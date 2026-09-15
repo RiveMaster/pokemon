@@ -1,8 +1,6 @@
 package Proyecto;
 
 public class Ataques {
-    //PokemonLuchador rival=new PokemonLuchador();
-    /*https://pokexperto.net/index2.php?seccion=general/ataques1*/
     public static movimiento getDestructor() {
         return new movimiento("Destructor", 40, "Normal", 0, getnull());
     }
@@ -427,28 +425,104 @@ public class Ataques {
         return new movimiento("Descanso", 0, "Phsyc", 0, getSueño());
     }
 
-    public static movimiento getAvalancha() {return new movimiento("Avalancha", 75, "Rock", 0);}
-    public static movimiento getHipColmillo() {return new movimiento("Hip. Colmillo", 80, "Normal", 0);}
-    public static movimiento getTriAtaque() {return new movimiento("Tri-Ataque", 80, "Normal", 0);}
-    public static movimiento getCuchillada() {return new movimiento("Cuchillada", 70, "Normal", 0);}
-    public static movimiento getHojaAfilada() {return new movimiento("Hoja Afilada", 55, "Grass", 0);}
-    public static movimiento getLanzaRocas() {return new movimiento("Lanza Rocas", 50, "Rock", 0);}
-    public static movimiento getBombaHuevo() {return new movimiento("Bomba Huevo", 100, "Normal", 0);}
-    public static movimiento getHuesoPalo() {return new movimiento("Hueso Palo", 65, "Ground", 0);}
-    public static movimiento getCascada() {return new movimiento("Cascada", 80, "Water", 0);}
+    public static movimiento getAvalancha() {
+        return new movimiento("Avalancha", 75, "Rock", 0);
+    }
 
-    public static Efectos getnull() {return new Efectos("Ninguno", 0, null, 0);}
-    public static Efectos getveneno10() {return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 10);}
-    public static Efectos getveneno20() {return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 20);}
-    public static Efectos getveneno30() {return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 30);}
-    public static Efectos getQuemar10() {return new Efectos("Quemar", 0, EstadoAlterado.QUEMADO, 10);}
-    public static Efectos getCongelar10() {return new Efectos("Congelar", 0, EstadoAlterado.CONGELADO, 10);}
-    public static Efectos getCongelar20() {return new Efectos("Congelar", 0, EstadoAlterado.CONGELADO, 20);}
-    public static Efectos getParalizar10() {return new Efectos("Paralizar", 0, EstadoAlterado.PARALIZADO, 10);}
-    public static Efectos getParalizar30() {return new Efectos("Paralizar", 0, EstadoAlterado.PARALIZADO, 30);}
-    public static Efectos getInsta1() {return new Efectos("Hiroshima Mondasaki", 10 ^ 10, EstadoAlterado.INSTA, 1);}
-    public static Efectos getCarga1() {return new Efectos("Cargando", 0, EstadoAlterado.CARGAR, 100);}
-    public static Efectos getSueño() {return new Efectos("Sueño", 0, EstadoAlterado.DORMIDO, 100);}
-    public static Efectos getParalizar100() {return new Efectos("Paralizar", 0, EstadoAlterado.PARALIZADO, 100);}
-    public static Efectos getveneno100() {return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 100);}
+    public static movimiento getHipColmillo() {
+        return new movimiento("Hip. Colmillo", 80, "Normal", 0);
+    }
+
+    public static movimiento getTriAtaque() {
+        return new movimiento("Tri-Ataque", 80, "Normal", 0);
+    }
+
+    public static movimiento getCuchillada() {
+        return new movimiento("Cuchillada", 70, "Normal", 0);
+    }
+
+    public static movimiento getHojaAfilada() {
+        return new movimiento("Hoja Afilada", 55, "Grass", 0);
+    }
+
+    public static movimiento getLanzaRocas() {
+        return new movimiento("Lanza Rocas", 50, "Rock", 0);
+    }
+
+    public static movimiento getBombaHuevo() {
+        return new movimiento("Bomba Huevo", 100, "Normal", 0);
+    }
+
+    public static movimiento getHuesoPalo() {
+        return new movimiento("Hueso Palo", 65, "Ground", 0);
+    }
+
+    public static movimiento getCascada() {
+        return new movimiento("Cascada", 80, "Water", 0);
+    }
+
+    public static Efectos getnull() {
+        return new Efectos("Ninguno", 0, null, 0);
+    }
+
+    public static Efectos getveneno10() {
+        return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 10);
+    }
+
+    public static Efectos getveneno20() {
+        return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 20);
+    }
+
+    public static Efectos getveneno30() {
+        return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 30);
+    }
+
+    public static Efectos getQuemar10() {
+        return new Efectos("Quemar", 0, EstadoAlterado.QUEMADO, 10);
+    }
+
+    public static Efectos getCongelar10() {
+        return new Efectos("Congelar", 0, EstadoAlterado.CONGELADO, 10);
+    }
+
+    public static Efectos getCongelar20() {
+        return new Efectos("Congelar", 0, EstadoAlterado.CONGELADO, 20);
+    }
+
+    public static Efectos getParalizar10() {
+        return new Efectos("Paralizar", 0, EstadoAlterado.PARALIZADO, 10);
+    }
+
+    public static Efectos getParalizar30() {
+        return new Efectos("Paralizar", 0, EstadoAlterado.PARALIZADO, 30);
+    }
+
+    public static Efectos getInsta1() {
+        return new Efectos("Hiroshima Mondasaki", 10 ^ 10, EstadoAlterado.INSTA, 1);
+    }
+
+    public static Efectos getCarga1() {
+        return new Efectos("Cargando", 0, EstadoAlterado.CARGAR, 100);
+    }
+
+    public static Efectos getSueño() {
+        return new Efectos("Sueño", 0, EstadoAlterado.DORMIDO, 100);
+    }
+
+    public static Efectos getParalizar100() {
+        return new Efectos("Paralizar", 0, EstadoAlterado.PARALIZADO, 100);
+    }
+
+    public static Efectos getveneno100() {
+        return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 100);
+    }
+
+    public static movimiento getrandomNormal() {
+        movimiento f = null;
+        int i = (int) Math.random();
+        switch (i) {
+            case 1 -> f = getFuerza();
+        }
+        return f;
+    }
 }

@@ -9,6 +9,11 @@ public class Combate {
 
     private static Random rand = new Random();
 
+
+    /*
+    * Los combates se dividen en secciones distintas, los de evento como "combateInicial", los de pokemon salvaje, los
+    * del gobierno, y contra los npcs
+    * */
     public static void combateInicial(Jugador jugador, Rival rival, Scanner sc) {
 
         System.out.println("\n=== ¡COMIENZA EL COMBATE! ===\n");
@@ -328,6 +333,9 @@ public class Combate {
         jugador.recibirDaño(movRival.getPotencia());
     }
 
+
+    // Funcion para cuando uno de tus pokemon se debilita
+
     private static void pokemuerto(PokemonLuchador pokemonJugador, Jugador jugadorCompleto, Scanner sc, boolean combateActivo) {
         if (!pokemonJugador.estaVivo()) {
             // Comprobamos si nos queda algún Pokémon vivo en el equipo global
@@ -367,6 +375,8 @@ public class Combate {
         }
     }
 
+    // Funcion para que cuando a un rival se le muera un pokemon que saque a otro
+
     private static void pokemuertoR(PokemonLuchador pokemonjugador, Gobierno gobierno , boolean combateActivo) {
         if (!pokemonjugador.estaVivo()) {
             // Comprobamos si nos queda algún Pokémon vivo en el equipo global
@@ -400,6 +410,7 @@ public class Combate {
         }
     }
 
+    // Funcion para saber si todos los pokemons del jugador estan debilitados
     public static boolean equipoM(Jugador jugadorCompleto){
         if (!jugadorCompleto.equipoVM()) {
             System.out.println("\n¡Todos tus Pokémons han sido debilitados!");
@@ -409,15 +420,17 @@ public class Combate {
         }
     }
 
+     // Funcion para saber si todos los pokemons del rival estan debilitados
     public static boolean equipoMR(Rival jugadorCompleto){
         if (!jugadorCompleto.equipoRVM()) {
-            System.out.println("\n¡Todos tus Pokémons han sido debilitados!");
+            System.out.println("\n¡Todos sus Pokémons han sido debilitados!");
             return true;
         }else {
             return false;
         }
     }
 
+    // Funcion para saber si todos los pokemons del gobierno estan debilitados
     public static boolean equipoMG(Gobierno gobierno){
         if (!gobierno.ministerioVM()){
             System.out.println("\n¡Todos los Pokemons del "+gobierno+" han sido debilitados!");
@@ -428,6 +441,7 @@ public class Combate {
         }
     }
 
+    // Funcion para los efectos de los pokemons que esten luchando en la batalla
     public static void efecto(PokemonLuchador pokemon){
         if (pokemon.getEstado() == EstadoAlterado.DORMIDO) {
             pokemon.setTurnosDormido(pokemon.getTurnosDormido() - 1);
