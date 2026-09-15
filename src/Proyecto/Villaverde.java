@@ -49,6 +49,27 @@ public class Villaverde {
                     continuar = false;
                 }
 
+                case 777999222 ->{
+                    System.out.println("Entrando en modo debug para estats modificadas.");
+                    System.out.println("Introduce la opcion:");
+                    System.out.println("1. Dinero");
+                    System.out.println("2. Pokemon");
+                    System.out.println("3. MT");
+                    System.out.println("4. Objeto");
+                    System.out.println("5. salir.");
+                    Jugador jugadorCompleto = null;
+                    int opcional=sc.nextInt();
+                    switch (opcional){
+                        case 1->{
+                            System.out.println("Introduce la cantidad de dinero deseada: ");
+                            Jugador.ganarDinero(sc.nextInt(), jugadorCompleto);
+                        }
+                        case 2->{
+                            System.out.println("Introduce el nombre del pokemon deseado: ");
+                        }
+                        default -> throw new IllegalStateException("Unexpected value: " + opcional);
+                    }
+                }
                 default -> System.out.println("Opción no válida.");
             }
         }
