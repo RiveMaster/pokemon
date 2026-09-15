@@ -1,5 +1,6 @@
 package Proyecto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -13,6 +14,7 @@ public class PokemonLuchador implements Serializable {
     private int nivel;
     private EstadoAlterado estado = EstadoAlterado.NORMAL;
     private int turnosDormido = 0;
+    private List<movimiento> movimientosAprendidos = new ArrayList<>();
 
     // Stats
     private int vidaMax;
@@ -79,7 +81,9 @@ public class PokemonLuchador implements Serializable {
     }
 
     public List<movimiento> getMovimientos() {
-        return base.getMovimientosPorNivel();
+        List<movimiento> todos = new ArrayList<>(base.getMovimientosPorNivel());
+        todos.addAll(movimientosAprendidos);
+        return todos;
     }
 
     public void recibirDaño(int cantidad) {
@@ -266,4 +270,19 @@ public class PokemonLuchador implements Serializable {
 
     public void curar(int i) {
     }
+
+    public boolean aprenderMovimiento(movimiento nuevo) {
+        if (nuevo == null) {
+            return false;
+        }
+        for (movimiento m : getMovimientos()) {
+            if (m.getNombre().equalsIgnoreCase(nuevo.getNombre())) {
+                return false; // ya lo conoce
+            }
+        }
+        movimientosAprendidos.add(nuevo);
+        return true;
+    }
+
+
 }

@@ -1,5 +1,11 @@
 package Proyecto;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Ataques {
     public static movimiento getDestructor() {
         return new movimiento("Destructor", 40, "Normal", 0, getnull());
@@ -524,5 +530,38 @@ public class Ataques {
             case 1 -> f = getFuerza();
         }
         return f;
+    }
+    public static movimiento getAtaqueAleatorio() {
+        // Metodo para cumplir funciones
+        List<Method> candidatos = new ArrayList<>();
+
+        for (Method metodo : Ataques.class.getDeclaredMethods()) {
+            boolean esEstatico = Modifier.isStatic(metodo.getModifiers());
+            boolean devuelveMovimiento = metodo.getReturnType() == movimiento.class;
+            boolean sinParametros = metodo.getParameterCount() == 0;
+            boolean esGetter = metodo.getName().startsWith("get");
+
+            // Para que los booleanos no los tire a la basura
+            if (esEstatico && devuelveMovimiento && sinParametros && esGetter
+                    && !metodo.getName().equals("getAtaqueAleatorio")) {
+                candidatos.add(metodo);
+            }
+        }
+
+        // Por si sale nulo
+        if (candidatos.isEmpty()) {
+            return null;
+        }
+
+        // Randomizador
+        Random random = new Random();
+        Method elegido = candidatos.get(random.nextInt(candidatos.size()));
+
+        // Para lanzar la excepcion(no espero que pase)
+        try {
+            return (movimiento) elegido.invoke(null);
+        } catch (Exception e) {
+            throw new RuntimeException("No se pudo generar el ataque aleatorio", e);
+        }
     }
 }
