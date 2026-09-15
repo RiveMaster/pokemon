@@ -11,8 +11,8 @@ public class Ataques {
         return new movimiento("Destructor", 40, "Normal", 0, getnull());
     }
 
-    public static movimiento getarañazo() {
-        return new movimiento("Arañazo", 40, "Normal", 1, getnull());
+    public static movimiento getarainazo() {
+        return new movimiento("Arainazo", 40, "Normal", 1, getnull());
     }
 
     public static movimiento getKarate() {
@@ -23,36 +23,36 @@ public class Ataques {
         return new movimiento("Doblebofeton", 15 * (int) (5 * Math.random() + 1), "Normal", 0, getnull());
     }
 
-    public static movimiento getPuñoCometa() {
-        return new movimiento("Puño cometa", 18 * (int) (5 * Math.random() + 1), "Normal", 0, getnull());
+    public static movimiento getPuinoCometa() {
+        return new movimiento("Puino cometa", 18 * (int) (5 * Math.random() + 1), "Normal", 0, getnull());
     }
 
-    public static movimiento getMegaPuño() {
-        return new movimiento("Mega Puño", 80, "Normal", 0, getnull());
+    public static movimiento getMegaPuino() {
+        return new movimiento("Mega Puino", 80, "Normal", 0, getnull());
     }
 
     public static movimiento getDiaDePago(Jugador jugador) {
         return new movimiento("Dia de pago", jugador.getDinero(), "Normal", 0, getnull());
     }
 
-    public static movimiento getPuñoFuego() {
-        return new movimiento("Puño Fuego", 75, "Fire", 0, getQuemar10());
+    public static movimiento getPuinoFuego() {
+        return new movimiento("Puino Fuego", 75, "Fire", 0, getQuemar10());
     }
 
-    public static movimiento getPuñoHielo() {
-        return new movimiento("Puño Hielo", 75, "Ice", 0, getCongelar10());
+    public static movimiento getPuinoHielo() {
+        return new movimiento("Puino Hielo", 75, "Ice", 0, getCongelar10());
     }
 
     public static movimiento getAgarre() {
         return new movimiento("Agarre", 55, "Normal", 0, getnull());
     }
 
-    public static movimiento getPuñoTrueno() {
-        return new movimiento("Puño Trueno", 75, "Electric", 0, getParalizar10());
+    public static movimiento getPuinoTrueno() {
+        return new movimiento("Puino Trueno", 75, "Electric", 0, getParalizar10());
     }
 
     public static movimiento getGuillotina() {
-        return new movimiento("Guillotina", 10 ^ 10, "Normal", 0, getInsta1());
+        return new movimiento("Guillotina", Math.pow(10,10), "Normal", 0, getInsta1());
     }
 
     public static movimiento getVCortante() {
@@ -103,7 +103,7 @@ public class Ataques {
         return new movimiento("Atadura", 15, "Normal", 0);
     }
 
-    public static movimiento getPisotón() {
+    public static movimiento getPisoton() {
         return new movimiento("Pisotón", 65, "Normal", 0);
     }
 
@@ -120,7 +120,7 @@ public class Ataques {
     }
 
     public static movimiento getPerforador() {
-        return new movimiento("Perdorador", 10 ^ 10, "Normal", 0, getInsta1());
+        return new movimiento("Perdorador", Math.pow(10,10), "Normal", 0, getInsta1());
     }
 
     public static movimiento getPlacaje() {
@@ -160,7 +160,7 @@ public class Ataques {
     }
 
     public static movimiento getCanto() {
-        return new movimiento("Canto", 0, "Normal", 0, getSueño());
+        return new movimiento("Canto", 0, "Normal", 0, getSueino());
     }
 
     public static movimiento getAcido() {
@@ -256,7 +256,7 @@ public class Ataques {
     }
 
     public static movimiento getSomnifero() {
-        return new movimiento("Somnifero", 0, "Grass", 0, getSueño());
+        return new movimiento("Somnifero", 0, "Grass", 0, getSueino());
     }
 
     public static movimiento getDanzaPetalo() {
@@ -292,7 +292,7 @@ public class Ataques {
     }
 
     public static movimiento getFisura() {
-        return new movimiento("Fisura", 10 ^ 10, "Ground", 0, getInsta1());
+        return new movimiento("Fisura", Math.pow(10,10), "Ground", 0, getInsta1());
     }
 
     public static movimiento getExcavar() {
@@ -312,7 +312,7 @@ public class Ataques {
     }
 
     public static movimiento getHipnosis() {
-        return new movimiento("Hipnosis", 0, "Phsyc", 0, getSueño());
+        return new movimiento("Hipnosis", 0, "Phsyc", 0, getSueino());
     }
 
     public static movimiento getFuria() {
@@ -323,7 +323,7 @@ public class Ataques {
         return new movimiento("Teletransp", 0, "Phsyc", 0);
     }
 
-    public static movimiento getLengüetazo() {
+    public static movimiento getLenguetazo() {
         return new movimiento("Lengüetazo", 20, "Ghost", 0, getParalizar30());
     }
 
@@ -351,8 +351,8 @@ public class Ataques {
         return new movimiento("Cabezazo", 100, "Normal", 0, getCarga1());
     }
 
-    public static movimiento getClavoCañon() {
-        return new movimiento("Clavo Cañon", 20, "Normal", 0);
+    public static movimiento getClavoCainon() {
+        return new movimiento("Clavo Cainon", 20, "Normal", 0);
     }
 
     public static movimiento getRestriccion() {
@@ -367,8 +367,8 @@ public class Ataques {
         return new movimiento("Deslumbrar", 0, "Normal", 0, getParalizar100());
     }
 
-    public static movimiento getComesueños() {
-        return new movimiento("Comesueños", 100, "Phsyc", 0);
+    public static movimiento getComesueinos() {
+        return new movimiento("Comesueinos", 100, "Phsyc", 0);
     }
 
     public static movimiento getGasVenenoso() {
@@ -384,7 +384,7 @@ public class Ataques {
     }
 
     public static movimiento getBesoAmoroso() {
-        return new movimiento("Beso Amoroso", 0, "Normal", 0, getSueño());
+        return new movimiento("Beso Amoroso", 0, "Normal", 0, getSueino());
     }
 
     public static movimiento getAtaqueAereo() {
@@ -395,12 +395,12 @@ public class Ataques {
         return new movimiento("Burbuja", 20, "Water", 0);
     }
 
-    public static movimiento getPuñoMareo() {
-        return new movimiento("Puño-Mareo", 70, "Normal", 0);
+    public static movimiento getPuinoMareo() {
+        return new movimiento("Puino-Mareo", 70, "Normal", 0);
     }
 
     public static movimiento getEspora() {
-        return new movimiento("Espora", 0, "Grass", 0, getSueño());
+        return new movimiento("Espora", 0, "Grass", 0, getSueino());
     }
 
     public static movimiento getPsicoOnda() {
@@ -428,7 +428,7 @@ public class Ataques {
     }
 
     public static movimiento getDescanso() {
-        return new movimiento("Descanso", 0, "Phsyc", 0, getSueño());
+        return new movimiento("Descanso", 0, "Phsyc", 0, getSueino());
     }
 
     public static movimiento getAvalancha() {
@@ -504,15 +504,15 @@ public class Ataques {
     }
 
     public static Efectos getInsta1() {
-        return new Efectos("Hiroshima Mondasaki", 10 ^ 10, EstadoAlterado.INSTA, 1);
+        return new Efectos("Hiroshima Mondasaki", Math.pow(10,10), EstadoAlterado.INSTA, 1);
     }
 
     public static Efectos getCarga1() {
         return new Efectos("Cargando", 0, EstadoAlterado.CARGAR, 100);
     }
 
-    public static Efectos getSueño() {
-        return new Efectos("Sueño", 0, EstadoAlterado.DORMIDO, 100);
+    public static Efectos getSueino() {
+        return new Efectos("Sueino", 0, EstadoAlterado.DORMIDO, 100);
     }
 
     public static Efectos getParalizar100() {
@@ -523,14 +523,14 @@ public class Ataques {
         return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 100);
     }
 
-    public static movimiento getrandomNormal() {
+    /*public static movimiento getrandomNormal() {
         movimiento f = null;
         int i = (int) Math.random();
         switch (i) {
             case 1 -> f = getFuerza();
         }
         return f;
-    }
+    }*/
     public static movimiento getAtaqueAleatorio() {
         // Metodo para cumplir funciones
         List<Method> candidatos = new ArrayList<>();

@@ -9,20 +9,19 @@ public class Rival implements Serializable {
 
 
     private String nombre;
-    private PokemonLuchador pokemon;
+    private static PokemonLuchador pokemon;
     private List<PokemonLuchador> equipoRival = new ArrayList<>();
 
     private static List<List<PokemonLuchador>> equiposPredefinidos = new ArrayList<>();
 
-
-        // Equipo 1: Fuego
-    private static Equipo1() {
+    
+    private static void Equipo1() {
 
         List<PokemonLuchador> equipo1 = new ArrayList<>();
         equipo1.add(new PokemonLuchador(Pokedex.getPikachu(), 10));
         equipo1.add(new PokemonLuchador(getPokemon().getBase(),10));
     }
-    private static Equipo2() {
+    private static void Equipo2() {
 
         List<PokemonLuchador> equipo2 = new ArrayList<>();
         equipo2.add(new PokemonLuchador(getPokemon().getBase(),30));
@@ -30,7 +29,7 @@ public class Rival implements Serializable {
         equipo2.add(new PokemonLuchador(Pokedex.getSpearow(),25));
         equipo2.add(new PokemonLuchador(Pokedex.getSandshrew(),25));
     }
-    private static Equipo3(){
+    private static void Equipo3(){
         List<PokemonLuchador> equipo3 = new ArrayList<>();
         equipo3.add(new PokemonLuchador(getPokemon().getBase(),60));
         equipo3.add(new PokemonLuchador(Pokedex.getPidgeot(),55));
@@ -55,7 +54,7 @@ public class Rival implements Serializable {
         return nombre;
     }
 
-    public PokemonLuchador getPokemon() {
+    public static PokemonLuchador getPokemon() {
         return pokemon;
     }
 

@@ -5,9 +5,9 @@ import java.io.*;
 public class GuardarCargar {
     private static final String ARCHIVO = "Juego.txt";
 
-    // -----------------------
-    // Método para guardar
-    // -----------------------
+    /* -----------------------
+     * Método para guardar
+     *-----------------------*/
     public static void guardarPartida(Jugador jugador) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO))) {
             oos.writeObject(jugador);
@@ -19,9 +19,9 @@ public class GuardarCargar {
     }
 
 
-    // -----------------------
-    // Método para cargar
-    // -----------------------
+    /* -----------------------
+     * Método para cargar
+     *-----------------------*/
     public static Jugador cargarPartida() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARCHIVO))) {
             Jugador jugador = (Jugador) ois.readObject();

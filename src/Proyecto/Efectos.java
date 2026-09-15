@@ -6,7 +6,7 @@ public class Efectos {
     private EstadoAlterado estado;
     private int probabilidad;
 
-    public Efectos(String nombre, int dano, EstadoAlterado estado, int probabilidad) {
+    public Efectos(String nombre, double dano, EstadoAlterado estado, int probabilidad) {
         this.nombre = nombre;
         this.dano = dano;
         this.estado = estado;
