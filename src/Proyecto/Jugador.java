@@ -16,7 +16,8 @@ public class Jugador implements Serializable {
     private static HashMap<String, Integer> objetosClave = new HashMap<>();
     private static HashMap<String, Integer> mts = new HashMap<>();
     private String nombre;
-    private List<PokemonLuchador> equipo = new ArrayList<>();
+    private static List<PokemonLuchador> equipo = new ArrayList<>();
+    private static List<PokemonLuchador> pc = new ArrayList<>();
     private int dinero;
     private Rival rival;
     private int encuentroActual;
@@ -50,6 +51,8 @@ public class Jugador implements Serializable {
     public List<PokemonLuchador> getEquipo() {
         return equipo;
     }
+
+    public List<PokemonLuchador> getPc(){return pc;}
 
     public int getDinero() { return dinero; }
 
@@ -105,11 +108,50 @@ public class Jugador implements Serializable {
         return false;
     }
 
+    public static void pokemonEquipoPc( PokemonLuchador pokemon, Scanner sc){
+        System.out.println("Seleccione un pokemon de su equipo para almacenar en el PC.");
+        for (int k = 0; k < equipo.size(); k++) {
+            PokemonLuchador p = equipo.get(k);
+            String estado = p.estaVivo() ? "Vivo" : "Debilitado";
+            System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
+        }
+        int idx = sc.nextInt() - 1;
+        if (idx >= 0 && idx < equipo.size()) {
+            PokemonLuchador nuevo = equipo.get(idx);
+            pc.add(nuevo);
+            equipo.remove(nuevo);
+            } else {
+            System.out.println("Selección inválida.");
+        }
+    }
+    public static void equipoPokemonPc( PokemonLuchador pokemon, Scanner sc){
+        System.out.println("Seleccione un pokemon de su PC para poner en el equipo.");
+        for (int k = 0; k < pc.size(); k++) {
+            PokemonLuchador p = pc.get(k);
+            String estado = p.estaVivo() ? "Vivo" : "Debilitado";
+            System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
+        }
+        int idx = sc.nextInt() - 1;
+        if (idx >= 0 && idx < pc.size()) {
+            PokemonLuchador nuevo = pc.get(idx);
+            equipo.add(nuevo);
+            pc.remove(nuevo);
+        } else {
+            System.out.println("Selección inválida.");
+        }
+    }
+
+    public static void salvajePc(PokemonLuchador pokemon){
+        pc.add(pokemon);
+    }
+
     public void agregarPokemon(PokemonLuchador pokemon) {
         if (equipo.size() < 6) {
             equipo.add(pokemon);
         } else {
             System.out.println("¡El equipo ya está completo (máximo 6 Pokémon)!");
+            System.out.println("Añadiendo Pokemon a la PC.");
+            Jugador.salvajePc(pokemon);
         }
     }
 
@@ -147,6 +189,10 @@ public class Jugador implements Serializable {
             }
         }
         return false;
+    }
+    public void obtenerPokemon(Pokedex pokemon){
+        PokemonLuchador nuevo=new PokemonLuchador(Pokemonbase pokemon=new PokemonBase(pokemon), 100);
+        agregarPokemon(nuevo);
     }
 
     public boolean capturarPokemon(PokemonLuchador pokemon, String tipoPokeball) {

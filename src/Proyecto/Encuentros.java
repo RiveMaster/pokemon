@@ -80,7 +80,7 @@ public class Encuentros implements Serializable {
 
     public static Jugador ENCUENTRO_COMPLETADO(Jugador jugador, Scanner sc){
         System.out.println(jugador.getRival()+": Oye, ¿que coño pasa con los putos inmigrantes de mierda? No paran de intentar quitarme los pokemons y el dinero, bueno todo en general..." +
-                " en fin... Peleamos");
+                " en fin... Peleemos");
         jugador.getRival().setEquipoRival1(Equipo1(jugador.getRival()));
         Combate.combateRival(jugador, jugador.getRival(), jugador.getPokemon(), jugador.getRival().getPokemon(), sc);
         jugador.setEncuentroActual(ENCUENTRO_DIFERENTE);

@@ -13,7 +13,7 @@ public class GuardarCargar {
             oos.writeObject(jugador);
             System.out.println("✔ Partida guardada correctamente.");
         } catch (IOException e) {
-            System.out.println("✖ Error al guardar la partida: " + e.getMessage());
+            System.err.println("✖ Error al guardar la partida: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -28,12 +28,12 @@ public class GuardarCargar {
             System.out.println("✔ Partida cargada correctamente.");
             return jugador;
         } catch (FileNotFoundException e) {
-            System.out.println("✖ No existe partida guardada.");
+            System.err.println("✖ No existe partida guardada.");
         } catch (IOException e) {
-            System.out.println("✖ Error al cargar la partida: " + e.getMessage());
+            System.err.println("✖ Error al cargar la partida: " + e.getMessage());
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            System.out.println("✖ Error: Clase no encontrada al cargar.");
+            System.err.println("✖ Error: Clase no encontrada al cargar.");
             e.printStackTrace();
         }
         return null;

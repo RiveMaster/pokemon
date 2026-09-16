@@ -66,6 +66,7 @@ public class Villaverde {
                         }
                         case 2->{
                             System.out.println("Introduce el nombre del pokemon deseado: ");
+                            PokemonBase nuevo = new PokemonBase(Pokedex.buscarPorNombre(sc.nextLine()));
                         }
                         default -> throw new IllegalStateException("Unexpected value: " + opcional);
                     }

@@ -3,7 +3,6 @@ package Proyecto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 import java.io.Serializable;
 
@@ -57,6 +56,23 @@ public class PokemonLuchador implements Serializable {
         vidaActual = vidaMax;
     }
 
+    public void PokemonLuchadorTrucado(PokemonBase trucado, int nivel){
+        this.base = trucado;
+        this.nivel = nivel;
+        // IVs: entre -3 y +3
+        ivVida = 3;
+        ivAtaque = 3;
+        ivDefensa = 3;
+        ivVelocidad = 3;
+        // Stats totales
+        vidaMax = base.getVidaBase() + ivVida;
+        ataque = base.getAtaqueBase() + ivAtaque;
+        defensa = base.getDefensaBase() + ivDefensa;
+        velocidad = base.getVelocidadBase() + ivVelocidad;
+
+        vidaActual = vidaMax;
+    }
+
     public static void combate(PokemonLuchador jugador, PokemonLuchador rival) {
     }
 
@@ -86,7 +102,7 @@ public class PokemonLuchador implements Serializable {
         return todos;
     }
 
-    public void recibirDaño(int cantidad) {
+    public void recibirDaño(double cantidad) {
         vidaActual -= cantidad;
         if (vidaActual < 0) vidaActual = 0;
     }

@@ -241,7 +241,7 @@ public class Combate {
                 }else if (n==3){
                 //aqui viene cuando la mata.......
                     System.out.println("Elige un Pokémon para enviar al combate:");
-                    List<PokemonLuchador> equipo = jugadorCompleto.getEquipo(); // Asegúrate que este método existe en Jugador
+                    List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
 
                     for (int k = 0; k < equipo.size(); k++) {
                         PokemonLuchador p = equipo.get(k);
