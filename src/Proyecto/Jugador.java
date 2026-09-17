@@ -191,7 +191,7 @@ public class Jugador implements Serializable {
         return false;
     }
     public void obtenerPokemon(Pokedex pokemon){
-        PokemonLuchador nuevo=new PokemonLuchador(Pokemonbase pokemon=new PokemonBase(pokemon), 100);
+        PokemonLuchador nuevo=new PokemonLuchador(PokemonBase pokemon=new PokemonBase(pokemon), 100);
         agregarPokemon(nuevo);
     }
 
