@@ -56,14 +56,14 @@ public class PokemonLuchador implements Serializable {
         vidaActual = vidaMax;
     }
 
-    public void PokemonLuchadorTrucado(PokemonBase trucado, int nivel){
+    public PokemonLuchador(PokemonBase trucado, int nivel, int stats){
         this.base = trucado;
         this.nivel = nivel;
         // IVs: entre -3 y +3
-        ivVida = 3;
-        ivAtaque = 3;
-        ivDefensa = 3;
-        ivVelocidad = 3;
+        ivVida = stats;
+        ivAtaque = stats;
+        ivDefensa = stats;
+        ivVelocidad = stats;
         // Stats totales
         vidaMax = base.getVidaBase() + ivVida;
         ataque = base.getAtaqueBase() + ivAtaque;
