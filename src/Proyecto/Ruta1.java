@@ -16,11 +16,11 @@ public class Ruta1 {
     // Generar Pokémon salvaje
     private PokemonBase generarPokemonBase() {
         int prob = rand.nextInt(1000) + 1;
-        if (prob <= 500) return Pokedex.getBunnelby1();
-        else if (prob <= 800) return Pokedex.getPidgey();
-        else if (prob <= 950) return Pokedex.getAmbipom1();
-        else if (prob <= 999) return Pokedex.getShinx1();
-        else return Pokedex.getMewtow1();
+        if (prob <= 500) return Pokedex.buscarPorNombre("Bunnelby");
+        else if (prob <= 800) return Pokedex.buscarPorNombre("Pidgey");
+        else if (prob <= 950) return Pokedex.buscarPorNombre("Ambipom");
+        else if (prob <= 999) return Pokedex.buscarPorNombre("Shinx");
+        else return Pokedex.buscarPorNombre("Mewtow");
     }
 
     private int generarNivel() {

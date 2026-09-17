@@ -15,7 +15,7 @@ public class Rival implements Serializable {
     private static List<List<PokemonLuchador>> equiposPredefinidos = new ArrayList<>();
 
     
-    private static void Equipo1() {
+    /*private static void Equipo1() {
 
         List<PokemonLuchador> equipo1 = new ArrayList<>();
         equipo1.add(new PokemonLuchador(Pokedex.getPikachu(), 10));
@@ -39,7 +39,7 @@ public class Rival implements Serializable {
         equipo3.add(new PokemonLuchador(Pokedex.getArcanine(),55));
 
 
-    }
+    }*/
 
 
     public Rival(String nombre, PokemonLuchador pokemonInicial) {

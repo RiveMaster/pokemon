@@ -5,7372 +5,1135 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Pokedex {
-    private static List<PokemonBase> pokemons = new ArrayList<>();
+    private static final List<PokemonBase> pokemons = new ArrayList<>();
     private static boolean cargado = false;
 
     public void cargarpokemons() {
-        pokemons.add(new PokemonBase("Charmander", "Fuego", null, 39, 52, 43, 65, 16, "Charmeleon",
-                Arrays.asList(
-                        new movimiento("Arañazo", 40, "Normal", 1),
-                        new movimiento("Ascuas", 40, "Fuego", 7),
-                        new movimiento("Garra Metal", 50, "Acero", 13),
-                        new movimiento("Lanzallamas", 90, "Fuego", 24)
-                )));
-        pokemons.add(new PokemonBase("Bulbasaur", "Planta", "Veneno", 45, 49, 49, 45, 16, "Ivysaur",
-                Arrays.asList(
-                        new movimiento("Placaje", 40, "Normal", 1),
-                        new movimiento("Látigo Cepa", 45, "Planta", 7),
-                        new movimiento("Drenadoras", 0, "Planta", 10),
-                        new movimiento("Gigadrenado", 75, "Planta", 20))));
-        pokemons.add(new PokemonBase("Squirtle", "Agua", null, 44, 48, 65, 43, 16, "Wartortle",
-                Arrays.asList(
-                        new movimiento("Placaje", 40, "Normal", 1),
-                        new movimiento("Pistola Agua", 40, "Agua", 7),
-                        new movimiento("Rizo Defensa", 0, "Normal", 10),
-                        new movimiento("Hidropulso", 60, "Agua", 18)
-                )));
-        pokemons.add(new PokemonBase("Bunnelby", "Normal", null, 50, 55, 40, 50, 20, "Diggersby",
-                Arrays.asList(
-                        new movimiento("Arañazo", 40, "Normal", 1),
-                        new movimiento("Placaje", 35, "Normal", 5),
-                        new movimiento("Golpe Cabeza", 70, "Normal", 12)
-                )));
-        pokemons.add(new PokemonBase("Pidgey", "Normal", "Volador", 40, 45, 40, 56, 18, "Pidgeotto",
-                Arrays.asList(
-                        new movimiento("Picotazo", 35, "Normal", 1),
-                        new movimiento("Ataque Ala", 60, "Volador", 7),
-                        new movimiento("Tornado", 40, "Volador", 15)
-                )));
-        pokemons.add(new PokemonBase("Shinx", "Eléctrico", null, 45, 65, 34, 45, 15, "Luxio",
-                Arrays.asList(
-                        new movimiento("Impactrueno", 40, "Eléctrico", 1),
-                        new movimiento("Placaje", 35, "Normal", 4),
-                        new movimiento("Rayo", 65, "Eléctrico", 20)
-                )));
-        pokemons.add(new PokemonBase("Mewtow", "Psíquico", null, 106, 110, 90, 130, 0, null,
-                Arrays.asList(
-                        new movimiento("Psíquico", 90, "Psíquico", 1),
-                        new movimiento("Confusión", 50, "Psíquico", 1),
-                        new movimiento("Onda Mental", 80, "Psíquico", 20),
-                        new movimiento("Impactrueno", 40, "Eléctrico", 25)
-                )));
-        pokemons.add(new PokemonBase("Mew", "Psíquico", null, 100, 100, 100, 100, 0, null,
-                Arrays.asList(
-                        new movimiento("Psíquico", 90, "Psíquico", 1),
-                        new movimiento("Transformación", 0, "Normal", 1),
-                        new movimiento("Confusión", 50, "Psíquico", 5),
-                        new movimiento("Onda Mental", 80, "Psíquico", 20)
-                )));
-        pokemons.add(new PokemonBase("Dedenne", "Eléctrico", "Hada",
-                67, 58, 57, 101,
-                0, null,
-                Arrays.asList(
-                        new movimiento("Impactrueno", 40, "Eléctrico", 1),
-                        new movimiento("Beso Drenaje", 50, "Hada", 5),
-                        new movimiento("Rayo", 90, "Eléctrico", 20),
-                        new movimiento("Chispa", 65, "Eléctrico", 10)
-                )));
-        pokemons.add(new PokemonBase("Nidoran♂", "Veneno", null,
-                46, 57, 40, 50,
-                0, "Nidorino",
-                Arrays.asList(
-                        new movimiento("Picotazo Veneno", 35, "Veneno", 1),
-                        new movimiento("Arañazo", 40, "Normal", 1),
-                        new movimiento("Doble Patada", 30, "Lucha", 10),
-                        new movimiento("Cornada", 65, "Normal", 13)
-                )));
-        pokemons.add(new PokemonBase("Nidoran♀", "Veneno", null,
-                55, 47, 52, 41,
-                0, "Nidorina",
-                Arrays.asList(
-                        new movimiento("Picotazo Veneno", 35, "Veneno", 1),
-                        new movimiento("Placaje", 40, "Normal", 1),
-                        new movimiento("Doble Patada", 30, "Lucha", 12),
-                        new movimiento("Cornada", 65, "Normal", 15)
-                )));
-        pokemons.add(new PokemonBase("Budew", "Planta", "Veneno",
-                40, 30, 35, 55,
-                0, "Roselia",
-                Arrays.asList(
-                        new movimiento("Absorber", 20, "Planta", 1),
-                        new movimiento("Drenadoras", 0, "Planta", 5),
-                        new movimiento("Hoja Afilada", 55, "Planta", 10),
-                        new movimiento("Polvo Veneno", 0, "Veneno", 7)
-                )));
-        pokemons.add(new PokemonBase("Togepi", "Hada", null,
-                35, 20, 65, 20,
-                0, "Togetic",
-                Arrays.asList(
-                        new movimiento("Destructor", 40, "Normal", 1),
-                        new movimiento("Deseo", 0, "Normal", 5),
-                        new movimiento("Encanto", 0, "Hada", 1),
-                        new movimiento("Beso Drenaje", 50, "Hada", 12)
-                )));
-        pokemons.add(new PokemonBase("Ambipom", "Normal", null,
-                75, 100, 66, 115,
-                0, null,
-                Arrays.asList(
-                        new movimiento("Arañazo", 40, "Normal", 1),
-                        new movimiento("Golpe Furia", 15, "Normal", 5),
-                        new movimiento("Persecución", 40, "Siniestro", 10),
-                        new movimiento("Doble Golpe", 35, "Normal", 15)
-                )));
-        pokemons.add(new PokemonBase("Bulbasaur",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ivysaur",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Venusaur",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Charmander",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Charmeleon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Charizard",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Squirtle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wartortle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Blastoise",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Caterpie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Metapod",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Butterfree",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Weedle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kakuna",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Beedrill",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pidgey",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pidgeotto",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pidgeot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rattata",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Raticate",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spearow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fearow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ekans",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arbok",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pikachu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Raichu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sandshrew",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sandslash",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nidoran♀",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nidorina",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nidoqueen",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nidoran♂",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nidorino",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nidoking",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Clefairy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Clefable",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vulpix",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ninetales",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Jigglypuff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wigglytuff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zubat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Golbat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Oddish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gloom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vileplume",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Paras",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Parasect",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Venonat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Venomoth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Diglett",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dugtrio",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Meowth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Persian",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Psyduck",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Golduck",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mankey",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Primeape",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Growlithe",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arcanine",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Poliwag",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Poliwhirl",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Poliwrath",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Abra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kadabra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Alakazam",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Machop",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Machoke",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Machamp",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bellsprout",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Weepinbell",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Victreebel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tentacool",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tentacruel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Geodude",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Graveler",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Golem",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ponyta",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rapidash",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slowpoke",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slowbro",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magnemite",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magneton",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Farfetch'd",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Doduo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dodrio",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Seel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dewgong",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grimer",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Muk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shellder",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cloyster",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gastly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Haunter",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gengar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Onix",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drowzee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hypno",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Krabby",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kingler",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Voltorb",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Electrode",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Exeggcute",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Exeggutor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cubone",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Marowak",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hitmonlee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hitmonchan",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lickitung",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Koffing",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Weezing",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rhyhorn",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rhydon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chansey",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tangela",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kangaskhan",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Horsea",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Seadra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Goldeen",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Seaking",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Staryu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Starmie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mr. Mime",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scyther",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Jynx",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Electabuzz",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magmar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pinsir",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tauros",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magikarp",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gyarados",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lapras",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ditto",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Eevee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vaporeon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Jolteon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flareon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Porygon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Omanyte",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Omastar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kabuto",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kabutops",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Aerodactyl",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Snorlax",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Articuno",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zapdos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Moltres",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dratini",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dragonair",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dragonite",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mewtwo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mew",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chikorita",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bayleef",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Meganium",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cyndaquil",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Quilava",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Typhlosion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Totodile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Croconaw",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Feraligatr",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sentret",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Furret",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hoothoot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Noctowl",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ledyba",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ledian",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spinarak",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ariados",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Crobat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chinchou",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lanturn",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pichu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cleffa",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Igglybuff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Togepi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Togetic",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Natu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Xatu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mareep",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flaaffy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ampharos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bellossom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Marill",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Azumarill",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sudowoodo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Politoed",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hoppip",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skiploom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Jumpluff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Aipom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sunkern",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sunflora",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Yanma",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wooper",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Quagsire",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Espeon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Umbreon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Murkrow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slowking",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Misdreavus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Unown",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wobbuffet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Girafarig",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pineco",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Forretress",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dunsparce",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gligar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Steelix",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Snubbull",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Granbull",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Qwilfish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scizor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shuckle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Heracross",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sneasel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Teddiursa",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ursaring",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slugma",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magcargo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swinub",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Piloswine",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Corsola",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Remoraid",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Octillery",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Delibird",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mantine",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skarmory",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Houndour",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Houndoom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kingdra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Phanpy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Donphan",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Porygon2",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Stantler",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Smeargle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tyrogue",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hitmontop",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Smoochum",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Elekid",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magby",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Miltank",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Blissey",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Raikou",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Entei",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Suicune",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Larvitar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pupitar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tyranitar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lugia",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ho-oh",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Celebi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Treecko",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grovyle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sceptile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Torchic",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Combusken",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Blaziken",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mudkip",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Marshtomp",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swampert",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Poochyena",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mightyena",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zigzagoon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Linoone",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wurmple",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Silcoon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Beautifly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cascoon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dustox",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lotad",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lombre",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ludicolo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Seedot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nuzleaf",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shiftry",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Taillow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swellow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wingull",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pelipper",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ralts",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kirlia",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gardevoir",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Surskit",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Masquerain",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shroomish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Breloom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slakoth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vigoroth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slaking",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nincada",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ninjask",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shedinja",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Whismur",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Loudred",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Exploud",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Makuhita",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hariyama",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Azurill",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nosepass",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skitty",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Delcatty",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sableye",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mawile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Aron",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lairon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Aggron",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Meditite",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Medicham",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Electrike",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Manectric",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Plusle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Minun",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Volbeat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Illumise",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Roselia",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gulpin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swalot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Carvanha",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sharpedo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wailmer",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wailord",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Numel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Camerupt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Torkoal",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spoink",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grumpig",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spinda",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Trapinch",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vibrava",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flygon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cacnea",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cacturne",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swablu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Altaria",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zangoose",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Seviper",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lunatone",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Solrock",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Barboach",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Whiscash",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Corphish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Crawdaunt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Baltoy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Claydol",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lileep",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cradily",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Anorith",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Armaldo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Feebas",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Milotic",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Castform",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kecleon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shuppet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Banette",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Duskull",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dusclops",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tropius",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chimecho",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Absol",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wynaut",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Snorunt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Glalie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spheal",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sealeo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Walrein",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Clamperl",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Huntail",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gorebyss",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Relicanth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Luvdisc",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bagon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shelgon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Salamence",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Beldum",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Metang",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Metagross",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Regirock",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Regice",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Registeel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Latias",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Latios",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kyogre",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Groudon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rayquaza",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Jirachi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Deoxys",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Turtwig",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grotle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Torterra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chimchar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Monferno",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Infernape",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Piplup",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Prinplup",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Empoleon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Starly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Staravia",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Staraptor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bidoof",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bibarel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kricketot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kricketune",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shinx",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Luxio",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Luxray",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Budew",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Roserade",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cranidos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rampardos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shieldon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bastiodon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Burmy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wormadam",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mothim",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Combee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vespiquen",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pachirisu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Buizel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Floatzel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cherubi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cherrim",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shellos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gastrodon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ambipom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drifloon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drifblim",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Buneary",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lopunny",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mismagius",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Honchkrow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Glameow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Purugly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chingling",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Stunky",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skuntank",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bronzor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bronzong",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bonsly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mime Jr.",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Happiny",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chatot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spiritomb",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gible",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gabite",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Garchomp",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Munchlax",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Riolu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lucario",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hippopotas",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hippowdon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skorupi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drapion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Croagunk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Toxicroak",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Carnivine",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Finneon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lumineon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mantyke",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Snover",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Abomasnow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Weavile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magnezone",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lickilicky",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rhyperior",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tangrowth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Electivire",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magmortar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Togekiss",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Yanmega",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Leafeon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Glaceon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gliscor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mamoswine",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Porygon-Z",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gallade",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Probopass",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dusknoir",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Froslass",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rotom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Uxie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mesprit",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Azelf",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dialga",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Palkia",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Heatran",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Regigigas",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Giratina",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cresselia",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Phione",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Manaphy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Darkrai",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shaymin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arceus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Victini",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Snivy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Servine",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Serperior",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tepig",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pignite",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Emboar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Oshawott",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dewott",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Samurott",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Patrat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Watchog",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lillipup",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Herdier",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Stoutland",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Purrloin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Liepard",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pansage",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Simisage",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pansear",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Simisear",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Panpour",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Simipour",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Munna",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Musharna",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pidove",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tranquill",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Unfezant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Blitzle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zebstrika",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Roggenrola",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Boldore",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gigalith",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Woobat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swoobat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drilbur",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Excadrill",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Audino",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Timburr",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gurdurr",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Conkeldurr",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tympole",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Palpitoad",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Seismitoad",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Throh",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sawk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sewaddle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swadloon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Leavanny",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Venipede",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Whirlipede",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scolipede",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cottonee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Whimsicott",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Petilil",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lilligant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Basculin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sandile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Krokorok",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Krookodile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Darumaka",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Darmanitan",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Maractus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dwebble",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Crustle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scraggy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scrafty",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sigilyph",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Yamask",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cofagrigus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tirtouga",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Carracosta",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Archen",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Archeops",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Trubbish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Garbodor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zorua",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zoroark",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Minccino",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cinccino",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gothita",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gothorita",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gothitelle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Solosis",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Duosion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Reuniclus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ducklett",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swanna",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vanillite",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vanillish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vanilluxe",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Deerling",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sawsbuck",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Emolga",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Karrablast",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Escavalier",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Foongus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Amoonguss",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Frillish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Jellicent",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Alomomola",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Joltik",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Galvantula",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ferroseed",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ferrothorn",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Klink",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Klang",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Klinklang",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tynamo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Eelektrik",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Eelektross",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Elgyem",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Beheeyem",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Litwick",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lampent",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chandelure",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Axew",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fraxure",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Haxorus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cubchoo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Beartic",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cryogonal",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shelmet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Accelgor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Stunfisk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mienfoo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mienshao",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Druddigon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Golett",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Golurk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pawniard",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bisharp",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bouffalant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rufflet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Braviary",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vullaby",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mandibuzz",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Heatmor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Durant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Deino",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zweilous",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hydreigon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Larvesta",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Volcarona",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cobalion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Terrakion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Virizion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tornadus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Thundurus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Reshiram",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zekrom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Landorus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kyurem",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Keldeo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Meloetta",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Genesect",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chespin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Quilladin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chesnaught",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fennekin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Braixen",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Delphox",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Froakie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Frogadier",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Greninja",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bunnelby",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Diggersby",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fletchling",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fletchinder",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Talonflame",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scatterbug",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spewpa",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vivillon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Litleo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pyroar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flabébé",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Floette",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Florges",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skiddo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gogoat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pancham",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pangoro",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Furfrou",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Espurr",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Meowstic",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Honedge",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Doublade",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Aegislash",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spritzee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Aromatisse",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Swirlix",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slurpuff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Inkay",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Malamar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Binacle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Barbaracle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skrelp",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dragalge",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Clauncher",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Clawitzer",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Helioptile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Heliolisk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tyrunt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tyrantrum",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Amaura",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Aurorus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sylveon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hawlucha",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dedenne",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Carbink",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Goomy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sliggoo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Goodra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Klefki",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Phantump",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Trevenant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pumpkaboo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gourgeist",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bergmite",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Avalugg",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Noibat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Noivern",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Xerneas",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Yveltal",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zygarde",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Diancie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hoopa",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Volcanion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rowlet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dartrix",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Decidueye",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Litten",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Torracat",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Incineroar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Popplio",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Brionne",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Primarina",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pikipek",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Trumbeak",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Toucannon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Yungoos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gumshoos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grubbin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Charjabug",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Vikavolt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Crabrawler",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Crabominable",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Oricorio",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cutiefly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ribombee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rockruff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lycanroc",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wishiwashi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mareanie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Toxapex",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mudbray",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mudsdale",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dewpider",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Araquanid",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fomantis",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lurantis",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Morelull",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shiinotic",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Salandit",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Salazzle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Stufful",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bewear",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bounsweet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Steenee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tsareena",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Comfey",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Oranguru",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Passimian",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wimpod",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Golisopod",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sandygast",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Palossand",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pyukumuku",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Type: Null",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Silvally",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Minior",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Komala",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Turtonator",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Togedemaru",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mimikyu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bruxish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drampa",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dhelmise",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Jangmo-o",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hakamo-o",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kommo-o",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tapu Koko",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tapu Lele",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tapu Bulu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tapu Fini",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cosmog",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cosmoem",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Solgaleo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lunala",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nihilego",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Buzzwole",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pheromosa",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Xurkitree",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Celesteela",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kartana",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Guzzlord",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Necrozma",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Magearna",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Marshadow",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Poipole",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Naganadel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Stakataka",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Blacephalon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zeraora",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Meltan",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Melmetal",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grookey",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Thwackey",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rillaboom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scorbunny",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Raboot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cinderace",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sobble",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drizzile",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Inteleon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skwovet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Greedent",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rookidee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Corvisquire",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Corviknight",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Blipbug",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dottler",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Orbeetle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nickit",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Thievul",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gossifleur",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Eldegoss",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wooloo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dubwool",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chewtle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drednaw",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Yamper",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Boltund",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rolycoly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Carkol",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Coalossal",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Applin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flapple",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Appletun",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Silicobra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sandaconda",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cramorant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arrokuda",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Barraskewda",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Toxel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Toxtricity",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sizzlipede",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Centiskorch",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Clobbopus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grapploct",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sinistea",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Polteageist",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hatenna",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hattrem",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hatterene",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Impidimp",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Morgrem",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grimmsnarl",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Obstagoon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Perrserker",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cursola",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sirfetch'd",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mr. Rime",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Runerigus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Milcery",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Alcremie",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Falinks",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pincurchin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Snom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Frosmoth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Stonjourner",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Eiscue",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Indeedee",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Morpeko",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cufant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Copperajah",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dracozolt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arctozolt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dracovish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arctovish",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Duraludon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dreepy",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Drakloak",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dragapult",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zacian",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zamazenta",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Eternatus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kubfu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Urshifu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Zarude",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Regieleki",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Regidrago",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Glastrier",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spectrier",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Calyrex",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wyrdeer",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kleavor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ursaluna",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Basculegion",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sneasler",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Overqwil",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Enamorus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sprigatito",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Floragato",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Meowscarada",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fuecoco",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Crocalor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Skeledirge",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Quaxly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Quaxwell",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Quaquaval",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lechonk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Oinkologne",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tarountula",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Spidops",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nymble",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Lokix",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pawmi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pawmo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pawmot",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tandemaus",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Maushold",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fidough",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dachsbun",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Smoliv",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dolliv",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arboliva",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Squawkabilly",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Nacli",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Naclstack",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Garganacl",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Charcadet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Armarouge",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ceruledge",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tadbulb",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bellibolt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wattrel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kilowattrel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Maschiff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Mabosstiff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Shroodle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Grafaiai",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bramblin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Brambleghast",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Toedscool",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Toedscruel",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Klawf",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Capsakid",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scovillain",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rellor",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Rabsca",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flittle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Espathra",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tinkatink",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tinkatuff",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tinkaton",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wiglett",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wugtrio",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Bombirdier",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Finizen",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Palafin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Varoom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Revavroom",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cyclizar",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Orthworm",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Glimmet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Glimmora",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Greavard",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Houndstone",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flamigo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cetoddle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Cetitan",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Veluza",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dondozo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Tatsugiri",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Annihilape",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Clodsire",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Farigiraf",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dudunsparce",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Kingambit",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Great Tusk",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Scream Tail",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Brute Bonnet",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Flutter Mane",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Slither Wing",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sandy Shocks",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Treads",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Bundle",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Hands",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Jugulis",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Moth",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Thorns",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Frigibax",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Arctibax",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Baxcalibur",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gimmighoul",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gholdengo",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Wo-Chien",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chien-Pao",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ting-Lu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Chi-Yu",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Roaring Moon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Valiant",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Koraidon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Miraidon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Walking Wake",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Leaves",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Dipplin",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Poltchageist",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Sinistcha",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Okidogi",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Munkidori",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Fezandipiti",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Ogerpon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Archaludon",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Hydrapple",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Gouging Fire",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Raging Bolt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Boulder",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Iron Crown",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Terapagos",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        pokemons.add(new PokemonBase("Pecharunt",null,null,
-                50,50,50,50,0,null,
-                Arrays.asList(  new movimiento("Placaje",40,"Normal",1),
-                        new movimiento("Latigo Cepa",45,"Planta",0),
-                        new movimiento("Ataque Rápido",40,"Normal",10),
-                        new movimiento("Golpe Furia",35,"Normal",15)
-                )));
-        //pokemons de gobierno
-        //estos los de pedrito
+        if (cargado) return;
+        pokemons.clear();
+        cargarBloque1();
+        cargarBloque2();
+        cargarBloque3();
+        cargarBloque4();
+        cargarBloque5();
+        cargarBloque6();
+        cargarBloque7();
+        cargarBloque8();
+        cargarBloque9();
+        cargarBloque10();
+        cargarBloque11();
+        cargarBloque12();
+        cargarBloque13();
+        cargado = true;
+    }
+
+    private static void cargarBloque1() {
+        pokemons.add(new PokemonBase("Bulbasaur", "Grass", "Poison", 45, 49, 49, 45, 16, "Ivysaur", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Ivysaur", "Grass", "Poison", 60, 62, 63, 60, 32, "Venusaur", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Venusaur", "Grass", "Poison", 80, 82, 83, 80, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Charmander", "Fire", null, 39, 52, 43, 65, 16, "Charmeleon", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Charmeleon", "Fire", null, 58, 64, 58, 80, 36, "Charizard", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Charizard", "Fire", "Flying", 78, 84, 78, 100, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Squirtle", "Water", null, 44, 48, 65, 43, 16, "Wartortle", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Wartortle", "Water", null, 59, 63, 80, 58, 36, "Blastoise", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Blastoise", "Water", null, 79, 83, 100, 78, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Caterpie", "Bug", null, 45, 30, 35, 45, 7, "Metapod", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Metapod", "Bug", null, 50, 20, 55, 30, 10, "Butterfree", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Butterfree", "Bug", "Flying", 60, 45, 50, 70, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Weedle", "Bug", "Poison", 40, 35, 30, 50, 7, "Kakuna", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Kakuna", "Bug", "Poison", 45, 25, 50, 35, 10, "Beedrill", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Beedrill", "Bug", "Poison", 65, 90, 40, 75, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Pidgey", "Normal", "Flying", 40, 45, 40, 56, 18, "Pidgeotto", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Pidgeotto", "Normal", "Flying", 63, 60, 55, 71, 36, "Pidgeot", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Pidgeot", "Normal", "Flying", 83, 80, 75, 101, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Rattata", "Normal", null, 30, 56, 35, 72, 20, "Raticate", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Raticate", "Normal", null, 55, 81, 60, 97, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Spearow", "Normal", "Flying", 40, 60, 30, 70, 20, "Fearow", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Fearow", "Normal", "Flying", 65, 90, 65, 100, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Ekans", "Poison", null, 35, 60, 44, 55, 22, "Arbok", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Arbok", "Poison", null, 60, 95, 69, 80, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Pikachu", "Electric", null, 35, 55, 40, 90, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Raichu", "Electric", null, 60, 90, 55, 110, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Sandshrew", "Ground", null, 50, 75, 85, 40, 22, "Sandslash", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Sandslash", "Ground", null, 75, 100, 110, 65, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Nidoran♀", "Poison", null, 55, 47, 52, 41, 16, "Nidorina", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Nidorina", "Poison", null, 70, 62, 67, 56, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Nidoqueen", "Poison", "Ground", 90, 92, 87, 76, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Nidoran♂", "Poison", null, 46, 57, 40, 50, 16, "Nidorino", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Nidorino", "Poison", null, 61, 72, 57, 65, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Nidoking", "Poison", "Ground", 81, 102, 77, 85, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Clefairy", "Fairy", null, 70, 45, 48, 35, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Clefable", "Fairy", null, 95, 70, 73, 60, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Vulpix", "Fire", null, 38, 41, 40, 65, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Ninetales", "Fire", null, 73, 76, 75, 100, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Jigglypuff", "Normal", "Fairy", 115, 45, 20, 20, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Wigglytuff", "Normal", "Fairy", 140, 70, 45, 45, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Zubat", "Poison", "Flying", 40, 45, 35, 55, 22, "Golbat", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Golbat", "Poison", "Flying", 75, 80, 70, 90, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Oddish", "Grass", "Poison", 45, 50, 55, 30, 21, "Gloom", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Gloom", "Grass", "Poison", 60, 65, 70, 40, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Vileplume", "Grass", "Poison", 75, 80, 85, 50, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Paras", "Bug", "Grass", 35, 70, 55, 25, 24, "Parasect", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Parasect", "Bug", "Grass", 60, 95, 80, 30, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Venonat", "Bug", "Poison", 60, 55, 50, 45, 31, "Venomoth", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Venomoth", "Bug", "Poison", 70, 65, 60, 90, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Diglett", "Ground", null, 10, 55, 25, 95, 26, "Dugtrio", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Dugtrio", "Ground", null, 35, 100, 50, 120, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Meowth", "Normal", null, 40, 45, 35, 90, 28, "Persian", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Persian", "Normal", null, 65, 70, 60, 115, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Psyduck", "Water", null, 50, 52, 48, 55, 33, "Golduck", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Golduck", "Water", null, 80, 82, 78, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Mankey", "Fighting", null, 40, 80, 35, 70, 28, "Primeape", Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Primeape", "Fighting", null, 65, 105, 60, 95, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Growlithe", "Fire", null, 55, 70, 45, 60, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Arcanine", "Fire", null, 90, 110, 80, 95, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Poliwag", "Water", null, 40, 50, 40, 90, 25, "Poliwhirl", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Poliwhirl", "Water", null, 65, 65, 65, 90, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Poliwrath", "Water", "Fighting", 90, 95, 95, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Abra", "Psychic", null, 25, 20, 15, 90, 16, "Kadabra", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Kadabra", "Psychic", null, 40, 35, 30, 105, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Alakazam", "Psychic", null, 55, 50, 45, 120, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Machop", "Fighting", null, 70, 80, 50, 35, 28, "Machoke", Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Machoke", "Fighting", null, 80, 100, 70, 45, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Machamp", "Fighting", null, 90, 130, 80, 55, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Bellsprout", "Grass", "Poison", 50, 75, 35, 40, 21, "Weepinbell", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Weepinbell", "Grass", "Poison", 65, 90, 50, 55, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Victreebel", "Grass", "Poison", 80, 105, 65, 70, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Tentacool", "Water", "Poison", 40, 40, 35, 70, 30, "Tentacruel", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Tentacruel", "Water", "Poison", 80, 70, 65, 100, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Geodude", "Rock", "Ground", 40, 80, 100, 20, 25, "Graveler", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Graveler", "Rock", "Ground", 55, 95, 115, 35, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Golem", "Rock", "Ground", 80, 120, 130, 45, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Ponyta", "Fire", null, 50, 85, 55, 90, 40, "Rapidash", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Rapidash", "Fire", null, 65, 100, 70, 105, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Slowpoke", "Water", "Psychic", 90, 65, 65, 15, 37, "Slowbro", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Slowbro", "Water", "Psychic", 95, 75, 110, 30, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+    }
+
+    private static void cargarBloque2() {
+        pokemons.add(new PokemonBase("Magnemite", "Electric", "Steel", 25, 35, 70, 45, 30, "Magneton", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Magneton", "Electric", "Steel", 50, 60, 95, 70, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Farfetch'd", "Normal", "Flying", 52, 90, 55, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Doduo", "Normal", "Flying", 35, 85, 45, 75, 31, "Dodrio", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Dodrio", "Normal", "Flying", 60, 110, 70, 110, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Seel", "Water", null, 65, 45, 55, 45, 34, "Dewgong", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Dewgong", "Water", "Ice", 90, 70, 80, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Grimer", "Poison", null, 80, 80, 50, 25, 38, "Muk", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Muk", "Poison", null, 105, 105, 75, 50, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Shellder", "Water", null, 30, 65, 100, 40, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Cloyster", "Water", "Ice", 50, 95, 180, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Gastly", "Ghost", "Poison", 30, 35, 30, 80, 25, "Haunter", Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Haunter", "Ghost", "Poison", 45, 50, 45, 95, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Gengar", "Ghost", "Poison", 60, 65, 60, 110, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Onix", "Rock", "Ground", 35, 45, 160, 70, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Drowzee", "Psychic", null, 60, 48, 45, 42, 26, "Hypno", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Hypno", "Psychic", null, 85, 73, 70, 67, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Krabby", "Water", null, 30, 105, 90, 50, 28, "Kingler", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Kingler", "Water", null, 55, 130, 115, 75, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Voltorb", "Electric", null, 40, 30, 50, 100, 30, "Electrode", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Electrode", "Electric", null, 60, 50, 70, 150, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Exeggcute", "Grass", "Psychic", 60, 40, 80, 40, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Exeggutor", "Grass", "Psychic", 95, 95, 85, 55, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Cubone", "Ground", null, 50, 50, 95, 35, 28, "Marowak", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Marowak", "Ground", null, 60, 80, 110, 45, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Hitmonlee", "Fighting", null, 50, 120, 53, 87, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Hitmonchan", "Fighting", null, 50, 105, 79, 76, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Lickitung", "Normal", null, 90, 55, 75, 30, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Koffing", "Poison", null, 40, 65, 95, 35, 35, "Weezing", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Weezing", "Poison", null, 65, 90, 120, 60, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Rhyhorn", "Ground", "Rock", 80, 85, 95, 25, 42, "Rhydon", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Rhydon", "Ground", "Rock", 105, 130, 120, 40, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Chansey", "Normal", null, 250, 5, 5, 50, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Tangela", "Grass", null, 65, 55, 115, 60, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Kangaskhan", "Normal", null, 105, 95, 80, 90, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Horsea", "Water", null, 30, 40, 70, 60, 32, "Seadra", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Seadra", "Water", null, 55, 65, 95, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Goldeen", "Water", null, 45, 67, 60, 63, 33, "Seaking", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Seaking", "Water", null, 80, 92, 65, 68, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Staryu", "Water", null, 30, 45, 55, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Starmie", "Water", "Psychic", 60, 75, 85, 115, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Mr. Mime", "Psychic", "Fairy", 40, 45, 65, 90, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Scyther", "Bug", "Flying", 70, 110, 80, 105, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Jynx", "Ice", "Psychic", 65, 50, 35, 95, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Electabuzz", "Electric", null, 65, 83, 57, 105, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Magmar", "Fire", null, 65, 95, 57, 93, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Pinsir", "Bug", null, 65, 125, 100, 85, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Tauros", "Normal", null, 75, 100, 95, 110, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Magikarp", "Water", null, 20, 10, 55, 80, 20, "Gyarados", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Gyarados", "Water", "Flying", 95, 125, 79, 81, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Lapras", "Water", "Ice", 130, 85, 80, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Ditto", "Normal", null, 48, 48, 48, 48, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Eevee", "Normal", null, 55, 55, 50, 55, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Vaporeon", "Water", null, 130, 65, 60, 65, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Jolteon", "Electric", null, 65, 65, 60, 130, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Flareon", "Fire", null, 65, 130, 60, 65, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Porygon", "Normal", null, 65, 60, 70, 40, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Omanyte", "Rock", "Water", 35, 40, 100, 35, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPistolaAgua())));
+        pokemons.add(new PokemonBase("Omastar", "Rock", "Water", 70, 60, 125, 55, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPistolaAgua())));
+        pokemons.add(new PokemonBase("Kabuto", "Rock", "Water", 30, 80, 90, 55, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPistolaAgua())));
+        pokemons.add(new PokemonBase("Kabutops", "Rock", "Water", 60, 115, 105, 80, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPistolaAgua())));
+        pokemons.add(new PokemonBase("Aerodactyl", "Rock", "Flying", 80, 105, 65, 130, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Snorlax", "Normal", null, 160, 110, 65, 30, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Articuno", "Ice", "Flying", 90, 85, 100, 85, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Zapdos", "Electric", "Flying", 90, 90, 85, 100, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Moltres", "Fire", "Flying", 90, 100, 90, 90, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Dratini", "Dragon", null, 41, 64, 45, 50, 30, "Dragonair", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Dragonair", "Dragon", null, 61, 84, 65, 70, 55, "Dragonite", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Dragonite", "Dragon", "Flying", 91, 134, 95, 80, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Mewtwo", "Psychic", null, 106, 110, 90, 130, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Mew", "Psychic", null, 100, 100, 100, 100, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Chikorita", "Grass", null, 45, 49, 65, 45, 16, "Bayleef", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Bayleef", "Grass", null, 60, 62, 80, 60, 32, "Meganium", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Meganium", "Grass", null, 80, 82, 100, 80, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Cyndaquil", "Fire", null, 39, 52, 43, 65, 14, "Quilava", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Quilava", "Fire", null, 58, 64, 58, 80, 36, "Typhlosion", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Typhlosion", "Fire", null, 78, 84, 78, 100, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Totodile", "Water", null, 50, 65, 64, 43, 18, "Croconaw", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Croconaw", "Water", null, 65, 80, 80, 58, 30, "Feraligatr", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Feraligatr", "Water", null, 85, 105, 100, 78, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+    }
+
+    private static void cargarBloque3() {
+        pokemons.add(new PokemonBase("Sentret", "Normal", null, 35, 46, 34, 20, 15, "Furret", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Furret", "Normal", null, 85, 76, 64, 90, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Hoothoot", "Normal", "Flying", 60, 30, 30, 50, 20, "Noctowl", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Noctowl", "Normal", "Flying", 100, 50, 50, 70, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Ledyba", "Bug", "Flying", 40, 20, 30, 55, 18, "Ledian", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Ledian", "Bug", "Flying", 55, 35, 50, 85, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Spinarak", "Bug", "Poison", 40, 60, 40, 30, 22, "Ariados", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Ariados", "Bug", "Poison", 70, 90, 70, 40, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Crobat", "Poison", "Flying", 85, 90, 80, 130, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Chinchou", "Water", "Electric", 75, 38, 38, 67, 27, "Lanturn", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Lanturn", "Water", "Electric", 125, 58, 58, 67, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Pichu", "Electric", null, 20, 40, 15, 60, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Cleffa", "Fairy", null, 50, 25, 28, 15, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Igglybuff", "Normal", "Fairy", 90, 30, 15, 15, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Togepi", "Fairy", null, 35, 20, 65, 20, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Togetic", "Fairy", "Flying", 55, 40, 85, 40, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Natu", "Psychic", "Flying", 40, 50, 45, 70, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Xatu", "Psychic", "Flying", 65, 75, 70, 95, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Mareep", "Electric", null, 55, 40, 40, 35, 15, "Flaaffy", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Flaaffy", "Electric", null, 70, 55, 55, 45, 30, "Ampharos", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Ampharos", "Electric", null, 90, 75, 85, 55, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Bellossom", "Grass", null, 75, 80, 95, 50, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Marill", "Water", "Fairy", 70, 20, 50, 40, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Azumarill", "Water", "Fairy", 100, 50, 80, 50, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Sudowoodo", "Rock", null, 70, 100, 115, 30, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Politoed", "Water", null, 90, 75, 75, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Hoppip", "Grass", "Flying", 35, 35, 40, 50, 18, "Skiploom", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Skiploom", "Grass", "Flying", 55, 45, 50, 80, 27, "Jumpluff", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Jumpluff", "Grass", "Flying", 75, 55, 70, 110, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Aipom", "Normal", null, 55, 70, 55, 85, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Sunkern", "Grass", null, 30, 30, 30, 30, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Sunflora", "Grass", null, 75, 75, 55, 30, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Yanma", "Bug", "Flying", 65, 65, 45, 95, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Wooper", "Water", "Ground", 55, 45, 45, 15, 20, "Quagsire", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Quagsire", "Water", "Ground", 95, 85, 85, 35, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Espeon", "Psychic", null, 65, 65, 60, 110, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Umbreon", "Dark", null, 95, 65, 110, 65, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Murkrow", "Dark", "Flying", 60, 85, 42, 91, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Slowking", "Water", "Psychic", 95, 75, 80, 30, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Misdreavus", "Ghost", null, 60, 60, 60, 85, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Unown", "Psychic", null, 48, 72, 48, 48, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Wobbuffet", "Psychic", null, 190, 33, 58, 33, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Girafarig", "Normal", "Psychic", 70, 80, 65, 85, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Pineco", "Bug", null, 50, 65, 90, 15, 31, "Forretress", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Forretress", "Bug", "Steel", 75, 90, 140, 40, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Dunsparce", "Normal", null, 100, 70, 70, 45, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Gligar", "Ground", "Flying", 65, 75, 105, 85, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Steelix", "Steel", "Ground", 75, 85, 200, 30, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Snubbull", "Fairy", null, 60, 80, 50, 30, 23, "Granbull", Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Granbull", "Fairy", null, 90, 120, 75, 45, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Qwilfish", "Water", "Poison", 65, 95, 85, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Scizor", "Bug", "Steel", 70, 130, 100, 65, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Shuckle", "Bug", "Rock", 20, 10, 230, 5, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Heracross", "Bug", "Fighting", 80, 125, 75, 85, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Sneasel", "Dark", "Ice", 55, 95, 55, 115, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora())));
+        pokemons.add(new PokemonBase("Teddiursa", "Normal", null, 60, 80, 50, 40, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Ursaring", "Normal", null, 90, 130, 75, 55, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Slugma", "Fire", null, 40, 40, 40, 20, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Magcargo", "Fire", "Rock", 60, 50, 120, 30, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Swinub", "Ice", "Ground", 50, 50, 40, 50, 33, "Piloswine", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Piloswine", "Ice", "Ground", 100, 100, 80, 50, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Corsola", "Water", "Rock", 65, 55, 95, 35, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Remoraid", "Water", null, 35, 65, 35, 65, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Octillery", "Water", null, 75, 105, 75, 45, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Delibird", "Ice", "Flying", 45, 55, 45, 75, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Mantine", "Water", "Flying", 85, 40, 70, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Skarmory", "Steel", "Flying", 65, 80, 140, 70, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Houndour", "Dark", "Fire", 45, 60, 30, 65, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas())));
+        pokemons.add(new PokemonBase("Houndoom", "Dark", "Fire", 75, 90, 50, 95, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas())));
+        pokemons.add(new PokemonBase("Kingdra", "Water", "Dragon", 75, 95, 95, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Phanpy", "Ground", null, 90, 60, 60, 40, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Donphan", "Ground", null, 90, 120, 120, 50, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Porygon2", "Normal", null, 85, 80, 90, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Stantler", "Normal", null, 73, 95, 62, 85, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Smeargle", "Normal", null, 55, 20, 35, 75, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Tyrogue", "Fighting", null, 35, 35, 35, 35, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Hitmontop", "Fighting", null, 50, 95, 95, 70, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Smoochum", "Ice", "Psychic", 45, 30, 15, 65, 30, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Elekid", "Electric", null, 45, 63, 37, 95, 30, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Magby", "Fire", null, 45, 75, 37, 83, 30, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+    }
+
+    private static void cargarBloque4() {
+        pokemons.add(new PokemonBase("Miltank", "Normal", null, 95, 80, 105, 100, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Blissey", "Normal", null, 255, 10, 10, 55, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Raikou", "Electric", null, 90, 85, 75, 115, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Entei", "Fire", null, 115, 115, 85, 100, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Suicune", "Water", null, 100, 75, 115, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Larvitar", "Rock", "Ground", 50, 64, 50, 41, 30, "Pupitar", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Pupitar", "Rock", "Ground", 70, 84, 70, 51, 55, "Tyranitar", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Tyranitar", "Rock", "Dark", 100, 134, 110, 61, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getMordisco())));
+        pokemons.add(new PokemonBase("Lugia", "Psychic", "Flying", 106, 90, 130, 110, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Ho-oh", "Fire", "Flying", 106, 130, 90, 90, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Celebi", "Psychic", "Grass", 100, 100, 100, 100, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Treecko", "Grass", null, 40, 45, 35, 70, 16, "Grovyle", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Grovyle", "Grass", null, 50, 65, 45, 95, 36, "Sceptile", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Sceptile", "Grass", null, 70, 85, 65, 120, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Torchic", "Fire", null, 45, 60, 40, 45, 16, "Combusken", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Combusken", "Fire", "Fighting", 60, 85, 60, 55, 36, "Blaziken", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Blaziken", "Fire", "Fighting", 80, 120, 70, 80, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Mudkip", "Water", null, 50, 70, 50, 40, 16, "Marshtomp", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Marshtomp", "Water", "Ground", 70, 85, 70, 50, 36, "Swampert", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Swampert", "Water", "Ground", 100, 110, 90, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Poochyena", "Dark", null, 35, 55, 35, 35, 18, "Mightyena", Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Mightyena", "Dark", null, 70, 90, 70, 70, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Zigzagoon", "Normal", null, 38, 30, 41, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Linoone", "Normal", null, 78, 70, 61, 100, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Wurmple", "Bug", null, 45, 45, 35, 20, 7, "Silcoon", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Silcoon", "Bug", null, 50, 35, 55, 15, 10, "Beautifly", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Beautifly", "Bug", "Flying", 60, 70, 50, 65, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Cascoon", "Bug", null, 50, 35, 55, 15, 10, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Dustox", "Bug", "Poison", 60, 50, 70, 65, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Lotad", "Water", "Grass", 40, 30, 30, 30, 14, "Lombre", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Lombre", "Water", "Grass", 60, 50, 50, 50, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Ludicolo", "Water", "Grass", 80, 70, 70, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Seedot", "Grass", null, 40, 40, 50, 30, 14, "Nuzleaf", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Nuzleaf", "Grass", "Dark", 70, 70, 40, 60, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Shiftry", "Grass", "Dark", 90, 100, 60, 80, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Taillow", "Normal", "Flying", 40, 55, 30, 85, 22, "Swellow", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Swellow", "Normal", "Flying", 60, 85, 60, 125, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Wingull", "Water", "Flying", 40, 30, 30, 85, 25, "Pelipper", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Pelipper", "Water", "Flying", 60, 50, 100, 65, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Ralts", "Psychic", "Fairy", 28, 25, 25, 40, 20, "Kirlia", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Kirlia", "Psychic", "Fairy", 38, 35, 35, 50, 30, "Gardevoir", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Gardevoir", "Psychic", "Fairy", 68, 65, 65, 80, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Surskit", "Bug", "Water", 40, 30, 32, 65, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Masquerain", "Bug", "Flying", 70, 60, 62, 80, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Shroomish", "Grass", null, 60, 40, 60, 35, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Breloom", "Grass", "Fighting", 60, 130, 80, 70, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Slakoth", "Normal", null, 60, 60, 60, 30, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Vigoroth", "Normal", null, 80, 80, 80, 90, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Slaking", "Normal", null, 150, 160, 100, 100, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Nincada", "Bug", "Ground", 31, 45, 90, 40, 20, "Ninjask", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Ninjask", "Bug", "Flying", 61, 90, 45, 160, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Shedinja", "Bug", "Ghost", 1, 90, 45, 40, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Whismur", "Normal", null, 64, 51, 23, 28, 20, "Loudred", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Loudred", "Normal", null, 84, 71, 43, 48, 40, "Exploud", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Exploud", "Normal", null, 104, 91, 63, 68, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Makuhita", "Fighting", null, 72, 60, 30, 25, 24, "Hariyama", Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Hariyama", "Fighting", null, 144, 120, 60, 50, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Azurill", "Normal", "Fairy", 50, 20, 40, 20, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Nosepass", "Rock", null, 30, 45, 135, 30, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Skitty", "Normal", null, 50, 45, 45, 50, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Delcatty", "Normal", null, 70, 65, 65, 90, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Sableye", "Dark", "Ghost", 50, 75, 75, 50, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Mawile", "Steel", "Fairy", 50, 85, 85, 50, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getBesoAmoroso())));
+        pokemons.add(new PokemonBase("Aron", "Steel", "Rock", 50, 70, 100, 30, 32, "Lairon", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getLanzaRocas())));
+        pokemons.add(new PokemonBase("Lairon", "Steel", "Rock", 60, 90, 140, 40, 42, "Aggron", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getLanzaRocas())));
+        pokemons.add(new PokemonBase("Aggron", "Steel", "Rock", 70, 110, 180, 50, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getLanzaRocas())));
+        pokemons.add(new PokemonBase("Meditite", "Fighting", "Psychic", 30, 40, 55, 60, 37, "Medicham", Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Medicham", "Fighting", "Psychic", 60, 60, 75, 80, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Electrike", "Electric", null, 40, 45, 40, 65, 26, "Manectric", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Manectric", "Electric", null, 70, 75, 60, 105, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Plusle", "Electric", null, 60, 50, 40, 95, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Minun", "Electric", null, 60, 40, 50, 95, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Volbeat", "Bug", null, 65, 73, 75, 85, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Illumise", "Bug", null, 65, 47, 75, 85, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Roselia", "Grass", "Poison", 50, 60, 45, 65, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Gulpin", "Poison", null, 70, 43, 53, 40, 26, "Swalot", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Swalot", "Poison", null, 100, 73, 83, 55, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Carvanha", "Water", "Dark", 45, 90, 20, 65, 30, "Sharpedo", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Sharpedo", "Water", "Dark", 70, 120, 40, 95, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Wailmer", "Water", null, 130, 70, 35, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+    }
+
+    private static void cargarBloque5() {
+        pokemons.add(new PokemonBase("Wailord", "Water", null, 170, 90, 45, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Numel", "Fire", "Ground", 60, 60, 40, 35, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Camerupt", "Fire", "Ground", 70, 100, 70, 40, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Torkoal", "Fire", null, 70, 85, 140, 20, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Spoink", "Psychic", null, 60, 25, 35, 60, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Grumpig", "Psychic", null, 80, 45, 65, 80, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Spinda", "Normal", null, 60, 60, 60, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Trapinch", "Ground", null, 45, 100, 45, 10, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Vibrava", "Ground", "Dragon", 50, 70, 50, 70, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Flygon", "Ground", "Dragon", 80, 100, 80, 100, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Cacnea", "Grass", null, 50, 85, 40, 35, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Cacturne", "Grass", "Dark", 70, 115, 60, 55, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Swablu", "Normal", "Flying", 45, 40, 60, 50, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Altaria", "Dragon", "Flying", 75, 70, 90, 80, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Zangoose", "Normal", null, 73, 115, 60, 90, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Seviper", "Poison", null, 73, 100, 60, 65, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Lunatone", "Rock", "Psychic", 90, 55, 65, 70, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Solrock", "Rock", "Psychic", 90, 95, 85, 70, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Barboach", "Water", "Ground", 50, 48, 43, 60, 30, "Whiscash", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Whiscash", "Water", "Ground", 110, 78, 73, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Corphish", "Water", null, 43, 80, 65, 35, 30, "Crawdaunt", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Crawdaunt", "Water", "Dark", 63, 120, 85, 55, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Baltoy", "Ground", "Psychic", 40, 40, 55, 55, 36, "Claydol", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Claydol", "Ground", "Psychic", 60, 70, 105, 75, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Lileep", "Rock", "Grass", 66, 41, 77, 23, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getLatigoCepa())));
+        pokemons.add(new PokemonBase("Cradily", "Rock", "Grass", 86, 81, 97, 43, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getLatigoCepa())));
+        pokemons.add(new PokemonBase("Anorith", "Rock", "Bug", 45, 95, 50, 75, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getDobleAtaque())));
+        pokemons.add(new PokemonBase("Armaldo", "Rock", "Bug", 75, 125, 100, 45, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getDobleAtaque())));
+        pokemons.add(new PokemonBase("Feebas", "Water", null, 20, 15, 20, 80, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Milotic", "Water", null, 95, 60, 79, 81, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Castform", "Normal", null, 70, 70, 70, 70, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Kecleon", "Normal", null, 60, 90, 70, 40, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Shuppet", "Ghost", null, 44, 75, 35, 45, 37, "Banette", Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Banette", "Ghost", null, 64, 115, 65, 65, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Duskull", "Ghost", null, 20, 40, 90, 25, 37, "Dusclops", Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Dusclops", "Ghost", null, 40, 70, 130, 25, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Tropius", "Grass", "Flying", 99, 68, 83, 51, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Chimecho", "Psychic", null, 75, 50, 80, 65, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Absol", "Dark", null, 65, 130, 60, 75, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Wynaut", "Psychic", null, 95, 23, 48, 23, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Snorunt", "Ice", null, 50, 50, 50, 50, 42, "Glalie", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Glalie", "Ice", null, 80, 80, 80, 80, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Spheal", "Ice", "Water", 70, 40, 50, 25, 32, "Sealeo", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Sealeo", "Ice", "Water", 90, 60, 70, 45, 44, "Walrein", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Walrein", "Ice", "Water", 110, 80, 90, 65, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Clamperl", "Water", null, 35, 64, 85, 32, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Huntail", "Water", null, 55, 104, 105, 52, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Gorebyss", "Water", null, 55, 84, 105, 52, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Relicanth", "Water", "Rock", 100, 90, 130, 55, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Luvdisc", "Water", null, 43, 30, 55, 97, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Bagon", "Dragon", null, 45, 75, 60, 50, 30, "Shelgon", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Shelgon", "Dragon", null, 65, 95, 100, 50, 50, "Salamence", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Salamence", "Dragon", "Flying", 95, 135, 80, 100, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Beldum", "Steel", "Psychic", 40, 55, 80, 30, 20, "Metang", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Metang", "Steel", "Psychic", 60, 75, 100, 50, 45, "Metagross", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Metagross", "Steel", "Psychic", 80, 135, 130, 70, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Regirock", "Rock", null, 80, 100, 200, 50, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Regice", "Ice", null, 80, 50, 100, 50, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Registeel", "Steel", null, 80, 75, 150, 50, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Latias", "Dragon", "Psychic", 80, 80, 90, 110, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo())));
+        pokemons.add(new PokemonBase("Latios", "Dragon", "Psychic", 80, 90, 80, 110, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo())));
+        pokemons.add(new PokemonBase("Kyogre", "Water", null, 100, 100, 90, 90, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Groudon", "Ground", null, 100, 150, 140, 90, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Rayquaza", "Dragon", "Flying", 105, 150, 90, 95, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Jirachi", "Steel", "Psychic", 100, 100, 100, 100, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Deoxys", "Psychic", null, 50, 150, 50, 150, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Turtwig", "Grass", null, 55, 68, 64, 31, 18, "Grotle", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Grotle", "Grass", null, 75, 89, 85, 36, 32, "Torterra", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Torterra", "Grass", "Ground", 95, 109, 105, 56, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Chimchar", "Fire", null, 44, 58, 44, 61, 14, "Monferno", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Monferno", "Fire", "Fighting", 64, 78, 52, 81, 36, "Infernape", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Infernape", "Fire", "Fighting", 76, 104, 71, 108, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Piplup", "Water", null, 53, 51, 53, 40, 16, "Prinplup", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Prinplup", "Water", null, 64, 66, 68, 50, 36, "Empoleon", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Empoleon", "Water", "Steel", 84, 86, 88, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Starly", "Normal", "Flying", 40, 55, 30, 60, 14, "Staravia", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Staravia", "Normal", "Flying", 55, 75, 50, 80, 34, "Staraptor", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Staraptor", "Normal", "Flying", 85, 120, 70, 100, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Bidoof", "Normal", null, 59, 45, 40, 31, 15, "Bibarel", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Bibarel", "Normal", "Water", 79, 85, 60, 71, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+    }
+
+    private static void cargarBloque6() {
+        pokemons.add(new PokemonBase("Kricketot", "Bug", null, 37, 25, 41, 25, 10, "Kricketune", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Kricketune", "Bug", null, 77, 85, 51, 65, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Shinx", "Electric", null, 45, 65, 34, 45, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Luxio", "Electric", null, 60, 85, 49, 60, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Luxray", "Electric", null, 80, 120, 79, 70, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Budew", "Grass", "Poison", 40, 30, 35, 55, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Roserade", "Grass", "Poison", 60, 70, 65, 90, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Cranidos", "Rock", null, 67, 125, 40, 58, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Rampardos", "Rock", null, 97, 165, 60, 58, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Shieldon", "Rock", "Steel", 30, 42, 118, 30, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getClavoCainon())));
+        pokemons.add(new PokemonBase("Bastiodon", "Rock", "Steel", 60, 52, 168, 30, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getClavoCainon())));
+        pokemons.add(new PokemonBase("Burmy", "Bug", null, 40, 29, 45, 36, 20, "Wormadam", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Wormadam", "Bug", "Grass", 60, 59, 85, 36, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Mothim", "Bug", "Flying", 70, 94, 50, 66, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Combee", "Bug", "Flying", 30, 30, 42, 70, 21, "Vespiquen", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Vespiquen", "Bug", "Flying", 70, 80, 102, 40, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Pachirisu", "Electric", null, 60, 45, 70, 95, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Buizel", "Water", null, 55, 65, 35, 85, 26, "Floatzel", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Floatzel", "Water", null, 85, 105, 55, 115, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Cherubi", "Grass", null, 45, 35, 45, 35, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Cherrim", "Grass", null, 70, 60, 70, 85, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Shellos", "Water", null, 76, 48, 48, 34, 30, "Gastrodon", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Gastrodon", "Water", "Ground", 111, 83, 68, 39, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Ambipom", "Normal", null, 75, 100, 66, 115, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Drifloon", "Ghost", "Flying", 90, 50, 34, 70, 28, "Drifblim", Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Drifblim", "Ghost", "Flying", 150, 80, 44, 80, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Buneary", "Normal", null, 55, 66, 44, 85, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Lopunny", "Normal", null, 65, 76, 84, 105, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Mismagius", "Ghost", null, 60, 60, 60, 105, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Honchkrow", "Dark", "Flying", 100, 125, 52, 71, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Glameow", "Normal", null, 49, 55, 42, 85, 38, "Purugly", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Purugly", "Normal", null, 71, 82, 64, 112, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Chingling", "Psychic", null, 45, 30, 50, 45, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Stunky", "Poison", "Dark", 63, 63, 47, 74, 34, "Skuntank", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Skuntank", "Poison", "Dark", 103, 93, 67, 84, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Bronzor", "Steel", "Psychic", 57, 24, 86, 23, 33, "Bronzong", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Bronzong", "Steel", "Psychic", 67, 89, 116, 33, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Bonsly", "Rock", null, 50, 80, 95, 10, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Mime Jr.", "Psychic", "Fairy", 20, 25, 45, 60, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Happiny", "Normal", null, 100, 5, 5, 30, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Chatot", "Normal", "Flying", 76, 65, 45, 91, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Spiritomb", "Ghost", "Dark", 50, 92, 108, 35, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getMordisco())));
+        pokemons.add(new PokemonBase("Gible", "Dragon", "Ground", 58, 70, 45, 42, 24, "Gabite", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang())));
+        pokemons.add(new PokemonBase("Gabite", "Dragon", "Ground", 68, 90, 65, 82, 48, "Garchomp", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang())));
+        pokemons.add(new PokemonBase("Garchomp", "Dragon", "Ground", 108, 130, 95, 102, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang())));
+        pokemons.add(new PokemonBase("Munchlax", "Normal", null, 135, 85, 40, 5, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Riolu", "Fighting", null, 40, 70, 40, 60, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Lucario", "Fighting", "Steel", 70, 110, 70, 90, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Hippopotas", "Ground", null, 68, 72, 78, 32, 34, "Hippowdon", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Hippowdon", "Ground", null, 108, 112, 118, 47, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Skorupi", "Poison", "Bug", 40, 50, 90, 65, 40, "Drapion", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Drapion", "Poison", "Dark", 70, 90, 110, 95, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Croagunk", "Poison", "Fighting", 48, 61, 40, 50, 37, "Toxicroak", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Toxicroak", "Poison", "Fighting", 83, 106, 65, 85, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Carnivine", "Grass", null, 74, 100, 72, 46, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Finneon", "Water", null, 49, 49, 56, 66, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Lumineon", "Water", null, 69, 69, 76, 91, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Mantyke", "Water", "Flying", 45, 20, 50, 50, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Snover", "Grass", "Ice", 60, 62, 50, 40, 40, "Abomasnow", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Abomasnow", "Grass", "Ice", 90, 92, 75, 60, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Weavile", "Dark", "Ice", 70, 120, 65, 125, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora())));
+        pokemons.add(new PokemonBase("Magnezone", "Electric", "Steel", 70, 70, 115, 60, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Lickilicky", "Normal", null, 110, 85, 95, 50, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Rhyperior", "Ground", "Rock", 115, 140, 130, 40, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Tangrowth", "Grass", null, 100, 100, 125, 50, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Electivire", "Electric", null, 75, 123, 67, 95, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Magmortar", "Fire", null, 75, 95, 67, 83, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Togekiss", "Fairy", "Flying", 85, 50, 95, 80, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Yanmega", "Bug", "Flying", 86, 76, 86, 95, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Leafeon", "Grass", null, 65, 110, 130, 95, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Glaceon", "Ice", null, 65, 60, 110, 65, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Gliscor", "Ground", "Flying", 75, 95, 125, 95, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Mamoswine", "Ice", "Ground", 110, 130, 80, 80, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Porygon-Z", "Normal", null, 85, 80, 70, 90, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Gallade", "Psychic", "Fighting", 68, 125, 65, 80, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Probopass", "Rock", "Steel", 60, 55, 145, 40, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getClavoCainon())));
+        pokemons.add(new PokemonBase("Dusknoir", "Ghost", null, 45, 100, 135, 45, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Froslass", "Ice", "Ghost", 70, 80, 70, 110, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Rotom", "Electric", "Ghost", 50, 50, 77, 91, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Uxie", "Psychic", null, 75, 75, 130, 95, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+    }
+
+    private static void cargarBloque7() {
+        pokemons.add(new PokemonBase("Mesprit", "Psychic", null, 80, 105, 105, 80, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Azelf", "Psychic", null, 75, 125, 70, 115, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Dialga", "Steel", "Dragon", 100, 120, 120, 90, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getFuriaDragon())));
+        pokemons.add(new PokemonBase("Palkia", "Water", "Dragon", 90, 120, 100, 100, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Heatran", "Fire", "Steel", 91, 90, 106, 77, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Regigigas", "Normal", null, 110, 160, 110, 100, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Giratina", "Ghost", "Dragon", 150, 100, 120, 90, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getFuriaDragon())));
+        pokemons.add(new PokemonBase("Cresselia", "Psychic", null, 120, 70, 110, 85, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Phione", "Water", null, 80, 80, 80, 80, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Manaphy", "Water", null, 100, 100, 100, 100, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Darkrai", "Dark", null, 70, 90, 90, 125, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Shaymin", "Grass", null, 100, 100, 100, 100, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Arceus", "Normal", null, 120, 120, 120, 120, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Victini", "Psychic", "Fire", 100, 100, 100, 100, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Snivy", "Grass", null, 45, 45, 55, 63, 17, "Servine", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Servine", "Grass", null, 60, 60, 75, 83, 36, "Serperior", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Serperior", "Grass", null, 75, 75, 95, 113, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Tepig", "Fire", null, 65, 63, 45, 45, 17, "Pignite", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Pignite", "Fire", "Fighting", 90, 93, 55, 55, 36, "Emboar", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Emboar", "Fire", "Fighting", 110, 123, 65, 65, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Oshawott", "Water", null, 55, 55, 45, 45, 17, "Dewott", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Dewott", "Water", null, 75, 75, 60, 60, 36, "Samurott", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Samurott", "Water", null, 95, 100, 85, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Patrat", "Normal", null, 45, 55, 39, 42, 20, "Watchog", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Watchog", "Normal", null, 60, 85, 69, 77, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Lillipup", "Normal", null, 45, 60, 45, 55, 16, "Herdier", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Herdier", "Normal", null, 65, 80, 65, 60, 32, "Stoutland", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Stoutland", "Normal", null, 85, 110, 90, 80, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Purrloin", "Dark", null, 41, 50, 37, 66, 20, "Liepard", Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Liepard", "Dark", null, 64, 88, 50, 106, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Pansage", "Grass", null, 50, 53, 48, 64, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Simisage", "Grass", null, 75, 98, 63, 101, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Pansear", "Fire", null, 50, 53, 48, 64, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Simisear", "Fire", null, 75, 98, 63, 101, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Panpour", "Water", null, 50, 53, 48, 64, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Simipour", "Water", null, 75, 98, 63, 101, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Munna", "Psychic", null, 76, 25, 45, 24, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Musharna", "Psychic", null, 116, 55, 85, 29, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Pidove", "Normal", "Flying", 50, 55, 50, 43, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Tranquill", "Normal", "Flying", 62, 77, 62, 65, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Unfezant", "Normal", "Flying", 80, 115, 80, 93, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Blitzle", "Electric", null, 45, 60, 32, 76, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Zebstrika", "Electric", null, 75, 100, 63, 116, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Roggenrola", "Rock", null, 55, 75, 85, 15, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Boldore", "Rock", null, 70, 105, 105, 20, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Gigalith", "Rock", null, 85, 135, 130, 25, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Woobat", "Psychic", "Flying", 65, 45, 43, 72, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Swoobat", "Psychic", "Flying", 67, 57, 55, 114, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Drilbur", "Ground", null, 60, 85, 40, 68, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Excadrill", "Ground", "Steel", 110, 135, 60, 88, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Audino", "Normal", null, 103, 60, 86, 50, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Timburr", "Fighting", null, 75, 80, 55, 35, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Gurdurr", "Fighting", null, 85, 105, 85, 40, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Conkeldurr", "Fighting", null, 105, 140, 95, 45, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Tympole", "Water", null, 50, 50, 40, 64, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Palpitoad", "Water", "Ground", 75, 65, 55, 69, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Seismitoad", "Water", "Ground", 105, 95, 75, 74, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Throh", "Fighting", null, 120, 100, 85, 45, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Sawk", "Fighting", null, 75, 125, 75, 85, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Sewaddle", "Bug", "Grass", 45, 53, 70, 42, 20, "Swadloon", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Swadloon", "Bug", "Grass", 55, 63, 90, 42, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Leavanny", "Bug", "Grass", 75, 103, 80, 92, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Venipede", "Bug", "Poison", 30, 45, 59, 57, 22, "Whirlipede", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Whirlipede", "Bug", "Poison", 40, 55, 99, 47, 30, "Scolipede", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Scolipede", "Bug", "Poison", 60, 100, 89, 112, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Cottonee", "Grass", "Fairy", 40, 27, 60, 66, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Whimsicott", "Grass", "Fairy", 60, 67, 85, 116, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Petilil", "Grass", null, 45, 35, 50, 30, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Lilligant", "Grass", null, 70, 60, 75, 90, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Basculin", "Water", null, 70, 92, 65, 98, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Sandile", "Ground", "Dark", 50, 72, 35, 65, 29, "Krokorok", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Krokorok", "Ground", "Dark", 60, 82, 45, 74, 40, "Krookodile", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Krookodile", "Ground", "Dark", 95, 117, 80, 92, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Darumaka", "Fire", null, 70, 90, 45, 50, 35, "Darmanitan", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Darmanitan", "Fire", null, 105, 140, 55, 95, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Maractus", "Grass", null, 75, 86, 67, 60, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Dwebble", "Bug", "Rock", 50, 65, 85, 55, 34, "Crustle", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Crustle", "Bug", "Rock", 70, 105, 125, 45, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Scraggy", "Dark", "Fighting", 50, 75, 70, 48, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada())));
+        pokemons.add(new PokemonBase("Scrafty", "Dark", "Fighting", 65, 90, 115, 58, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada())));
+    }
+
+    private static void cargarBloque8() {
+        pokemons.add(new PokemonBase("Sigilyph", "Psychic", "Flying", 72, 58, 80, 97, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Yamask", "Ghost", null, 38, 30, 85, 30, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Cofagrigus", "Ghost", null, 58, 50, 145, 30, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Tirtouga", "Water", "Rock", 54, 78, 103, 22, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Carracosta", "Water", "Rock", 74, 108, 133, 32, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Archen", "Rock", "Flying", 55, 112, 45, 70, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Archeops", "Rock", "Flying", 75, 140, 65, 110, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Trubbish", "Poison", null, 50, 50, 62, 65, 36, "Garbodor", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Garbodor", "Poison", null, 80, 95, 82, 75, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Zorua", "Dark", null, 40, 65, 40, 65, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Zoroark", "Dark", null, 60, 105, 60, 105, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Minccino", "Normal", null, 55, 50, 40, 75, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Cinccino", "Normal", null, 75, 95, 60, 115, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Gothita", "Psychic", null, 45, 30, 50, 45, 32, "Gothorita", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Gothorita", "Psychic", null, 60, 45, 70, 55, 41, "Gothitelle", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Gothitelle", "Psychic", null, 70, 55, 95, 65, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Solosis", "Psychic", null, 45, 30, 40, 20, 32, "Duosion", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Duosion", "Psychic", null, 65, 40, 50, 30, 41, "Reuniclus", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Reuniclus", "Psychic", null, 110, 65, 75, 30, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Ducklett", "Water", "Flying", 62, 44, 50, 55, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Swanna", "Water", "Flying", 75, 87, 63, 98, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Vanillite", "Ice", null, 36, 50, 50, 44, 35, "Vanillish", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Vanillish", "Ice", null, 51, 65, 65, 59, 47, "Vanilluxe", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Vanilluxe", "Ice", null, 71, 95, 85, 79, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Deerling", "Normal", "Grass", 60, 60, 50, 75, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Sawsbuck", "Normal", "Grass", 80, 100, 70, 95, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Emolga", "Electric", "Flying", 55, 75, 60, 103, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Karrablast", "Bug", null, 50, 75, 45, 60, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Escavalier", "Bug", "Steel", 70, 135, 105, 20, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Foongus", "Grass", "Poison", 69, 55, 45, 15, 39, "Amoonguss", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Amoonguss", "Grass", "Poison", 114, 85, 70, 30, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Frillish", "Water", "Ghost", 55, 40, 50, 40, 40, "Jellicent", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Jellicent", "Water", "Ghost", 100, 60, 70, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Alomomola", "Water", null, 165, 75, 80, 65, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Joltik", "Bug", "Electric", 50, 47, 50, 65, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Galvantula", "Bug", "Electric", 70, 77, 60, 108, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Ferroseed", "Grass", "Steel", 44, 50, 91, 10, 40, "Ferrothorn", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Ferrothorn", "Grass", "Steel", 74, 94, 131, 20, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Klink", "Steel", null, 40, 55, 70, 30, 38, "Klang", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Klang", "Steel", null, 60, 80, 95, 50, 49, "Klinklang", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Klinklang", "Steel", null, 60, 100, 115, 90, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Tynamo", "Electric", null, 35, 55, 40, 60, 39, "Eelektrik", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Eelektrik", "Electric", null, 65, 85, 70, 40, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Eelektross", "Electric", null, 85, 115, 80, 50, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Elgyem", "Psychic", null, 55, 55, 55, 30, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Beheeyem", "Psychic", null, 75, 75, 75, 40, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Litwick", "Ghost", "Fire", 50, 30, 55, 20, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getAscuas())));
+        pokemons.add(new PokemonBase("Lampent", "Ghost", "Fire", 60, 40, 60, 55, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getAscuas())));
+        pokemons.add(new PokemonBase("Chandelure", "Ghost", "Fire", 60, 55, 90, 80, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getAscuas())));
+        pokemons.add(new PokemonBase("Axew", "Dragon", null, 46, 87, 60, 57, 38, "Fraxure", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Fraxure", "Dragon", null, 66, 117, 70, 67, 48, "Haxorus", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Haxorus", "Dragon", null, 76, 147, 90, 97, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Cubchoo", "Ice", null, 55, 70, 40, 40, 37, "Beartic", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Beartic", "Ice", null, 95, 130, 80, 50, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Cryogonal", "Ice", null, 80, 50, 50, 105, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Shelmet", "Bug", null, 50, 40, 85, 25, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Accelgor", "Bug", null, 80, 70, 40, 145, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Stunfisk", "Ground", "Electric", 109, 66, 84, 32, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Mienfoo", "Fighting", null, 45, 85, 50, 65, 50, "Mienshao", Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Mienshao", "Fighting", null, 65, 125, 60, 105, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Druddigon", "Dragon", null, 77, 120, 90, 48, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Golett", "Ground", "Ghost", 59, 74, 50, 35, 43, "Golurk", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Golurk", "Ground", "Ghost", 89, 124, 80, 55, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Pawniard", "Dark", "Steel", 45, 85, 70, 60, 52, "Bisharp", Arrays.asList(Ataques.getMordisco(), Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Bisharp", "Dark", "Steel", 65, 125, 100, 70, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Bouffalant", "Normal", null, 95, 110, 95, 55, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Rufflet", "Normal", "Flying", 70, 83, 50, 60, 54, "Braviary", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Braviary", "Normal", "Flying", 100, 123, 75, 80, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Vullaby", "Dark", "Flying", 70, 55, 75, 60, 54, "Mandibuzz", Arrays.asList(Ataques.getMordisco(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Mandibuzz", "Dark", "Flying", 110, 65, 105, 80, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Heatmor", "Fire", null, 85, 97, 66, 65, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Durant", "Bug", "Steel", 58, 109, 112, 109, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Deino", "Dark", "Dragon", 52, 65, 50, 38, 50, "Zweilous", Arrays.asList(Ataques.getMordisco(), Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez())));
+        pokemons.add(new PokemonBase("Zweilous", "Dark", "Dragon", 72, 85, 70, 58, 64, "Hydreigon", Arrays.asList(Ataques.getMordisco(), Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez())));
+        pokemons.add(new PokemonBase("Hydreigon", "Dark", "Dragon", 92, 105, 90, 98, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez())));
+        pokemons.add(new PokemonBase("Larvesta", "Bug", "Fire", 55, 85, 55, 60, 59, "Volcarona", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Volcarona", "Bug", "Fire", 85, 60, 65, 100, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Cobalion", "Steel", "Fighting", 91, 90, 129, 108, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getKarate())));
+        pokemons.add(new PokemonBase("Terrakion", "Rock", "Fighting", 91, 129, 90, 108, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getKarate())));
+        pokemons.add(new PokemonBase("Virizion", "Grass", "Fighting", 91, 90, 72, 108, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+    }
+
+    private static void cargarBloque9() {
+        pokemons.add(new PokemonBase("Tornadus", "Flying", null, 79, 115, 70, 111, 0, null, Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Thundurus", "Electric", "Flying", 79, 115, 70, 111, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Reshiram", "Dragon", "Fire", 100, 120, 100, 90, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas())));
+        pokemons.add(new PokemonBase("Zekrom", "Dragon", "Electric", 100, 150, 120, 90, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno())));
+        pokemons.add(new PokemonBase("Landorus", "Ground", "Flying", 89, 125, 90, 101, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Kyurem", "Dragon", "Ice", 125, 130, 90, 95, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora())));
+        pokemons.add(new PokemonBase("Keldeo", "Water", "Fighting", 91, 72, 90, 108, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Meloetta", "Normal", "Psychic", 100, 77, 77, 90, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Genesect", "Bug", "Steel", 71, 120, 95, 99, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Chespin", "Grass", null, 56, 61, 65, 38, 16, "Quilladin", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Quilladin", "Grass", null, 61, 78, 95, 57, 36, "Chesnaught", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Chesnaught", "Grass", "Fighting", 88, 107, 122, 64, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Fennekin", "Fire", null, 40, 45, 40, 60, 16, "Braixen", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Braixen", "Fire", null, 59, 59, 58, 73, 36, "Delphox", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Delphox", "Fire", "Psychic", 75, 69, 72, 104, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Froakie", "Water", null, 41, 56, 40, 71, 16, "Frogadier", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Frogadier", "Water", null, 54, 63, 52, 97, 36, "Greninja", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Greninja", "Water", "Dark", 72, 95, 67, 122, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Bunnelby", "Normal", null, 38, 36, 38, 57, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Diggersby", "Normal", "Ground", 85, 56, 77, 78, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Fletchling", "Normal", "Flying", 45, 50, 43, 62, 17, "Fletchinder", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Fletchinder", "Fire", "Flying", 62, 73, 55, 84, 35, "Talonflame", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Talonflame", "Fire", "Flying", 78, 81, 71, 126, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Scatterbug", "Bug", null, 38, 35, 40, 35, 9, "Spewpa", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Spewpa", "Bug", null, 45, 22, 60, 29, 12, "Vivillon", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Vivillon", "Bug", "Flying", 80, 52, 50, 89, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Litleo", "Fire", "Normal", 62, 50, 58, 72, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Pyroar", "Fire", "Normal", 86, 68, 72, 106, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Flabébé", "Fairy", null, 44, 38, 39, 42, 19, "Floette", Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Floette", "Fairy", null, 54, 45, 47, 52, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Florges", "Fairy", null, 78, 65, 68, 75, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Skiddo", "Grass", null, 66, 65, 48, 52, 32, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Gogoat", "Grass", null, 123, 100, 62, 68, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Pancham", "Fighting", null, 67, 82, 62, 43, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Pangoro", "Fighting", "Dark", 95, 124, 78, 58, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Furfrou", "Normal", null, 75, 80, 60, 102, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Espurr", "Psychic", null, 62, 48, 54, 68, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Meowstic", "Psychic", null, 74, 48, 76, 104, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Honedge", "Steel", "Ghost", 45, 80, 100, 28, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getLenguetazo())));
+        pokemons.add(new PokemonBase("Doublade", "Steel", "Ghost", 59, 110, 150, 35, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getLenguetazo())));
+        pokemons.add(new PokemonBase("Aegislash", "Steel", "Ghost", 60, 50, 140, 60, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getLenguetazo())));
+        pokemons.add(new PokemonBase("Spritzee", "Fairy", null, 78, 52, 60, 23, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Aromatisse", "Fairy", null, 101, 72, 72, 29, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Swirlix", "Fairy", null, 62, 48, 66, 49, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Slurpuff", "Fairy", null, 82, 80, 86, 72, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Inkay", "Dark", "Psychic", 53, 54, 53, 45, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo())));
+        pokemons.add(new PokemonBase("Malamar", "Dark", "Psychic", 86, 92, 88, 73, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo())));
+        pokemons.add(new PokemonBase("Binacle", "Rock", "Water", 42, 52, 67, 50, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPistolaAgua())));
+        pokemons.add(new PokemonBase("Barbaracle", "Rock", "Water", 72, 105, 115, 68, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPistolaAgua())));
+        pokemons.add(new PokemonBase("Skrelp", "Poison", "Water", 50, 60, 60, 30, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Dragalge", "Poison", "Dragon", 65, 75, 90, 44, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Clauncher", "Water", null, 50, 53, 62, 44, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Clawitzer", "Water", null, 71, 73, 88, 59, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Helioptile", "Electric", "Normal", 44, 38, 33, 70, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Heliolisk", "Electric", "Normal", 62, 55, 52, 109, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Tyrunt", "Rock", "Dragon", 58, 89, 77, 48, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getFuriaDragon())));
+        pokemons.add(new PokemonBase("Tyrantrum", "Rock", "Dragon", 82, 121, 119, 71, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getFuriaDragon())));
+        pokemons.add(new PokemonBase("Amaura", "Rock", "Ice", 77, 59, 50, 46, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getRayoHielo())));
+        pokemons.add(new PokemonBase("Aurorus", "Rock", "Ice", 123, 77, 72, 58, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getRayoHielo())));
+        pokemons.add(new PokemonBase("Sylveon", "Fairy", null, 95, 65, 65, 60, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Hawlucha", "Fighting", "Flying", 78, 92, 75, 118, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Dedenne", "Electric", "Fairy", 67, 58, 57, 101, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Carbink", "Rock", "Fairy", 50, 50, 150, 50, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getBesoAmoroso())));
+        pokemons.add(new PokemonBase("Goomy", "Dragon", null, 45, 50, 35, 40, 40, "Sliggoo", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Sliggoo", "Dragon", null, 68, 75, 53, 60, 50, "Goodra", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Goodra", "Dragon", null, 90, 100, 70, 80, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Klefki", "Steel", "Fairy", 57, 80, 91, 75, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getBesoAmoroso())));
+        pokemons.add(new PokemonBase("Phantump", "Ghost", "Grass", 43, 70, 48, 38, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getLatigoCepa())));
+        pokemons.add(new PokemonBase("Trevenant", "Ghost", "Grass", 85, 110, 76, 56, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getLatigoCepa())));
+        pokemons.add(new PokemonBase("Pumpkaboo", "Ghost", "Grass", 49, 66, 70, 51, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getLatigoCepa())));
+        pokemons.add(new PokemonBase("Gourgeist", "Ghost", "Grass", 65, 90, 122, 84, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getLatigoCepa())));
+        pokemons.add(new PokemonBase("Bergmite", "Ice", null, 55, 69, 85, 28, 37, "Avalugg", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Avalugg", "Ice", null, 95, 117, 184, 28, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Noibat", "Flying", "Dragon", 40, 30, 35, 55, 48, "Noivern", Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Noivern", "Flying", "Dragon", 85, 70, 80, 123, 0, null, Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Xerneas", "Fairy", null, 126, 131, 95, 99, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Yveltal", "Dark", "Flying", 126, 131, 95, 99, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Zygarde", "Dragon", "Ground", 108, 100, 121, 95, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang())));
+        pokemons.add(new PokemonBase("Diancie", "Rock", "Fairy", 50, 100, 150, 50, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getBesoAmoroso())));
+        pokemons.add(new PokemonBase("Hoopa", "Psychic", "Ghost", 80, 110, 60, 70, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+    }
+
+    private static void cargarBloque10() {
+        pokemons.add(new PokemonBase("Volcanion", "Fire", "Water", 80, 110, 120, 70, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Rowlet", "Grass", "Flying", 68, 55, 55, 42, 17, "Dartrix", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Dartrix", "Grass", "Flying", 78, 75, 75, 52, 34, "Decidueye", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Decidueye", "Grass", "Ghost", 78, 107, 75, 70, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Litten", "Fire", null, 45, 65, 40, 70, 17, "Torracat", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Torracat", "Fire", null, 65, 85, 50, 90, 34, "Incineroar", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Incineroar", "Fire", "Dark", 95, 115, 90, 60, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Popplio", "Water", null, 50, 54, 54, 40, 17, "Brionne", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Brionne", "Water", null, 60, 69, 69, 50, 34, "Primarina", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Primarina", "Water", "Fairy", 80, 74, 74, 60, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Pikipek", "Normal", "Flying", 35, 75, 30, 65, 14, "Trumbeak", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Trumbeak", "Normal", "Flying", 55, 85, 50, 75, 28, "Toucannon", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Toucannon", "Normal", "Flying", 80, 120, 75, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Yungoos", "Normal", null, 48, 70, 30, 45, 20, "Gumshoos", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Gumshoos", "Normal", null, 88, 110, 60, 45, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Grubbin", "Bug", null, 47, 62, 45, 46, 20, "Charjabug", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Charjabug", "Bug", "Electric", 57, 82, 95, 36, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Vikavolt", "Bug", "Electric", 77, 70, 90, 43, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Crabrawler", "Fighting", null, 47, 82, 57, 63, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Crabominable", "Fighting", "Ice", 97, 132, 77, 43, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Oricorio", "Fire", "Flying", 75, 70, 70, 93, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Cutiefly", "Bug", "Fairy", 40, 45, 40, 84, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Ribombee", "Bug", "Fairy", 60, 55, 60, 124, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Rockruff", "Rock", null, 45, 65, 40, 60, 25, "Lycanroc", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Lycanroc", "Rock", null, 75, 115, 65, 112, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Wishiwashi", "Water", null, 45, 20, 20, 40, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Mareanie", "Poison", "Water", 50, 53, 62, 45, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Toxapex", "Poison", "Water", 50, 63, 152, 35, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Mudbray", "Ground", null, 70, 100, 70, 45, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Mudsdale", "Ground", null, 100, 125, 100, 35, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Dewpider", "Water", "Bug", 38, 40, 52, 27, 22, "Araquanid", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Araquanid", "Water", "Bug", 68, 70, 92, 42, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Fomantis", "Grass", null, 40, 55, 35, 35, 34, "Lurantis", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Lurantis", "Grass", null, 70, 105, 90, 45, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Morelull", "Grass", "Fairy", 40, 35, 55, 15, 24, "Shiinotic", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Shiinotic", "Grass", "Fairy", 60, 45, 80, 30, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Salandit", "Poison", "Fire", 48, 44, 40, 77, 33, "Salazzle", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Salazzle", "Poison", "Fire", 68, 64, 60, 117, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Stufful", "Normal", "Fighting", 70, 75, 50, 50, 27, "Bewear", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Bewear", "Normal", "Fighting", 120, 125, 80, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Bounsweet", "Grass", null, 42, 30, 38, 32, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Steenee", "Grass", null, 52, 40, 48, 62, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Tsareena", "Grass", null, 72, 120, 98, 72, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Comfey", "Fairy", null, 51, 52, 90, 100, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Oranguru", "Normal", "Psychic", 90, 60, 80, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Passimian", "Fighting", null, 100, 120, 90, 80, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Wimpod", "Bug", "Water", 25, 35, 40, 80, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Golisopod", "Bug", "Water", 75, 125, 140, 40, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Sandygast", "Ghost", "Ground", 55, 55, 80, 15, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Palossand", "Ghost", "Ground", 85, 75, 110, 35, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getTerremoto())));
+        pokemons.add(new PokemonBase("Pyukumuku", "Water", null, 55, 60, 130, 5, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Type: Null", "Normal", null, 95, 95, 95, 59, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Silvally", "Normal", null, 95, 95, 95, 95, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Minior", "Rock", "Flying", 60, 60, 100, 60, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Komala", "Normal", null, 65, 115, 65, 65, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Turtonator", "Fire", "Dragon", 60, 78, 135, 36, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Togedemaru", "Electric", "Steel", 65, 98, 63, 96, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Mimikyu", "Ghost", "Fairy", 55, 90, 80, 96, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getBesoAmoroso())));
+        pokemons.add(new PokemonBase("Bruxish", "Water", "Psychic", 68, 105, 70, 92, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Drampa", "Normal", "Dragon", 78, 60, 85, 36, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Dhelmise", "Ghost", "Grass", 70, 131, 100, 40, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getLatigoCepa())));
+        pokemons.add(new PokemonBase("Jangmo-o", "Dragon", null, 45, 55, 65, 45, 35, "Hakamo-o", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Hakamo-o", "Dragon", "Fighting", 55, 75, 90, 65, 45, "Kommo-o", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada())));
+        pokemons.add(new PokemonBase("Kommo-o", "Dragon", "Fighting", 75, 110, 125, 85, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada())));
+        pokemons.add(new PokemonBase("Tapu Koko", "Electric", "Fairy", 70, 115, 85, 130, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Tapu Lele", "Psychic", "Fairy", 70, 85, 75, 95, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Tapu Bulu", "Grass", "Fairy", 70, 130, 115, 75, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Tapu Fini", "Water", "Fairy", 70, 75, 115, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Cosmog", "Psychic", null, 43, 29, 31, 37, 43, "Cosmoem", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Cosmoem", "Psychic", null, 43, 29, 131, 37, 53, "Solgaleo", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Solgaleo", "Psychic", "Steel", 137, 137, 107, 97, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Lunala", "Psychic", "Ghost", 137, 113, 89, 97, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Nihilego", "Rock", "Poison", 109, 53, 47, 103, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Buzzwole", "Bug", "Fighting", 107, 139, 139, 79, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Pheromosa", "Bug", "Fighting", 71, 137, 37, 151, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Xurkitree", "Electric", null, 83, 89, 71, 83, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Celesteela", "Steel", "Flying", 97, 101, 103, 61, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Kartana", "Grass", "Steel", 59, 181, 131, 109, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Guzzlord", "Dark", "Dragon", 223, 101, 53, 43, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez())));
+        pokemons.add(new PokemonBase("Necrozma", "Psychic", null, 97, 107, 101, 79, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+    }
+
+    private static void cargarBloque11() {
+        pokemons.add(new PokemonBase("Magearna", "Steel", "Fairy", 80, 95, 115, 65, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getBesoAmoroso())));
+        pokemons.add(new PokemonBase("Marshadow", "Fighting", "Ghost", 90, 125, 80, 125, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Poipole", "Poison", null, 67, 73, 67, 73, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Naganadel", "Poison", "Dragon", 73, 73, 73, 121, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Stakataka", "Rock", "Steel", 61, 131, 211, 13, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getClavoCainon())));
+        pokemons.add(new PokemonBase("Blacephalon", "Fire", "Ghost", 53, 127, 53, 107, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Zeraora", "Electric", null, 88, 112, 75, 143, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Meltan", "Steel", null, 46, 65, 65, 34, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Melmetal", "Steel", null, 135, 143, 143, 34, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Grookey", "Grass", null, 50, 65, 50, 65, 16, "Thwackey", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Thwackey", "Grass", null, 70, 85, 70, 80, 35, "Rillaboom", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Rillaboom", "Grass", null, 100, 125, 90, 85, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Scorbunny", "Fire", null, 50, 71, 40, 69, 16, "Raboot", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Raboot", "Fire", null, 65, 86, 60, 94, 35, "Cinderace", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Cinderace", "Fire", null, 80, 116, 75, 119, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Sobble", "Water", null, 50, 40, 40, 70, 16, "Drizzile", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Drizzile", "Water", null, 65, 60, 55, 90, 35, "Inteleon", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Inteleon", "Water", null, 70, 85, 65, 120, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Skwovet", "Normal", null, 70, 55, 55, 25, 24, "Greedent", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Greedent", "Normal", null, 120, 95, 95, 20, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Rookidee", "Flying", null, 38, 47, 35, 57, 18, "Corvisquire", Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Corvisquire", "Flying", null, 68, 67, 55, 77, 38, "Corviknight", Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Corviknight", "Flying", "Steel", 98, 87, 105, 67, 0, null, Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Blipbug", "Bug", null, 25, 20, 20, 45, 10, "Dottler", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Dottler", "Bug", "Psychic", 50, 35, 80, 30, 30, "Orbeetle", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Orbeetle", "Bug", "Psychic", 60, 45, 110, 90, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Nickit", "Dark", null, 40, 28, 28, 50, 18, "Thievul", Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Thievul", "Dark", null, 70, 58, 58, 90, 30, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Gossifleur", "Grass", null, 40, 40, 60, 10, 20, "Eldegoss", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Eldegoss", "Grass", null, 60, 50, 90, 60, 35, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Wooloo", "Normal", null, 42, 40, 55, 48, 24, "Dubwool", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Dubwool", "Normal", null, 72, 80, 100, 88, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Chewtle", "Water", null, 50, 64, 50, 44, 22, "Drednaw", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Drednaw", "Water", "Rock", 90, 115, 90, 74, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Yamper", "Electric", null, 59, 45, 50, 26, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Boltund", "Electric", null, 69, 90, 60, 121, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Rolycoly", "Rock", null, 30, 40, 50, 30, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Carkol", "Rock", "Fire", 80, 60, 90, 50, 18, "Coalossal", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getAscuas())));
+        pokemons.add(new PokemonBase("Coalossal", "Rock", "Fire", 110, 80, 120, 30, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getAscuas())));
+        pokemons.add(new PokemonBase("Applin", "Grass", "Dragon", 40, 40, 80, 20, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Flapple", "Grass", "Dragon", 70, 110, 80, 70, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Appletun", "Grass", "Dragon", 110, 85, 80, 30, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Silicobra", "Ground", null, 52, 57, 75, 46, 36, "Sandaconda", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Sandaconda", "Ground", null, 72, 107, 125, 71, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Cramorant", "Flying", "Water", 70, 85, 55, 85, 0, null, Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Arrokuda", "Water", null, 41, 63, 40, 66, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Barraskewda", "Water", null, 61, 123, 60, 136, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Toxel", "Electric", "Poison", 40, 38, 35, 40, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Toxtricity", "Electric", "Poison", 75, 98, 70, 75, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Sizzlipede", "Fire", "Bug", 50, 65, 45, 45, 28, "Centiskorch", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Centiskorch", "Fire", "Bug", 100, 115, 65, 65, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Clobbopus", "Fighting", null, 50, 68, 60, 32, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Grapploct", "Fighting", null, 80, 118, 90, 42, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Sinistea", "Ghost", null, 40, 45, 45, 50, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Polteageist", "Ghost", null, 60, 65, 65, 70, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Hatenna", "Psychic", null, 42, 30, 45, 39, 32, "Hattrem", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Hattrem", "Psychic", null, 57, 40, 65, 49, 42, "Hatterene", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Hatterene", "Psychic", "Fairy", 57, 90, 95, 29, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Impidimp", "Dark", "Fairy", 45, 45, 30, 50, 32, "Morgrem", Arrays.asList(Ataques.getMordisco(), Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar())));
+        pokemons.add(new PokemonBase("Morgrem", "Dark", "Fairy", 65, 60, 45, 70, 42, "Grimmsnarl", Arrays.asList(Ataques.getMordisco(), Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar())));
+        pokemons.add(new PokemonBase("Grimmsnarl", "Dark", "Fairy", 95, 120, 65, 60, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar())));
+        pokemons.add(new PokemonBase("Obstagoon", "Dark", "Normal", 93, 90, 101, 95, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Perrserker", "Steel", null, 70, 110, 100, 50, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Cursola", "Ghost", null, 60, 95, 50, 30, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Sirfetch'd", "Fighting", null, 62, 135, 95, 65, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Mr. Rime", "Ice", "Psychic", 80, 85, 75, 70, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Runerigus", "Ground", "Ghost", 58, 95, 145, 30, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Milcery", "Fairy", null, 45, 40, 40, 34, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Alcremie", "Fairy", null, 65, 60, 75, 64, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Falinks", "Fighting", null, 65, 100, 100, 75, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Pincurchin", "Electric", null, 48, 101, 95, 15, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Snom", "Ice", "Bug", 30, 25, 35, 20, 42, "Frosmoth", Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Frosmoth", "Ice", "Bug", 70, 65, 60, 65, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Stonjourner", "Rock", null, 100, 125, 135, 70, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Eiscue", "Ice", null, 75, 80, 110, 50, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Indeedee", "Psychic", "Normal", 60, 65, 55, 95, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Morpeko", "Electric", "Dark", 58, 95, 58, 97, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Cufant", "Steel", null, 72, 80, 49, 40, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Copperajah", "Steel", null, 122, 130, 69, 30, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Dracozolt", "Electric", "Dragon", 90, 100, 90, 75, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+    }
+
+    private static void cargarBloque12() {
+        pokemons.add(new PokemonBase("Arctozolt", "Electric", "Ice", 90, 100, 90, 55, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Dracovish", "Water", "Dragon", 90, 90, 100, 75, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Arctovish", "Water", "Ice", 90, 90, 100, 55, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Duraludon", "Steel", "Dragon", 70, 95, 115, 85, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getFuriaDragon())));
+        pokemons.add(new PokemonBase("Dreepy", "Dragon", "Ghost", 28, 60, 30, 82, 50, "Drakloak", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Drakloak", "Dragon", "Ghost", 68, 80, 50, 102, 60, "Dragapult", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Dragapult", "Dragon", "Ghost", 88, 120, 75, 142, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Zacian", "Fairy", null, 92, 120, 115, 138, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Zamazenta", "Fighting", null, 92, 120, 115, 138, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Eternatus", "Poison", "Dragon", 140, 85, 95, 130, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Kubfu", "Fighting", null, 60, 90, 60, 72, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Urshifu", "Fighting", "Dark", 100, 130, 100, 97, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Zarude", "Dark", "Grass", 105, 120, 105, 105, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar())));
+        pokemons.add(new PokemonBase("Regieleki", "Electric", null, 80, 100, 50, 200, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Regidrago", "Dragon", null, 200, 100, 50, 80, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Glastrier", "Ice", null, 100, 145, 130, 30, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Spectrier", "Ghost", null, 100, 65, 60, 130, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Calyrex", "Psychic", "Grass", 100, 80, 80, 80, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Wyrdeer", "Normal", "Psychic", 103, 105, 72, 65, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Kleavor", "Bug", "Rock", 70, 135, 95, 85, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Ursaluna", "Ground", "Normal", 130, 140, 105, 50, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Basculegion", "Water", "Ghost", 120, 112, 65, 78, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Sneasler", "Fighting", "Poison", 80, 130, 60, 120, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Overqwil", "Dark", "Poison", 85, 115, 95, 85, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion())));
+        pokemons.add(new PokemonBase("Enamorus", "Fairy", "Flying", 74, 115, 70, 106, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPicotazo())));
+        pokemons.add(new PokemonBase("Sprigatito", "Grass", null, 40, 61, 54, 65, 16, "Floragato", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Floragato", "Grass", null, 61, 80, 63, 83, 36, "Meowscarada", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Meowscarada", "Grass", "Dark", 76, 110, 70, 123, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Fuecoco", "Fire", null, 67, 45, 59, 36, 16, "Crocalor", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Crocalor", "Fire", null, 81, 55, 78, 49, 36, "Skeledirge", Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Skeledirge", "Fire", "Ghost", 104, 75, 100, 66, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Quaxly", "Water", null, 55, 65, 45, 50, 16, "Quaxwell", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Quaxwell", "Water", null, 70, 85, 65, 65, 36, "Quaquaval", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Quaquaval", "Water", "Fighting", 85, 120, 80, 85, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Lechonk", "Normal", null, 54, 45, 40, 35, 18, "Oinkologne", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Oinkologne", "Normal", null, 110, 100, 75, 65, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Tarountula", "Bug", null, 35, 41, 45, 20, 15, "Spidops", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Spidops", "Bug", null, 60, 79, 92, 35, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Nymble", "Bug", null, 33, 46, 40, 45, 24, "Lokix", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Lokix", "Bug", "Dark", 71, 102, 78, 92, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Pawmi", "Electric", null, 45, 50, 20, 60, 18, "Pawmo", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Pawmo", "Electric", "Fighting", 60, 75, 40, 85, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Pawmot", "Electric", "Fighting", 70, 115, 70, 105, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Tandemaus", "Normal", null, 50, 50, 45, 75, 25, "Maushold", Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Maushold", "Normal", null, 74, 75, 70, 111, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Fidough", "Fairy", null, 37, 55, 70, 65, 26, "Dachsbun", Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Dachsbun", "Fairy", null, 57, 80, 115, 95, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Smoliv", "Grass", "Normal", 41, 35, 45, 30, 25, "Dolliv", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Dolliv", "Grass", "Normal", 52, 53, 60, 33, 35, "Arboliva", Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Arboliva", "Grass", "Normal", 78, 69, 90, 39, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Squawkabilly", "Normal", "Flying", 82, 96, 51, 92, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Nacli", "Rock", null, 55, 55, 75, 25, 24, "Naclstack", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Naclstack", "Rock", null, 60, 60, 100, 35, 38, "Garganacl", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Garganacl", "Rock", null, 100, 100, 130, 35, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Charcadet", "Fire", null, 40, 50, 40, 35, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Armarouge", "Fire", "Psychic", 85, 60, 100, 75, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Ceruledge", "Fire", "Ghost", 75, 125, 80, 85, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Tadbulb", "Electric", null, 61, 31, 41, 45, 25, "Bellibolt", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Bellibolt", "Electric", null, 109, 64, 91, 45, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Wattrel", "Electric", "Flying", 40, 40, 35, 70, 25, "Kilowattrel", Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Kilowattrel", "Electric", "Flying", 70, 70, 60, 125, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Maschiff", "Dark", null, 60, 78, 60, 51, 30, "Mabosstiff", Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Mabosstiff", "Dark", null, 80, 120, 90, 85, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Shroodle", "Poison", "Normal", 40, 65, 35, 75, 28, "Grafaiai", Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Grafaiai", "Poison", "Normal", 63, 95, 65, 110, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Bramblin", "Grass", "Ghost", 40, 65, 30, 60, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Brambleghast", "Grass", "Ghost", 55, 115, 70, 90, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Toedscool", "Ground", "Grass", 40, 40, 35, 70, 30, "Toedscruel", Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Toedscruel", "Ground", "Grass", 80, 70, 65, 100, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Klawf", "Rock", null, 70, 100, 115, 75, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Capsakid", "Grass", null, 50, 62, 40, 50, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Scovillain", "Grass", "Fire", 65, 108, 65, 75, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Rellor", "Bug", null, 41, 50, 60, 30, 25, "Rabsca", Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Rabsca", "Bug", "Psychic", 75, 50, 85, 45, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Flittle", "Psychic", null, 30, 35, 30, 75, 35, "Espathra", Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Espathra", "Psychic", null, 95, 60, 60, 105, 0, null, Arrays.asList(Ataques.getConfusion(), Ataques.getPsiquico(), Ataques.getPsicoRayo(), Ataques.getHipnosis())));
+        pokemons.add(new PokemonBase("Tinkatink", "Fairy", "Steel", 50, 45, 45, 58, 24, "Tinkatuff", Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getClavoCainon())));
+        pokemons.add(new PokemonBase("Tinkatuff", "Fairy", "Steel", 65, 55, 55, 78, 38, "Tinkaton", Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getClavoCainon())));
+        pokemons.add(new PokemonBase("Tinkaton", "Fairy", "Steel", 85, 75, 77, 94, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getClavoCainon())));
+        pokemons.add(new PokemonBase("Wiglett", "Water", null, 10, 55, 25, 95, 26, "Wugtrio", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+    }
+
+    private static void cargarBloque13() {
+        pokemons.add(new PokemonBase("Wugtrio", "Water", null, 35, 100, 50, 120, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Bombirdier", "Flying", "Dark", 70, 103, 85, 82, 0, null, Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Finizen", "Water", null, 70, 45, 40, 75, 38, "Palafin", Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Palafin", "Water", null, 100, 70, 72, 100, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Varoom", "Steel", "Poison", 45, 70, 63, 47, 40, "Revavroom", Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Revavroom", "Steel", "Poison", 80, 119, 90, 90, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Cyclizar", "Dragon", "Normal", 70, 95, 65, 121, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza())));
+        pokemons.add(new PokemonBase("Orthworm", "Steel", null, 70, 85, 145, 65, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Glimmet", "Rock", "Poison", 48, 35, 42, 60, 35, "Glimmora", Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Glimmora", "Rock", "Poison", 83, 55, 90, 86, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getPicotazoVen())));
+        pokemons.add(new PokemonBase("Greavard", "Ghost", null, 50, 61, 60, 34, 30, "Houndstone", Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Houndstone", "Ghost", null, 72, 101, 100, 68, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Flamigo", "Flying", "Fighting", 82, 115, 74, 90, 0, null, Arrays.asList(Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado(), Ataques.getVuelo())));
+        pokemons.add(new PokemonBase("Cetoddle", "Ice", null, 108, 68, 45, 43, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Cetitan", "Ice", null, 170, 113, 65, 73, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Veluza", "Water", "Psychic", 90, 102, 73, 70, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Dondozo", "Water", null, 150, 100, 115, 35, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Tatsugiri", "Dragon", "Water", 68, 50, 60, 82, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf())));
+        pokemons.add(new PokemonBase("Annihilape", "Fighting", "Ghost", 110, 115, 80, 90, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Clodsire", "Poison", "Ground", 130, 75, 60, 20, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Farigiraf", "Normal", "Psychic", 120, 90, 70, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Dudunsparce", "Normal", null, 125, 100, 80, 55, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Kingambit", "Dark", "Steel", 100, 135, 120, 50, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Great Tusk", "Ground", "Fighting", 115, 131, 131, 87, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Scream Tail", "Fairy", "Psychic", 115, 65, 99, 111, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Brute Bonnet", "Grass", "Dark", 111, 127, 99, 55, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Flutter Mane", "Ghost", "Fairy", 55, 55, 55, 135, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getBesoAmoroso())));
+        pokemons.add(new PokemonBase("Slither Wing", "Bug", "Fighting", 85, 135, 79, 81, 0, null, Arrays.asList(Ataques.getDobleAtaque(), Ataques.getPinMisil(), Ataques.getChupaVidas(), Ataques.getEspora())));
+        pokemons.add(new PokemonBase("Sandy Shocks", "Electric", "Ground", 85, 81, 97, 101, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Iron Treads", "Ground", "Steel", 90, 112, 120, 106, 0, null, Arrays.asList(Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang(), Ataques.getHuesoPalo())));
+        pokemons.add(new PokemonBase("Iron Bundle", "Ice", "Water", 56, 80, 114, 136, 0, null, Arrays.asList(Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora(), Ataques.getPuinoHielo())));
+        pokemons.add(new PokemonBase("Iron Hands", "Fighting", "Electric", 154, 140, 108, 50, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Iron Jugulis", "Dark", "Flying", 94, 80, 86, 108, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getPicotazo(), Ataques.getAtaqueAla(), Ataques.getTornado())));
+        pokemons.add(new PokemonBase("Iron Moth", "Fire", "Poison", 80, 70, 60, 110, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Iron Thorns", "Rock", "Electric", 100, 134, 110, 72, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getImpactrueno())));
+        pokemons.add(new PokemonBase("Frigibax", "Dragon", "Ice", 65, 75, 45, 55, 35, "Arctibax", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora())));
+        pokemons.add(new PokemonBase("Arctibax", "Dragon", "Ice", 90, 95, 66, 62, 54, "Baxcalibur", Arrays.asList(Ataques.getFuriaDragon(), Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora())));
+        pokemons.add(new PokemonBase("Baxcalibur", "Dragon", "Ice", 115, 145, 92, 87, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora())));
+        pokemons.add(new PokemonBase("Gimmighoul", "Ghost", null, 45, 30, 70, 10, 0, null, Arrays.asList(Ataques.getLenguetazo(), Ataques.getDescanso(), Ataques.getHipnosis(), Ataques.getPlacaje())));
+        pokemons.add(new PokemonBase("Gholdengo", "Steel", "Ghost", 87, 60, 95, 84, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getLenguetazo())));
+        pokemons.add(new PokemonBase("Wo-Chien", "Dark", "Grass", 85, 85, 100, 70, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar())));
+        pokemons.add(new PokemonBase("Chien-Pao", "Dark", "Ice", 80, 120, 80, 135, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getRayoHielo(), Ataques.getVentisca(), Ataques.getRayoAurora())));
+        pokemons.add(new PokemonBase("Ting-Lu", "Dark", "Ground", 155, 110, 125, 45, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getTerremoto(), Ataques.getExcavar(), Ataques.getHuesomerang())));
+        pokemons.add(new PokemonBase("Chi-Yu", "Dark", "Fire", 55, 80, 80, 100, 0, null, Arrays.asList(Ataques.getMordisco(), Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas())));
+        pokemons.add(new PokemonBase("Roaring Moon", "Dragon", "Dark", 105, 139, 71, 119, 0, null, Arrays.asList(Ataques.getFuriaDragon(), Ataques.getMordisco(), Ataques.getPlacaje(), Ataques.getRapidez())));
+        pokemons.add(new PokemonBase("Iron Valiant", "Fairy", "Fighting", 74, 130, 90, 116, 0, null, Arrays.asList(Ataques.getBesoAmoroso(), Ataques.getCanto(), Ataques.getDeslumbrar(), Ataques.getKarate())));
+        pokemons.add(new PokemonBase("Koraidon", "Fighting", "Dragon", 100, 135, 115, 135, 0, null, Arrays.asList(Ataques.getKarate(), Ataques.getDoblePatada(), Ataques.getMegaPatada(), Ataques.getSumision())));
+        pokemons.add(new PokemonBase("Miraidon", "Electric", "Dragon", 100, 85, 100, 135, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Walking Wake", "Water", "Dragon", 99, 83, 91, 109, 0, null, Arrays.asList(Ataques.getPistolaAgua(), Ataques.getRayoBurbuja(), Ataques.getSurf(), Ataques.getHidroBomba())));
+        pokemons.add(new PokemonBase("Iron Leaves", "Grass", "Psychic", 90, 130, 88, 104, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Dipplin", "Grass", "Dragon", 80, 80, 110, 40, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Poltchageist", "Grass", "Ghost", 40, 45, 45, 50, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Sinistcha", "Grass", "Ghost", 71, 60, 106, 70, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Okidogi", "Poison", "Fighting", 88, 128, 115, 80, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Munkidori", "Poison", "Psychic", 88, 75, 66, 106, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Fezandipiti", "Poison", "Fairy", 88, 91, 82, 99, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+        pokemons.add(new PokemonBase("Ogerpon", "Grass", null, 80, 120, 84, 110, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Archaludon", "Steel", "Dragon", 90, 105, 130, 85, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getFuriaDragon())));
+        pokemons.add(new PokemonBase("Hydrapple", "Grass", "Dragon", 106, 80, 110, 44, 0, null, Arrays.asList(Ataques.getLatigoCepa(), Ataques.getAbsorber(), Ataques.getMegaagotar(), Ataques.getRayoSolar())));
+        pokemons.add(new PokemonBase("Gouging Fire", "Fire", "Dragon", 105, 115, 121, 91, 0, null, Arrays.asList(Ataques.getAscuas(), Ataques.getGiroFuego(), Ataques.getLanzallamas(), Ataques.getLlamarada())));
+        pokemons.add(new PokemonBase("Raging Bolt", "Electric", "Dragon", 125, 73, 91, 75, 0, null, Arrays.asList(Ataques.getImpactrueno(), Ataques.getRayo(), Ataques.getTrueno(), Ataques.getOndaTrueno())));
+        pokemons.add(new PokemonBase("Iron Boulder", "Rock", "Psychic", 90, 120, 80, 124, 0, null, Arrays.asList(Ataques.getLanzaRocas(), Ataques.getAvalancha(), Ataques.getCabezazo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Iron Crown", "Steel", "Psychic", 90, 72, 100, 98, 0, null, Arrays.asList(Ataques.getClavoCainon(), Ataques.getCabezazo(), Ataques.getDerribo(), Ataques.getConfusion())));
+        pokemons.add(new PokemonBase("Terapagos", "Normal", null, 90, 65, 85, 60, 0, null, Arrays.asList(Ataques.getPlacaje(), Ataques.getRapidez(), Ataques.getGolpeCabeza(), Ataques.getDerribo())));
+        pokemons.add(new PokemonBase("Pecharunt", "Poison", "Ghost", 88, 88, 160, 88, 0, null, Arrays.asList(Ataques.getPicotazoVen(), Ataques.getAcido(), Ataques.getPolucion(), Ataques.getResiduos())));
+    }
+    /*//pokemons de gobierno
+    //estos los de pedrito
         pokemons.add(new PokemonBase("Hacienda","Politica","Ladron",
-                100,0,1000,50,0,null,
-                Arrays.asList(
-                        new movimiento("Robo",0,"Dinero",0),
+                                             100,0,1000,50,0,null,
+                                     Arrays.asList(
+                                             new movimiento("Robo",0,"Dinero",0),
                         new movimiento("Embargacion",0,"Robo",0),
                         new movimiento("Impuestodevida",0,"Curacion",0),
                         new movimiento("Subirimpuestos",0,"Antidefensa(baja la defensa 15 punticos)",0)
                 )));
         pokemons.add(new PokemonBase("BarcelonaLore","Inmigracion","Ladron",
-                100,30,0,90,0,null,
-                Arrays.asList(
-                        new movimiento("SegarroAmigo",40,"Metal",0),
+                                             100,30,0,90,0,null,
+                                     Arrays.asList(
+                                             new movimiento("SegarroAmigo",40,"Metal",0),
                         new movimiento("Independencia",0,"Usa un ataque aleatorio del rival",0),
                         new movimiento("MDLR axe",10,"veneno",0)
                 )));
         pokemons.add(new PokemonBase("Familia","Diputados","",400,15,0,0,0,null,
-                Arrays.asList(
-                        new movimiento("Hermano",5,"confusion",0),
+                                     Arrays.asList(
+                                             new movimiento("Hermano",5,"confusion",0),
                         new movimiento("Esposa",10,"confusion",0),
                         new movimiento("Koldo",10,"confusion",0)
                 )));
         pokemons.add(new PokemonBase("Africa","","",50,0,0,70,0,null,
-                Arrays.asList(
-                        new movimiento("Patera",70,"Fisico",0),
+                                     Arrays.asList(
+                                             new movimiento("Patera",70,"Fisico",0),
                         new movimiento("Salto",0,"Evade el sigiente ataque",0),
                         new movimiento("Musulman",100,"Explosion",0),
                         new movimiento("Ascuas",40,"Fuego",0)
                 )));
         pokemons.add(new PokemonBase("","","",0,0,0,0,0,null,
-                Arrays.asList(
-                        new movimiento("",0,"",0),
-                        new movimiento("",0,"",0),
-                        new movimiento("",0,"",0),
-                        new movimiento("",0,"",0)
-                )));
-        pokemons.add(new PokemonBase("","","",0,0,0,0,0,null,
-                Arrays.asList(
-                        new movimiento("",0,"",0),
+                                     Arrays.asList(
+                                             new movimiento("",0,"",0),
                         new movimiento("",0,"",0),
                         new movimiento("",0,"",0),
                         new movimiento("",0,"",0)
-                )));
+                )));*/
 
-//esto es lo que se usa que si no pereza...
-        pokemons.add(new PokemonBase("","","",0,0,0,0,0,null,
-                Arrays.asList(
-                        new movimiento("",0,"",0),
-                        new movimiento("",0,"",0),
-                        new movimiento("",0,"",0),
-                        new movimiento("",0,"",0)
-                )));
-
+    private static void cargarSiHaceFalta() {
+        if (!cargado) new Pokedex().cargarpokemons();
     }
 
     public static PokemonBase getByName(String name) {
-        PokemonBase pokemon = buscarPorNombre(name);
-        if (pokemon == null) {
-            System.out.println("Advertencia: No se encontró Pokémon con nombre '" + name + "' en Pokedex.");
-        }
-        return pokemon;
-    }
-    private static void cargarSiHaceFalta() {
-        if (cargado) return;
-        for (java.lang.reflect.Method m : Pokedex.class.getDeclaredMethods()) {
-            if (m.getParameterCount() == 0
-                    && m.getReturnType() == PokemonBase.class
-                    && m.getName().startsWith("get")
-                    && !m.getName().equals("getByName")) {
-                try {
-                    PokemonBase p = (PokemonBase) m.invoke(null);
-                    if (p != null && p.getNombre() != null && !p.getNombre().isEmpty()) {
-                        pokemons.add(p);
-                    }
-                } catch (Exception e) {
-                    // Si algún getXxx() falla, lo ignoramos y seguimos con el resto.
-                }
-            }
-        }
-        cargado = true;
+        return buscarPorNombre(name);
     }
 
     public static PokemonBase buscarPorNombre(String nombre) {
@@ -7380,36 +1143,29 @@ public class Pokedex {
         }
         return null;
     }
-
-   /* public static PokemonBase buscarPorNombreStatic(String nombre) {
-        switch (nombre.toLowerCase()) {
-            case "charmander":
-                return getCharmander();
-            case "bulbasaur":
-                return getBulbasaur();
-            case "squirtle":
-                return getSquirtle();
-            case "bunnelby":
-                return getBunnelby();
-            case "pidgey":
-                return getPidgey();
-            case "shinx":
-                return getShinx();
-            case "mew":
-                return getMew();
-            case "dedenne":
-                return getDedenne();
-            case "nidoran♀":
-                return getNidorana();
-            case "budew":
-                return getBudew();
-            case "togepi":
-                return getTogepi();
-            case "ambipom":
-                return getAmbipom();
-            default:
-                return null;
-        }
-
-    }*/
+    // Compatibilidad con el resto del proyecto: acceso directo por nombre.
+    /*private static PokemonBase porNombre(String nombre) { return getByName(nombre); }
+    public static PokemonBase getPikachu(){ return porNombre("Pikachu"); }
+    public static PokemonBase getMeowth(){ return porNombre("Meowth"); }
+    public static PokemonBase getSpearow(){ return porNombre("Spearow"); }
+    public static PokemonBase getSandshrew(){ return porNombre("Sandshrew"); }
+    public static PokemonBase getPidgeot(){ return porNombre("Pidgeot"); }
+    public static PokemonBase getAlakazam(){ return porNombre("Alakazam"); }
+    public static PokemonBase getGyarados(){ return porNombre("Gyarados"); }
+    public static PokemonBase getExeggutor(){ return porNombre("Exeggutor"); }
+    public static PokemonBase getArcanine(){ return porNombre("Arcanine"); }
+    public static PokemonBase getBulbasaur(){ return porNombre("Bulbasaur"); }
+    public static PokemonBase getCharmander(){ return porNombre("Charmander"); }
+    public static PokemonBase getSquirtle(){ return porNombre("Squirtle"); }
+    public static PokemonBase getPidgey(){ return porNombre("Pidgey"); }
+    public static PokemonBase getBunnelby1(){ return porNombre("Bunnelby"); }
+    public static PokemonBase getAmbipom1(){ return porNombre("Ambipom"); }
+    public static PokemonBase getShinx1(){ return porNombre("Shinx"); }
+    public static PokemonBase getMewtow1(){ return porNombre("Mewtwo"); }
+    public static PokemonBase getNidoran(){ return porNombre("Nidoran♂"); }
+    public static PokemonBase getNidorana(){ return porNombre("Nidoran♀"); }
+    public static PokemonBase getBudew1(){ return porNombre("Budew"); }
+    public static PokemonBase getDedenne1(){ return porNombre("Dedenne"); }
+    public static PokemonBase getTogepi1(){ return porNombre("Togepi"); }
+*/
 }

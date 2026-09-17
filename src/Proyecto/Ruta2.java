@@ -13,13 +13,13 @@ public class Ruta2 {
     // ===============================
     private PokemonBase generarPokemonBase() {
         int prob = rand.nextInt(1000) + 1;
-        if (prob <= 200) return Pokedex.getPidgey();
-        else if (prob <= 400) return Pokedex.getNidoran();
-        else if (prob <= 600) return Pokedex.getNidorana();
-        else if (prob <= 800)  return Pokedex.getBudew1();
-        else if (prob <= 950) return Pokedex.getDedenne1();
-        else if (prob <= 999) return Pokedex.getTogepi1();
-        else return Pokedex.getMewtow1();
+        if (prob <= 200) return Pokedex.buscarPorNombre("Pidgey");
+        else if (prob <= 400) return Pokedex.buscarPorNombre("Nidoran");
+        else if (prob <= 600) return Pokedex.buscarPorNombre("Nidorana");
+        else if (prob <= 800)  return Pokedex.buscarPorNombre("Budew");
+        else if (prob <= 950) return Pokedex.buscarPorNombre("Dedenne");
+        else if (prob <= 999) return Pokedex.buscarPorNombre("Togepi");
+        else return Pokedex.buscarPorNombre("Mewtow");
     }
 
     private int generarNivel() {

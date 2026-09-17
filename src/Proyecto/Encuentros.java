@@ -43,9 +43,9 @@ public class Encuentros implements Serializable {
             sc.nextLine();
 
             List<PokemonBase> iniciales = Arrays.asList(
-                    Pokedex.getBulbasaur(),
-                    Pokedex.getCharmander(),
-                    Pokedex.getSquirtle()
+                    Pokedex.buscarPorNombre("Bulbasaur"),
+                    Pokedex.buscarPorNombre("Charmander"),
+                    Pokedex.buscarPorNombre("Squirtle")
             );
 
             PokemonBase elegidoJugador = iniciales.get(Math.max(0, Math.min(2, eleccion - 1)));
@@ -105,7 +105,7 @@ public class Encuentros implements Serializable {
 
     private static List<PokemonLuchador> Equipo1(Rival rival) {
         List<PokemonLuchador> equipo1 = new ArrayList<>();
-        equipo1.add(new PokemonLuchador(Pokedex.getPikachu(), 10));
+        equipo1.add(new PokemonLuchador(Pokedex.buscarPorNombre("Pikachu"), 10));
         equipo1.add(new PokemonLuchador(rival.getPokemon().getBase(),10));
         return equipo1;
     }
@@ -113,19 +113,19 @@ public class Encuentros implements Serializable {
 
         List<PokemonLuchador> equipo2 = new ArrayList<>();
         equipo2.add(new PokemonLuchador(rival.getPokemon().getBase(),30));
-        equipo2.add(new PokemonLuchador(Pokedex.getMeowth(),25));
-        equipo2.add(new PokemonLuchador(Pokedex.getSpearow(),25));
-        equipo2.add(new PokemonLuchador(Pokedex.getSandshrew(),25));
+        equipo2.add(new PokemonLuchador(Pokedex.buscarPorNombre("Meowth"),25));
+        equipo2.add(new PokemonLuchador(Pokedex.buscarPorNombre("Spearow"),25));
+        equipo2.add(new PokemonLuchador(Pokedex.buscarPorNombre("Sandshrew"),25));
         return equipo2;
     }
     private static List<PokemonLuchador> Equipo3(Rival rival){
         List<PokemonLuchador> equipo3 = new ArrayList<>();
         equipo3.add(new PokemonLuchador(rival.getPokemon().getBase(),60));
-        equipo3.add(new PokemonLuchador(Pokedex.getPidgeot(),55));
-        equipo3.add(new PokemonLuchador(Pokedex.getAlakazam(),55));
-        equipo3.add(new PokemonLuchador(Pokedex.getGyarados(),55));
-        equipo3.add(new PokemonLuchador(Pokedex.getExeggutor(),55));
-        equipo3.add(new PokemonLuchador(Pokedex.getArcanine(),55));
+        equipo3.add(new PokemonLuchador(Pokedex.buscarPorNombre("Pidgeot"),55));
+        equipo3.add(new PokemonLuchador(Pokedex.buscarPorNombre("Alakazam"),55));
+        equipo3.add(new PokemonLuchador(Pokedex.buscarPorNombre("Gyarados"),55));
+        equipo3.add(new PokemonLuchador(Pokedex.buscarPorNombre("Exeggutor"),55));
+        equipo3.add(new PokemonLuchador(Pokedex.buscarPorNombre("Arcanine"),55));
         return equipo3;
     }
 }
