@@ -2,7 +2,7 @@ package Proyecto;
 
 public class Efectos {
     private String nombre;
-    private int dano;
+    private double dano;
     private EstadoAlterado estado;
     private int probabilidad;
 
@@ -21,11 +21,11 @@ public class Efectos {
         this.nombre = nombre;
     }
 
-    public int getDano() {
+    public double getDano() {
         return dano;
     }
 
-    public void setDano(int dano) {
+    public void setDano(double dano) {
         this.dano = dano;
     }
 }

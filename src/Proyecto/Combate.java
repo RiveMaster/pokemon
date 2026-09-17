@@ -22,10 +22,10 @@ public class Combate {
 
             // Mostrar barras de vida
             System.out.println("\n===============================");
-            System.out.println("Tu Pokémon: " + jugador.getNombre() + "  Nv." + jugador.getNivel());
+            System.out.println("Tu Pokémon: " + jugador.getPokemon().getNombre() + "  Nv." + jugador.getPokemon().getNivel());
             System.out.println("Vida: " + jugador.getPokemon().getVidaActual() + "/" + jugador.getPokemon().getVidaMax());
             System.out.println("-------------------------------");
-            System.out.println("Rival: " + rival.getNombre() + "  Nv." + rival.getPokemon().getNivel());
+            System.out.println("Rival: " + rival.getPokemon().getNombre() + "  Nv." + rival.getPokemon().getNivel());
             System.out.println("Vida: " + rival.getPokemon().getVidaActual() + "/" + rival.getPokemon().getVidaMax());
             System.out.println("===============================\n");
 
