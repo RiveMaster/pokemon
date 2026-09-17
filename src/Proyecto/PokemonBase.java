@@ -51,23 +51,16 @@ public class PokemonBase implements Serializable {
             return nombre;
         }
 
-
         public List<movimiento> getMovimientosPorNivel() {
             return movimientosPorNivel;
         }
-
 
         public int getNivelEvolucion() {
             return nivelEvolucion;
         }
 
-
         public String getEvolucion() {
             return evolucion;
-        }
-
-        public String getbuscar(String buscar){
-        return String.valueOf(buscar.equals(nombre));
         }
 
         public int getVidaBase() {
@@ -83,7 +76,6 @@ public class PokemonBase implements Serializable {
         public int getDefensaBase() {
             return defensaBase;
         }
-
 
         public int getVelocidadBase() {
             return velocidadBase;

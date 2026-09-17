@@ -70,55 +70,8 @@ public class Aventura {
 
     public static void menuPuebloVillaverde(Jugador jugadorCompleto) {
         while (true) {
-            System.out.println("\n╔════════════════════════════════════╗");
-            System.out.println("║      PUEBLO VILLAVERDE             ║");
-            System.out.println("╚════════════════════════════════════╝");
-            System.out.println("1. Visitar a mamá");
-            System.out.println("2. Ir a Ruta 1");
-            System.out.println("3. Ver dinero");
-            System.out.println("4. Ver estado del Pokémon");
-            System.out.println("5. Guardar partida");
-            System.out.println("6. Salir del juego");
-            System.out.print("\nElige una opción: ");
-
-            int opcion = sc.nextInt();
-
-            switch (opcion) {
-                case 1 -> visitarMama(jugadorCompleto);
-                case 2 -> Ruta1.entrarRuta1(sc, jugadorCompleto);
-                case 3 -> System.out.println("\n💰 Tienes " + jugadorCompleto.getDinero() + "€");
-                case 4 -> jugadorCompleto.mostrarEstadoEquipo();
-                case 5 -> {
-                    GuardarCargar.guardarPartida(jugadorCompleto);
-                    System.out.println("✔ Partida guardada con éxito.");
-                }
-                case 6 -> {
-                    System.out.println("\n¡Gracias por jugar!");
-                    return;
-                }
-                default -> System.out.println("❌ Opción no válida.");
-            }
+            Villaverde.mostrarMenu(sc, jugadorCompleto);
         }
-    }
-
-    public static void visitarMama(Jugador jugador) {
-        System.out.println("\n🏠 Casa de mamá...");
-
-        if (!jugador.isMamaVisitada()) {
-            System.out.println("Mamá: ¡Hijo mío! Te doy 1000€ para empezar tu aventura.");
-            jugador.agregarDinero(1000);
-            jugador.setMamaVisitada(true);
-            System.out.println("✔ Has recibido 1000€");
-            System.out.println("Contunuar..........");
-            sc.nextLine();
-            sc.nextLine();
-        } else {
-            System.out.println("Mamá: Ya te di dinero, ¡ve y conviértete en un gran entrenador!");
-        }
-
-        System.out.println("💰 Ahora tienes " + jugador.getDinero() + "€");
-        System.out.println("Contunuar..........");
-        sc.nextLine();
     }
 
 }

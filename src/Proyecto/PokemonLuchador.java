@@ -65,10 +65,10 @@ public class PokemonLuchador implements Serializable {
         ivDefensa = stats;
         ivVelocidad = stats;
         // Stats totales
-        vidaMax = base.getVidaBase() + ivVida;
-        ataque = base.getAtaqueBase() + ivAtaque;
-        defensa = base.getDefensaBase() + ivDefensa;
-        velocidad = base.getVelocidadBase() + ivVelocidad;
+        vidaMax = base.getVidaBase() + ivVida +getNivel();
+        ataque = base.getAtaqueBase() + ivAtaque+getNivel();
+        defensa = base.getDefensaBase() + ivDefensa+getNivel();
+        velocidad = base.getVelocidadBase() + ivVelocidad+getNivel();
 
         vidaActual = vidaMax;
     }
