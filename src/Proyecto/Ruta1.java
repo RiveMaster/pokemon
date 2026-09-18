@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import static Proyecto.PokemonLuchador.combate;
-
 public class Ruta1 {
 
     private Random rand = new Random();
@@ -97,7 +95,7 @@ public class Ruta1 {
 
     // Método auxiliar para que el jugador elija el movimiento
     private static void jugadorAtaca(Scanner sc, PokemonLuchador jugador, PokemonLuchador rival) {
-        List<movimiento> movs = jugador.getMovimientos();
+        List<Movimiento> movs = jugador.getMovimientos();
         if (movs.isEmpty()) {
             System.out.println("¡Tu Pokémon no tiene movimientos!");
             return;
@@ -113,7 +111,7 @@ public class Ruta1 {
         if (eleccion < 1 || eleccion > movs.size()) {
             System.out.println("Movimiento inválido. Pierdes el turno.");
         } else {
-            movimiento movJugador = movs.get(eleccion - 1);
+            Movimiento movJugador = movs.get(eleccion - 1);
             System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
             rival.recibirDaño(movJugador.getPotencia());
         }

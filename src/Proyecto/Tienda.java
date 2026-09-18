@@ -43,7 +43,7 @@ public class Tienda {
             return;
         }
 
-        movimiento mt = Ataques.getAtaqueAleatorio();
+        Movimiento mt = Ataques.getAtaqueAleatorio();
 
         if (mt == null) {
             System.out.println("Error: no se pudo generar la MT. Se te devuelve el dinero.");

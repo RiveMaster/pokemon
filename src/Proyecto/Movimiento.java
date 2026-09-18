@@ -2,7 +2,7 @@ package Proyecto;
 
 import java.io.Serializable;
 
-public class movimiento implements Serializable {
+public class Movimiento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String nombre;
@@ -12,14 +12,14 @@ public class movimiento implements Serializable {
     private Efectos efecto;
 
 
-    public movimiento(String nombre, double potencia, String tipo, int nivelRequerido, Efectos efecto) {
+    public Movimiento(String nombre, double potencia, String tipo, int nivelRequerido, Efectos efecto) {
         this.nombre = nombre;
         this.potencia = potencia;
         this.tipo = tipo;
         this.nivelRequerido = nivelRequerido;
         this.efecto = efecto;
     }
-    public movimiento(String nombre, double potencia, String tipo, int nivelRequerido) {
+    public Movimiento(String nombre, double potencia, String tipo, int nivelRequerido) {
         this.nombre = nombre;
         this.potencia = potencia;
         this.tipo = tipo;

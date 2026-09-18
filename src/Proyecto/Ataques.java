@@ -7,466 +7,125 @@ import java.util.List;
 import java.util.Random;
 
 public class Ataques {
-    public static movimiento getDestructor() {
-        return new movimiento("Destructor", 40, "Normal", 0, getnull());
+    private static final List<Movimiento> movimientos = new ArrayList<>();
+    private static Jugador jugador;
+    private static void Ataque() {
+        movimientos.add(new Movimiento("Destructor", 40, "Normal", 0, getnull()));
+        movimientos.add(new Movimiento("Arainazo", 40, "Normal", 1, getnull()));
+        movimientos.add(new Movimiento("Karate", 50, "Fighting", 0, getnull()));
+        movimientos.add(new Movimiento("Doblebofeton", 15 * (int) (5 * Math.random() + 1), "Normal", 0, getnull()));
+        movimientos.add(new Movimiento("Puino cometa", 18 * (int) (5 * Math.random() + 1), "Normal", 0, getnull()));
+        movimientos.add(new Movimiento("Mega Puino", 80, "Normal", 0, getnull()));
+        movimientos.add(new Movimiento("Dia de pago", jugador.getDinero(), "Normal", 0, getnull()));
+        movimientos.add(new Movimiento("Puino Fuego", 75, "Fire", 0, getQuemar10()));
+        movimientos.add(new Movimiento("Puino Hielo", 75, "Ice", 0, getCongelar10()));
+        movimientos.add(new Movimiento("Agarre", 55, "Normal", 0, getnull()));
+        movimientos.add(new Movimiento("Puino Trueno", 75, "Electric", 0, getParalizar10()));
+        movimientos.add(new Movimiento("Guillotina", Math.pow(10, 10), "Normal", 0, getInsta1()));
+        movimientos.add(new Movimiento("V. Cortante", 80, "Normal", 0, getCarga1()));
+        movimientos.add(new Movimiento("Corte", 50, "Normal", 0, getnull())); //cortar arbustos
+        movimientos.add(new Movimiento("Ataque Ala", 60, "Volador", 0, getnull()));
+        movimientos.add(new Movimiento("Doble Patada", 30 * 2, "Fighting", 0, getnull()));
+        movimientos.add(new Movimiento("Mega Patada", 120, "Fighting", 0, getnull()));
+        movimientos.add(new Movimiento("Patada Salto", 85, "Fighting", 0, getnull()));
+        movimientos.add(new Movimiento("Patada Giro", 60, "Fighting", 0, getnull()));
+        movimientos.add(new Movimiento("Portazo", 80, "Normal", 0, getnull()));
+        movimientos.add(new Movimiento("Latigo Cepa", 35, "Grass", 0, getnull()));
+        movimientos.add(new Movimiento("Tornado", 40, "Flying", 0));
+        movimientos.add(new Movimiento("Vuelo", 90, "Flying", 0, getCarga1()));
+        movimientos.add(new Movimiento("Atadura", 15, "Normal", 0));
+        movimientos.add(new Movimiento("Pisotón", 65, "Normal", 0));
+        movimientos.add(new Movimiento("Golpe Cabeza", 70, "Normal", 0));
+        movimientos.add(new Movimiento("Cornada", 65, "Normal", 0));
+        movimientos.add(new Movimiento("Ataque Furia", 15 * (int) (5 * Math.random() + 2), "Normal", 0));
+        movimientos.add(new Movimiento("Perdorador", Math.pow(10, 10), "Normal", 0, getInsta1()));
+        movimientos.add(new Movimiento("Placaje", 35, "Normal", 0));
+        movimientos.add(new Movimiento("Golpe cuerpo", 85, "Normal", 0, getParalizar30()));
+        movimientos.add(new Movimiento("Repeticion", 15, "Normal", 0));
+        movimientos.add(new Movimiento("Derribo", 90, "Normal", 0));
+        movimientos.add(new Movimiento("Doble Filo", 120, "Normal", 0));
+        movimientos.add(new Movimiento("Picotazo Venenoso", 15, "Poison", 0, getveneno30()));
+        movimientos.add(new Movimiento("Doble ataque", 25 * 2, "Bug", 0, getveneno20()));
+        movimientos.add(new Movimiento("Pin Misil", 14 * (int) (Math.random() * 4 + 2), "Bug", 0));
+        movimientos.add(new Movimiento("Mordisco", 60, "Dark", 0));
+        movimientos.add(new Movimiento("Canto", 0, "Normal", 0, getSueino()));
+        movimientos.add(new Movimiento("Acido", 40, "Poison", 0, getveneno10()));
+        movimientos.add(new Movimiento("Ascuas", 40, "Fire", 0, getQuemar10()));
+        movimientos.add(new Movimiento("Lanzallamas", 95, "Fire", 0, getQuemar10()));
+        movimientos.add(new Movimiento("Pistola Agua", 40, "Water", 0));
+        movimientos.add(new Movimiento("Hidro Bomba", 120, "Water", 0));
+        movimientos.add(new Movimiento("Surf", 85, "Water", 0));//permite nadar
+        movimientos.add(new Movimiento("Rayo Hielo", 95, "Ice", 0, getCongelar10()));
+        movimientos.add(new Movimiento("Ventisca", 120, "Ice", 0, getCongelar20()));
+        movimientos.add(new Movimiento("Picotazo", 35, "Flying", 0));
+        movimientos.add(new Movimiento("Pico Taladro", 80, "Flying", 0));
+        movimientos.add(new Movimiento("Sumision", 80, "Fighting", 0));
+        movimientos.add(new Movimiento("Psico-Rayo", 65, "Phsyc", 0));
+        movimientos.add(new Movimiento("Rayo Burbuja", 65, "Water", 0));
+        movimientos.add(new Movimiento("Rayo Aurora", 65, "Ice", 0));
+        movimientos.add(new Movimiento("Hiperrayo", 150, "Normal", 0));
+        movimientos.add(new Movimiento("Fuerza", 80, "Normal", 0));//Permite mover rocas
+        movimientos.add(new Movimiento("Absorber", 20, "Grass", 0));
+        movimientos.add(new Movimiento("Megaagotar", 40, "Grass", 0));
+        movimientos.add(new Movimiento("Drenadoras", 0, "Grass", 0));
+        movimientos.add(new Movimiento("Desarrollo", 0, "Normal", 0));
+        movimientos.add(new Movimiento("Rayo Solar", 120, "Grass", 0, getCarga1()));
+        movimientos.add(new Movimiento("Polvo Veneno", 0, "Poison", 0, getveneno100()));
+        movimientos.add(new Movimiento("Paralizador", 0, "Grass", 0, getParalizar100()));
+        movimientos.add(new Movimiento("Somnifero", 0, "Grass", 0, getSueino()));
+        movimientos.add(new Movimiento("Danza Petalo", 90, "Grass", 0));
+        movimientos.add(new Movimiento("Furia Dragon", 40, "Dragon", 0));
+        movimientos.add(new Movimiento("Giro Fuego", 15, "Fire", 0));
+        movimientos.add(new Movimiento("Impactrueno", 40, "Electric", 0, getParalizar10()));
+        movimientos.add(new Movimiento("Rayo", 95, "Electric", 0, getParalizar10()));
+        movimientos.add(new Movimiento("Onda Trueno", 0, "Electric", 0, getParalizar100()));
+        movimientos.add(new Movimiento("Trueno", 120, "Electric", 0, getParalizar30()));
+        movimientos.add(new Movimiento("Terremoto", 100, "Ground", 0));
+        movimientos.add(new Movimiento("Fisura", Math.pow(10, 10), "Ground", 0, getInsta1()));
+        movimientos.add(new Movimiento("Excavar", 60, "Ground", 0, getCarga1()));
+        movimientos.add(new Movimiento("Toxico", 0, "Poison", 0, getveneno100()));
+        movimientos.add(new Movimiento("Confusion", 50, "Phsyc", 0));
+        movimientos.add(new Movimiento("Psiquico", 90, "Phsyc", 0));
+        movimientos.add(new Movimiento("Hipnosis", 0, "Phsyc", 0, getSueino()));
+        movimientos.add(new Movimiento("Furia", 20, "Normal", 0));
+        movimientos.add(new Movimiento("Teletransp", 0, "Phsyc", 0));
+        movimientos.add(new Movimiento("Lengüetazo", 20, "Ghost", 0, getParalizar30()));
+        movimientos.add(new Movimiento("Polucion", 20, "Poison", 0, getveneno30()));
+        movimientos.add(new Movimiento("Residuos", 65, "Poison", 0, getveneno30()));
+        movimientos.add(new Movimiento("Llamarada", 120, "Fire", 0, getQuemar10()));
+        movimientos.add(new Movimiento("Tenaza", 35, "Water", 0));
+        movimientos.add(new Movimiento("Rapidez", 60, "Normal", 0));
+        movimientos.add(new Movimiento("Cabezazo", 100, "Normal", 0, getCarga1()));
+        movimientos.add(new Movimiento("Clavo Cainon", 20, "Normal", 0));
+        movimientos.add(new Movimiento("Restriccion", 10, "Normal", 0));
+        movimientos.add(new Movimiento("Patada S. Alta", 100, "Fighting", 0));
+        movimientos.add(new Movimiento("Deslumbrar", 0, "Normal", 0, getParalizar100()));
+        movimientos.add(new Movimiento("Comesueinos", 100, "Phsyc", 0));
+        movimientos.add(new Movimiento("Gas Venenoso", 0, "Poison", 0, getveneno100()));
+        movimientos.add(new Movimiento("Presa", 15, "Normal", 0));
+        movimientos.add(new Movimiento("Chupa Vidas", 20, "Bug", 0));
+        movimientos.add(new Movimiento("Beso Amoroso", 0, "Normal", 0, getSueino()));
+        movimientos.add(new Movimiento("Ataque Aereo", 140, "Flying", 0, getCarga1()));
+        movimientos.add(new Movimiento("Burbuja", 20, "Water", 0));
+        movimientos.add(new Movimiento("Puino-Mareo", 70, "Normal", 0));
+        movimientos.add(new Movimiento("Espora", 0, "Grass", 0, getSueino()));
+        movimientos.add(new Movimiento("Psico Onda", 1, "Phsyc", 0));
+        movimientos.add(new Movimiento("Salpicadura", 0, "Normal", 0));
+        movimientos.add(new Movimiento("Martillazo", 90, "Water", 0));
+        movimientos.add(new Movimiento("Explosion", 250, "Normal", 0));
+        movimientos.add(new Movimiento("Golpes Furia", 18, "Normal", 0));
+        movimientos.add(new Movimiento("Huesomerang", 100, "Ground", 0));
+        movimientos.add(new Movimiento("Descanso", 0, "Phsyc", 0, getSueino()));
+        movimientos.add(new Movimiento("Avalancha", 75, "Rock", 0));
+        movimientos.add(new Movimiento("Hip. Colmillo", 80, "Normal", 0));
+        movimientos.add(new Movimiento("Tri-Ataque", 80, "Normal", 0));
+        movimientos.add(new Movimiento("Cuchillada", 70, "Normal", 0));
+        movimientos.add(new Movimiento("Hoja Afilada", 55, "Grass", 0));
+        movimientos.add(new Movimiento("Lanza Rocas", 50, "Rock", 0));
+        movimientos.add(new Movimiento("Bomba Huevo", 100, "Normal", 0));
+        movimientos.add(new Movimiento("Hueso Palo", 65, "Ground", 0));
+        movimientos.add(new Movimiento("Cascada", 80, "Water", 0));
     }
-
-    public static movimiento getarainazo() {
-        return new movimiento("Arainazo", 40, "Normal", 1, getnull());
-    }
-
-    public static movimiento getKarate() {
-        return new movimiento("Karate", 50, "Fighting", 0, getnull());
-    }
-
-    public static movimiento getDoblebofeton() {
-        return new movimiento("Doblebofeton", 15 * (int) (5 * Math.random() + 1), "Normal", 0, getnull());
-    }
-
-    public static movimiento getPuinoCometa() {
-        return new movimiento("Puino cometa", 18 * (int) (5 * Math.random() + 1), "Normal", 0, getnull());
-    }
-
-    public static movimiento getMegaPuino() {
-        return new movimiento("Mega Puino", 80, "Normal", 0, getnull());
-    }
-
-    public static movimiento getDiaDePago(Jugador jugador) {
-        return new movimiento("Dia de pago", jugador.getDinero(), "Normal", 0, getnull());
-    }
-
-    public static movimiento getPuinoFuego() {
-        return new movimiento("Puino Fuego", 75, "Fire", 0, getQuemar10());
-    }
-
-    public static movimiento getPuinoHielo() {
-        return new movimiento("Puino Hielo", 75, "Ice", 0, getCongelar10());
-    }
-
-    public static movimiento getAgarre() {
-        return new movimiento("Agarre", 55, "Normal", 0, getnull());
-    }
-
-    public static movimiento getPuinoTrueno() {
-        return new movimiento("Puino Trueno", 75, "Electric", 0, getParalizar10());
-    }
-
-    public static movimiento getGuillotina() {
-        return new movimiento("Guillotina", Math.pow(10,10), "Normal", 0, getInsta1());
-    }
-
-    public static movimiento getVCortante() {
-        return new movimiento("V. Cortante", 80, "Normal", 0, getCarga1());
-    }
-
-    public static movimiento getCorte() {
-        return new movimiento("Corte", 50, "Normal", 0, getnull());
-    } //cortar arbustos
-
-    public static movimiento getAtaqueAla() {
-        return new movimiento("Ataque Ala", 60, "Volador", 0, getnull());
-    }
-
-    public static movimiento getDoblePatada() {
-        return new movimiento("Doble Patada", 30 * 2, "Fighting", 0, getnull());
-    }
-
-    public static movimiento getMegaPatada() {
-        return new movimiento("Mega Patada", 120, "Fighting", 0, getnull());
-    }
-
-    public static movimiento getPatadaSalto() {
-        return new movimiento("Patada Salto", 85, "Fighting", 0, getnull());
-    }
-
-    public static movimiento getPatadaGiro() {
-        return new movimiento("Patada Giro", 60, "Fighting", 0, getnull());
-    }
-
-    public static movimiento getPortazo() {
-        return new movimiento("Portazo", 80, "Normal", 0, getnull());
-    }
-
-    public static movimiento getLatigoCepa() {
-        return new movimiento("Latigo Cepa", 35, "Grass", 0, getnull());
-    }
-
-    public static movimiento getTornado() {
-        return new movimiento("Tornado", 40, "Flying", 0);
-    }
-
-    public static movimiento getVuelo() {
-        return new movimiento("Vuelo", 90, "Flying", 0, getCarga1());
-    }
-
-    public static movimiento getAtadura() {
-        return new movimiento("Atadura", 15, "Normal", 0);
-    }
-
-    public static movimiento getPisoton() {
-        return new movimiento("Pisotón", 65, "Normal", 0);
-    }
-
-    public static movimiento getGolpeCabeza() {
-        return new movimiento("Golpe Cabeza", 70, "Normal", 0);
-    }
-
-    public static movimiento getCornada() {
-        return new movimiento("Cornada", 65, "Normal", 0);
-    }
-
-    public static movimiento getAtaqueFuria() {
-        return new movimiento("Ataque Furia", 15 * (int) (5 * Math.random() + 2), "Normal", 0);
-    }
-
-    public static movimiento getPerforador() {
-        return new movimiento("Perdorador", Math.pow(10,10), "Normal", 0, getInsta1());
-    }
-
-    public static movimiento getPlacaje() {
-        return new movimiento("Placaje", 35, "Normal", 0);
-    }
-
-    public static movimiento getGolpeCuerpo() {
-        return new movimiento("Golpe cuerpo", 85, "Normal", 0, getParalizar30());
-    }
-
-    public static movimiento getRepeticion() {
-        return new movimiento("Repeticion", 15, "Normal", 0);
-    }
-
-    public static movimiento getDerribo() {
-        return new movimiento("Derribo", 90, "Normal", 0);
-    }
-
-    public static movimiento getDobleFilo() {
-        return new movimiento("Doble Filo", 120, "Normal", 0);
-    }
-
-    public static movimiento getPicotazoVen() {
-        return new movimiento("Picotazo Venenoso", 15, "Poison", 0, getveneno30());
-    }
-
-    public static movimiento getDobleAtaque() {
-        return new movimiento("Doble ataque", 25 * 2, "Bug", 0, getveneno20());
-    }
-
-    public static movimiento getPinMisil() {
-        return new movimiento("Pin Misil", 14 * (int) (Math.random() * 4 + 2), "Bug", 0);
-    }
-
-    public static movimiento getMordisco() {
-        return new movimiento("Mordisco", 60, "Dark", 0);
-    }
-
-    public static movimiento getCanto() {
-        return new movimiento("Canto", 0, "Normal", 0, getSueino());
-    }
-
-    public static movimiento getAcido() {
-        return new movimiento("Acido", 40, "Poison", 0, getveneno10());
-    }
-
-    public static movimiento getAscuas() {
-        return new movimiento("Ascuas", 40, "Fire", 0, getQuemar10());
-    }
-
-    public static movimiento getLanzallamas() {
-        return new movimiento("Lanzallamas", 95, "Fire", 0, getQuemar10());
-    }
-
-    public static movimiento getPistolaAgua() {
-        return new movimiento("Pistola Agua", 40, "Water", 0);
-    }
-
-    public static movimiento getHidroBomba() {
-        return new movimiento("Hidro Bomba", 120, "Water", 0);
-    }
-
-    public static movimiento getSurf() {
-        return new movimiento("Surf", 85, "Water", 0);
-    }//permite nadar
-
-    public static movimiento getRayoHielo() {
-        return new movimiento("Rayo Hielo", 95, "Ice", 0, getCongelar10());
-    }
-
-    public static movimiento getVentisca() {
-        return new movimiento("Ventisca", 120, "Ice", 0, getCongelar20());
-    }
-
-    public static movimiento getPicotazo() {
-        return new movimiento("Picotazo", 35, "Flying", 0);
-    }
-
-    public static movimiento getPicoTaladro() {
-        return new movimiento("Pico Taladro", 80, "Flying", 0);
-    }
-
-    public static movimiento getSumision() {
-        return new movimiento("Sumision", 80, "Fighting", 0);
-    }
-
-    public static movimiento getPsicoRayo() {
-        return new movimiento("Psico-Rayo", 65, "Phsyc", 0);
-    }
-
-    public static movimiento getRayoBurbuja() {
-        return new movimiento("Rayo Burbuja", 65, "Water", 0);
-    }
-
-    public static movimiento getRayoAurora() {
-        return new movimiento("Rayo Aurora", 65, "Ice", 0);
-    }
-
-    public static movimiento getHiperrayo() {
-        return new movimiento("Hiperrayo", 150, "Normal", 0);
-    }
-
-    public static movimiento getFuerza() {
-        return new movimiento("Fuerza", 80, "Normal", 0);
-    }//Permite mover rocas
-
-    public static movimiento getAbsorber() {
-        return new movimiento("Absorber", 20, "Grass", 0);
-    }
-
-    public static movimiento getMegaagotar() {
-        return new movimiento("Megaagotar", 40, "Grass", 0);
-    }
-
-    public static movimiento getDrenadoras() {
-        return new movimiento("Drenadoras", 0, "Grass", 0);
-    }
-
-    public static movimiento getDesarrollo() {
-        return new movimiento("Desarrollo", 0, "Normal", 0);
-    }
-
-    public static movimiento getRayoSolar() {
-        return new movimiento("Rayo Solar", 120, "Grass", 0, getCarga1());
-    }
-
-    public static movimiento getPolvoVeneno() {
-        return new movimiento("Polvo Veneno", 0, "Poison", 0, getveneno100());
-    }
-
-    public static movimiento getParalizador() {
-        return new movimiento("Paralizador", 0, "Grass", 0, getParalizar100());
-    }
-
-    public static movimiento getSomnifero() {
-        return new movimiento("Somnifero", 0, "Grass", 0, getSueino());
-    }
-
-    public static movimiento getDanzaPetalo() {
-        return new movimiento("Danza Petalo", 90, "Grass", 0);
-    }
-
-    public static movimiento getFuriaDragon() {
-        return new movimiento("Furia Dragon", 40, "Dragon", 0);
-    }
-
-    public static movimiento getGiroFuego() {
-        return new movimiento("Giro Fuego", 15, "Fire", 0);
-    }
-
-    public static movimiento getImpactrueno() {
-        return new movimiento("Impactrueno", 40, "Electric", 0, getParalizar10());
-    }
-
-    public static movimiento getRayo() {
-        return new movimiento("Rayo", 95, "Electric", 0, getParalizar10());
-    }
-
-    public static movimiento getOndaTrueno() {
-        return new movimiento("Onda Trueno", 0, "Electric", 0, getParalizar100());
-    }
-
-    public static movimiento getTrueno() {
-        return new movimiento("Trueno", 120, "Electric", 0, getParalizar30());
-    }
-
-    public static movimiento getTerremoto() {
-        return new movimiento("Terremoto", 100, "Ground", 0);
-    }
-
-    public static movimiento getFisura() {
-        return new movimiento("Fisura", Math.pow(10,10), "Ground", 0, getInsta1());
-    }
-
-    public static movimiento getExcavar() {
-        return new movimiento("Excavar", 60, "Ground", 0, getCarga1());
-    }
-
-    public static movimiento getToxico() {
-        return new movimiento("Toxico", 0, "Poison", 0, getveneno100());
-    }
-
-    public static movimiento getConfusion() {
-        return new movimiento("Confusion", 50, "Phsyc", 0);
-    }
-
-    public static movimiento getPsiquico() {
-        return new movimiento("Psiquico", 90, "Phsyc", 0);
-    }
-
-    public static movimiento getHipnosis() {
-        return new movimiento("Hipnosis", 0, "Phsyc", 0, getSueino());
-    }
-
-    public static movimiento getFuria() {
-        return new movimiento("Furia", 20, "Normal", 0);
-    }
-
-    public static movimiento getTeletransp() {
-        return new movimiento("Teletransp", 0, "Phsyc", 0);
-    }
-
-    public static movimiento getLenguetazo() {
-        return new movimiento("Lengüetazo", 20, "Ghost", 0, getParalizar30());
-    }
-
-    public static movimiento getPolucion() {
-        return new movimiento("Polucion", 20, "Poison", 0, getveneno30());
-    }
-
-    public static movimiento getResiduos() {
-        return new movimiento("Residuos", 65, "Poison", 0, getveneno30());
-    }
-
-    public static movimiento getLlamarada() {
-        return new movimiento("Llamarada", 120, "Fire", 0, getQuemar10());
-    }
-
-    public static movimiento getTenaza() {
-        return new movimiento("Tenaza", 35, "Water", 0);
-    }
-
-    public static movimiento getRapidez() {
-        return new movimiento("Rapidez", 60, "Normal", 0);
-    }
-
-    public static movimiento getCabezazo() {
-        return new movimiento("Cabezazo", 100, "Normal", 0, getCarga1());
-    }
-
-    public static movimiento getClavoCainon() {
-        return new movimiento("Clavo Cainon", 20, "Normal", 0);
-    }
-
-    public static movimiento getRestriccion() {
-        return new movimiento("Restriccion", 10, "Normal", 0);
-    }
-
-    public static movimiento getPatadaSAlta() {
-        return new movimiento("Patada S. Alta", 100, "Fighting", 0);
-    }
-
-    public static movimiento getDeslumbrar() {
-        return new movimiento("Deslumbrar", 0, "Normal", 0, getParalizar100());
-    }
-
-    public static movimiento getComesueinos() {
-        return new movimiento("Comesueinos", 100, "Phsyc", 0);
-    }
-
-    public static movimiento getGasVenenoso() {
-        return new movimiento("Gas Venenoso", 0, "Poison", 0, getveneno100());
-    }
-
-    public static movimiento getPresa() {
-        return new movimiento("Presa", 15, "Normal", 0);
-    }
-
-    public static movimiento getChupaVidas() {
-        return new movimiento("Chupa Vidas", 20, "Bug", 0);
-    }
-
-    public static movimiento getBesoAmoroso() {
-        return new movimiento("Beso Amoroso", 0, "Normal", 0, getSueino());
-    }
-
-    public static movimiento getAtaqueAereo() {
-        return new movimiento("Ataque Aereo", 140, "Flying", 0, getCarga1());
-    }
-
-    public static movimiento getBurbuja() {
-        return new movimiento("Burbuja", 20, "Water", 0);
-    }
-
-    public static movimiento getPuinoMareo() {
-        return new movimiento("Puino-Mareo", 70, "Normal", 0);
-    }
-
-    public static movimiento getEspora() {
-        return new movimiento("Espora", 0, "Grass", 0, getSueino());
-    }
-
-    public static movimiento getPsicoOnda() {
-        return new movimiento("Psico Onda", 1, "Phsyc", 0);
-    }
-
-    public static movimiento getSalpicadura() {
-        return new movimiento("Salpicadura", 0, "Normal", 0);
-    }
-
-    public static movimiento getMartillazo() {
-        return new movimiento("Martillazo", 90, "Water", 0);
-    }
-
-    public static movimiento getExplosion() {
-        return new movimiento("Explosion", 250, "Normal", 0);
-    }
-
-    public static movimiento getGolpesFuria() {
-        return new movimiento("Golpes Furia", 18, "Normal", 0);
-    }
-
-    public static movimiento getHuesomerang() {
-        return new movimiento("Huesomerang", 100, "Ground", 0);
-    }
-
-    public static movimiento getDescanso() {
-        return new movimiento("Descanso", 0, "Phsyc", 0, getSueino());
-    }
-
-    public static movimiento getAvalancha() {
-        return new movimiento("Avalancha", 75, "Rock", 0);
-    }
-
-    public static movimiento getHipColmillo() {
-        return new movimiento("Hip. Colmillo", 80, "Normal", 0);
-    }
-
-    public static movimiento getTriAtaque() {
-        return new movimiento("Tri-Ataque", 80, "Normal", 0);
-    }
-
-    public static movimiento getCuchillada() {
-        return new movimiento("Cuchillada", 70, "Normal", 0);
-    }
-
-    public static movimiento getHojaAfilada() {
-        return new movimiento("Hoja Afilada", 55, "Grass", 0);
-    }
-
-    public static movimiento getLanzaRocas() {
-        return new movimiento("Lanza Rocas", 50, "Rock", 0);
-    }
-
-    public static movimiento getBombaHuevo() {
-        return new movimiento("Bomba Huevo", 100, "Normal", 0);
-    }
-
-    public static movimiento getHuesoPalo() {
-        return new movimiento("Hueso Palo", 65, "Ground", 0);
-    }
-
-    public static movimiento getCascada() {
-        return new movimiento("Cascada", 80, "Water", 0);
-    }
-
     public static Efectos getnull() {
         return new Efectos("Ninguno", 0, null, 0);
     }
@@ -531,13 +190,13 @@ public class Ataques {
         }
         return f;
     }*/
-    public static movimiento getAtaqueAleatorio() {
+    public static Movimiento getAtaqueAleatorio() {
         // Metodo para cumplir funciones
         List<Method> candidatos = new ArrayList<>();
 
         for (Method metodo : Ataques.class.getDeclaredMethods()) {
             boolean esEstatico = Modifier.isStatic(metodo.getModifiers());
-            boolean devuelveMovimiento = metodo.getReturnType() == movimiento.class;
+            boolean devuelveMovimiento = metodo.getReturnType() == Movimiento.class;
             boolean sinParametros = metodo.getParameterCount() == 0;
             boolean esGetter = metodo.getName().startsWith("get");
 
@@ -559,9 +218,15 @@ public class Ataques {
 
         // Para lanzar la excepcion(no espero que pase)
         try {
-            return (movimiento) elegido.invoke(null);
+            return (Movimiento) elegido.invoke(null);
         } catch (Exception e) {
             throw new RuntimeException("No se pudo generar el ataque aleatorio", e);
         }
+    }
+    public static Movimiento buscarPorNombre(String nombre) {
+        for (Movimiento p : movimientos) {
+            if (p.getNombre().equalsIgnoreCase(nombre)) return p;
+        }
+        return null;
     }
 }

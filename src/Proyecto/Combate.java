@@ -36,7 +36,7 @@ public class Combate {
 
             if (opcion == 1) {
 
-                List<movimiento> movs = jugador.getPokemon().getMovimientos();
+                List<Movimiento> movs = jugador.getPokemon().getMovimientos();
 
                 if (movs.isEmpty()) {
                     System.out.println("¡Tu Pokémon no tiene movimientos!");
@@ -56,7 +56,7 @@ public class Combate {
                     System.out.println("Movimiento inválido. Pierdes el turno.");
                 } else {
 
-                    movimiento movJugador = movs.get(eleccion - 1);
+                    Movimiento movJugador = movs.get(eleccion - 1);
 
                     System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
 
@@ -70,7 +70,7 @@ public class Combate {
                 }
 
                 // Turno rival
-                movimiento movRival = rival.getPokemon().getMovimientos().get(0);
+                Movimiento movRival = rival.getPokemon().getMovimientos().get(0);
                 System.out.println("\nEl rival usa " + movRival.getNombre() + "!");
                 jugador.getPokemon().recibirDaño(movRival.getPotencia());
 
@@ -294,7 +294,7 @@ public class Combate {
 
     // Turno del jugador
     private static void turnoJugador(PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
-        List<movimiento> movs = jugador.getMovimientos();
+        List<Movimiento> movs = jugador.getMovimientos();
 
         if (movs.isEmpty()) {
             System.out.println("¡Tu Pokémon no tiene movimientos!");
@@ -312,23 +312,23 @@ public class Combate {
             return;
         }
 
-        movimiento movJugador = movs.get(eleccion - 1);
+        Movimiento movJugador = movs.get(eleccion - 1);
         System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
         rival.recibirDaño((movJugador.getPotencia()+jugador.getNivel()/2));
     }
 
     // Turno del rival (si es un rival "entrenador")
     private static void turnoRival(PokemonLuchador jugador, PokemonLuchador rival) {
-        List<movimiento> movs = rival.getMovimientos();
-        movimiento movRival = movs.get(rand.nextInt(movs.size()));
+        List<Movimiento> movs = rival.getMovimientos();
+        Movimiento movRival = movs.get(rand.nextInt(movs.size()));
         System.out.println("\n" + rival.getNombre() + " usa " + movRival.getNombre() + "!");
         jugador.recibirDaño(movRival.getPotencia());
     }
 
     // Turno del rival salvaje (usa siempre un movimiento aleatorio)
     private static void turnoRivalSalvaje(PokemonLuchador jugador, PokemonLuchador salvaje) {
-        List<movimiento> movs = salvaje.getMovimientos();
-        movimiento movRival = movs.get(rand.nextInt(movs.size()));
+        List<Movimiento> movs = salvaje.getMovimientos();
+        Movimiento movRival = movs.get(rand.nextInt(movs.size()));
         System.out.println("\nEl salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!");
         jugador.recibirDaño(movRival.getPotencia());
     }

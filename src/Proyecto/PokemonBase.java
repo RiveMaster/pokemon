@@ -15,11 +15,11 @@ public class PokemonBase implements Serializable {
     private int vidaBase, ataqueBase, defensaBase, velocidadBase;
     private int nivelEvolucion;
     private String evolucion;
-    private List<movimiento> movimientosPorNivel;
+    private List<Movimiento> movimientosPorNivel;
     private HashMap<String, Double> efectos;
     private HashMap<String, String> efectosPasivos;
 
-    public PokemonBase(String nombre, String tipo1, String tipo2, int vidaBase, int ataqueBase, int defensaBase, int velocidadBase, int nivelEvolucion, String evolucion, List<movimiento> movimientosPorNivel) {
+    public PokemonBase(String nombre, String tipo1, String tipo2, int vidaBase, int ataqueBase, int defensaBase, int velocidadBase, int nivelEvolucion, String evolucion, List<Movimiento> movimientosPorNivel) {
 
 
         this.nombre = nombre;
@@ -51,7 +51,7 @@ public class PokemonBase implements Serializable {
             return nombre;
         }
 
-        public List<movimiento> getMovimientosPorNivel() {
+        public List<Movimiento> getMovimientosPorNivel() {
             return movimientosPorNivel;
         }
 

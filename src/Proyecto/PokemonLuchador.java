@@ -13,7 +13,7 @@ public class PokemonLuchador implements Serializable {
     private int nivel;
     private EstadoAlterado estado = EstadoAlterado.NORMAL;
     private int turnosDormido = 0;
-    private List<movimiento> movimientosAprendidos = new ArrayList<>();
+    private List<Movimiento> movimientosAprendidos = new ArrayList<>();
 
     // Stats
     private int vidaMax;
@@ -96,8 +96,8 @@ public class PokemonLuchador implements Serializable {
         return vidaActual > 0;
     }
 
-    public List<movimiento> getMovimientos() {
-        List<movimiento> todos = new ArrayList<>(base.getMovimientosPorNivel());
+    public List<Movimiento> getMovimientos() {
+        List<Movimiento> todos = new ArrayList<>(base.getMovimientosPorNivel());
         todos.addAll(movimientosAprendidos);
         return todos;
     }
@@ -287,11 +287,11 @@ public class PokemonLuchador implements Serializable {
     public void curar(int i) {
     }
 
-    public boolean aprenderMovimiento(movimiento nuevo) {
+    public boolean aprenderMovimiento(Movimiento nuevo) {
         if (nuevo == null) {
             return false;
         }
-        for (movimiento m : getMovimientos()) {
+        for (Movimiento m : getMovimientos()) {
             if (m.getNombre().equalsIgnoreCase(nuevo.getNombre())) {
                 return false; // ya lo conoce
             }
