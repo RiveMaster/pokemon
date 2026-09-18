@@ -22,7 +22,6 @@ public class Jugador implements Serializable {
     private Rival rival;
     private int encuentroActual;
     private boolean mamaVisitada;
-    private Mochila mochila;
     private transient Scanner sc;
 
     public Jugador(String nombre, PokemonLuchador pokemonInicial, int dineroInicial) {
@@ -32,7 +31,6 @@ public class Jugador implements Serializable {
         this.rival = null;
         this.encuentroActual = 0;
         this.mamaVisitada = false;
-        this.mochila = new Mochila();
 
     }
 
@@ -62,9 +60,6 @@ public class Jugador implements Serializable {
 
     public boolean isMamaVisitada() { return mamaVisitada; }
 
-    public Mochila getMochila() {
-        return mochila;
-    }
     // -------- SETTERS --------
 
 
@@ -92,9 +87,6 @@ public class Jugador implements Serializable {
         this.mamaVisitada = visitada;
     }
 
-    public void setMochila(Mochila mochila) {
-        this.mochila = mochila;
-    }
 
     public void agregarDinero(int cantidad) {
         dinero += cantidad;
