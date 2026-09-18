@@ -18,7 +18,7 @@ public class Ruta1 {
         else if (prob <= 800) return Pokedex.buscarPorNombre("Pidgey");
         else if (prob <= 950) return Pokedex.buscarPorNombre("Ambipom");
         else if (prob <= 999) return Pokedex.buscarPorNombre("Shinx");
-        else return Pokedex.buscarPorNombre("Mewtow");
+        else return Pokedex.buscarPorNombre("Mewtwo");
     }
 
     private int generarNivel() {
