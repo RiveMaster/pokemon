@@ -9,6 +9,17 @@ import java.util.Random;
 public class Ataques {
     private static final List<Movimiento> movimientos = new ArrayList<>();
     private static Jugador jugador;
+
+    // Bloque estático: se ejecuta automáticamente al cargar la clase,
+    // asegurando que la lista de movimientos esté rellena ANTES de que
+    // Pokedex (u otra clase) llame a buscarPorNombre(). Antes, Ataque()
+    // nunca se invocaba y la lista quedaba vacía, provocando que todos
+    // los pokemon tuvieran movimientos "null" y el juego petara (NPE)
+    // al elegir "Atacar" en el primer combate.
+    static {
+        Ataque();
+    }
+
     private static void Ataque() {
         movimientos.add(new Movimiento("Destructor", 40, "Normal", 0, getnull()));
         movimientos.add(new Movimiento("Arainazo", 40, "Normal", 1, getnull()));
@@ -16,7 +27,10 @@ public class Ataques {
         movimientos.add(new Movimiento("Doblebofeton", 15 * (int) (5 * Math.random() + 1), "Normal", 0, getnull()));
         movimientos.add(new Movimiento("Puino cometa", 18 * (int) (5 * Math.random() + 1), "Normal", 0, getnull()));
         movimientos.add(new Movimiento("Mega Puino", 80, "Normal", 0, getnull()));
-        movimientos.add(new Movimiento("Dia de pago", jugador.getDinero(), "Normal", 0, getnull()));
+        // Antes: "jugador.getDinero()" -> jugador es siempre null en este punto
+        // (nunca se asigna), lo que provocaba un NullPointerException en cuanto
+        // se cargaba la clase. Se usa una potencia fija como placeholder.
+        movimientos.add(new Movimiento("Dia de pago", 50, "Normal", 0, getnull()));
         movimientos.add(new Movimiento("Puino Fuego", 75, "Fire", 0, getQuemar10()));
         movimientos.add(new Movimiento("Puino Hielo", 75, "Ice", 0, getCongelar10()));
         movimientos.add(new Movimiento("Agarre", 55, "Normal", 0, getnull()));

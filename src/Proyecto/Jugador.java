@@ -100,49 +100,143 @@ public class Jugador implements Serializable {
         return false;
     }
 
-    public static void pokemonEquipoPc( PokemonLuchador pokemon, Scanner sc){
-        System.out.println("Seleccione un pokemon de su equipo para almacenar en el PC.");
+    // =====================================================
+    // ================   SISTEMA DE PC   =================
+    // =====================================================
+    // Permite guardar Pokémon del equipo en el PC y sacarlos
+    // de vuelta al equipo, además de enviar automáticamente
+    // al PC cualquier Pokémon capturado cuando el equipo (6)
+    // ya está completo.
+
+    private static void mostrarListaEquipo() {
+        if (equipo.isEmpty()) {
+            System.out.println("  (no tienes Pokémon en el equipo)");
+            return;
+        }
         for (int k = 0; k < equipo.size(); k++) {
             PokemonLuchador p = equipo.get(k);
             String estado = p.estaVivo() ? "Vivo" : "Debilitado";
             System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
         }
-        int idx = sc.nextInt() - 1;
-        if (idx >= 0 && idx < equipo.size()) {
-            PokemonLuchador nuevo = equipo.get(idx);
-            pc.add(nuevo);
-            equipo.remove(nuevo);
-            } else {
-            System.out.println("Selección inválida.");
-        }
     }
-    public static void equipoPokemonPc( PokemonLuchador pokemon, Scanner sc){
-        System.out.println("Seleccione un pokemon de su PC para poner en el equipo.");
+
+    private static void mostrarListaPc() {
+        if (pc.isEmpty()) {
+            System.out.println("  (el PC está vacío)");
+            return;
+        }
         for (int k = 0; k < pc.size(); k++) {
             PokemonLuchador p = pc.get(k);
             String estado = p.estaVivo() ? "Vivo" : "Debilitado";
             System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
         }
-        int idx = sc.nextInt() - 1;
-        if (idx >= 0 && idx < pc.size()) {
-            PokemonLuchador nuevo = pc.get(idx);
-            equipo.add(nuevo);
-            pc.remove(nuevo);
-        } else {
-            System.out.println("Selección inválida.");
-        }
     }
 
+    // Envía un Pokémon del equipo al PC. Devuelve true si se depositó.
+    public static boolean depositarPokemon(Scanner sc) {
+        if (equipo.size() <= 1) {
+            System.out.println("¡No puedes depositar a tu último Pokémon! Necesitas al menos uno en el equipo.");
+            return false;
+        }
+
+        System.out.println("Selecciona un Pokémon de tu equipo para depositar en el PC:");
+        mostrarListaEquipo();
+        System.out.print("Elige una opción (0 para cancelar): ");
+
+        int idx = sc.nextInt() - 1;
+        if (idx == -1) {
+            System.out.println("Cancelado.");
+            return false;
+        }
+        if (idx < 0 || idx >= equipo.size()) {
+            System.out.println("Selección inválida.");
+            return false;
+        }
+
+        PokemonLuchador elegido = equipo.get(idx);
+        equipo.remove(idx);
+        pc.add(elegido);
+        System.out.println("¡" + elegido.getNombre() + " ha sido enviado al PC!");
+        return true;
+    }
+
+    // Saca un Pokémon del PC y lo añade al equipo. Devuelve true si se retiró.
+    public static boolean retirarPokemon(Scanner sc) {
+        if (pc.isEmpty()) {
+            System.out.println("El PC está vacío, no hay Pokémon que retirar.");
+            return false;
+        }
+        if (equipo.size() >= 6) {
+            System.out.println("Tu equipo ya está completo (máximo 6 Pokémon). Deposita alguno primero.");
+            return false;
+        }
+
+        System.out.println("Selecciona un Pokémon del PC para añadir a tu equipo:");
+        mostrarListaPc();
+        System.out.print("Elige una opción (0 para cancelar): ");
+
+        int idx = sc.nextInt() - 1;
+        if (idx == -1) {
+            System.out.println("Cancelado.");
+            return false;
+        }
+        if (idx < 0 || idx >= pc.size()) {
+            System.out.println("Selección inválida.");
+            return false;
+        }
+
+        PokemonLuchador elegido = pc.get(idx);
+        pc.remove(idx);
+        equipo.add(elegido);
+        System.out.println("¡" + elegido.getNombre() + " se ha unido a tu equipo!");
+        return true;
+    }
+
+    // Envía directamente un Pokémon al PC (p.ej. al capturar con el equipo lleno)
     public static void salvajePc(PokemonLuchador pokemon){
+        System.out.println("Tu equipo está lleno. " + pokemon.getNombre() + " ha sido enviado directamente al PC.");
         pc.add(pokemon);
+    }
+
+    // Menú interactivo del PC, pensado para invocarse desde el Centro Pokémon
+    public static void menuPC(Scanner sc) {
+        while (true) {
+            System.out.println("\n╔════════════════════════════════════╗");
+            System.out.println("║              PC POKÉMON             ║");
+            System.out.println("╚════════════════════════════════════╝");
+            System.out.println("1. Ver mi equipo");
+            System.out.println("2. Ver Pokémon guardados en el PC");
+            System.out.println("3. Depositar un Pokémon (equipo -> PC)");
+            System.out.println("4. Retirar un Pokémon (PC -> equipo)");
+            System.out.println("5. Salir del PC");
+            System.out.print("Elige una opción: ");
+
+            int opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1 -> {
+                    System.out.println("\n-- Tu equipo --");
+                    mostrarListaEquipo();
+                }
+                case 2 -> {
+                    System.out.println("\n-- Pokémon en el PC --");
+                    mostrarListaPc();
+                }
+                case 3 -> depositarPokemon(sc);
+                case 4 -> retirarPokemon(sc);
+                case 5 -> {
+                    System.out.println("Cerrando sesión del PC...");
+                    return;
+                }
+                default -> System.out.println("Opción no válida.");
+            }
+        }
     }
 
     public void agregarPokemon(PokemonLuchador pokemon) {
         if (equipo.size() < 6) {
             equipo.add(pokemon);
         } else {
-            System.out.println("¡El equipo ya está completo (máximo 6 Pokémon)!");
-            System.out.println("Añadiendo Pokemon a la PC.");
             Jugador.salvajePc(pokemon);
         }
     }
@@ -188,11 +282,9 @@ public class Jugador implements Serializable {
     }
 
     public boolean capturarPokemon(PokemonLuchador pokemon, String tipoPokeball) {
-        // Verificar si hay espacio en el equipo
-        if (equipoLleno()) {
-            System.out.println("¡No puedes capturar más Pokémon! Tu equipo está lleno.");
-            return false;
-        }
+        // Nota: ya no se bloquea la captura si el equipo está lleno.
+        // Si se captura y no hay hueco en el equipo, agregarPokemon()
+        // se encarga de enviar el Pokémon automáticamente al PC.
 
         // Intentar usar la Poké Ball de la mochila
         if (!usarPokeball(tipoPokeball)) {
@@ -221,7 +313,7 @@ public class Jugador implements Serializable {
 
         if (capturado) {
             System.out.println("¡Felicidades! Has capturado a " + pokemon.getNombre() + ".");
-            agregarPokemon(pokemon);
+            agregarPokemon(pokemon); // Si el equipo está lleno, se envía automáticamente al PC
             return true;
         } else {
             System.out.println("¡Oh no! El Pokémon se escapó de la " + tipoPokeball + ".");

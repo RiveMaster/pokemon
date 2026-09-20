@@ -71,7 +71,7 @@ public class Villaverde {
 
                         }
                         case 5->{return;}
-                        default -> throw new IllegalStateException("Unexpected value: " + opcional);
+                        default -> System.out.println("Valor no permitido");
                     }
                 }
                 default -> System.out.println("Opción no válida.");

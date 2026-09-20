@@ -12,7 +12,8 @@ public class CentroPokemon {
             System.out.println("\n=== Centro Pokémon ===");
             System.out.println("1. Curar a tu Pokémon");
             System.out.println("2. Ver estadísticas de tu Pokémon");
-            System.out.println("3. Salir del Centro Pokémon");
+            System.out.println("3. Acceder al PC");
+            System.out.println("4. Salir del Centro Pokémon");
             System.out.print("Elige una opción: ");
 
             int opcion = sc.nextInt();
@@ -33,7 +34,8 @@ public class CentroPokemon {
                         mostrarEstadisticas(p);
                     }
                 }
-                case 3 -> {
+                case 3 -> Jugador.menuPC(sc);
+                case 4 -> {
                     System.out.println("¡Vuelve pronto!");
                     return;
                 }
