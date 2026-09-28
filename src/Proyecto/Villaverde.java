@@ -16,28 +16,15 @@ public class Villaverde {
             System.out.println("╚════════════════════════════════════╝");
             System.out.println("1. Visitar a mamá");
             System.out.println("2. Ir a Ruta 1");
-            System.out.println("3. Ver dinero");
-            System.out.println("4. Ver estado del Pokémon");
-            System.out.println("5. Guardar partida");
-            System.out.println("6. Salir del juego");
+            System.out.println("3. Ver mochila");
             System.out.print("\nElige una opción: ");
             int opcion = leerEntero(sc);
             sc.nextLine();
 
             switch (opcion) {
-
                 case 1 -> visitarMama(sc, jugadorCompleto);
                 case 2 -> Ruta1.entrarRuta1(sc, jugadorCompleto);
-                case 3 -> System.out.println("\n💰 Tienes " + jugadorCompleto.getDinero() + "€");
-                case 4 -> jugadorCompleto.mostrarEstadoEquipo();
-                case 5 -> {
-                    GuardarCargar.guardarPartida(jugadorCompleto);
-                    System.out.println("✔ Partida guardada con éxito.");
-                }
-                case 6 -> {
-                    System.out.println("\n¡Gracias por jugar!");
-                    return;}
-
+                case 3 -> Menu.mostrarmenu(sc, jugadorCompleto);
                 case 777999222 ->{
                     System.out.println("Entrando en modo debug para estats modificadas.");
                     System.out.println("Introduce la opcion:");
