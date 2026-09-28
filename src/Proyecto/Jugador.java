@@ -323,7 +323,7 @@ public class Jugador implements Serializable {
 
     public void curarPokemon(PokemonLuchador pokemon, String tipocura) {
         if (!usarMedicina(tipocura, pokemon)) {
-            System.out.println("No tienes esa cura."); // No se pudo usar la curaaaa (no hay disponibles)
+            System.out.println("No tienes esa cura."); // No se pudo usar la cura (no hay disponibles)
         }if (tipocura.equals("pocion")) {
             pokemon.curar(100);
         }if (tipocura.equals("superpocion")) {
@@ -390,6 +390,9 @@ public class Jugador implements Serializable {
         pokeballs.put(nombre, pokeballs.get(nombre) - 1);
         System.out.println("Lanzas una " + nombre + "...");
         return true;
+    }
+    public void usarMT(Jugador jugador){
+
     }
 
     // === Mostrar mochila ===

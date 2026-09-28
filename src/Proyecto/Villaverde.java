@@ -51,11 +51,14 @@ public class Villaverde {
                             }
                         }
                         case 3->{
-
+                            System.out.println("Introduce el nombre del ataque: ");
 
                         }
                         case 4->{
+                            System.out.println("");
+                            switch (opcion){
 
+                            }
                         }
                         case 5->{return;}
                         default -> System.out.println("Valor no permitido");
