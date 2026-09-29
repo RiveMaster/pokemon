@@ -8,7 +8,7 @@ public class Aventura {
 
     public static void main(String[] args) {
         Jugador jugador = null;
-        boolean reanudar = false; // true si se cargó una partida: continuar en la posición guardada
+        boolean reanudar = false; // true si se cargó una partida: continúa en la posición guardada (Mapa.jugar la lee)
 
         System.out.println("╔════════════════════════════════════╗");
         System.out.println("║   BIENVENIDO AL MUNDO POKÉMON      ║");
@@ -63,7 +63,8 @@ public class Aventura {
         // ===== COMENZAR EL JUEGO =====
         if (jugador != null) {
             if (reanudar) {
-                reanudarDesdeUbicacion(jugador);
+                System.out.println("\nContinúas en: " + jugador.getUbicacion().getNombre()
+                        + " [" + jugador.getGeneracion().etiqueta() + "]");
             }
             menuPuebloVillaverde(jugador);
 
@@ -74,22 +75,8 @@ public class Aventura {
         }
     }
 
-    // Lleva al jugador al lugar donde guardó. Al salir de él (p. ej. volver al pueblo)
-    // el juego sigue con el menú de Villaverde, que es la base de todos los caminos.
-    private static void reanudarDesdeUbicacion(Jugador jugador) {
-        System.out.println("\nContinúas en: " + jugador.getUbicacion().getNombre());
-        switch (jugador.getUbicacion()) {
-            case RUTA1 -> Ruta1.entrarRuta1(sc, jugador);
-            case OVIEDO -> Oviedo.entrarOviedo(sc, jugador);
-            case RUTA2 -> Ruta2.entrarRuta2(sc, jugador);
-            case VILLAVERDE -> { }
-        }
-    }
-
     public static void menuPuebloVillaverde(Jugador jugadorCompleto) {
-        while (true) {
-            Villaverde.mostrarMenu(sc, jugadorCompleto);
-        }
+        Mapa.jugar(sc, jugadorCompleto);
     }
 
 }

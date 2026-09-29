@@ -148,7 +148,14 @@ public class Combate {
                 }
                 turnoRival(pokemonJugador, pokemonpodemita);
                 if (!pokemonJugador.estaVivo()){
-                    pokemuerto(pokemonJugador, jugadorCompleto, sc, combateActivo);
+                    {
+                    PokemonLuchador siguiente = pokemuerto(pokemonJugador, jugadorCompleto, sc);
+                    if (siguiente == null) {
+                        combateActivo = false;
+                    } else {
+                        pokemonJugador = siguiente;
+                    }
+                }
                 }
             }else if (opcion == 2){
                 System.out.println("Escapas del combate para no aguantar a un rojo tocacojones.");
@@ -203,7 +210,14 @@ public class Combate {
                 turnoRivalSalvaje(pokemonJugador, salvaje);
 
                 if (!pokemonJugador.estaVivo()) {
-                    pokemuerto(pokemonJugador, jugadorCompleto, sc, combateActivo);
+                    {
+                    PokemonLuchador siguiente = pokemuerto(pokemonJugador, jugadorCompleto, sc);
+                    if (siguiente == null) {
+                        combateActivo = false;
+                    } else {
+                        pokemonJugador = siguiente;
+                    }
+                }
                 }
 
             } else if (opcion == 2) {
@@ -228,7 +242,14 @@ public class Combate {
                         // Continuar con el turno del salvaje después de fallo
                         turnoRivalSalvaje(pokemonJugador, salvaje);
                         if (!pokemonJugador.estaVivo()) {
-                            pokemuerto(pokemonJugador, jugadorCompleto, sc, combateActivo);
+                            {
+                    PokemonLuchador siguiente = pokemuerto(pokemonJugador, jugadorCompleto, sc);
+                    if (siguiente == null) {
+                        combateActivo = false;
+                    } else {
+                        pokemonJugador = siguiente;
+                    }
+                }
                         }
                     }
                 }else if (n==2){
@@ -266,7 +287,14 @@ public class Combate {
                             turnoRivalSalvaje(pokemonJugador, salvaje);
 
                             if (!pokemonJugador.estaVivo()) {
-                                pokemuerto(pokemonJugador, jugadorCompleto, sc, combateActivo);
+                                {
+                    PokemonLuchador siguiente = pokemuerto(pokemonJugador, jugadorCompleto, sc);
+                    if (siguiente == null) {
+                        combateActivo = false;
+                    } else {
+                        pokemonJugador = siguiente;
+                    }
+                }
                             }
                         }
                     } else {
@@ -336,41 +364,42 @@ public class Combate {
 
     // Funcion para cuando uno de tus pokemon se debilita
 
-    private static void pokemuerto(PokemonLuchador pokemonJugador, Jugador jugadorCompleto, Scanner sc, boolean combateActivo) {
-        if (!pokemonJugador.estaVivo()) {
-            // Comprobamos si nos queda algún Pokémon vivo en el equipo global
-            if (equipoM(jugadorCompleto)) {
-                System.out.println("\n¡Todos tus Pokémons han sido debilitados!");
-            } else {
-                // Si hay vivos, obligamos a cambiar
-                System.out.println("\n" + pokemonJugador.getNombre() + " ha sido debilitado.");
-                System.out.println("¡Debes sacar a otro Pokémon!");
+    // Cuando cae el Pokémon del jugador. Devuelve el que sigue en combate:
+    // el mismo si sigue vivo, el elegido si hay que sustituirlo, o null si ya no queda ninguno.
+    // (Antes era void: el cambio se hacía en una copia local y el combate seguía con el debilitado.)
+    private static PokemonLuchador pokemuerto(PokemonLuchador pokemonJugador, Jugador jugadorCompleto, Scanner sc) {
+        if (pokemonJugador.estaVivo()) {
+            return pokemonJugador;
+        }
 
-                List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
-                boolean cambioRealizado = false;
+        // Ojo: equipoM devuelve true cuando TODO el equipo está debilitado
+        if (equipoM(jugadorCompleto)) {
+            System.out.println("\n¡Todos tus Pokémons han sido debilitados!");
+            return null;
+        }
 
-                while (!cambioRealizado) {
-                    System.out.println("Elige un Pokémon vivo:");
-                    for (int k = 0; k < equipo.size(); k++) {
-                        PokemonLuchador p = equipo.get(k);
-                        String estado = p.estaVivo() ? "Vivo" : "Debilitado";
-                        System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
-                    }
+        System.out.println("\n" + pokemonJugador.getNombre() + " ha sido debilitado.");
+        System.out.println("¡Debes sacar a otro Pokémon!");
 
-                    int idx = sc.nextInt() - 1;
-                    if (idx >= 0 && idx < equipo.size()) {
-                        PokemonLuchador candidato = equipo.get(idx);
-                        if (candidato.estaVivo()) {
-                            pokemonJugador = candidato; // Actualizamos el Pokémon activo en el combate
-                            cambioRealizado = true;
-                            System.out.println("¡Adelante " + pokemonJugador.getNombre() + "!");
-                        } else {
-                            System.out.println("Ese Pokémon está debilitado. Elige otro.");
-                        }
-                    } else {
-                        System.out.println("Opción no válida.");
-                    }
+        List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
+        while (true) {
+            System.out.println("Elige un Pokémon vivo:");
+            for (int k = 0; k < equipo.size(); k++) {
+                PokemonLuchador p = equipo.get(k);
+                String estado = p.estaVivo() ? "Vivo" : "Debilitado";
+                System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
+            }
+
+            int idx = Entrada.leerEntero(sc) - 1;
+            if (idx >= 0 && idx < equipo.size()) {
+                PokemonLuchador candidato = equipo.get(idx);
+                if (candidato.estaVivo()) {
+                    System.out.println("¡Adelante " + candidato.getNombre() + "!");
+                    return candidato;
                 }
+                System.out.println("Ese Pokémon está debilitado. Elige otro.");
+            } else {
+                System.out.println("Opción no válida.");
             }
         }
     }

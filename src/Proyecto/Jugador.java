@@ -36,6 +36,11 @@ public class Jugador implements Serializable {
     private Set<String> medallas = new LinkedHashSet<>();
     private Ubicacion ubicacion = Ubicacion.VILLAVERDE;
 
+    // Generación en la que se juega, la más alta desbloqueada y jefes del Gobierno derrotados
+    private int generacionActual = 1;
+    private int generacionMaxima = 1;
+    private Set<Integer> jefesDerrotados = new LinkedHashSet<>();
+
     public Jugador(String nombre, PokemonLuchador pokemonInicial, int dineroInicial) {
         this.nombre = nombre;
         this.equipo.add(pokemonInicial);
@@ -77,6 +82,54 @@ public class Jugador implements Serializable {
     public Set<String> getMedallas() { return medallas; }
 
     public boolean tieneMedalla(String medalla) { return medallas.contains(medalla); }
+
+    // ---- Generaciones ----
+    public Generacion getGeneracion() { return Generacion.de(generacionActual); }
+
+    public int getGeneracionMaxima() { return generacionMaxima; }
+
+    /** Cambia de generación (solo a las desbloqueadas). Devuelve false si no está permitida. */
+    public boolean viajarAGeneracion(int numero) {
+        if (numero < 1 || numero > generacionMaxima) return false;
+        generacionActual = numero;
+        return true;
+    }
+
+    public void desbloquearGeneracion(Generacion gen) {
+        generacionMaxima = Math.max(generacionMaxima, gen.getNumero());
+    }
+
+    public void desbloquearTodasLasGeneraciones() {
+        generacionMaxima = 10;
+    }
+
+    public boolean jefeDerrotado(Generacion gen) { return jefesDerrotados.contains(gen.getNumero()); }
+
+    public void marcarJefeDerrotado(Generacion gen) { jefesDerrotados.add(gen.getNumero()); }
+
+    /** Cuántas medallas tiene de una generación (las medallas se guardan con el nombre de la región). */
+    public int medallasEnGeneracion(Generacion gen) {
+        String sufijo = " (" + gen.getRegion() + ")";
+        int n = 0;
+        for (String m : medallas) {
+            if (m.endsWith(sufijo)) n++;
+        }
+        return n;
+    }
+
+    /** Primer Pokémon del equipo que pueda combatir (null si todos están debilitados). */
+    public PokemonLuchador getPokemonActivo() {
+        for (PokemonLuchador p : equipo) {
+            if (p.estaVivo()) return p;
+        }
+        return null;
+    }
+
+    public void curarEquipoTotal() {
+        for (PokemonLuchador p : equipo) {
+            p.curarTotal();
+        }
+    }
 
     // -------- SETTERS --------
 
@@ -139,6 +192,9 @@ public class Jugador implements Serializable {
         if (objetosEquipables == null) objetosEquipables = new HashMap<>();
         if (medallas == null) medallas = new LinkedHashSet<>();
         if (ubicacion == null) ubicacion = Ubicacion.VILLAVERDE;
+        if (jefesDerrotados == null) jefesDerrotados = new LinkedHashSet<>();
+        if (generacionActual < 1) generacionActual = 1;   // partidas guardadas antes de existir las generaciones
+        if (generacionMaxima < generacionActual) generacionMaxima = generacionActual;
 
         try {
             reemplazar(medicinas, (HashMap<String, Integer>) in.readObject());
@@ -664,7 +720,7 @@ public class Jugador implements Serializable {
         if (objetosEquipables.isEmpty()) System.out.println("  (vacío)");
         else objetosEquipables.forEach((k,v) -> System.out.println("  " + k.getNombre() + " x" + v));
 
-        System.out.println("\n-- Medallas --");
+        System.out.println("\n-- Medallas -- (generación actual: " + getGeneracion().etiqueta() + ")");
         if (medallas.isEmpty()) System.out.println("  (ninguna)");
         else medallas.forEach(m -> System.out.println("  " + m));
 

@@ -1132,6 +1132,12 @@ public class Pokedex {
         if (!cargado) new Pokedex().cargarpokemons();
     }
 
+    // Todos los Pokémon en orden de Pokédex nacional (posición 0 = nº 1)
+    public static List<PokemonBase> getTodos() {
+        cargarSiHaceFalta();
+        return java.util.Collections.unmodifiableList(pokemons);
+    }
+
     public static PokemonBase getByName(String name) {
         return buscarPorNombre(name);
     }

@@ -6,26 +6,29 @@ import java.util.List;
 
 public class Villaverde {
 
-    public static void mostrarMenu(Scanner sc, Jugador jugadorCompleto) {
+    /** Menú de Villaverde. Devuelve a dónde va el jugador (Ruta 1); el resto de opciones se quedan aquí. */
+    public static Ubicacion mostrarMenu(Scanner sc, Jugador jugadorCompleto) {
 
-        boolean continuar = true;
-
-        while (continuar) {
-            jugadorCompleto.setUbicacion(Ubicacion.VILLAVERDE);
+        while (true) {
             System.out.println("\n╔════════════════════════════════════╗");
             System.out.println("║      PUEBLO VILLAVERDE             ║");
             System.out.println("╚════════════════════════════════════╝");
+            System.out.println("Generación actual: " + jugadorCompleto.getGeneracion().etiqueta());
             System.out.println("1. Visitar a mamá");
             System.out.println("2. Ir a Ruta 1");
             System.out.println("3. Menú (mochila, MT, objetos, guardar)");
+            System.out.println("4. Viajar a otra generación");
             System.out.print("\nElige una opción: ");
             int opcion = leerEntero(sc);
             sc.nextLine();
 
             switch (opcion) {
                 case 1 -> visitarMama(sc, jugadorCompleto);
-                case 2 -> Ruta1.entrarRuta1(sc, jugadorCompleto);
+                case 2 -> {
+                    return Ubicacion.RUTA1;
+                }
                 case 3 -> Menu.mostrarmenu(sc, jugadorCompleto);
+                case 4 -> viajarEntreGeneraciones(sc, jugadorCompleto);
                 case 777999222 ->{
                     System.out.println("Entrando en modo debug para estats modificadas.");
                     System.out.println("Introduce la opcion:");
@@ -33,7 +36,8 @@ public class Villaverde {
                     System.out.println("2. Pokemon");
                     System.out.println("3. MT");
                     System.out.println("4. Objeto");
-                    System.out.println("5. salir.");
+                    System.out.println("5. Desbloquear todas las generaciones");
+                    System.out.println("6. salir.");
                     int opcional=sc.nextInt();
                     sc.nextLine();
                     switch (opcional){
@@ -75,12 +79,38 @@ public class Villaverde {
                                 System.out.println("Objeto añadido: " + objeto.getNombre());
                             }
                         }
-                        case 5->{return;}
+                        case 5->{
+                            jugadorCompleto.desbloquearTodasLasGeneraciones();
+                            System.out.println("Generaciones 1 a 10 desbloqueadas.");
+                        }
+                        case 6->{ }
                         default -> System.out.println("Valor no permitido");
                     }
                 }
                 default -> System.out.println("Opción no válida.");
             }
+        }
+    }
+
+    // Elige una de las generaciones desbloqueadas: cambia qué Pokémon salen y el nivel del mundo entero
+    private static void viajarEntreGeneraciones(Scanner sc, Jugador jugador) {
+        System.out.println("\n-- Viajar a otra generación --");
+        for (int n = 1; n <= 10; n++) {
+            Generacion g = Generacion.de(n);
+            String estado = n > jugador.getGeneracionMaxima() ? "🔒 bloqueada"
+                    : (jugador.jefeDerrotado(g) ? "✔ jefe derrotado" : "desbloqueada");
+            String actual = n == jugador.getGeneracion().getNumero() ? "  <-- estás aquí" : "";
+            System.out.println(n + ". " + g.etiqueta() + " (nivel +" + g.getBonusNivel() + ") - " + estado + actual);
+        }
+        System.out.println("Para desbloquear la siguiente hay que ganar las 5 medallas y derrotar al jefe del Gobierno.");
+        System.out.print("Elige (0 para cancelar): ");
+        int n = leerEntero(sc);
+        sc.nextLine();
+        if (n == 0) return;
+        if (jugador.viajarAGeneracion(n)) {
+            System.out.println("Has viajado a " + jugador.getGeneracion().etiqueta() + ": " + jugador.getGeneracion().getAmbiente());
+        } else {
+            System.out.println("Esa generación está bloqueada o no existe.");
         }
     }
 

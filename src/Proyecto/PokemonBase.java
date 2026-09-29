@@ -51,6 +51,14 @@ public class PokemonBase implements Serializable {
             return nombre;
         }
 
+        public String getTipo1() {
+            return tipo1;
+        }
+
+        public String getTipo2() {
+            return tipo2;
+        }
+
         public List<Movimiento> getMovimientosPorNivel() {
             return movimientosPorNivel;
         }
