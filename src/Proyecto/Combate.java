@@ -282,7 +282,7 @@ public class Combate {
     }
 
     // Mostrar estado de los Pokémon
-    private static void mostrarEstado(PokemonLuchador jugador, PokemonLuchador rival) {
+    static void mostrarEstado(PokemonLuchador jugador, PokemonLuchador rival) {
         System.out.println("\n===============================");
         System.out.println("Tu Pokémon: " + jugador.getNombre() + "  Nv." + jugador.getNivel());
         System.out.println("Vida: " + jugador.getVidaActual() + "/" + jugador.getVidaMax());
@@ -293,7 +293,7 @@ public class Combate {
     }
 
     // Turno del jugador
-    private static void turnoJugador(PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
+    static void turnoJugador(PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
         List<Movimiento> movs = jugador.getMovimientos();
 
         if (movs.isEmpty()) {
@@ -314,15 +314,15 @@ public class Combate {
 
         Movimiento movJugador = movs.get(eleccion - 1);
         System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
-        rival.recibirDaño((movJugador.getPotencia()+jugador.getNivel()/2));
+        jugador.atacarCon(movJugador, movJugador.getPotencia() + jugador.getNivel() / 2, rival);
     }
 
     // Turno del rival (si es un rival "entrenador")
-    private static void turnoRival(PokemonLuchador jugador, PokemonLuchador rival) {
+    static void turnoRival(PokemonLuchador jugador, PokemonLuchador rival) {
         List<Movimiento> movs = rival.getMovimientos();
         Movimiento movRival = movs.get(rand.nextInt(movs.size()));
         System.out.println("\n" + rival.getNombre() + " usa " + movRival.getNombre() + "!");
-        jugador.recibirDaño(movRival.getPotencia());
+        rival.atacarCon(movRival, movRival.getPotencia(), jugador);
     }
 
     // Turno del rival salvaje (usa siempre un movimiento aleatorio)
@@ -330,7 +330,7 @@ public class Combate {
         List<Movimiento> movs = salvaje.getMovimientos();
         Movimiento movRival = movs.get(rand.nextInt(movs.size()));
         System.out.println("\nEl salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!");
-        jugador.recibirDaño(movRival.getPotencia());
+        salvaje.atacarCon(movRival, movRival.getPotencia(), jugador);
     }
 
 
@@ -443,6 +443,7 @@ public class Combate {
 
     // Funcion para los efectos de los pokemons que esten luchando en la batalla
     public static void efecto(PokemonLuchador pokemon){
+        pokemon.efectoObjetoInicioTurno();
         if (pokemon.getEstado() == EstadoAlterado.DORMIDO) {
             pokemon.setTurnosDormido(pokemon.getTurnosDormido() - 1);
             System.out.println(pokemon.getNombre() + " está dormido...");

@@ -11,7 +11,7 @@ public class GuardarCargar {
     public static void guardarPartida(Jugador jugador) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO))) {
             oos.writeObject(jugador);
-            System.out.println("✔ Partida guardada correctamente.");
+            System.out.println("✔ Partida guardada correctamente en: " + jugador.getUbicacion().getNombre() + ".");
         } catch (IOException e) {
             System.err.println("✖ Error al guardar la partida: " + e.getMessage());
             e.printStackTrace();
@@ -25,7 +25,7 @@ public class GuardarCargar {
     public static Jugador cargarPartida() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARCHIVO))) {
             Jugador jugador = (Jugador) ois.readObject();
-            System.out.println("✔ Partida cargada correctamente.");
+            System.out.println("✔ Partida cargada correctamente. Ubicación: " + jugador.getUbicacion().getNombre() + ".");
             return jugador;
         } catch (FileNotFoundException e) {
             System.err.println("✖ No existe partida guardada.");

@@ -4,27 +4,28 @@ import java.util.Scanner;
 
 public class Menu {
     public static void mostrarmenu(Scanner sc, Jugador jugador){
-        System.out.println("1. Ver dinero");
+        System.out.println("\n1. Ver dinero");
         System.out.println("2. Ver estado del Pokémon");
-        System.out.println("3. Usar MT");
-        System.out.println("4. Guardar partida");
-        System.out.println("5. Salir del juego");
-        System.out.println("6. Volver");
+        System.out.println("3. Ver mochila");
+        System.out.println("4. Usar MT");
+        System.out.println("5. Equipar objeto");
+        System.out.println("6. Guardar partida");
+        System.out.println("7. Salir del juego");
+        System.out.println("8. Volver");
         System.out.println("Elegir opcion:");
-        int opcion = sc.nextInt();
+        int opcion = Entrada.leerEntero(sc);
         switch (opcion){
             case 1->System.out.println("\n💰 Tienes " + jugador.getDinero() + "€");
             case 2->jugador.mostrarEstadoEquipo();
-            case 3->jugador.usarMT(jugador);
-            case 4->{
-                GuardarCargar.guardarPartida(jugador);
-                System.out.println("✔ Partida guardada con éxito.");
-            }
-            case 5->{
+            case 3->jugador.mostrar(jugador);
+            case 4->jugador.usarMT(sc);
+            case 5->jugador.menuEquipar(sc);
+            case 6->GuardarCargar.guardarPartida(jugador); // ya informa de si se guardó o falló
+            case 7->{
                 System.out.println("\n¡Gracias por jugar!");
                 System.exit(1);
             }
-            case 6-> {return;}
+            case 8-> {return;}
             default -> System.out.println("Opción no válida.");
         }
     }

@@ -14,6 +14,7 @@ public class PokemonLuchador implements Serializable {
     private EstadoAlterado estado = EstadoAlterado.NORMAL;
     private int turnosDormido = 0;
     private List<Movimiento> movimientosAprendidos = new ArrayList<>();
+    private ObjetoEquipable objeto; // objeto equipado (null = ninguno)
 
     // Stats
     private int vidaMax;
@@ -282,6 +283,79 @@ public class PokemonLuchador implements Serializable {
 
     public void curarTotal() {
         this.vidaActual = this.vidaMax;
+    }
+
+    // ---------------------------
+    // OBJETOS EQUIPABLES
+    // ---------------------------
+    public ObjetoEquipable getObjeto() {
+        return objeto;
+    }
+
+    public void setObjeto(ObjetoEquipable objeto) {
+        this.objeto = objeto;
+    }
+
+    // Recupera vida sin pasar del máximo (no se usa curar(int), que está sin implementar)
+    private void restaurarVida(int cantidad) {
+        vidaActual = Math.min(vidaMax, vidaActual + cantidad);
+    }
+
+    // Efecto de objetos que actúan al inicio de cada turno (Restos)
+    public void efectoObjetoInicioTurno() {
+        if (objeto == ObjetoEquipable.RESTOS && estaVivo() && vidaActual < vidaMax) {
+            restaurarVida(Math.max(1, vidaMax / 16));
+            System.out.println(getNombre() + " recupera vida gracias a sus Restos.");
+        }
+    }
+
+    // Ataca a un objetivo aplicando los bonus del objeto equipado
+    public void atacarCon(Movimiento mov, double danoBase, PokemonLuchador objetivo) {
+        double dano = danoBase;
+
+        if (objeto != null) {
+            switch (objeto) {
+                case CINTA_FUERTE -> dano *= 1.10;
+                case VIDASFERA -> dano *= 1.30;
+                default -> {
+                    String tipo = objeto.getTipoPotenciado();
+                    if (tipo != null && tipo.equalsIgnoreCase(mov.getTipo())) {
+                        dano *= 1.20;
+                    }
+                }
+            }
+        }
+
+        objetivo.recibirAtaque(dano);
+
+        if (objeto == ObjetoEquipable.VIDASFERA && dano > 0 && estaVivo()) {
+            recibirDaño(Math.max(1, vidaMax / 10));
+            System.out.println(getNombre() + " pierde vida por la Vidasfera.");
+        }
+    }
+
+    // Daño recibido por un ataque (a diferencia de recibirDaño, tiene en cuenta el objeto)
+    public void recibirAtaque(double cantidad) {
+        double dano = cantidad;
+
+        if (objeto == ObjetoEquipable.PETO_DURO) {
+            dano *= 0.85;
+        }
+
+        if (objeto == ObjetoEquipable.BANDA_FOCUS && vidaActual == vidaMax && dano >= vidaActual) {
+            vidaActual = 1;
+            objeto = null; // se consume
+            System.out.println(getNombre() + " aguanta el golpe con su Banda Focus.");
+            return;
+        }
+
+        recibirDaño(dano);
+
+        if (objeto == ObjetoEquipable.BAYA_ARANJA && estaVivo() && vidaActual * 2 <= vidaMax) {
+            objeto = null; // se consume
+            restaurarVida(30);
+            System.out.println(getNombre() + " se come su Baya Aranja y recupera vida.");
+        }
     }
 
     public void curar(int i) {

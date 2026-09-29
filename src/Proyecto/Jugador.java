@@ -1,11 +1,18 @@
 package Proyecto;
 
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 import java.io.Serializable;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Jugador implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -23,6 +30,11 @@ public class Jugador implements Serializable {
     private int encuentroActual;
     private boolean mamaVisitada;
     private transient Scanner sc;
+
+    // Objetos equipables en la mochila, medallas de gimnasio y posición actual
+    private HashMap<ObjetoEquipable, Integer> objetosEquipables = new HashMap<>();
+    private Set<String> medallas = new LinkedHashSet<>();
+    private Ubicacion ubicacion = Ubicacion.VILLAVERDE;
 
     public Jugador(String nombre, PokemonLuchador pokemonInicial, int dineroInicial) {
         this.nombre = nombre;
@@ -60,6 +72,12 @@ public class Jugador implements Serializable {
 
     public boolean isMamaVisitada() { return mamaVisitada; }
 
+    public Ubicacion getUbicacion() { return ubicacion; }
+
+    public Set<String> getMedallas() { return medallas; }
+
+    public boolean tieneMedalla(String medalla) { return medallas.contains(medalla); }
+
     // -------- SETTERS --------
 
 
@@ -85,6 +103,60 @@ public class Jugador implements Serializable {
 
     public void setMamaVisitada(boolean visitada) { // ← NUEVO
         this.mamaVisitada = visitada;
+    }
+
+    public void setUbicacion(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public void añadirMedalla(String medalla) {
+        medallas.add(medalla);
+    }
+
+    // =====================================================
+    // ===============   GUARDADO / CARGA   ================
+    // =====================================================
+    // equipo, pc y la mochila (medicinas, pokeballs, objetos clave y MT) son
+    // static, y Java NO serializa campos static: sin esto, al cargar una partida
+    // en otra ejecución el equipo y la mochila aparecían vacíos. Por eso se
+    // escriben/leen aquí a mano, justo detrás de los campos normales.
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(new HashMap<>(medicinas));
+        out.writeObject(new HashMap<>(pokeballs));
+        out.writeObject(new HashMap<>(objetosClave));
+        out.writeObject(new HashMap<>(mts));
+        out.writeObject(new ArrayList<>(equipo));
+        out.writeObject(new ArrayList<>(pc));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        // Los campos añadidos después de crear una partida vienen a null al cargarla
+        if (objetosEquipables == null) objetosEquipables = new HashMap<>();
+        if (medallas == null) medallas = new LinkedHashSet<>();
+        if (ubicacion == null) ubicacion = Ubicacion.VILLAVERDE;
+
+        try {
+            reemplazar(medicinas, (HashMap<String, Integer>) in.readObject());
+            reemplazar(pokeballs, (HashMap<String, Integer>) in.readObject());
+            reemplazar(objetosClave, (HashMap<String, Integer>) in.readObject());
+            reemplazar(mts, (HashMap<String, Integer>) in.readObject());
+            equipo.clear();
+            equipo.addAll((List<PokemonLuchador>) in.readObject());
+            pc.clear();
+            pc.addAll((List<PokemonLuchador>) in.readObject());
+        } catch (OptionalDataException | EOFException e) {
+            // Partida guardada con una versión antigua que no incluía estos datos
+        }
+    }
+
+    private static void reemplazar(HashMap<String, Integer> destino, HashMap<String, Integer> origen) {
+        destino.clear();
+        destino.putAll(origen);
     }
 
 
@@ -264,6 +336,8 @@ public class Jugador implements Serializable {
             System.out.println("Defensa: " + equipo.get(i).getDefensa());
             System.out.println("Velocidad: " + equipo.get(i).getVelocidad());
             System.out.println("EXP: " + equipo.get(i).getExpActual() + "/" + equipo.get(i).getExpParaSubirNivel());
+            ObjetoEquipable llevado = equipo.get(i).getObjeto();
+            System.out.println("Objeto: " + (llevado == null ? "ninguno" : llevado.getNombre()));
             System.out.println("--------------------");
         }
     }
@@ -355,7 +429,11 @@ public class Jugador implements Serializable {
     }
 
     public void añadirMT(String nombre) {
-        mts.put(nombre, 1);
+        añadirObjeto(mts, nombre, 1);
+    }
+
+    public void añadirObjetoEquipable(ObjetoEquipable objeto, int cantidad) {
+        objetosEquipables.put(objeto, objetosEquipables.getOrDefault(objeto, 0) + cantidad);
     }
 
     // === Usar objetos ===
@@ -391,8 +469,174 @@ public class Jugador implements Serializable {
         System.out.println("Lanzas una " + nombre + "...");
         return true;
     }
-    public void usarMT(Jugador jugador){
+    // =====================================================
+    // =====================   MT   ========================
+    // =====================================================
+    // Las MT se guardan por nombre de ataque y son de un solo uso: se gastan al
+    // enseñárselas a un Pokémon (si ya conocía el ataque, no se gastan).
 
+    // Menú "Usar MT": elegir una MT de la mochila y el Pokémon del equipo que la aprende
+    public void usarMT(Scanner sc) {
+        List<String> disponibles = new ArrayList<>();
+        for (String nombre : mts.keySet()) {
+            if (mts.get(nombre) > 0) {
+                disponibles.add(nombre);
+            }
+        }
+        if (disponibles.isEmpty()) {
+            System.out.println("No tienes ninguna MT. Puedes comprarlas en la Tienda o ganarlas en los gimnasios.");
+            return;
+        }
+        java.util.Collections.sort(disponibles);
+
+        System.out.println("\n-- Tus MT --");
+        for (int i = 0; i < disponibles.size(); i++) {
+            String nombre = disponibles.get(i);
+            Movimiento mov = Ataques.buscarPorNombre(nombre);
+            String detalle = (mov == null) ? "" : " [" + mov.getTipo() + ", potencia " + (int) mov.getPotencia() + "]";
+            System.out.println((i + 1) + ". " + nombre + detalle + " x" + mts.get(nombre));
+        }
+        System.out.print("Elige una MT (0 para cancelar): ");
+
+        int eleccion = Entrada.leerEntero(sc);
+        if (eleccion < 1 || eleccion > disponibles.size()) {
+            System.out.println("Cancelado.");
+            return;
+        }
+        enseñarMT(sc, disponibles.get(eleccion - 1));
+    }
+
+    // Pregunta a qué Pokémon del equipo enseñar la MT. Devuelve true si la aprendió (y se gasta).
+    public boolean enseñarMT(Scanner sc, String nombreMT) {
+        Movimiento mov = Ataques.buscarPorNombre(nombreMT);
+        if (mov == null) {
+            System.out.println("No se reconoce el ataque de esta MT: " + nombreMT);
+            return false;
+        }
+        if (mts.getOrDefault(nombreMT, 0) <= 0) {
+            System.out.println("No tienes la MT " + nombreMT + ".");
+            return false;
+        }
+
+        PokemonLuchador elegido = elegirPokemonEquipo(sc,
+                "¿A qué Pokémon quieres enseñarle " + nombreMT + "? (0 para cancelar)");
+        if (elegido == null) {
+            System.out.println("La MT se queda en la mochila.");
+            return false;
+        }
+
+        if (!elegido.aprenderMovimiento(mov)) {
+            System.out.println(elegido.getNombre() + " ya conoce " + nombreMT + ". La MT no se gasta.");
+            return false;
+        }
+
+        int quedan = mts.get(nombreMT) - 1;
+        if (quedan <= 0) {
+            mts.remove(nombreMT);
+        } else {
+            mts.put(nombreMT, quedan);
+        }
+        System.out.println("¡" + elegido.getNombre() + " ha aprendido " + nombreMT + "!");
+        return true;
+    }
+
+    // Lista el equipo y devuelve el Pokémon elegido (null si cancela o la opción no es válida)
+    private PokemonLuchador elegirPokemonEquipo(Scanner sc, String pregunta) {
+        if (equipo.isEmpty()) {
+            System.out.println("No tienes Pokémon en el equipo.");
+            return null;
+        }
+        System.out.println("\n" + pregunta);
+        for (int i = 0; i < equipo.size(); i++) {
+            PokemonLuchador p = equipo.get(i);
+            ObjetoEquipable llevado = p.getObjeto();
+            System.out.println((i + 1) + ". " + p.getNombre() + " Nv." + p.getNivel()
+                    + (llevado == null ? "" : " (lleva " + llevado.getNombre() + ")"));
+        }
+        System.out.print("Elige una opción: ");
+        int idx = Entrada.leerEntero(sc) - 1;
+        if (idx < 0 || idx >= equipo.size()) {
+            return null;
+        }
+        return equipo.get(idx);
+    }
+
+    // =====================================================
+    // ============   OBJETOS EQUIPABLES   =================
+    // =====================================================
+
+    // Menú "Equipar objeto": ver, cambiar o quitar el objeto que lleva un Pokémon
+    public void menuEquipar(Scanner sc) {
+        PokemonLuchador pokemon = elegirPokemonEquipo(sc,
+                "¿A qué Pokémon quieres gestionarle el objeto? (0 para cancelar)");
+        if (pokemon == null) {
+            return;
+        }
+
+        ObjetoEquipable actual = pokemon.getObjeto();
+        System.out.println("\n" + pokemon.getNombre() + " lleva: "
+                + (actual == null ? "nada" : actual.getNombre() + " - " + actual.getDescripcion()));
+        System.out.println("1. Equipar un objeto de la mochila");
+        System.out.println("2. Quitar el objeto (vuelve a la mochila)");
+        System.out.println("3. Cancelar");
+        System.out.print("Elige una opción: ");
+
+        switch (Entrada.leerEntero(sc)) {
+            case 1 -> equiparDesdeMochila(sc, pokemon);
+            case 2 -> {
+                if (actual == null) {
+                    System.out.println(pokemon.getNombre() + " no lleva ningún objeto.");
+                } else {
+                    pokemon.setObjeto(null);
+                    añadirObjetoEquipable(actual, 1);
+                    System.out.println("Has guardado " + actual.getNombre() + " en la mochila.");
+                }
+            }
+            default -> System.out.println("Cancelado.");
+        }
+    }
+
+    private void equiparDesdeMochila(Scanner sc, PokemonLuchador pokemon) {
+        List<ObjetoEquipable> disponibles = new ArrayList<>();
+        for (ObjetoEquipable o : ObjetoEquipable.values()) {
+            if (objetosEquipables.getOrDefault(o, 0) > 0) {
+                disponibles.add(o);
+            }
+        }
+        if (disponibles.isEmpty()) {
+            System.out.println("No tienes objetos equipables. Puedes comprarlos en la Tienda.");
+            return;
+        }
+
+        System.out.println("\n-- Objetos equipables --");
+        for (int i = 0; i < disponibles.size(); i++) {
+            ObjetoEquipable o = disponibles.get(i);
+            System.out.println((i + 1) + ". " + o.getNombre() + " x" + objetosEquipables.get(o) + " - " + o.getDescripcion());
+        }
+        System.out.print("Elige un objeto (0 para cancelar): ");
+
+        int eleccion = Entrada.leerEntero(sc);
+        if (eleccion < 1 || eleccion > disponibles.size()) {
+            System.out.println("Cancelado.");
+            return;
+        }
+
+        ObjetoEquipable nuevo = disponibles.get(eleccion - 1);
+        ObjetoEquipable viejo = pokemon.getObjeto();
+
+        int quedan = objetosEquipables.get(nuevo) - 1;
+        if (quedan <= 0) {
+            objetosEquipables.remove(nuevo);
+        } else {
+            objetosEquipables.put(nuevo, quedan);
+        }
+
+        pokemon.setObjeto(nuevo);
+        if (viejo != null) {
+            añadirObjetoEquipable(viejo, 1);
+            System.out.println(viejo.getNombre() + " vuelve a la mochila.");
+        }
+        System.out.println("¡" + pokemon.getNombre() + " lleva ahora " + nuevo.getNombre() + "!");
     }
 
     // === Mostrar mochila ===
@@ -414,7 +658,15 @@ public class Jugador implements Serializable {
 
         System.out.println("\n-- MT/MO --");
         if (mts.isEmpty()) System.out.println("  (vacío)");
-        else mts.forEach((k,v) -> System.out.println("  " + k));
+        else mts.forEach((k,v) -> System.out.println("  " + k + " x" + v));
+
+        System.out.println("\n-- Objetos equipables --");
+        if (objetosEquipables.isEmpty()) System.out.println("  (vacío)");
+        else objetosEquipables.forEach((k,v) -> System.out.println("  " + k.getNombre() + " x" + v));
+
+        System.out.println("\n-- Medallas --");
+        if (medallas.isEmpty()) System.out.println("  (ninguna)");
+        else medallas.forEach(m -> System.out.println("  " + m));
 
         System.out.println("===========================\n");
     }

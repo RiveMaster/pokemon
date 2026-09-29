@@ -64,7 +64,8 @@ public class Ruta2 {
             // ===============================
             // ENCUENTRO SALVAJE
             // ===============================
-            System.out.println("\nCaminando por la Ruta 1...");
+            jugadorCompleto.setUbicacion(Ubicacion.RUTA2);
+            System.out.println("\nCaminando por la Ruta 2...");
             Ruta2.Pokemon baseSalvaje = ruta.generarPokemonSalvaje();
             PokemonLuchador salvaje = new PokemonLuchador(baseSalvaje.getBase(), ruta.generarNivel());
 
@@ -81,13 +82,19 @@ public class Ruta2 {
             // ===============================
             // MENÚ DESPUÉS DEL COMBATE
             // ===============================
-            System.out.println("\n¿Qué quieres hacer ahora?");
-            System.out.println("1. Seguir caminando por la ruta");
-            System.out.println("2. Ir al Bosque Cantabria");
-            System.out.println("3. Volver a Ciudad Oviedo");
-            System.out.print("Elige: ");
-
-            int accion = sc.nextInt();
+            int accion;
+            do {
+                System.out.println("\n¿Qué quieres hacer ahora?");
+                System.out.println("1. Seguir caminando por la ruta");
+                System.out.println("2. Ir al Bosque Cantabria");
+                System.out.println("3. Volver a Ciudad Oviedo");
+                System.out.println("4. Menú (mochila, MT, objetos, guardar)");
+                System.out.print("Elige: ");
+                accion = Entrada.leerEntero(sc);
+                if (accion == 4) {
+                    Menu.mostrarmenu(sc, jugadorCompleto);
+                }
+            } while (accion == 4);
 
             switch (accion) {
                 case 1 -> {} // repetir el bucle

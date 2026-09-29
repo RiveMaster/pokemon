@@ -11,12 +11,13 @@ public class Villaverde {
         boolean continuar = true;
 
         while (continuar) {
+            jugadorCompleto.setUbicacion(Ubicacion.VILLAVERDE);
             System.out.println("\n╔════════════════════════════════════╗");
             System.out.println("║      PUEBLO VILLAVERDE             ║");
             System.out.println("╚════════════════════════════════════╝");
             System.out.println("1. Visitar a mamá");
             System.out.println("2. Ir a Ruta 1");
-            System.out.println("3. Ver mochila");
+            System.out.println("3. Menú (mochila, MT, objetos, guardar)");
             System.out.print("\nElige una opción: ");
             int opcion = leerEntero(sc);
             sc.nextLine();
@@ -52,12 +53,26 @@ public class Villaverde {
                         }
                         case 3->{
                             System.out.println("Introduce el nombre del ataque: ");
-
+                            Movimiento mov = Ataques.buscarPorNombre(sc.nextLine());
+                            if (mov == null) {
+                                System.out.println("No se encontró ese ataque.");
+                            } else {
+                                jugadorCompleto.añadirMT(mov.getNombre());
+                                System.out.println("MT añadida: " + mov.getNombre());
+                            }
                         }
                         case 4->{
-                            System.out.println("");
-                            switch (opcion){
-
+                            System.out.println("Objetos disponibles:");
+                            for (ObjetoEquipable o : ObjetoEquipable.values()) {
+                                System.out.println("  " + o.getNombre());
+                            }
+                            System.out.println("Introduce el nombre del objeto: ");
+                            ObjetoEquipable objeto = ObjetoEquipable.buscarPorNombre(sc.nextLine());
+                            if (objeto == null) {
+                                System.out.println("No se encontró ese objeto.");
+                            } else {
+                                jugadorCompleto.añadirObjetoEquipable(objeto, 1);
+                                System.out.println("Objeto añadido: " + objeto.getNombre());
                             }
                         }
                         case 5->{return;}

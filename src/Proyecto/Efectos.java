@@ -1,6 +1,10 @@
 package Proyecto;
 
-public class Efectos {
+import java.io.Serializable;
+
+public class Efectos implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String nombre;
     private double dano;
     private EstadoAlterado estado;

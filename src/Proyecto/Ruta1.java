@@ -58,6 +58,7 @@ public class Ruta1 {
         boolean seguir = true;
 
         while (seguir) {
+            jugadorCompleto.setUbicacion(Ubicacion.RUTA1);
             System.out.println("\nCaminando por la Ruta 1...");
             Pokemon baseSalvaje = ruta.generarPokemonSalvaje();
             PokemonLuchador salvaje = new PokemonLuchador(baseSalvaje.getBase(), ruta.generarNivel());
@@ -66,13 +67,20 @@ public class Ruta1 {
 
             Combate.combateSalvaje(jugadorCompleto, jugadorCompleto.getPokemon(), salvaje, sc);
 
-            // Menú tras combate
-            System.out.println("\n¿Qué quieres hacer ahora?");
-            System.out.println("1. Seguir caminando por la ruta");
-            System.out.println("2. Ir a Oviedo");
-            System.out.println("3. Volver a Pueblo Villaverde");
-            System.out.print("Elige: ");
-            int accion = sc.nextInt();
+            // Menú tras combate (la opción 4 abre el menú y vuelve a preguntar)
+            int accion;
+            do {
+                System.out.println("\n¿Qué quieres hacer ahora?");
+                System.out.println("1. Seguir caminando por la ruta");
+                System.out.println("2. Ir a Oviedo");
+                System.out.println("3. Volver a Pueblo Villaverde");
+                System.out.println("4. Menú (mochila, MT, objetos, guardar)");
+                System.out.print("Elige: ");
+                accion = Entrada.leerEntero(sc);
+                if (accion == 4) {
+                    Menu.mostrarmenu(sc, jugadorCompleto);
+                }
+            } while (accion == 4);
 
             switch (accion) {
                 case 1 -> {} // seguir el while

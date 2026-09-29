@@ -13,17 +13,19 @@ public class Tienda {
             System.out.println("2. Comprar Poción (300€)");
             System.out.println("3. Comprar MT aleatoria (200€)");
             System.out.println("4. Ver mochila");
-            System.out.println("5. Salir");
+            System.out.println("5. Comprar objeto equipable");
+            System.out.println("6. Salir");
             System.out.print("Elige una opción: ");
 
-            int opcion = sc.nextInt();
+            int opcion = Entrada.leerEntero(sc);
 
             switch (opcion) {
                 case 1 -> comprarPokeball(jugadorCompleto);
                 case 2 -> comprarPocion(jugadorCompleto);
                 case 3 -> comprarMT(sc, jugadorCompleto);
                 case 4 -> jugadorCompleto.mostrar(jugadorCompleto);
-                case 5 -> {
+                case 5 -> comprarObjetoEquipable(sc, jugadorCompleto);
+                case 6 -> {
                     System.out.println("Gracias por visitar la tienda.");
                     return;
                 }
@@ -57,37 +59,38 @@ public class Tienda {
 
         jugadorCompleto.añadirMT(mt.getNombre());
 
-        // Preguntar a qué Pokémon del equipo se le quiere enseñar la MT
-        List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
-
-        if (equipo.isEmpty()) {
+        // Enseñársela ahora a un Pokémon del equipo (si cancela, se queda en la mochila)
+        if (jugadorCompleto.getEquipo().isEmpty()) {
             System.out.println("No tienes Pokémon en el equipo para enseñarle la MT ahora. La has guardado en la mochila.");
             return;
         }
+        jugadorCompleto.enseñarMT(sc, mt.getNombre());
+    }
 
-        System.out.println("\n¿A qué Pokémon quieres enseñarle " + mt.getNombre() + "? (0 para no enseñarla ahora)");
-        for (int i = 0; i < equipo.size(); i++) {
-            System.out.println((i + 1) + ". " + equipo.get(i).getNombre() + " Nv." + equipo.get(i).getNivel());
+    private static void comprarObjetoEquipable(Scanner sc, Jugador jugadorCompleto) {
+        ObjetoEquipable[] objetos = ObjetoEquipable.values();
+
+        System.out.println("\n-- Objetos equipables -- (dinero: " + jugadorCompleto.getDinero() + "€)");
+        for (int i = 0; i < objetos.length; i++) {
+            System.out.println((i + 1) + ". " + objetos[i].getNombre() + " (" + objetos[i].getPrecio() + "€) - "
+                    + objetos[i].getDescripcion());
         }
-        System.out.print("Elige una opción: ");
+        System.out.print("Elige un objeto (0 para cancelar): ");
 
-        int eleccion = sc.nextInt();
-
-        if (eleccion < 1 || eleccion > equipo.size()) {
-            System.out.println("De acuerdo, la MT se queda guardada en la mochila.");
+        int eleccion = Entrada.leerEntero(sc);
+        if (eleccion < 1 || eleccion > objetos.length) {
             return;
         }
 
-        PokemonLuchador elegido = equipo.get(eleccion - 1);
-
-        // Creamos una copia nueva del movimiento por si el original lleva un efecto compartido
-        boolean aprendido = elegido.aprenderMovimiento(mt);
-
-        if (aprendido) {
-            System.out.println(elegido.getNombre() + " ha aprendido " + mt.getNombre() + "!");
-        } else {
-            System.out.println(elegido.getNombre() + " ya conocía ese movimiento.");
+        ObjetoEquipable objeto = objetos[eleccion - 1];
+        if (!Jugador.gastarDinero(objeto.getPrecio(), jugadorCompleto)) {
+            System.out.println("No tienes suficiente dinero.");
+            return;
         }
+
+        jugadorCompleto.añadirObjetoEquipable(objeto, 1);
+        System.out.println("Compraste " + objeto.getNombre() + ". Equípaselo a un Pokémon desde el menú.");
+        System.out.println("Dinero restante: " + jugadorCompleto.getDinero() + "€");
     }
 
 

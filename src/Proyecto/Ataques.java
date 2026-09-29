@@ -1,7 +1,5 @@
 package Proyecto;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -204,38 +202,20 @@ public class Ataques {
         }
         return f;
     }*/
+    // Ataque aleatorio para las MT de la tienda. Solo entran ataques que hacen daño
+    // y se excluyen los de KO instantáneo (potencia 10^10).
     public static Movimiento getAtaqueAleatorio() {
-        // Metodo para cumplir funciones
-        List<Method> candidatos = new ArrayList<>();
-
-        for (Method metodo : Ataques.class.getDeclaredMethods()) {
-            boolean esEstatico = Modifier.isStatic(metodo.getModifiers());
-            boolean devuelveMovimiento = metodo.getReturnType() == Movimiento.class;
-            boolean sinParametros = metodo.getParameterCount() == 0;
-            boolean esGetter = metodo.getName().startsWith("get");
-
-            // Para que los booleanos no los tire a la basura
-            if (esEstatico && devuelveMovimiento && sinParametros && esGetter
-                    && !metodo.getName().equals("getAtaqueAleatorio")) {
-                candidatos.add(metodo);
+        List<Movimiento> candidatos = new ArrayList<>();
+        for (Movimiento m : movimientos) {
+            if (m.getPotencia() > 0 && m.getPotencia() < 1000) {
+                candidatos.add(m);
             }
         }
 
-        // Por si sale nulo
         if (candidatos.isEmpty()) {
             return null;
         }
-
-        // Randomizador
-        Random random = new Random();
-        Method elegido = candidatos.get(random.nextInt(candidatos.size()));
-
-        // Para lanzar la excepcion(no espero que pase)
-        try {
-            return (Movimiento) elegido.invoke(null);
-        } catch (Exception e) {
-            throw new RuntimeException("No se pudo generar el ataque aleatorio", e);
-        }
+        return candidatos.get(new Random().nextInt(candidatos.size()));
     }
     public static Movimiento buscarPorNombre(String nombre) {
         for (Movimiento p : movimientos) {
