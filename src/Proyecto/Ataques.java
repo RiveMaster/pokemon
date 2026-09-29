@@ -194,16 +194,6 @@ public class Ataques {
         return new Efectos("Veneno", 0, EstadoAlterado.ENVENENADO, 100);
     }
 
-    /*public static movimiento getrandomNormal() {
-        movimiento f = null;
-        int i = (int) Math.random();
-        switch (i) {
-            case 1 -> f = getFuerza();
-        }
-        return f;
-    }*/
-    // Ataque aleatorio para las MT de la tienda. Solo entran ataques que hacen daño
-    // y se excluyen los de KO instantáneo (potencia 10^10).
     public static Movimiento getAtaqueAleatorio() {
         List<Movimiento> candidatos = new ArrayList<>();
         for (Movimiento m : movimientos) {

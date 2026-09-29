@@ -391,7 +391,7 @@ public class Jugador implements Serializable {
             System.out.println("Ataque: " + equipo.get(i).getAtaque());
             System.out.println("Defensa: " + equipo.get(i).getDefensa());
             System.out.println("Velocidad: " + equipo.get(i).getVelocidad());
-            System.out.println("EXP: " + equipo.get(i).getExpActual() + "/" + equipo.get(i).getExpParaSubirNivel());
+            System.out.println("EXP: " + equipo.get(i).getExpActual() + "/" + equipo.get(i).getExpParaSubirNivel()*equipo.get(i).getNivel());
             ObjetoEquipable llevado = equipo.get(i).getObjeto();
             System.out.println("Objeto: " + (llevado == null ? "ninguno" : llevado.getNombre()));
             System.out.println("--------------------");
