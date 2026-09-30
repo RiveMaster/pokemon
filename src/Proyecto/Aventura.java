@@ -32,7 +32,7 @@ public class Aventura {
 
         } else if (opcion == 2) {
             // ===== CARGAR PARTIDA =====
-            jugador = GuardarCargar.cargarPartida(sc);
+            jugador = GuardarCargar.cargarPartida();
 
             if (jugador != null) {
                 jugador.initializeScanner();
@@ -70,7 +70,7 @@ public class Aventura {
 
             // Al salir, guardar automáticamente
             System.out.println("\n💾 Guardando partida...");
-            GuardarCargar.guardarPartida(sc, jugador);
+            GuardarCargar.guardarPartida(jugador);
             System.out.println("¡Hasta pronto, " + jugador.getNombre() + "!");
         }
     }
