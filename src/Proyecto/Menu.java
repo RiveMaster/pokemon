@@ -28,7 +28,7 @@ public class Menu {
             case 6->{
                 return Vuelo.elegirDestino(sc, jugador);
             }
-            case 7->GuardarCargar.guardarPartida(jugador); // ya informa de si se guardó o falló
+            case 7->GuardarCargar.guardarPartida(sc, jugador); // ya informa de si se guardó o falló
             case 8->{
                 System.out.println("\n¡Gracias por jugar!");
                 System.exit(1);
