@@ -41,6 +41,9 @@ public class Jugador implements Serializable {
     private int generacionMaxima = 1;
     private Set<Integer> jefesDerrotados = new LinkedHashSet<>();
 
+    // Miembros de gimnasio ya vencidos (el progreso persiste aunque salgas del gimnasio)
+    private Set<String> miembrosGimnasioDerrotados = new LinkedHashSet<>();
+
     public Jugador(String nombre, PokemonLuchador pokemonInicial, int dineroInicial) {
         this.nombre = nombre;
         this.equipo.add(pokemonInicial);
@@ -106,6 +109,10 @@ public class Jugador implements Serializable {
     public boolean jefeDerrotado(Generacion gen) { return jefesDerrotados.contains(gen.getNumero()); }
 
     public void marcarJefeDerrotado(Generacion gen) { jefesDerrotados.add(gen.getNumero()); }
+
+    public boolean miembroGimnasioDerrotado(String clave) { return miembrosGimnasioDerrotados.contains(clave); }
+
+    public void marcarMiembroGimnasioDerrotado(String clave) { miembrosGimnasioDerrotados.add(clave); }
 
     /** Cuántas medallas tiene de una generación (las medallas se guardan con el nombre de la región). */
     public int medallasEnGeneracion(Generacion gen) {
@@ -193,6 +200,7 @@ public class Jugador implements Serializable {
         if (medallas == null) medallas = new LinkedHashSet<>();
         if (ubicacion == null) ubicacion = Ubicacion.VILLAVERDE;
         if (jefesDerrotados == null) jefesDerrotados = new LinkedHashSet<>();
+        if (miembrosGimnasioDerrotados == null) miembrosGimnasioDerrotados = new LinkedHashSet<>();
         if (generacionActual < 1) generacionActual = 1;   // partidas guardadas antes de existir las generaciones
         if (generacionMaxima < generacionActual) generacionMaxima = generacionActual;
 

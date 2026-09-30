@@ -20,7 +20,7 @@ public class Menu {
             case 3->jugador.mostrar(jugador);
             case 4->jugador.usarMT(sc);
             case 5->jugador.menuEquipar(sc);
-            case 6->GuardarCargar.guardarPartida(sc, jugador); // ya informa de si se guardó o falló
+            case 6->GuardarCargar.guardarPartida(jugador); // ya informa de si se guardó o falló
             case 7->{
                 System.out.println("\n¡Gracias por jugar!");
                 System.exit(1);

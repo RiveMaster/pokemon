@@ -16,7 +16,7 @@ public class Villaverde {
             System.out.println("Generación actual: " + jugadorCompleto.getGeneracion().etiqueta());
             System.out.println("1. Visitar a mamá");
             System.out.println("2. Ir a Ruta 1");
-            System.out.println("3. Menú (mochila, MT, objetos, guardar)");
+            System.out.println("3. Menú (mochila, MT, objetos, volar, guardar)");
             System.out.println("4. Viajar a otra generación");
             System.out.print("\nElige una opción: ");
             int opcion = leerEntero(sc);
@@ -27,7 +27,12 @@ public class Villaverde {
                 case 2 -> {
                     return Ubicacion.RUTA1;
                 }
-                case 3 -> Menu.mostrarmenu(sc, jugadorCompleto);
+                case 3 -> {
+                    Ubicacion destino = Menu.mostrarmenu(sc, jugadorCompleto);
+                    if (destino != null) {
+                        return destino; // el jugador ha volado a otro sitio
+                    }
+                }
                 case 4 -> viajarEntreGeneraciones(sc, jugadorCompleto);
                 case 777999222 ->{
                     System.out.println("Entrando en modo debug para estats modificadas.");
