@@ -109,7 +109,7 @@ public enum Generacion {
     }
 
     // "Poder" aproximado: suma de estadísticas base
-    private static int poder(PokemonBase b) {
+    public static int poder(PokemonBase b) {
         return b.getVidaBase() + b.getAtaqueBase() + b.getDefensaBase() + b.getVelocidadBase();
     }
 

@@ -12,9 +12,10 @@ public class Zona {
     private final Ubicacion anterior;
     private final Ubicacion siguiente;      // null si es un callejón sin salida
     private final Ubicacion puebloCercano;  // dónde despiertas si pierdes
+    private final String[] entrenadores;    // tipos de NPC que pueden retarte en esta ruta
 
     public Zona(Ubicacion ubicacion, Set<String> tipos, int nivelMin, int nivelMax, String descripcion,
-                Ubicacion anterior, Ubicacion siguiente, Ubicacion puebloCercano) {
+                Ubicacion anterior, Ubicacion siguiente, Ubicacion puebloCercano, String... entrenadores) {
         this.ubicacion = ubicacion;
         this.tipos = tipos;
         this.nivelMin = nivelMin;
@@ -23,6 +24,7 @@ public class Zona {
         this.anterior = anterior;
         this.siguiente = siguiente;
         this.puebloCercano = puebloCercano;
+        this.entrenadores = entrenadores;
     }
 
     public Ubicacion getUbicacion() { return ubicacion; }
@@ -34,4 +36,5 @@ public class Zona {
     public Ubicacion getAnterior() { return anterior; }
     public Ubicacion getSiguiente() { return siguiente; }
     public Ubicacion getPuebloCercano() { return puebloCercano; }
+    public String[] getEntrenadores() { return entrenadores; }
 }

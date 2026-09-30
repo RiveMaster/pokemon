@@ -24,13 +24,15 @@ public class Ruta {
 
         System.out.println("\nCaminando por " + zona.getNombre() + " [" + gen.etiqueta() + "]...");
 
-        // Pokémon salvaje de la generación actual, adecuado al tipo de la ruta
-        int nivel = zona.getNivelMin() + RAND.nextInt(zona.getNivelMax() - zona.getNivelMin() + 1) + gen.getBonusNivel();
-        PokemonBase base = gen.aleatorio(zona.getTipos(), nivel, RAND);
-        PokemonLuchador salvaje = new PokemonLuchador(base, nivel);
-        System.out.println("¡Un " + salvaje.getNombre() + " salvaje (Nivel " + nivel + ") ha aparecido!");
+        // A veces te retan entrenadores NPC; si no, sale un Pokémon salvaje de la generación actual
+        if (!Npc.intentar(sc, jugador, zona)) {
+            int nivel = zona.getNivelMin() + RAND.nextInt(zona.getNivelMax() - zona.getNivelMin() + 1) + gen.getBonusNivel();
+            PokemonBase base = gen.aleatorio(zona.getTipos(), nivel, RAND);
+            PokemonLuchador salvaje = new PokemonLuchador(base, nivel);
+            System.out.println("¡Un " + salvaje.getNombre() + " salvaje (Nivel " + nivel + ") ha aparecido!");
 
-        Combate.combateSalvaje(jugador, jugador.getPokemonActivo(), salvaje, sc);
+            Combate.combateSalvaje(jugador, jugador.getPokemonActivo(), salvaje, sc);
+        }
 
         if (!jugador.equipoVM()) {
             System.out.println("\nTe has quedado sin Pokémon en pie. Despiertas en " + zona.getPuebloCercano().getNombre() + ".");
@@ -48,10 +50,7 @@ public class Ruta {
             }
             Ubicacion a = zona.getAnterior();
             opciones.add(new Mapa.Opcion("Volver a " + a.getNombre(), () -> a));
-            opciones.add(new Mapa.Opcion("Menú (mochila, MT, objetos, guardar)", () -> {
-                Menu.mostrarmenu(sc, jugador);
-                return null;
-            }));
+            opciones.add(new Mapa.Opcion("Menú (mochila, MT, objetos, volar, guardar)", () -> Menu.mostrarmenu(sc, jugador)));
 
             System.out.println("\n¿Qué quieres hacer ahora?");
             Ubicacion destino = Mapa.elegir(sc, opciones);

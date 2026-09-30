@@ -128,6 +128,13 @@ public class PokemonLuchador implements Serializable {
         return expNecesaria;
     }
 
+    /** Los Pokémon de tipo Volador o Dragón (en cualquiera de sus dos tipos) pueden llevar al jugador volando. */
+    public boolean puedeVolar() {
+        PokemonBase b = getBase();
+        return "Flying".equals(b.getTipo1()) || "Dragon".equals(b.getTipo1())
+                || "Flying".equals(b.getTipo2()) || "Dragon".equals(b.getTipo2());
+    }
+
     public PokemonBase getBase() {
         return base;
     }
