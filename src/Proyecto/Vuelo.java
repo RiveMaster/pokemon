@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
+/*
  * Volar: un Pokémon de tipo Volador o Dragón (y que no esté debilitado) puede llevar al jugador
  * a cualquier pueblo o ruta del mapa. Se usa desde el menú del juego.
  */
 public class Vuelo {
 
-    /** Devuelve el destino elegido, o null si no puede volar o cancela. */
+    // Devuelve el destino elegido, o null si no puede volar o cancela.
     public static Ubicacion elegirDestino(Scanner sc, Jugador jugador) {
         List<PokemonLuchador> voladores = new ArrayList<>();
         boolean hayVoladorDebilitado = false;
@@ -19,7 +19,6 @@ public class Vuelo {
                 if (p.estaVivo()) voladores.add(p); else hayVoladorDebilitado = true;
             }
         }
-
         if (voladores.isEmpty()) {
             if (hayVoladorDebilitado) {
                 System.out.println("Tu Pokémon volador está debilitado. Cúralo en el Centro Pokémon para poder volar.");
@@ -28,7 +27,6 @@ public class Vuelo {
             }
             return null;
         }
-
         System.out.println("\n-- Volar --");
         System.out.println("¿Qué Pokémon te llevará volando? (0 para cancelar)");
         for (int i = 0; i < voladores.size(); i++) {
@@ -56,13 +54,11 @@ public class Vuelo {
             System.out.println("Cancelado.");
             return null;
         }
-
         Ubicacion destino = destinos.get(n - 1);
         if (destino == jugador.getUbicacion()) {
             System.out.println("Ya estás en " + destino.getNombre() + ".");
             return null;
         }
-
         System.out.println("¡" + volador.getNombre() + " te lleva volando a " + destino.getNombre() + "!");
         return destino;
     }

@@ -1,6 +1,6 @@
 package Proyecto;
 
-/**
+/*
  * Lugares del mapa donde puede estar el jugador (se guarda en la partida).
  * Los nuevos valores van al final para no romper partidas guardadas.
  *

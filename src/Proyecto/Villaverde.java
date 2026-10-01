@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Villaverde {
 
-    /** Menú de Villaverde. Devuelve a dónde va el jugador (Ruta 1); el resto de opciones se quedan aquí. */
+    // Menú de Villaverde. Devuelve a dónde va el jugador (Ruta 1); el resto de opciones se quedan aquí.
     public static Ubicacion mostrarMenu(Scanner sc, Jugador jugadorCompleto) {
 
         while (true) {
@@ -102,7 +102,7 @@ public class Villaverde {
         System.out.println("\n-- Viajar a otra generación --");
         for (int n = 1; n <= 10; n++) {
             Generacion g = Generacion.de(n);
-            String estado = n > jugador.getGeneracionMaxima() ? "🔒 bloqueada"
+            String estado = n > jugador.getGeneracionMaxima() ? "bloqueada"
                     : (jugador.jefeDerrotado(g) ? "✔ jefe derrotado" : "desbloqueada");
             String actual = n == jugador.getGeneracion().getNumero() ? "  <-- estás aquí" : "";
             System.out.println(n + ". " + g.etiqueta() + " (nivel +" + g.getBonusNivel() + ") - " + estado + actual);
@@ -130,7 +130,7 @@ public class Villaverde {
         }
     }
     public static void visitarMama(Scanner sc, Jugador jugador) {
-        System.out.println("\n🏠 Casa de mamá...");
+        System.out.println("\nCasa de mamá...");
 
         if (!jugador.isMamaVisitada()) {
             System.out.println("Mamá: ¡Hijo mío! Te doy 1000€ para empezar tu aventura.");
@@ -144,7 +144,7 @@ public class Villaverde {
             System.out.println("Mamá: Ya te di dinero, ¡ve y conviértete en un gran entrenador!");
         }
 
-        System.out.println("💰 Ahora tienes " + jugador.getDinero() + "€");
+        System.out.println("Ahora tienes " + jugador.getDinero() + "€");
         System.out.println("Contunuar..........");
         sc.nextLine();
     }

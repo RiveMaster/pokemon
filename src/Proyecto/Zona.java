@@ -2,7 +2,7 @@ package Proyecto;
 
 import java.util.Set;
 
-/** Datos de una ruta: qué tipos de Pokémon salen, a qué nivel y con qué conecta. */
+// Datos de una ruta: qué tipos de Pokémon salen, a qué nivel y con qué conecta.
 public class Zona {
     private final Ubicacion ubicacion;
     private final Set<String> tipos;
@@ -26,7 +26,6 @@ public class Zona {
         this.puebloCercano = puebloCercano;
         this.entrenadores = entrenadores;
     }
-
     public Ubicacion getUbicacion() { return ubicacion; }
     public String getNombre() { return ubicacion.getNombre(); }
     public Set<String> getTipos() { return tipos; }

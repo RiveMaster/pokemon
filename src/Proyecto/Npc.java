@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
+/*
  * Entrenadores NPC que pueden retarte al caminar por una ruta. Se generan al vuelo
  * (nombre, equipo y nivel), así que no hay que guardarlos: cada encuentro es nuevo.
  * Todos los nombres son inventados.
@@ -14,7 +14,7 @@ public class Npc {
 
     private static final Random RAND = new Random();
 
-    /** Probabilidad de que, en vez de un Pokémon salvaje, te rete un entrenador (ajustable desde pruebas). */
+    // Probabilidad de que, en vez de un Pokémon salvaje, te rete un entrenador (ajustable desde pruebas).
     static double probabilidad = 0.30;
 
     private static final String[] NOMBRES = {
@@ -36,7 +36,7 @@ public class Npc {
         "¡Qué combate! La próxima vez ganaré yo."
     };
 
-    /**
+    /*
      * Con cierta probabilidad, un NPC te reta. Devuelve true si hubo encuentro con NPC
      * (aceptado o rechazado), y entonces NO debe salir un Pokémon salvaje en esta vuelta.
      */
@@ -44,7 +44,7 @@ public class Npc {
         return intentar(sc, jugador, zona, RAND.nextDouble() < probabilidad);
     }
 
-    /** Versión que permite forzar el encuentro (para pruebas). */
+    // Versión que permite forzar el encuentro (para pruebas).
     static boolean intentar(Scanner sc, Jugador jugador, Zona zona, boolean aparece) {
         String[] clases = zona.getEntrenadores();
         if (!aparece || clases == null || clases.length == 0) {
@@ -85,7 +85,7 @@ public class Npc {
             int premio = sumaNiveles * 6;
             jugador.agregarDinero(premio);
             System.out.println("\n" + nombre + ": " + FRASES_DERROTA[RAND.nextInt(FRASES_DERROTA.length)]);
-            System.out.println("💰 Has ganado " + premio + "€.");
+            System.out.println(" Has ganado " + premio + "€.");
         } else {
             System.out.println("\n" + nombre + ": ¡He ganado! ¡Cuida mejor de tu equipo!");
         }

@@ -24,7 +24,7 @@ public class Casino {
     // Reglas (funciones puras, fáciles de probar)
     // ------------------------------------------------------------------
 
-    /** "verde" para el 0, "rojo" o "negro" para el resto. */
+    /* "verde" para el 0, "rojo" o "negro" para el resto. */
     public static String color(int n) {
         if (n == 0) return "verde";
         return ROJOS.contains(n) ? "rojo" : "negro";
@@ -63,7 +63,7 @@ public class Casino {
     // ------------------------------------------------------------------
 
     public static void entrar(Scanner sc, Jugador jugador) {
-        System.out.println("\n🎰 === CASINO DE COMILLAS === 🎰");
+        System.out.println("\n === CASINO DE COMILLAS === ");
         System.out.println("Crupier: Bienvenido. Recuerde: la casa siempre gana... a la larga.");
 
         while (true) {
@@ -168,9 +168,9 @@ public class Casino {
             int cobro = pago(tipo, numero, apuesta, resultado);
             if (cobro > 0) {
                 jugador.agregarDinero(cobro);
-                System.out.println("🎉 ¡Ganas! Cobras " + cobro + "€ (beneficio: " + (cobro - apuesta) + "€).");
+                System.out.println(" ¡Ganas! Cobras " + cobro + "€ (beneficio: " + (cobro - apuesta) + "€).");
             } else {
-                System.out.println("😞 Pierdes " + apuesta + "€.");
+                System.out.println(" Pierdes " + apuesta + "€.");
             }
         }
     }
