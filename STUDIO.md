@@ -175,3 +175,13 @@ válida generada con el código original, usada solo por las pruebas.
 ## Pendiente
 - Orden de turno por velocidad y prioridad (obliga a reescribir los bucles de combate).
 - Movimientos de carga, habilidad oculta, y un catálogo de habilidades más amplio que los cuatro efectos actuales.
+
+
+## Editor gráfico de mapas por tiles (nuevo)
+Lanzamiento desde la raíz del proyecto:
+```sh
+java Proyecto.studio.Estudio mapas
+```
+Abre una ventana Swing independiente para pintar mapas con tiles de 16×16, una paleta de ejemplo y tres capas (suelo, objetos y superior). Permite importar spritesheets PNG cuyas dimensiones sean múltiplos de 16, marcar colisiones por celda, guardar/abrir proyectos `.pmap` y exportar el mapa compuesto a PNG. El proyecto `.pmap` conserva los tiles importados, las tres capas y las colisiones.
+
+**Importante:** esta primera versión guarda el mapa visual en su propio formato `.pmap`; todavía no conecta esos tiles con el movimiento o las colisiones del juego durante la partida. El mapa lógico existente sigue siendo el de `Mapa`, `Zona`, `Pueblo` y `Ubicacion`. La integración con el motor del juego requiere adaptar su renderizado y movimiento a estos datos.
