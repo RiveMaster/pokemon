@@ -56,10 +56,11 @@ public final class Estudio {
             case "resumen" -> resumen(BaseDatos.cargar(carpeta));
             case "editor" -> EditorConsola.abrir(carpeta, new java.util.Scanner(System.in));
             case "gui" -> Proyecto.studio.gui.EditorGrafico.abrir(carpeta, true);
+            case "mapas" -> Proyecto.studio.gui.EditorMapas.abrir();
             case "probar-gui" -> System.exit(Proyecto.studio.gui.PruebaGui.probar() ? 0 : 1);
             case "probar-juego" -> System.exit(probarJuego(Path.of(System.getProperty("java.io.tmpdir"), "studio-juego")) ? 0 : 1);
             case "probar" -> System.exit(probar(Path.of(System.getProperty("java.io.tmpdir"), "studio-prueba")) ? 0 : 1);
-            default -> System.out.println("Órdenes: importar [carpeta] | validar [carpeta] | resumen [carpeta] | editor [carpeta] | gui [carpeta] | probar | probar-juego | probar-gui");
+            default -> System.out.println("Órdenes: importar [carpeta] | validar [carpeta] | resumen [carpeta] | editor [carpeta] | gui [carpeta] | mapas | probar | probar-juego | probar-gui");
         }
     }
 
