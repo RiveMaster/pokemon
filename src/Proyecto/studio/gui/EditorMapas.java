@@ -31,6 +31,7 @@ public final class EditorMapas {
     private final JComboBox<String> selectorCapa = new JComboBox<>(new String[]{"Suelo", "Objetos", "Superior"});
 
     private EditorMapas() {
+        for (int[] capaInicial : capas) java.util.Arrays.fill(capaInicial, -1);
         crearTilesEjemplo();
         for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
         construirVentana();
@@ -278,13 +279,14 @@ public final class EditorMapas {
         }
     }
 
-    private static final class TileRenderer extends JLabel implements ListCellRenderer<Integer> {
+    private final class TileRenderer extends JLabel implements ListCellRenderer<Integer> {
         TileRenderer() { setOpaque(true); setHorizontalAlignment(CENTER); setVerticalAlignment(CENTER); }
         @Override public Component getListCellRendererComponent(JList<? extends Integer> list, Integer value, int index, boolean selected, boolean focus) {
-            setText(String.valueOf(value)); setIcon(null);
+            setText(String.valueOf(value));
+            BufferedImage tile = (value != null && value >= 0 && value < tiles.size()) ? tiles.get(value) : null;
+            setIcon(tile == null ? null : new ImageIcon(tile.getScaledInstance(32, 32, Image.SCALE_FAST)));
             setBackground(selected ? new Color(180, 205, 245) : Color.WHITE);
             setBorder(BorderFactory.createLineBorder(selected ? Color.BLUE : new Color(210, 210, 210)));
-            // icon is set by the list's owning editor via renderer image lookup below
             return this;
         }
     }
