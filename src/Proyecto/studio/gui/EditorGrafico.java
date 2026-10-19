@@ -219,6 +219,10 @@ public final class EditorGrafico {
         validar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ctrl));
         validar.addActionListener(e -> mostrarValidacion(ctx, paneles));
         herramientas.add(validar);
+        JMenuItem editorMapas = new JMenuItem("Editor de mapas por tiles");
+        editorMapas.addActionListener(e -> EditorMapas.abrir());
+        herramientas.addSeparator();
+        herramientas.add(editorMapas);
 
         JMenu ayuda = new JMenu("Ayuda");
         JMenuItem acerca = new JMenuItem("Acerca de");
