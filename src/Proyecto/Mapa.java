@@ -96,7 +96,7 @@ public class Mapa {
     }
 
     /** Orden real del camino, de principio a fin (lo usa el menú de vuelo). */
-    private static final List<Ubicacion> RECORRIDO = List.of(
+    private static List<Ubicacion> RECORRIDO = List.of(
             Ubicacion.VILLAVERDE, Ubicacion.RUTA1, Ubicacion.NAVA, Ubicacion.RUTA11, Ubicacion.OVIEDO,
             Ubicacion.RUTA2, Ubicacion.LLANES, Ubicacion.RUTA3, Ubicacion.GIJON, Ubicacion.RUTA4,
             Ubicacion.COMILLAS, Ubicacion.RUTA8, Ubicacion.SANTANDER, Ubicacion.RUTA5, Ubicacion.LAREDO,
@@ -105,6 +105,15 @@ public class Mapa {
 
     public static List<Ubicacion> getRecorrido() {
         return RECORRIDO;
+    }
+
+    /** Sustituye rutas, pueblos y el orden del camino. Lo usa el cargador de datos de Studio. */
+    public static void reemplazar(List<Zona> zonas, List<Pueblo> pueblos, List<Ubicacion> recorrido) {
+        ZONAS.clear();
+        PUEBLOS.clear();
+        for (Zona z : zonas) zona(z);
+        for (Pueblo p : pueblos) pueblo(p);
+        RECORRIDO = List.copyOf(recorrido);
     }
 
     public static Zona zonaDe(Ubicacion u) {

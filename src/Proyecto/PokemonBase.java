@@ -19,6 +19,10 @@ public class PokemonBase implements Serializable {
     private HashMap<String, Double> efectos;
     private HashMap<String, String> efectosPasivos;
 
+    // Datos de combate avanzado (se leen solo si las reglas están activadas; 0 = sin dato)
+    private int ataqueEspBase, defensaEspBase;
+    private List<String> habilidades;
+
     public PokemonBase(String nombre, String tipo1, String tipo2, int vidaBase, int ataqueBase, int defensaBase, int velocidadBase, int nivelEvolucion, String evolucion, List<Movimiento> movimientosPorNivel) {
 
 
@@ -87,6 +91,22 @@ public class PokemonBase implements Serializable {
 
         public int getVelocidadBase() {
             return velocidadBase;
+        }
+
+        public int getAtaqueEspBase() { return ataqueEspBase; }
+
+        public int getDefensaEspBase() { return defensaEspBase; }
+
+        /** Símbolos de las habilidades que puede tener (vacío si no tiene). */
+        public List<String> getHabilidades() {
+            return habilidades == null ? java.util.List.of() : habilidades;
+        }
+
+        /** Lo usa el cargador de datos de Studio. */
+        public void configurarCombate(int ataqueEspBase, int defensaEspBase, List<String> habilidades) {
+            this.ataqueEspBase = ataqueEspBase;
+            this.defensaEspBase = defensaEspBase;
+            this.habilidades = habilidades == null ? null : List.copyOf(habilidades);
         }
 
 

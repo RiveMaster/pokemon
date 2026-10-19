@@ -1,0 +1,92 @@
+[
+  {
+    "generacion": 1,
+    "nombre": "Don Anselmo Papeleo",
+    "cargo": "Ministro de Trámites Eternos",
+    "tipos": ["normal", "poison"],
+    "nivel_base": 36,
+    "frase_derrota": "Está bien... le firmo el papel. Pero necesitaré una copia sellada.",
+    "memes": ["Vuelva usted mañana.", "Para eso necesita la casilla 27-B, que no existe.", "Su expediente está en trámite. Desde 1998."]
+  },
+  {
+    "generacion": 2,
+    "nombre": "Doña Remedios Rotonda",
+    "cargo": "Concejala de Rotondas y Aceras",
+    "tipos": ["steel", "normal"],
+    "nivel_base": 36,
+    "frase_derrota": "Cuánto ruido por una rotondita más...",
+    "memes": ["¡Una rotonda más y se acaba el tráfico!", "La obra terminará en breve. (Lleva doce años.)", "Hemos puesto una rotonda para que dé tiempo a pensar."]
+  },
+  {
+    "generacion": 3,
+    "nombre": "Ramiro Obraseterna",
+    "cargo": "Delegado de Obras Interminables",
+    "tipos": ["ground", "rock", "steel"],
+    "nivel_base": 36,
+    "frase_derrota": "No pasa nada, la próxima obra ya la inauguramos otro año.",
+    "memes": ["Vamos con retraso, pero con mucha ilusión.", "El cartel de la obra lleva más años que la obra.", "Desviamos el tráfico por donde ya estaba cortado."]
+  },
+  {
+    "generacion": 4,
+    "nombre": "Gervasio Comisiones",
+    "cargo": "Secretario de Chiringuitos Públicos",
+    "tipos": ["dark", "ghost"],
+    "nivel_base": 37,
+    "frase_derrota": "Yo esto no lo he firmado: lo firmó mi cuñado.",
+    "memes": ["Fue un error contable, un error de más de mil millones.", "Ese chiringuito tiene mucho futuro. Y mucho barra libre.", "Tranquilo, es un asunto entre amigos."]
+  },
+  {
+    "generacion": 5,
+    "nombre": "Pilar Enchufe",
+    "cargo": "Directora General de Nombramientos",
+    "tipos": ["psychic", "dark"],
+    "nivel_base": 37,
+    "frase_derrota": "Bueno, me marcho... pero mi sobrino se queda con mi puesto.",
+    "memes": ["Mi sobrino está muy cualificado. Tiene un título. Creo.", "Hay muchas plazas, pero pocas con mi apellido.", "En mi departamento todos somos familia. Literalmente."]
+  },
+  {
+    "generacion": 6,
+    "nombre": "Eusebio Portavoz",
+    "cargo": "Portavoz del Sí pero No",
+    "tipos": ["poison", "fairy"],
+    "nivel_base": 38,
+    "frase_derrota": "Se ha sacado de contexto. Igual que todo lo que digo.",
+    "memes": ["Yo no he dicho lo que dije, lo que dije fue lo que quise decir.", "Rueda de prensa sin preguntas. Gracias por venir.", "Eso lo dirá el presidente. O yo, otro día."]
+  },
+  {
+    "generacion": 7,
+    "nombre": "Amparo Sobres",
+    "cargo": "Consejera de Asuntos Discretos",
+    "tipos": ["dragon", "steel"],
+    "nivel_base": 38,
+    "frase_derrota": "Guárdese el sobre, que me lo van a echar en cara.",
+    "memes": ["Ese sobre solo contenía felicitaciones.", "Mis cuentas están claras: nadie las ha visto.", "No recuerdo nada, qué desmemoria la mía."]
+  },
+  {
+    "generacion": 8,
+    "nombre": "Baldomero Recortes",
+    "cargo": "Ministro de Austeridad y Comida Gratis",
+    "tipos": ["fighting", "dark"],
+    "nivel_base": 39,
+    "frase_derrota": "Habrá que recortar... en mi despacho, no.",
+    "memes": ["Hay que apretarse el cinturón (el de los demás).", "No hay dinero para hospitales, pero sí para la cena de Navidad.", "Mi coche oficial es de bajo consumo: consume poco, cuesta mucho."]
+  },
+  {
+    "generacion": 9,
+    "nombre": "Genoveva Tertulia",
+    "cargo": "Asesora de Comunicación y Ruido",
+    "tipos": ["ghost", "psychic"],
+    "nivel_base": 39,
+    "frase_derrota": "Mi opinión no cambia... pero hoy me han dado la contraria.",
+    "memes": ["Aquí venimos a hablar de lo nuestro. De lo tuyo, ni una palabra.", "Voy a ser muy breve: tres horas.", "Cuñado, deja de hablar. Es mi turno."]
+  },
+  {
+    "generacion": 10,
+    "nombre": "El Presidente Cuñado Supremo",
+    "cargo": "Presidente del Gobierno de la Mezcla",
+    "tipos": ["dark", "dragon", "psychic", "ghost", "steel"],
+    "nivel_base": 40,
+    "frase_derrota": "Está bien... el pueblo ha hablado. Y yo he dejado de escuchar.",
+    "memes": ["Yo de esto sé mucho, aunque no lo parezca.", "Cuando gobierne tú, lo hablamos.", "Todo el mundo tiene un cuñado. Yo soy el de todos."]
+  }
+]

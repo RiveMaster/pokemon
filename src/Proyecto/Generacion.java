@@ -26,10 +26,11 @@ public enum Generacion {
     GEN10(10, "Mezcla", 1, 1025, "Todas las regiones fundidas en una: aquí vale todo.");
 
     private final int numero;
-    private final String region;
-    private final int desde;
-    private final int hasta;
-    private final String ambiente;
+    private String region;
+    private int desde;
+    private int hasta;
+    private String ambiente;
+    private int bonusNivel;
 
     Generacion(int numero, String region, int desde, int hasta, String ambiente) {
         this.numero = numero;
@@ -37,6 +38,28 @@ public enum Generacion {
         this.desde = desde;
         this.hasta = hasta;
         this.ambiente = ambiente;
+        this.bonusNivel = (numero - 1) * 3;
+    }
+
+    /** Lo usa el cargador de datos de Studio. desde/hasta son posiciones en la Pokedex (1 = primera). */
+    public void configurar(String region, int desde, int hasta, String ambiente, int bonusNivel) {
+        this.region = region;
+        this.desde = desde;
+        this.hasta = hasta;
+        this.ambiente = ambiente;
+        this.bonusNivel = bonusNivel;
+        this.cache = null;
+    }
+
+    /** Sustituye la lista de Pokémon que nunca salen (por nombre). */
+    public static void reemplazarExcluidos(java.util.Collection<String> nombres) {
+        EXCLUIDOS.clear();
+        EXCLUIDOS.addAll(nombres);
+        reiniciarCaches();
+    }
+
+    public static void reiniciarCaches() {
+        for (Generacion g : values()) g.cache = null;
     }
 
     public int getNumero() { return numero; }
@@ -44,6 +67,13 @@ public enum Generacion {
     public String getRegion() { return region; }
 
     public String getAmbiente() { return ambiente; }
+
+    public int getDesde() { return desde; }
+
+    public int getHasta() { return hasta; }
+
+    /** Nombres de los Pokémon que nunca salen en rutas, gimnasios ni sedes (legendarios, míticos...). */
+    public static Set<String> getExcluidos() { return java.util.Collections.unmodifiableSet(EXCLUIDOS); }
 
     public String etiqueta() { return "Gen " + numero + " - " + region; }
 
@@ -61,7 +91,7 @@ public enum Generacion {
     }
 
     /** Cuánto se sube el nivel de todo el mundo en esta generación (gen 1 = 0, gen 10 = +27). */
-    public int getBonusNivel() { return (numero - 1) * 3; }
+    public int getBonusNivel() { return bonusNivel; }
 
     public static Set<String> tipos(String... tipos) {
         return new LinkedHashSet<>(Arrays.asList(tipos));

@@ -21,8 +21,8 @@ public enum ObjetoEquipable {
     PIEDRA_DURA("Piedra Dura", "Aumenta un 20% el daño de los ataques de tipo Roca.", 350, "Rock");
 
     private final String nombre;
-    private final String descripcion;
-    private final int precio;
+    private String descripcion;
+    private int precio;
     private final String tipoPotenciado; // tipo de ataque que refuerza (null si no aplica)
 
     ObjetoEquipable(String nombre, String descripcion, int precio, String tipoPotenciado) {
@@ -30,6 +30,12 @@ public enum ObjetoEquipable {
         this.descripcion = descripcion;
         this.precio = precio;
         this.tipoPotenciado = tipoPotenciado;
+    }
+
+    /** Lo usa el cargador de datos de Studio (el nombre y el efecto no cambian: están en el código de combate). */
+    public void configurar(String descripcion, int precio) {
+        this.descripcion = descripcion;
+        this.precio = precio;
     }
 
     public String getNombre() { return nombre; }

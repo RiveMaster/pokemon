@@ -4,14 +4,25 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Tienda {
+    private static int precioPokeball = 50;
+    private static int precioPocion = 300;
+    private static int precioMt = 200;
+
+    /** Lo usa el cargador de datos de Studio. */
+    public static void configurarPrecios(int pokeball, int pocion, int mt) {
+        precioPokeball = pokeball;
+        precioPocion = pocion;
+        precioMt = mt;
+    }
+
 
     public static void entrar(Scanner sc, Jugador jugadorCompleto) {
 
         while (true) {
             System.out.println("\n=== Tienda Pokémon ===");
-            System.out.println("1. Comprar Pokéball (50€)");
-            System.out.println("2. Comprar Poción (300€)");
-            System.out.println("3. Comprar MT aleatoria (200€)");
+            System.out.println("1. Comprar Pokéball (" + precioPokeball + "€)");
+            System.out.println("2. Comprar Poción (" + precioPocion + "€)");
+            System.out.println("3. Comprar MT aleatoria (" + precioMt + "€)");
             System.out.println("4. Ver mochila");
             System.out.println("5. Comprar objeto equipable");
             System.out.println("6. Salir");
@@ -38,7 +49,7 @@ public class Tienda {
     //      MÉTODOS DE COMPRA
     // =============================
     private static void comprarMT(Scanner sc, Jugador jugadorCompleto){
-        int precio = 200;
+        int precio = precioMt;
 
         if (!Jugador.gastarDinero(precio, jugadorCompleto)) {
             System.out.println("No tienes suficiente dinero.");
@@ -95,7 +106,7 @@ public class Tienda {
 
 
     private static void comprarPokeball(Jugador jugadorCompleto) {
-        int precio = 50;
+        int precio = precioPokeball;
 
         if (!Jugador.gastarDinero(precio, jugadorCompleto)) {
             System.out.println("No tienes suficiente dinero.");
@@ -108,7 +119,7 @@ public class Tienda {
     }
 
     private static void comprarPocion(Jugador jugadorCompleto) {
-        int precio = 300;
+        int precio = precioPocion;
 
         if (!Jugador.gastarDinero(precio, jugadorCompleto)) {
             System.out.println("No tienes suficiente dinero.");

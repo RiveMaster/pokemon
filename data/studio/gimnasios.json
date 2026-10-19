@@ -1,0 +1,72 @@
+[
+  {
+    "simbolo": "gimnasio_penascal",
+    "nombre": "Gimnasio Peñascal",
+    "ciudad": "oviedo",
+    "tipos_equipo": ["rock"],
+    "lider": "Roque Unboxing",
+    "titulo_lider": "el youtuber de unboxings",
+    "miembros": ["Pedrusco el Editor", "Guija la Moderadora", "Canto el Community Manager"],
+    "medalla": "Medalla Roca",
+    "recompensa_dinero": 800,
+    "mt_recompensa": "avalancha",
+    "nivel_base": 11,
+    "tamano_equipo": 3
+  },
+  {
+    "simbolo": "gimnasio_marejada",
+    "nombre": "Gimnasio Marejada",
+    "ciudad": "gijon",
+    "tipos_equipo": ["water"],
+    "lider": "Marina Directo",
+    "titulo_lider": "la streamer de directos eternos",
+    "miembros": ["Gota la Guionista", "Ola el Cámara", "Coral la Diseñadora de Miniaturas"],
+    "medalla": "Medalla Cascada",
+    "recompensa_dinero": 1200,
+    "mt_recompensa": "cascada",
+    "nivel_base": 16,
+    "tamano_equipo": 3
+  },
+  {
+    "simbolo": "gimnasio_voltio",
+    "nombre": "Gimnasio Voltio",
+    "ciudad": "santander",
+    "tipos_equipo": ["electric"],
+    "lider": "Volta Speedrun",
+    "titulo_lider": "el speedrunner más rápido",
+    "miembros": ["Chispa la Técnica de Sonido", "Amper el Streamer Novato", "Watio el Editor de Directos"],
+    "medalla": "Medalla Trueno",
+    "recompensa_dinero": 1600,
+    "mt_recompensa": "trueno",
+    "nivel_base": 20,
+    "tamano_equipo": 3
+  },
+  {
+    "simbolo": "gimnasio_frondoso",
+    "nombre": "Gimnasio Frondoso",
+    "ciudad": "bilbao",
+    "tipos_equipo": ["grass"],
+    "lider": "Flora Tutoriales",
+    "titulo_lider": "la youtuber de manualidades y plantas",
+    "miembros": ["Hojarasca la Jardinera", "Brote el Tutorialero", "Musgo la Reseñista"],
+    "medalla": "Medalla Hoja",
+    "recompensa_dinero": 2000,
+    "mt_recompensa": "danza_petalo",
+    "nivel_base": 25,
+    "tamano_equipo": 3
+  },
+  {
+    "simbolo": "gimnasio_ascua",
+    "nombre": "Gimnasio Ascua",
+    "ciudad": "vitoria",
+    "tipos_equipo": ["fire"],
+    "lider": "Cenizo Reto",
+    "titulo_lider": "el rey del reto picante",
+    "miembros": ["Brasa la Retadora", "Ceniza el Probador", "Chile el Catador de Picantes"],
+    "medalla": "Medalla Volcán",
+    "recompensa_dinero": 2500,
+    "mt_recompensa": "lanzallamas",
+    "nivel_base": 30,
+    "tamano_equipo": 4
+  }
+]

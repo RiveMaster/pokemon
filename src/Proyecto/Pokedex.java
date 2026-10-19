@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Pokedex {
+public class
+Pokedex {
     private static final List<PokemonBase> pokemons = new ArrayList<>();
     private static boolean cargado = false;
 
@@ -271,9 +272,9 @@ public class Pokedex {
         pokemons.add(new PokemonBase("Smeargle", "Normal", null, 55, 20, 35, 75, 0, null, Arrays.asList(Ataques.buscarPorNombre("Placaje"), Ataques.buscarPorNombre("Rapidez"), Ataques.buscarPorNombre("Golpe Cabeza"), Ataques.buscarPorNombre("Derribo"))));
         pokemons.add(new PokemonBase("Tyrogue", "Fighting", null, 35, 35, 35, 35, 0, null, Arrays.asList(Ataques.buscarPorNombre("Karate"), Ataques.buscarPorNombre("Doble Patada"), Ataques.buscarPorNombre("Mega Patada"), Ataques.buscarPorNombre("Sumision"))));
         pokemons.add(new PokemonBase("Hitmontop", "Fighting", null, 50, 95, 95, 70, 0, null, Arrays.asList(Ataques.buscarPorNombre("Karate"), Ataques.buscarPorNombre("Doble Patada"), Ataques.buscarPorNombre("Mega Patada"), Ataques.buscarPorNombre("Sumision"))));
-        pokemons.add(new PokemonBase("Smoochum", "Ice", "Psychic", 45, 30, 15, 65, 30, null, Arrays.asList(Ataques.buscarPorNombre("Rayo Hielo"), Ataques.buscarPorNombre("Ventisca"), Ataques.buscarPorNombre("Rayo Aurora"), Ataques.buscarPorNombre("Puino Hielo"))));
-        pokemons.add(new PokemonBase("Elekid", "Electric", null, 45, 63, 37, 95, 30, null, Arrays.asList(Ataques.buscarPorNombre("Impactrueno"), Ataques.buscarPorNombre("Rayo"), Ataques.buscarPorNombre("Trueno"), Ataques.buscarPorNombre("Onda Trueno"))));
-        pokemons.add(new PokemonBase("Magby", "Fire", null, 45, 75, 37, 83, 30, null, Arrays.asList(Ataques.buscarPorNombre("Ascuas"), Ataques.buscarPorNombre("Giro Fuego"), Ataques.buscarPorNombre("Lanzallamas"), Ataques.buscarPorNombre("Llamarada"))));
+        pokemons.add(new PokemonBase("Smoochum", "Ice", "Psychic", 45, 30, 15, 65, 30, "Jynx", Arrays.asList(Ataques.buscarPorNombre("Rayo Hielo"), Ataques.buscarPorNombre("Ventisca"), Ataques.buscarPorNombre("Rayo Aurora"), Ataques.buscarPorNombre("Puino Hielo"))));
+        pokemons.add(new PokemonBase("Elekid", "Electric", null, 45, 63, 37, 95, 30, "Electabuzz", Arrays.asList(Ataques.buscarPorNombre("Impactrueno"), Ataques.buscarPorNombre("Rayo"), Ataques.buscarPorNombre("Trueno"), Ataques.buscarPorNombre("Onda Trueno"))));
+        pokemons.add(new PokemonBase("Magby", "Fire", null, 45, 75, 37, 83, 30, "Magmar", Arrays.asList(Ataques.buscarPorNombre("Ascuas"), Ataques.buscarPorNombre("Giro Fuego"), Ataques.buscarPorNombre("Lanzallamas"), Ataques.buscarPorNombre("Llamarada"))));
     }
 
     private static void cargarBloque4() {
@@ -304,7 +305,7 @@ public class Pokedex {
         pokemons.add(new PokemonBase("Wurmple", "Bug", null, 45, 45, 35, 20, 7, "Silcoon", Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
         pokemons.add(new PokemonBase("Silcoon", "Bug", null, 50, 35, 55, 15, 10, "Beautifly", Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
         pokemons.add(new PokemonBase("Beautifly", "Bug", "Flying", 60, 70, 50, 65, 0, null, Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
-        pokemons.add(new PokemonBase("Cascoon", "Bug", null, 50, 35, 55, 15, 10, null, Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
+        pokemons.add(new PokemonBase("Cascoon", "Bug", null, 50, 35, 55, 15, 10, "Dustox", Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
         pokemons.add(new PokemonBase("Dustox", "Bug", "Poison", 60, 50, 70, 65, 0, null, Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
         pokemons.add(new PokemonBase("Lotad", "Water", "Grass", 40, 30, 30, 30, 14, "Lombre", Arrays.asList(Ataques.buscarPorNombre("Pistola Agua"), Ataques.buscarPorNombre("Rayo Burbuja"), Ataques.buscarPorNombre("Surf"), Ataques.buscarPorNombre("Hidro Bomba"))));
         pokemons.add(new PokemonBase("Lombre", "Water", "Grass", 60, 50, 50, 50, 0, null, Arrays.asList(Ataques.buscarPorNombre("Pistola Agua"), Ataques.buscarPorNombre("Rayo Burbuja"), Ataques.buscarPorNombre("Surf"), Ataques.buscarPorNombre("Hidro Bomba"))));
@@ -723,7 +724,7 @@ public class Pokedex {
         pokemons.add(new PokemonBase("Flabébé", "Fairy", null, 44, 38, 39, 42, 19, "Floette", Arrays.asList(Ataques.buscarPorNombre("Beso Amoroso"), Ataques.buscarPorNombre("Canto"), Ataques.buscarPorNombre("Deslumbrar"), Ataques.buscarPorNombre("Placaje"))));
         pokemons.add(new PokemonBase("Floette", "Fairy", null, 54, 45, 47, 52, 0, null, Arrays.asList(Ataques.buscarPorNombre("Beso Amoroso"), Ataques.buscarPorNombre("Canto"), Ataques.buscarPorNombre("Deslumbrar"), Ataques.buscarPorNombre("Placaje"))));
         pokemons.add(new PokemonBase("Florges", "Fairy", null, 78, 65, 68, 75, 0, null, Arrays.asList(Ataques.buscarPorNombre("Beso Amoroso"), Ataques.buscarPorNombre("Canto"), Ataques.buscarPorNombre("Deslumbrar"), Ataques.buscarPorNombre("Placaje"))));
-        pokemons.add(new PokemonBase("Skiddo", "Grass", null, 66, 65, 48, 52, 32, null, Arrays.asList(Ataques.buscarPorNombre("Latigo Cepa"), Ataques.buscarPorNombre("Absorber"), Ataques.buscarPorNombre("Megaagotar"), Ataques.buscarPorNombre("Rayo Solar"))));
+        pokemons.add(new PokemonBase("Skiddo", "Grass", null, 66, 65, 48, 52, 32, "Gogoat", Arrays.asList(Ataques.buscarPorNombre("Latigo Cepa"), Ataques.buscarPorNombre("Absorber"), Ataques.buscarPorNombre("Megaagotar"), Ataques.buscarPorNombre("Rayo Solar"))));
         pokemons.add(new PokemonBase("Gogoat", "Grass", null, 123, 100, 62, 68, 0, null, Arrays.asList(Ataques.buscarPorNombre("Latigo Cepa"), Ataques.buscarPorNombre("Absorber"), Ataques.buscarPorNombre("Megaagotar"), Ataques.buscarPorNombre("Rayo Solar"))));
         pokemons.add(new PokemonBase("Pancham", "Fighting", null, 67, 82, 62, 43, 0, null, Arrays.asList(Ataques.buscarPorNombre("Karate"), Ataques.buscarPorNombre("Doble Patada"), Ataques.buscarPorNombre("Mega Patada"), Ataques.buscarPorNombre("Sumision"))));
         pokemons.add(new PokemonBase("Pangoro", "Fighting", "Dark", 95, 124, 78, 58, 0, null, Arrays.asList(Ataques.buscarPorNombre("Karate"), Ataques.buscarPorNombre("Doble Patada"), Ataques.buscarPorNombre("Mega Patada"), Ataques.buscarPorNombre("Sumision"))));
@@ -885,9 +886,9 @@ public class Pokedex {
         pokemons.add(new PokemonBase("Dottler", "Bug", "Psychic", 50, 35, 80, 30, 30, "Orbeetle", Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
         pokemons.add(new PokemonBase("Orbeetle", "Bug", "Psychic", 60, 45, 110, 90, 0, null, Arrays.asList(Ataques.buscarPorNombre("Doble ataque"), Ataques.buscarPorNombre("Pin Misil"), Ataques.buscarPorNombre("Chupa Vidas"), Ataques.buscarPorNombre("Espora"))));
         pokemons.add(new PokemonBase("Nickit", "Dark", null, 40, 28, 28, 50, 18, "Thievul", Arrays.asList(Ataques.buscarPorNombre("Mordisco"), Ataques.buscarPorNombre("Placaje"), Ataques.buscarPorNombre("Rapidez"), Ataques.buscarPorNombre("Golpe Cabeza"))));
-        pokemons.add(new PokemonBase("Thievul", "Dark", null, 70, 58, 58, 90, 30, null, Arrays.asList(Ataques.buscarPorNombre("Mordisco"), Ataques.buscarPorNombre("Placaje"), Ataques.buscarPorNombre("Rapidez"), Ataques.buscarPorNombre("Golpe Cabeza"))));
+        pokemons.add(new PokemonBase("Thievul", "Dark", null, 70, 58, 58, 90, 0, null, Arrays.asList(Ataques.buscarPorNombre("Mordisco"), Ataques.buscarPorNombre("Placaje"), Ataques.buscarPorNombre("Rapidez"), Ataques.buscarPorNombre("Golpe Cabeza"))));
         pokemons.add(new PokemonBase("Gossifleur", "Grass", null, 40, 40, 60, 10, 20, "Eldegoss", Arrays.asList(Ataques.buscarPorNombre("Latigo Cepa"), Ataques.buscarPorNombre("Absorber"), Ataques.buscarPorNombre("Megaagotar"), Ataques.buscarPorNombre("Rayo Solar"))));
-        pokemons.add(new PokemonBase("Eldegoss", "Grass", null, 60, 50, 90, 60, 35, null, Arrays.asList(Ataques.buscarPorNombre("Latigo Cepa"), Ataques.buscarPorNombre("Absorber"), Ataques.buscarPorNombre("Megaagotar"), Ataques.buscarPorNombre("Rayo Solar"))));
+        pokemons.add(new PokemonBase("Eldegoss", "Grass", null, 60, 50, 90, 60, 0, null, Arrays.asList(Ataques.buscarPorNombre("Latigo Cepa"), Ataques.buscarPorNombre("Absorber"), Ataques.buscarPorNombre("Megaagotar"), Ataques.buscarPorNombre("Rayo Solar"))));
         pokemons.add(new PokemonBase("Wooloo", "Normal", null, 42, 40, 55, 48, 24, "Dubwool", Arrays.asList(Ataques.buscarPorNombre("Placaje"), Ataques.buscarPorNombre("Rapidez"), Ataques.buscarPorNombre("Golpe Cabeza"), Ataques.buscarPorNombre("Derribo"))));
         pokemons.add(new PokemonBase("Dubwool", "Normal", null, 72, 80, 100, 88, 0, null, Arrays.asList(Ataques.buscarPorNombre("Placaje"), Ataques.buscarPorNombre("Rapidez"), Ataques.buscarPorNombre("Golpe Cabeza"), Ataques.buscarPorNombre("Derribo"))));
         pokemons.add(new PokemonBase("Chewtle", "Water", null, 50, 64, 50, 44, 22, "Drednaw", Arrays.asList(Ataques.buscarPorNombre("Pistola Agua"), Ataques.buscarPorNombre("Rayo Burbuja"), Ataques.buscarPorNombre("Surf"), Ataques.buscarPorNombre("Hidro Bomba"))));
@@ -1136,6 +1137,14 @@ public class Pokedex {
     public static List<PokemonBase> getTodos() {
         cargarSiHaceFalta();
         return java.util.Collections.unmodifiableList(pokemons);
+    }
+
+    /** Sustituye todos los Pokémon (orden de Pokédex nacional). Lo usa el cargador de datos de Studio. */
+    public static void reemplazar(List<PokemonBase> nuevos) {
+        pokemons.clear();
+        pokemons.addAll(nuevos);
+        cargado = true;
+        Generacion.reiniciarCaches();
     }
 
     public static PokemonBase getByName(String name) {

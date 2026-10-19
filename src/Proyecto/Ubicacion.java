@@ -32,15 +32,53 @@ public enum Ubicacion {
     RUTA8("Ruta 8 (Camino de la Ría)"),
     RUTA9("Ruta 9 (Marisma Eléctrica)"),
     RUTA10("Ruta 10 (Hayedo Silencioso)"),
-    RUTA11("Ruta 11 (Sendas de la Sidra)");
+    RUTA11("Ruta 11 (Sendas de la Sidra)"),
 
-    private final String nombre;
+    // Ranuras libres para lugares nuevos creados en el editor de datos (Pokémon Studio). Una zona cuyo
+    // símbolo sea "extra1".."extra24" usa la ranura correspondiente. Se añaden al final: las partidas
+    // guardadas guardan el enum por nombre, así que añadir constantes no las rompe.
+    EXTRA1("Lugar libre 1"),
+    EXTRA2("Lugar libre 2"),
+    EXTRA3("Lugar libre 3"),
+    EXTRA4("Lugar libre 4"),
+    EXTRA5("Lugar libre 5"),
+    EXTRA6("Lugar libre 6"),
+    EXTRA7("Lugar libre 7"),
+    EXTRA8("Lugar libre 8"),
+    EXTRA9("Lugar libre 9"),
+    EXTRA10("Lugar libre 10"),
+    EXTRA11("Lugar libre 11"),
+    EXTRA12("Lugar libre 12"),
+    EXTRA13("Lugar libre 13"),
+    EXTRA14("Lugar libre 14"),
+    EXTRA15("Lugar libre 15"),
+    EXTRA16("Lugar libre 16"),
+    EXTRA17("Lugar libre 17"),
+    EXTRA18("Lugar libre 18"),
+    EXTRA19("Lugar libre 19"),
+    EXTRA20("Lugar libre 20"),
+    EXTRA21("Lugar libre 21"),
+    EXTRA22("Lugar libre 22"),
+    EXTRA23("Lugar libre 23"),
+    EXTRA24("Lugar libre 24");
+
+    private String nombre;
 
     Ubicacion(String nombre) {
         this.nombre = nombre;
     }
 
+    /** Es una de las ranuras reservadas para lugares nuevos (EXTRA1..EXTRA24). */
+    public boolean esRanuraLibre() {
+        return name().startsWith("EXTRA");
+    }
+
     public String getNombre() {
         return nombre;
+    }
+
+    /** Lo usa el cargador de datos de Studio para renombrar el lugar. */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

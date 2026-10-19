@@ -25,6 +25,14 @@ public class Efectos implements Serializable {
         this.nombre = nombre;
     }
 
+    public EstadoAlterado getEstado() {
+        return estado;
+    }
+
+    public int getProbabilidad() {
+        return probabilidad;
+    }
+
     public double getDano() {
         return dano;
     }

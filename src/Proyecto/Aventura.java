@@ -7,6 +7,7 @@ public class Aventura {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        Proyecto.studio.DatosJuego.iniciar(); // usa los datos de data/studio si existen (Pokémon Studio)
         Jugador jugador = null;
         boolean reanudar = false; // true si se cargó una partida: continúa en la posición guardada (Mapa.jugar la lee)
 
@@ -14,12 +15,27 @@ public class Aventura {
         System.out.println("║   BIENVENIDO AL MUNDO POKÉMON      ║");
         System.out.println("╚════════════════════════════════════╝\n");
 
-        System.out.println("1. Nueva partida");
-        System.out.println("2. Cargar partida");
-        System.out.print("\nElige una opción: ");
+        int opcion;
+        while (true) {
+            System.out.println("1. Nueva partida");
+            System.out.println("2. Cargar partida");
+            System.out.println("3. Editor de datos (Pokémon Studio, consola)");
+            System.out.println("4. Editor de datos (Pokémon Studio, ventana gráfica)");
+            System.out.print("\nElige una opción: ");
 
-        int opcion = sc.nextInt();
-        sc.nextLine(); // Limpiar buffer
+            opcion = sc.nextInt();
+            sc.nextLine(); // Limpiar buffer
+            if (opcion != 3 && opcion != 4) break;
+
+            try {
+                if (opcion == 3) Proyecto.studio.EditorConsola.abrir(Proyecto.studio.DatosJuego.carpeta(), sc);
+                else Proyecto.studio.gui.EditorGrafico.abrir(Proyecto.studio.DatosJuego.carpeta(), true);
+            } catch (java.io.IOException | IllegalStateException e) {
+                System.out.println("No se pudo usar el editor: " + e.getMessage());
+            }
+            Proyecto.studio.DatosJuego.iniciar(); // aplica lo que se haya guardado en el editor
+            System.out.println();
+        }
 
         if (opcion == 1) {
             // ===== NUEVA PARTIDA =====

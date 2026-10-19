@@ -48,7 +48,7 @@ public class Gobierno {
         final String[] memes;
         final String derrota;
 
-        Jefe(String nombre, String cargo, Set<String> tipos, int nivelBase, String derrota, String... memes) {
+        public Jefe(String nombre, String cargo, Set<String> tipos, int nivelBase, String derrota, String... memes) {
             this.nombre = nombre;
             this.cargo = cargo;
             this.tipos = tipos;
@@ -58,12 +58,22 @@ public class Gobierno {
         }
 
         public String getNombre() { return nombre; }
+
+        public String getCargo() { return cargo; }
+
+        public Set<String> getTipos() { return tipos; }
+
+        public int getNivelBase() { return nivelBase; }
+
+        public String getDerrota() { return derrota; }
+
+        public String[] getMemes() { return memes; }
     }
 
-    private static final int TAMANO_EQUIPO_JEFE = 5;
-    private static final int RECOMPENSA_JEFE = 3000;
+    private static int TAMANO_EQUIPO_JEFE = 5;
+    private static int RECOMPENSA_JEFE = 3000;
 
-    private static final Jefe[] JEFES = {
+    private static Jefe[] JEFES = {
         new Jefe("Don Anselmo Papeleo", "Ministro de Trámites Eternos", Generacion.tipos("Normal", "Poison"), 36,
                 "Está bien... le firmo el papel. Pero necesitaré una copia sellada.",
                 "Vuelva usted mañana.", "Para eso necesita la casilla 27-B, que no existe.", "Su expediente está en trámite. Desde 1998."),
@@ -98,6 +108,17 @@ public class Gobierno {
 
     public static Jefe getJefe(Generacion gen) {
         return JEFES[gen.getNumero() - 1];
+    }
+
+    /** Sustituye jefes (por nº de generación) y reglas. Los jefes que falten se quedan como estaban. */
+    public static void reemplazar(java.util.Map<Integer, Jefe> porGeneracion, int tamanoEquipo, int recompensa) {
+        Jefe[] nuevos = JEFES.clone();
+        for (java.util.Map.Entry<Integer, Jefe> e : porGeneracion.entrySet()) {
+            if (e.getKey() >= 1 && e.getKey() <= nuevos.length) nuevos[e.getKey() - 1] = e.getValue();
+        }
+        JEFES = nuevos;
+        TAMANO_EQUIPO_JEFE = tamanoEquipo;
+        RECOMPENSA_JEFE = recompensa;
     }
 
     private static final Random RAND = new Random();

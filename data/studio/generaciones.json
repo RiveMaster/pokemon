@@ -1,0 +1,82 @@
+[
+  {
+    "numero": 1,
+    "region": "Kanto",
+    "desde": 1,
+    "hasta": 151,
+    "ambiente": "Los 151 originales: donde empezó todo.",
+    "bonus_nivel": 0
+  },
+  {
+    "numero": 2,
+    "region": "Johto",
+    "desde": 152,
+    "hasta": 251,
+    "ambiente": "Tradición y nostalgia: los bichos de la segunda hornada.",
+    "bonus_nivel": 3
+  },
+  {
+    "numero": 3,
+    "region": "Hoenn",
+    "desde": 252,
+    "hasta": 386,
+    "ambiente": "Clima extremo, mar por todas partes y bichos de otro mundo.",
+    "bonus_nivel": 6
+  },
+  {
+    "numero": 4,
+    "region": "Sinnoh",
+    "desde": 387,
+    "hasta": 493,
+    "ambiente": "Montañas nevadas y mitos de tiempo y espacio.",
+    "bonus_nivel": 9
+  },
+  {
+    "numero": 5,
+    "region": "Teselia",
+    "desde": 494,
+    "hasta": 649,
+    "ambiente": "Todo Pokémon nuevo: aquí no hay ninguno de los antiguos.",
+    "bonus_nivel": 12
+  },
+  {
+    "numero": 6,
+    "region": "Kalos",
+    "desde": 650,
+    "hasta": 721,
+    "ambiente": "Elegancia, hadas y evoluciones espectaculares.",
+    "bonus_nivel": 15
+  },
+  {
+    "numero": 7,
+    "region": "Alola",
+    "desde": 722,
+    "hasta": 809,
+    "ambiente": "Islas tropicales, formas regionales y bichos de otra dimensión.",
+    "bonus_nivel": 18
+  },
+  {
+    "numero": 8,
+    "region": "Galar",
+    "desde": 810,
+    "hasta": 905,
+    "ambiente": "Estadios llenos, ligas de fama y bichos gigantes.",
+    "bonus_nivel": 21
+  },
+  {
+    "numero": 9,
+    "region": "Paldea",
+    "desde": 906,
+    "hasta": 1025,
+    "ambiente": "Mundo abierto: sin caminos marcados ni ruta obligada.",
+    "bonus_nivel": 24
+  },
+  {
+    "numero": 10,
+    "region": "Mezcla",
+    "desde": 1,
+    "hasta": 1025,
+    "ambiente": "Todas las regiones fundidas en una: aquí vale todo.",
+    "bonus_nivel": 27
+  }
+]

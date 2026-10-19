@@ -16,13 +16,14 @@ public class Npc {
 
     // Probabilidad de que, en vez de un Pokémon salvaje, te rete un entrenador (ajustable desde pruebas).
     static double probabilidad = 0.30;
+    static int premioPorNivel = 6; // dinero = suma de niveles del equipo x este valor
 
-    private static final String[] NOMBRES = {
+    private static String[] NOMBRES = {
         "Marcos", "Lucía", "Iker", "Nerea", "Hugo", "Paula", "Aitor", "Carmen", "Dani", "Sofía",
         "Unai", "Irene", "Pablo", "Marta", "Jon", "Alba", "Gael", "Noa", "Rubén", "Elena"
     };
 
-    private static final String[] FRASES_RETO = {
+    private static String[] FRASES_RETO = {
         "¡Nuestras miradas se han cruzado! ¡Eso significa combate!",
         "¡Llevaba toda la mañana esperando a alguien con quien probar mi equipo!",
         "¡Eh, tú! ¡Sí, tú! ¿Te atreves con un combate rápido?",
@@ -30,7 +31,7 @@ public class Npc {
         "Mis Pokémon están entrenadísimos. ¿Y los tuyos?"
     };
 
-    private static final String[] FRASES_DERROTA = {
+    private static String[] FRASES_DERROTA = {
         "¡Vaya! Me has ganado. Toma, te lo has ganado.",
         "Buf... tendré que entrenar más. Aquí tienes tu premio.",
         "¡Qué combate! La próxima vez ganaré yo."
@@ -82,7 +83,7 @@ public class Npc {
 
         boolean victoria = CombateEntrenador.combatir(sc, jugador, nombre, equipo);
         if (victoria) {
-            int premio = sumaNiveles * 6;
+            int premio = sumaNiveles * premioPorNivel;
             jugador.agregarDinero(premio);
             System.out.println("\n" + nombre + ": " + FRASES_DERROTA[RAND.nextInt(FRASES_DERROTA.length)]);
             System.out.println(" Has ganado " + premio + "€.");
@@ -91,6 +92,23 @@ public class Npc {
         }
         return true;
     }
+
+    /** Lo usa el cargador de datos de Studio. Las listas vacías se ignoran (se mantienen las actuales). */
+    public static void configurar(double prob, int premio, List<String> nombres, List<String> reto, List<String> derrota) {
+        probabilidad = prob;
+        premioPorNivel = premio;
+        if (!nombres.isEmpty()) NOMBRES = nombres.toArray(new String[0]);
+        if (!reto.isEmpty()) FRASES_RETO = reto.toArray(new String[0]);
+        if (!derrota.isEmpty()) FRASES_DERROTA = derrota.toArray(new String[0]);
+    }
+
+    public static double getProbabilidad() { return probabilidad; }
+
+    public static List<String> getNombres() { return List.of(NOMBRES); }
+
+    public static List<String> getFrasesReto() { return List.of(FRASES_RETO); }
+
+    public static List<String> getFrasesDerrota() { return List.of(FRASES_DERROTA); }
 
     private static boolean yaEsta(List<PokemonLuchador> equipo, PokemonBase base) {
         for (PokemonLuchador p : equipo) {

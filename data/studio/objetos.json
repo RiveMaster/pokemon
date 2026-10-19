@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1,
+    "simbolo": "poke_ball",
+    "nombre": "Poke Ball",
+    "bolsillo": "pokeballs",
+    "precio": 50,
+    "descripcion": "Sirve para capturar Pokémon salvajes.",
+    "banderas": ["tienda"]
+  },
+  {
+    "id": 2,
+    "simbolo": "pocion",
+    "nombre": "Poción",
+    "bolsillo": "medicina",
+    "precio": 300,
+    "descripcion": "Cura a un Pokémon.",
+    "banderas": ["tienda"]
+  },
+  {
+    "id": 3,
+    "simbolo": "mt_aleatoria",
+    "nombre": "MT aleatoria",
+    "bolsillo": "mts",
+    "precio": 200,
+    "descripcion": "Una MT con un movimiento al azar.",
+    "banderas": ["tienda"]
+  },
+  {
+    "id": 4,
+    "simbolo": "restos",
+    "nombre": "Restos",
+    "bolsillo": "equipables",
+    "precio": 600,
+    "descripcion": "Recupera 1/16 de la vida máxima al inicio de cada turno.",
+    "banderas": ["tienda", "equipable"]
+  },
+  {
+    "id": 5,
+    "simbolo": "baya_aranja",
+    "nombre": "Baya Aranja",
+    "bolsillo": "equipables",
+    "precio": 150,
+    "descripcion": "Cura 30 PS cuando la vida baja a la mitad o menos. Se consume.",
+    "banderas": ["tienda", "equipable"]
+  },
+  {
+    "id": 6,
+    "simbolo": "banda_focus",
+    "nombre": "Banda Focus",
+    "bolsillo": "equipables",
+    "precio": 500,
+    "descripcion": "Con la vida completa, aguanta con 1 PS un golpe que lo debilitaría. Se consume.",
+    "banderas": ["tienda", "equipable"]
+  },
+  {
+    "id": 7,
+    "simbolo": "cinta_fuerte",
+    "nombre": "Cinta Fuerte",
+    "bolsillo": "equipables",
+    "precio": 400,
+    "descripcion": "Aumenta un 10% el daño de todos sus ataques.",
+    "banderas": ["tienda", "equipable"]
+  },
+  {
+    "id": 8,
+    "simbolo": "vidasfera",
+    "nombre": "Vidasfera",
+    "bolsillo": "equipables",
+    "precio": 700,
+    "descripcion": "Aumenta un 30% el daño, pero pierde 1/10 de su vida al atacar.",
+    "banderas": ["tienda", "equipable"]
+  },
+  {
+    "id": 9,
+    "simbolo": "peto_duro",
+    "nombre": "Peto Duro",
+    "bolsillo": "equipables",
+    "precio": 450,
+    "descripcion": "Reduce un 15% el daño recibido.",
+    "banderas": ["tienda", "equipable"]
+  },
+  {
+    "id": 10,
+    "simbolo": "carbon",
+    "nombre": "Carbón",
+    "bolsillo": "equipables",
+    "precio": 350,
+    "descripcion": "Aumenta un 20% el daño de los ataques de tipo Fuego.",
+    "banderas": ["tienda", "equipable", "potencia_fire"]
+  },
+  {
+    "id": 11,
+    "simbolo": "agua_mistica",
+    "nombre": "Agua Mística",
+    "bolsillo": "equipables",
+    "precio": 350,
+    "descripcion": "Aumenta un 20% el daño de los ataques de tipo Agua.",
+    "banderas": ["tienda", "equipable", "potencia_water"]
+  },
+  {
+    "id": 12,
+    "simbolo": "semilla_milagro",
+    "nombre": "Semilla Milagro",
+    "bolsillo": "equipables",
+    "precio": 350,
+    "descripcion": "Aumenta un 20% el daño de los ataques de tipo Planta.",
+    "banderas": ["tienda", "equipable", "potencia_grass"]
+  },
+  {
+    "id": 13,
+    "simbolo": "iman",
+    "nombre": "Imán",
+    "bolsillo": "equipables",
+    "precio": 350,
+    "descripcion": "Aumenta un 20% el daño de los ataques de tipo Eléctrico.",
+    "banderas": ["tienda", "equipable", "potencia_electric"]
+  },
+  {
+    "id": 14,
+    "simbolo": "piedra_dura",
+    "nombre": "Piedra Dura",
+    "bolsillo": "equipables",
+    "precio": 350,
+    "descripcion": "Aumenta un 20% el daño de los ataques de tipo Roca.",
+    "banderas": ["tienda", "equipable", "potencia_rock"]
+  }
+]

@@ -15,7 +15,8 @@ public class Villaverde {
             System.out.println("╚════════════════════════════════════╝");
             System.out.println("Generación actual: " + jugadorCompleto.getGeneracion().etiqueta());
             System.out.println("1. Visitar a mamá");
-            System.out.println("2. Ir a Ruta 1");
+            Ubicacion primera = Mapa.getRecorrido().size() > 1 ? Mapa.getRecorrido().get(1) : Ubicacion.RUTA1;
+            System.out.println("2. Ir a " + primera.getNombre());
             System.out.println("3. Menú (mochila, MT, objetos, volar, guardar)");
             System.out.println("4. Viajar a otra generación");
             System.out.print("\nElige una opción: ");
@@ -25,7 +26,7 @@ public class Villaverde {
             switch (opcion) {
                 case 1 -> visitarMama(sc, jugadorCompleto);
                 case 2 -> {
-                    return Ubicacion.RUTA1;
+                    return primera;
                 }
                 case 3 -> {
                     Ubicacion destino = Menu.mostrarmenu(sc, jugadorCompleto);

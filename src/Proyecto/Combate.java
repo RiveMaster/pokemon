@@ -320,8 +320,17 @@ public class Combate {
         System.out.println("===============================");
     }
 
+    // Información extra de un movimiento en el menú (solo con las reglas de PP / precisión activadas)
+    private static String detalleMovimiento(PokemonLuchador p, Movimiento m) {
+        StringBuilder sb = new StringBuilder();
+        if (ReglasCombate.pp() && m.getPp() > 0) sb.append("  PP ").append(p.ppRestantes(m)).append('/').append(m.getPp());
+        if (ReglasCombate.precision() && m.getPrecision() > 0 && m.getPrecision() < 100)
+            sb.append("  Prec. ").append(m.getPrecision()).append('%');
+        return sb.toString();
+    }
+
     // Turno del jugador
-    static void turnoJugador(PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
+    public static void turnoJugador(PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
         List<Movimiento> movs = jugador.getMovimientos();
 
         if (movs.isEmpty()) {
@@ -329,36 +338,59 @@ public class Combate {
             return;
         }
 
-        System.out.println("\nElige un movimiento:");
-        for (int i = 0; i < movs.size(); i++) {
-            System.out.println((i + 1) + ". " + movs.get(i).getNombre() + " (Potencia " + (movs.get(i).getPotencia()+jugador.getNivel()/2) + ")");
-        }
-
-        int eleccion = sc.nextInt();
-        if (eleccion < 1 || eleccion > movs.size()) {
-            System.out.println("Movimiento inválido. Pierdes el turno.");
+        if (jugador.sinPp()) {
+            System.out.println("¡A " + jugador.getNombre() + " no le quedan PP!");
+            System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
+            jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
             return;
         }
 
-        Movimiento movJugador = movs.get(eleccion - 1);
-        System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
-        jugador.atacarCon(movJugador, movJugador.getPotencia() + jugador.getNivel() / 2, rival);
+        System.out.println("\nElige un movimiento:");
+        for (int i = 0; i < movs.size(); i++) {
+            System.out.println((i + 1) + ". " + movs.get(i).getNombre() + " (Potencia " + (movs.get(i).getPotencia()+jugador.getNivel()/2) + ")"
+                    + detalleMovimiento(jugador, movs.get(i)));
+        }
+
+        while (true) {
+            int eleccion = sc.nextInt();
+            if (eleccion < 1 || eleccion > movs.size()) {
+                System.out.println("Movimiento inválido. Pierdes el turno.");
+                return;
+            }
+
+            Movimiento movJugador = movs.get(eleccion - 1);
+            if (!jugador.tienePp(movJugador)) {
+                System.out.println("¡No quedan PP para " + movJugador.getNombre() + "! Elige otro movimiento.");
+                continue;
+            }
+            System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
+            jugador.usarMovimiento(movJugador, movJugador.getPotencia() + jugador.getNivel() / 2, rival);
+            return;
+        }
+    }
+
+    // Elige el movimiento de un Pokémon controlado por el juego (al azar; con PP solo entre los que tienen)
+    private static Movimiento elegirMovimientoRival(PokemonLuchador p) {
+        List<Movimiento> movs = p.getMovimientos();
+        if (!ReglasCombate.pp()) return movs.get(rand.nextInt(movs.size()));
+        List<Movimiento> utiles = new java.util.ArrayList<>();
+        for (Movimiento m : movs) if (p.tienePp(m)) utiles.add(m);
+        if (utiles.isEmpty()) return Movimiento.FORCEJEO;
+        return utiles.get(rand.nextInt(utiles.size()));
     }
 
     // Turno del rival (si es un rival "entrenador")
-    static void turnoRival(PokemonLuchador jugador, PokemonLuchador rival) {
-        List<Movimiento> movs = rival.getMovimientos();
-        Movimiento movRival = movs.get(rand.nextInt(movs.size()));
+    public static void turnoRival(PokemonLuchador jugador, PokemonLuchador rival) {
+        Movimiento movRival = elegirMovimientoRival(rival);
         System.out.println("\n" + rival.getNombre() + " usa " + movRival.getNombre() + "!");
-        rival.atacarCon(movRival, movRival.getPotencia(), jugador);
+        rival.usarMovimiento(movRival, movRival.getPotencia(), jugador);
     }
 
     // Turno del rival salvaje (usa siempre un movimiento aleatorio)
     private static void turnoRivalSalvaje(PokemonLuchador jugador, PokemonLuchador salvaje) {
-        List<Movimiento> movs = salvaje.getMovimientos();
-        Movimiento movRival = movs.get(rand.nextInt(movs.size()));
+        Movimiento movRival = elegirMovimientoRival(salvaje);
         System.out.println("\nEl salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!");
-        salvaje.atacarCon(movRival, movRival.getPotencia(), jugador);
+        salvaje.usarMovimiento(movRival, movRival.getPotencia(), jugador);
     }
 
 
@@ -473,6 +505,7 @@ public class Combate {
     // Funcion para los efectos de los pokemons que esten luchando en la batalla
     public static void efecto(PokemonLuchador pokemon){
         pokemon.efectoObjetoInicioTurno();
+        pokemon.efectoHabilidadInicioTurno();
         if (pokemon.getEstado() == EstadoAlterado.DORMIDO) {
             pokemon.setTurnosDormido(pokemon.getTurnosDormido() - 1);
             System.out.println(pokemon.getNombre() + " está dormido...");

@@ -36,7 +36,7 @@ public class Ataques {
         movimientos.add(new Movimiento("Guillotina", Math.pow(10, 10), "Normal", 0, getInsta1()));
         movimientos.add(new Movimiento("V. Cortante", 80, "Normal", 0, getCarga1()));
         movimientos.add(new Movimiento("Corte", 50, "Normal", 0, getnull())); //cortar arbustos
-        movimientos.add(new Movimiento("Ataque Ala", 60, "Volador", 0, getnull()));
+        movimientos.add(new Movimiento("Ataque Ala", 60, "Flying", 0, getnull()));
         movimientos.add(new Movimiento("Doble Patada", 30 * 2, "Fighting", 0, getnull()));
         movimientos.add(new Movimiento("Mega Patada", 120, "Fighting", 0, getnull()));
         movimientos.add(new Movimiento("Patada Salto", 85, "Fighting", 0, getnull()));
@@ -72,7 +72,7 @@ public class Ataques {
         movimientos.add(new Movimiento("Picotazo", 35, "Flying", 0));
         movimientos.add(new Movimiento("Pico Taladro", 80, "Flying", 0));
         movimientos.add(new Movimiento("Sumision", 80, "Fighting", 0));
-        movimientos.add(new Movimiento("Psico-Rayo", 65, "Phsyc", 0));
+        movimientos.add(new Movimiento("Psico-Rayo", 65, "Psychic", 0));
         movimientos.add(new Movimiento("Rayo Burbuja", 65, "Water", 0));
         movimientos.add(new Movimiento("Rayo Aurora", 65, "Ice", 0));
         movimientos.add(new Movimiento("Hiperrayo", 150, "Normal", 0));
@@ -96,11 +96,11 @@ public class Ataques {
         movimientos.add(new Movimiento("Fisura", Math.pow(10, 10), "Ground", 0, getInsta1()));
         movimientos.add(new Movimiento("Excavar", 60, "Ground", 0, getCarga1()));
         movimientos.add(new Movimiento("Toxico", 0, "Poison", 0, getveneno100()));
-        movimientos.add(new Movimiento("Confusion", 50, "Phsyc", 0));
-        movimientos.add(new Movimiento("Psiquico", 90, "Phsyc", 0));
-        movimientos.add(new Movimiento("Hipnosis", 0, "Phsyc", 0, getSueino()));
+        movimientos.add(new Movimiento("Confusion", 50, "Psychic", 0));
+        movimientos.add(new Movimiento("Psiquico", 90, "Psychic", 0));
+        movimientos.add(new Movimiento("Hipnosis", 0, "Psychic", 0, getSueino()));
         movimientos.add(new Movimiento("Furia", 20, "Normal", 0));
-        movimientos.add(new Movimiento("Teletransp", 0, "Phsyc", 0));
+        movimientos.add(new Movimiento("Teletransp", 0, "Psychic", 0));
         movimientos.add(new Movimiento("Lengüetazo", 20, "Ghost", 0, getParalizar30()));
         movimientos.add(new Movimiento("Polucion", 20, "Poison", 0, getveneno30()));
         movimientos.add(new Movimiento("Residuos", 65, "Poison", 0, getveneno30()));
@@ -112,7 +112,7 @@ public class Ataques {
         movimientos.add(new Movimiento("Restriccion", 10, "Normal", 0));
         movimientos.add(new Movimiento("Patada S. Alta", 100, "Fighting", 0));
         movimientos.add(new Movimiento("Deslumbrar", 0, "Normal", 0, getParalizar100()));
-        movimientos.add(new Movimiento("Comesueinos", 100, "Phsyc", 0));
+        movimientos.add(new Movimiento("Comesueinos", 100, "Psychic", 0));
         movimientos.add(new Movimiento("Gas Venenoso", 0, "Poison", 0, getveneno100()));
         movimientos.add(new Movimiento("Presa", 15, "Normal", 0));
         movimientos.add(new Movimiento("Chupa Vidas", 20, "Bug", 0));
@@ -121,13 +121,13 @@ public class Ataques {
         movimientos.add(new Movimiento("Burbuja", 20, "Water", 0));
         movimientos.add(new Movimiento("Puino-Mareo", 70, "Normal", 0));
         movimientos.add(new Movimiento("Espora", 0, "Grass", 0, getSueino()));
-        movimientos.add(new Movimiento("Psico Onda", 1, "Phsyc", 0));
+        movimientos.add(new Movimiento("Psico Onda", 1, "Psychic", 0));
         movimientos.add(new Movimiento("Salpicadura", 0, "Normal", 0));
         movimientos.add(new Movimiento("Martillazo", 90, "Water", 0));
         movimientos.add(new Movimiento("Explosion", 250, "Normal", 0));
         movimientos.add(new Movimiento("Golpes Furia", 18, "Normal", 0));
         movimientos.add(new Movimiento("Huesomerang", 100, "Ground", 0));
-        movimientos.add(new Movimiento("Descanso", 0, "Phsyc", 0, getSueino()));
+        movimientos.add(new Movimiento("Descanso", 0, "Psychic", 0, getSueino()));
         movimientos.add(new Movimiento("Avalancha", 75, "Rock", 0));
         movimientos.add(new Movimiento("Hip. Colmillo", 80, "Normal", 0));
         movimientos.add(new Movimiento("Tri-Ataque", 80, "Normal", 0));
@@ -217,6 +217,17 @@ public class Ataques {
         }
         return candidatos.get(new Random().nextInt(candidatos.size()));
     }
+    /** Todos los movimientos registrados (solo lectura). */
+    public static List<Movimiento> getTodos() {
+        return java.util.Collections.unmodifiableList(movimientos);
+    }
+
+    /** Sustituye todos los movimientos. Lo usa el cargador de datos de Studio. */
+    public static void reemplazar(List<Movimiento> nuevos) {
+        movimientos.clear();
+        movimientos.addAll(nuevos);
+    }
+
     public static Movimiento buscarPorNombre(String nombre) {
         for (Movimiento p : movimientos) {
             if (p.getNombre().equalsIgnoreCase(nombre)) return p;

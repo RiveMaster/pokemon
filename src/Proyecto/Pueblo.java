@@ -34,6 +34,14 @@ public class Pueblo {
 
     public Ubicacion getUbicacion() { return ubicacion; }
 
+    public String getDescripcion() { return descripcion; }
+
+    public Set<String> getTiposTipicos() { return tiposTipicos; }
+
+    public Ubicacion getRutaAnterior() { return rutaAnterior; }
+
+    public Ubicacion getRutaSiguiente() { return rutaSiguiente; }
+
     public boolean tieneCasino() { return casino; }
 
     public boolean tieneSedeGobierno() { return sedeGobierno; }

@@ -20,8 +20,8 @@ import java.util.Set;
  */
 public class Gimnasio {
 
-    private static final int NUM_MIEMBROS = 3;
-    private static final int POKEMON_POR_MIEMBRO = 2;
+    private static int NUM_MIEMBROS = 3;
+    private static int POKEMON_POR_MIEMBRO = 2;
 
     private static final List<Gimnasio> GIMNASIOS = new ArrayList<>();
 
@@ -67,6 +67,35 @@ public class Gimnasio {
 
     public static List<Gimnasio> getGimnasios() {
         return GIMNASIOS;
+    }
+
+    /**
+     * Sustituye todos los gimnasios. Si algo no es válido (dos en la misma ciudad, nº de miembros
+     * incorrecto) lanza IllegalStateException y deja los gimnasios como estaban.
+     */
+    public static void reemplazar(List<Gimnasio> nuevos, int miembrosPorGimnasio, int pokemonPorMiembro) {
+        List<Gimnasio> antes = new ArrayList<>(GIMNASIOS);
+        int miembros0 = NUM_MIEMBROS, porMiembro0 = POKEMON_POR_MIEMBRO;
+        GIMNASIOS.clear();
+        NUM_MIEMBROS = miembrosPorGimnasio;
+        POKEMON_POR_MIEMBRO = pokemonPorMiembro;
+        try {
+            for (Gimnasio g : nuevos) registrar(g);
+        } catch (RuntimeException e) {
+            GIMNASIOS.clear();
+            GIMNASIOS.addAll(antes);
+            NUM_MIEMBROS = miembros0;
+            POKEMON_POR_MIEMBRO = porMiembro0;
+            throw e;
+        }
+    }
+
+    /** Crea un gimnasio (el constructor es privado). Para usarlo con {@link #reemplazar}. */
+    public static Gimnasio crear(String nombre, Ubicacion ciudad, String tipo, Set<String> tiposInternos,
+                                 String lider, String tituloLider, String[] miembros, String medalla,
+                                 int recompensaDinero, String mtRecompensa, int nivelBase, int tamanoEquipo) {
+        return new Gimnasio(nombre, ciudad, tipo, tiposInternos, lider, tituloLider, miembros, medalla,
+                recompensaDinero, mtRecompensa, nivelBase, tamanoEquipo);
     }
 
     /** El gimnasio de esa ciudad, o null si en ella no hay ninguno. */
@@ -122,6 +151,16 @@ public class Gimnasio {
     public String[] getMiembros() { return miembros; }
 
     public String getMedalla() { return medalla; }
+
+    public String getTituloLider() { return tituloLider; }
+
+    public int getRecompensaDinero() { return recompensaDinero; }
+
+    public String getMtRecompensa() { return mtRecompensa; }
+
+    public int getNivelBase() { return nivelBase; }
+
+    public int getTamanoEquipo() { return tamanoEquipo; }
 
     /** La medalla se guarda con la región, así cada generación tiene la suya. */
     public String claveMedalla(Generacion gen) {
@@ -255,11 +294,12 @@ public class Gimnasio {
             int dinero = recompensaDinero + recompensaDinero * (gen.getNumero() - 1) / 4;
             jugador.añadirMedalla(clave);
             jugador.agregarDinero(dinero);
-            jugador.añadirMT(mtRecompensa);
+            if (mtRecompensa != null && !mtRecompensa.isEmpty()) jugador.añadirMT(mtRecompensa);
             System.out.println(lider + ": Has ganado. Toma la " + medalla + ".");
             System.out.println("🏅 Has obtenido la " + clave + " (" + jugador.medallasEnGeneracion(gen) + "/" + GIMNASIOS.size() + " en " + gen.getRegion() + ").");
             System.out.println("💰 Has ganado " + dinero + "€.");
-            System.out.println("📀 Has recibido la MT " + mtRecompensa + " (úsala desde el menú).");
+            if (mtRecompensa != null && !mtRecompensa.isEmpty())
+                System.out.println("📀 Has recibido la MT " + mtRecompensa + " (úsala desde el menú).");
         }
     }
 
