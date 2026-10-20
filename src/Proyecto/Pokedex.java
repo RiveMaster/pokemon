@@ -25,6 +25,7 @@ Pokedex {
         cargarBloque11();
         cargarBloque12();
         cargarBloque13();
+        MegaEvoluciones.registrarEnPokedex(pokemons);
         cargado = true;
     }
 
