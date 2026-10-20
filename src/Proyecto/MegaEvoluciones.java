@@ -262,14 +262,17 @@ public final class MegaEvoluciones {
             return;
         }
         PokemonLuchador pokemon = pokemons.get(pi - 1);
-        List<String> compatibles = disponibles.stream().filter(stone ->
-                paraEspecie(pokemon.getBase().getNombre()).stream().anyMatch(f ->
+        List<String> compatibles = disponibles.stream()
+                .filter(stone -> pokemons.stream().noneMatch(otro ->
+                        otro != pokemon && stone.equalsIgnoreCase(otro.getMegapiedra() == null ? "" : otro.getMegapiedra())))
+                .filter(stone -> paraEspecie(pokemon.getBase().getNombre()).stream().anyMatch(f ->
                         Objects.equals(stone, f.megapiedra())
                                 || (f.megapiedra() == null && "Rayquaza".equalsIgnoreCase(f.especie())
                                 && "Ascenso Draco".equalsIgnoreCase(stone))))
                 .toList();
         if (compatibles.isEmpty()) {
-            System.out.println(pokemon.getNombre() + " no tiene megaevoluciones en el catálogo o no hay piedra compatible.");
+            System.out.println(pokemon.getNombre()
+                    + " no tiene una megapiedra compatible libre, o no dispone de megaevolución.");
             return;
         }
         for (int i = 0; i < compatibles.size(); i++) System.out.println((i + 1) + ". " + compatibles.get(i));
