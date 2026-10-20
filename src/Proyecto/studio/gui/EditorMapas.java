@@ -456,6 +456,7 @@ public final class EditorMapas {
             modoObjeto = false;
             lista.clearSelection();
             lista.setListData(objetos.toArray(new ObjetoMapa[0]));
+            recalcularTodasPropiedades();
             canvas.repaint();
             actualizarEstado();
         });
@@ -550,6 +551,7 @@ public final class EditorMapas {
             lista.setSelectedIndex(seleccionar);
             objetoSeleccionado = seleccionar;
             modoObjeto = true;
+            recalcularTodasPropiedades();
             actualizarEstado();
             canvas.repaint();
             dialogo.dispose();
@@ -653,8 +655,10 @@ public final class EditorMapas {
     }
 
     private void colocarObjeto(int x, int y, int capaActual) {
-        if (objetoSeleccionado >= 0 && objetoSeleccionado < objetos.size())
+        if (objetoSeleccionado >= 0 && objetoSeleccionado < objetos.size()) {
             colocaciones.add(new ColocacionObjeto(objetoSeleccionado, x, y, capaActual));
+            recalcularTodasPropiedades();
+        }
     }
 
     private void borrarObjetoEn(int x, int y) {
@@ -664,6 +668,7 @@ public final class EditorMapas {
             ObjetoMapa o = objetos.get(p.objeto);
             if (x >= p.x && y >= p.y && x < p.x + o.ancho && y < p.y + o.alto) {
                 colocaciones.remove(i);
+                recalcularTodasPropiedades();
                 return;
             }
         }
