@@ -201,3 +201,12 @@ El juego incluye un **Criadero Pokémon** (opción 10 del menú) y un **Centro d
 - Los guardados antiguos mantienen compatibilidad: los IV antiguos se migran al nuevo rango y los campos nuevos se inicializan sin perder equipo ni objetos.
 
 Prueba de compilación y comportamiento: `tests/SistemaCrianzaMegaSmokeTest.java`, ejecutada por `.github/workflows/pokemon-genetics-mega.yml` con Java 17.
+
+
+## Fase 7 · Objetos de crianza y generación de pueblos
+
+- La tienda y el inventario incluyen seis objetos equipables de herencia dirigida, uno por cada IV. El IV señalado se copia del portador; los demás siguen heredando la media redondeada.
+- El editor de mapas permite asignar categorías a los objetos compuestos, con soporte para casas, Centros Pokémon, gimnasios, tiendas, árboles, rocas, decoración y otros.
+- El generador de pueblos permite activar/desactivar cada clase de edificio. La paleta acepta variantes de camino para rectas, finales, esquinas interiores/exteriores y cruces, aplicadas automáticamente según las conexiones detectadas.
+- El formato de proyecto `.pmap` se incrementa a versión 5 para guardar la categoría de los objetos; la carga conserva compatibilidad con versiones 1–4.
+- Documentación de uso: [`CRIANZA_Y_MEGAEVOLUCION.md`](CRIANZA_Y_MEGAEVOLUCION.md).
