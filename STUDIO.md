@@ -182,6 +182,6 @@ Lanzamiento desde la raíz del proyecto:
 ```sh
 java Proyecto.studio.Estudio mapas
 ```
-Abre una ventana Swing independiente para pintar mapas con tiles de 16×16, una paleta de ejemplo y tres capas (suelo, objetos y superior). Permite importar spritesheets PNG cuyas dimensiones sean múltiplos de 16, marcar colisiones por celda, guardar/abrir proyectos `.pmap` y exportar el mapa compuesto a PNG. El proyecto `.pmap` conserva los tiles importados, las tres capas y las colisiones.
+Abre una ventana Swing independiente para pintar mapas con tiles de 16×16 y tres capas (suelo, objetos y superior). Lee PNG de la carpeta `Tiles/` y permite importar spritesheets cuyas dimensiones sean múltiplos de 16. Los tiles totalmente transparentes se omiten. En la pestaña «Crear objetos» puedes diseñar y nombrar composiciones de varios tiles (por ejemplo, árboles, casas o gimnasios) y colocarlas como sellos en el mapa. También permite marcar colisiones por celda, guardar/abrir proyectos `.pmap` y exportar el mapa compuesto a PNG. El proyecto conserva los tiles, las tres capas, las colisiones, la biblioteca de objetos y las colocaciones.
 
 **Importante:** esta primera versión guarda el mapa visual en su propio formato `.pmap`; todavía no conecta esos tiles con el movimiento o las colisiones del juego durante la partida. El mapa lógico existente sigue siendo el de `Mapa`, `Zona`, `Pueblo` y `Ubicacion`. La integración con el motor del juego requiere adaptar su renderizado y movimiento a estos datos.
