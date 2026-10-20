@@ -26,12 +26,24 @@ public final class GeneradorMapas {
         public final long semilla;
         public final Estilo estilo;
         public final boolean incluirCamino, incluirHierba, incluirAgua, incluirObstaculos, incluirObjetos;
+        public final boolean incluirCasas, incluirCentroPokemon, incluirGimnasio, incluirTienda;
         public final int tileBase, tileCamino, tileHierba, tileAgua, tileObstaculo;
 
         public Opciones(int ancho, int alto, long semilla, Estilo estilo, int densidad,
                         boolean incluirCamino, boolean incluirHierba, boolean incluirAgua,
                         boolean incluirObstaculos, boolean incluirObjetos,
                         int tileBase, int tileCamino, int tileHierba, int tileAgua, int tileObstaculo) {
+            this(ancho, alto, semilla, estilo, densidad, incluirCamino, incluirHierba, incluirAgua,
+                    incluirObstaculos, incluirObjetos, tileBase, tileCamino, tileHierba, tileAgua,
+                    tileObstaculo, true, true, true, true);
+        }
+
+        public Opciones(int ancho, int alto, long semilla, Estilo estilo, int densidad,
+                        boolean incluirCamino, boolean incluirHierba, boolean incluirAgua,
+                        boolean incluirObstaculos, boolean incluirObjetos,
+                        int tileBase, int tileCamino, int tileHierba, int tileAgua, int tileObstaculo,
+                        boolean incluirCasas, boolean incluirCentroPokemon, boolean incluirGimnasio,
+                        boolean incluirTienda) {
             if (ancho < 1 || ancho > 300 || alto < 1 || alto > 300)
                 throw new IllegalArgumentException("El mapa debe medir entre 1 y 300 tiles por lado.");
             this.ancho = ancho;
@@ -49,20 +61,29 @@ public final class GeneradorMapas {
             this.tileHierba = tileHierba;
             this.tileAgua = tileAgua;
             this.tileObstaculo = tileObstaculo;
+            this.incluirCasas = incluirCasas;
+            this.incluirCentroPokemon = incluirCentroPokemon;
+            this.incluirGimnasio = incluirGimnasio;
+            this.incluirTienda = incluirTienda;
         }
     }
 
     public static final class DefinicionObjeto {
         public final int indice, ancho, alto;
-        public final String nombre;
+        public final String nombre, categoria;
         public final int[] celdas;
 
         public DefinicionObjeto(int indice, String nombre, int ancho, int alto, int[] celdas) {
+            this(indice, nombre, ancho, alto, celdas, inferirCategoria(nombre));
+        }
+
+        public DefinicionObjeto(int indice, String nombre, int ancho, int alto, int[] celdas, String categoria) {
             this.indice = indice;
             this.nombre = nombre == null ? "" : nombre;
             this.ancho = ancho;
             this.alto = alto;
             this.celdas = celdas == null ? new int[0] : celdas.clone();
+            this.categoria = categoria == null ? inferirCategoria(this.nombre) : categoria;
         }
     }
 
@@ -119,7 +140,7 @@ public final class GeneradorMapas {
 
         if (o.incluirObjetos && biblioteca != null && !biblioteca.isEmpty()) {
             if (o.estilo == Estilo.PUEBLO)
-                colocarEdificios(placements, manual, path, water, grassPatch, w, h, biblioteca, random);
+                colocarEdificios(placements, manual, path, water, grassPatch, w, h, biblioteca, random, o);
             colocarElementosNaturales(placements, manual, path, water, grassPatch, w, h,
                     biblioteca, o.densidad, o.estilo, random);
         }
@@ -287,14 +308,22 @@ public final class GeneradorMapas {
 
     private static void colocarEdificios(List<Colocacion> salida, boolean[] manual, boolean[] path,
                                          boolean[] water, boolean[] grass, int w, int h,
-                                         List<DefinicionObjeto> biblioteca, Random random) {
+                                         List<DefinicionObjeto> biblioteca, Random random, Opciones opciones) {
         List<DefinicionObjeto> candidatos = new ArrayList<>();
         for (DefinicionObjeto obj : biblioteca) {
             if (obj != null && obj.ancho > 0 && obj.alto > 0 && obj.ancho <= w - 2 && obj.alto <= h - 2)
                 candidatos.add(obj);
         }
         List<DefinicionObjeto> edificiosNombrados = new ArrayList<>();
-        for (DefinicionObjeto obj : candidatos) if (esObjetoEdificio(obj)) edificiosNombrados.add(obj);
+        for (DefinicionObjeto obj : candidatos) {
+            if (!esObjetoEdificio(obj)) continue;
+            String categoria = obj.categoria.toUpperCase(Locale.ROOT);
+            if (categoria.equals("CASA") && !opciones.incluirCasas) continue;
+            if ((categoria.equals("CENTRO_POKEMON") || categoria.equals("CENTRO_POKÉMON")) && !opciones.incluirCentroPokemon) continue;
+            if (categoria.equals("GIMNASIO") && !opciones.incluirGimnasio) continue;
+            if (categoria.equals("TIENDA") && !opciones.incluirTienda) continue;
+            edificiosNombrados.add(obj);
+        }
         if (!edificiosNombrados.isEmpty()) candidatos = edificiosNombrados;
         else candidatos.removeIf(GeneradorMapas::esObjetoNatural);
         if (candidatos.isEmpty()) return;
@@ -376,13 +405,30 @@ public final class GeneradorMapas {
         }
     }
 
+    private static String inferirCategoria(String nombre) {
+        String n = nombre == null ? "" : nombre.toLowerCase(Locale.ROOT);
+        if (contiene(n, "pokecentro", "centro pok", "pokemon center")) return "CENTRO_POKEMON";
+        if (contiene(n, "gimnasio", "gym")) return "GIMNASIO";
+        if (contiene(n, "tienda", "shop")) return "TIENDA";
+        if (contiene(n, "casa", "house", "hogar", "edificio", "building")) return "CASA";
+        if (contiene(n, "arbol", "árbol", "tree", "arbusto", "bush", "planta", "plant")) return "ARBOL";
+        if (contiene(n, "roca", "rock", "piedra", "stone")) return "ROCA";
+        return "OTRO";
+    }
+
     private static boolean esObjetoNatural(DefinicionObjeto obj) {
+        String categoria = obj.categoria.toUpperCase(Locale.ROOT);
+        if (categoria.equals("ARBOL") || categoria.equals("ROCA")) return true;
+        if (!categoria.equals("OTRO")) return false;
         String n = obj.nombre.toLowerCase(Locale.ROOT);
         return contiene(n, "arbol", "árbol", "tree", "arbusto", "bush", "roca", "rock",
                 "piedra", "stone", "tronco", "log", "pino", "pine", "planta", "plant");
     }
 
     private static boolean esObjetoEdificio(DefinicionObjeto obj) {
+        String categoria = obj.categoria.toUpperCase(Locale.ROOT);
+        if (contiene(categoria, "CASA", "CENTRO_POKEMON", "CENTRO_POKÉMON", "GIMNASIO", "TIENDA")) return true;
+        if (!categoria.equals("OTRO") && !categoria.equals("DECORACION")) return false;
         String n = obj.nombre.toLowerCase(Locale.ROOT);
         return contiene(n, "casa", "house", "hogar", "edificio", "building", "gimnasio",
                 "gym", "centro", "tienda", "shop", "pokecentro", "pokemon center", "estacion", "station");
