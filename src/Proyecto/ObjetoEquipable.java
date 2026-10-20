@@ -18,18 +18,30 @@ public enum ObjetoEquipable {
     AGUA_MISTICA("Agua Mística", "Aumenta un 20% el daño de los ataques de tipo Agua.", 350, "Water"),
     SEMILLA_MILAGRO("Semilla Milagro", "Aumenta un 20% el daño de los ataques de tipo Planta.", 350, "Grass"),
     IMAN("Imán", "Aumenta un 20% el daño de los ataques de tipo Eléctrico.", 350, "Electric"),
-    PIEDRA_DURA("Piedra Dura", "Aumenta un 20% el daño de los ataques de tipo Roca.", 350, "Rock");
+    PIEDRA_DURA("Piedra Dura", "Aumenta un 20% el daño de los ataques de tipo Roca.", 350, "Rock"),
+    PESA_REcia("Pesa recia (IV PS)", "Al criar, fuerza que el IV de PS se herede del Pokémon que la lleva.", 1800, null, 0),
+    BRAZAL_RECIO("Brazal recio (IV Ataque)", "Al criar, fuerza que el IV de Ataque se herede del Pokémon que lo lleva.", 1800, null, 1),
+    CINTA_RECIA("Cinto recio (IV Defensa)", "Al criar, fuerza que el IV de Defensa se herede del Pokémon que lo lleva.", 1800, null, 2),
+    LENTE_RECIA("Lente recia (IV At. Esp.)", "Al criar, fuerza que el IV de Ataque Especial se herede del Pokémon que la lleva.", 1800, null, 3),
+    BANDA_RECIA("Banda recia (IV Def. Esp.)", "Al criar, fuerza que el IV de Defensa Especial se herede del Pokémon que la lleva.", 1800, null, 4),
+    FRANJA_RECIA("Franja recia (IV Velocidad)", "Al criar, fuerza que el IV de Velocidad se herede del Pokémon que la lleva.", 1800, null, 5);
 
     private final String nombre;
     private String descripcion;
     private int precio;
     private final String tipoPotenciado; // tipo de ataque que refuerza (null si no aplica)
+    private final int ivHeredado; // -1 si no modifica la crianza; 0 PS, 1 At., 2 Def., 3 At.Esp., 4 Def.Esp., 5 Vel.
 
     ObjetoEquipable(String nombre, String descripcion, int precio, String tipoPotenciado) {
+        this(nombre, descripcion, precio, tipoPotenciado, -1);
+    }
+
+    ObjetoEquipable(String nombre, String descripcion, int precio, String tipoPotenciado, int ivHeredado) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.tipoPotenciado = tipoPotenciado;
+        this.ivHeredado = ivHeredado;
     }
 
     /** Lo usa el cargador de datos de Studio (el nombre y el efecto no cambian: están en el código de combate). */
@@ -45,6 +57,9 @@ public enum ObjetoEquipable {
     public int getPrecio() { return precio; }
 
     public String getTipoPotenciado() { return tipoPotenciado; }
+
+    /** Índice de IV que este objeto fuerza a heredar, o -1 si no tiene efecto de crianza. */
+    public int getIvHeredado() { return ivHeredado; }
 
     /** Busca por nombre visible o interno, sin distinguir mayúsculas ni tildes. */
     public static ObjetoEquipable buscarPorNombre(String texto) {
