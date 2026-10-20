@@ -189,3 +189,15 @@ El botón **Generar mapa** abre un asistente procedural integrado. Permite elegi
 La generación es procedural y propia del proyecto; el ZIP de referencia solo contenía una aplicación Unity compilada, no el código fuente del generador original.
 
 **Importante:** las propiedades de colisión y hierba se guardan dentro del proyecto `.pmap`, pero el juego actual todavía no carga estos proyectos. Para que el mundo se dibuje con estos tiles, las colisiones bloqueen el movimiento y aparezcan Pokémon salvajes al caminar por la hierba, falta integrar el formato con el motor del juego. El mapa lógico actual sigue siendo el de `Mapa`, `Zona`, `Pueblo` y `Ubicacion`.
+
+
+## Fase 6 · Genética, crianza y megaevolución
+
+El juego incluye un **Criadero Pokémon** (opción 10 del menú) y un **Centro de Megaevolución** (opción 11). La guía completa y el catálogo de formas están en [`CRIANZA_Y_MEGAEVOLUCION.md`](CRIANZA_Y_MEGAEVOLUCION.md).
+
+- Cada Pokémon tiene sexo y seis IVs independientes de 0 a 31 (PS, ataque, defensa, ataque especial, defensa especial y velocidad). Los datos se serializan con el Pokémon, incluidos cooldown y megapiedra.
+- La crianza valida grupos huevo y sexo; Ditto puede actuar como ambos sexos y criar con cualquier especie apta salvo otro Ditto. Las crías nacen al nivel 1 y heredan la media redondeada de los seis IVs parentales. Ambos progenitores reciben 30 minutos de cooldown medidos por el reloj real del sistema.
+- El catálogo registra 93 formas Mega con tipos, estadísticas base, habilidades y megapiedras; se excluyen de los encuentros salvajes normales. En combate se puede escoger «0. Mega-evolucionar» dentro del menú de movimientos. La forma se revierte al terminar y solo puede megaevolucionar un Pokémon por lado y combate.
+- Los guardados antiguos mantienen compatibilidad: los IV antiguos se migran al nuevo rango y los campos nuevos se inicializan sin perder equipo ni objetos.
+
+Prueba de compilación y comportamiento: `tests/SistemaCrianzaMegaSmokeTest.java`, ejecutada por `.github/workflows/pokemon-genetics-mega.yml` con Java 17.
