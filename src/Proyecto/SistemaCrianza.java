@@ -50,7 +50,7 @@ public final class SistemaCrianza {
 
         System.out.println("\nElige el primer progenitor (0 cancela):");
         listarCandidatos(candidatos, origen, disponibles);
-        int primero = leerIndice(sc, candidatos.size());
+        int primero = leerIndice(sc, candidatos.size(), disponibles);
         if (primero < 0) return false;
         PokemonLuchador a = candidatos.get(primero);
         if (a.getBase().esMega()) {
@@ -60,7 +60,7 @@ public final class SistemaCrianza {
 
         System.out.println("\nElige el segundo progenitor (0 cancela):");
         listarCandidatos(candidatos, origen, disponibles);
-        int segundo = leerIndice(sc, candidatos.size());
+        int segundo = leerIndice(sc, candidatos.size(), disponibles);
         if (segundo < 0) return false;
         PokemonLuchador b = candidatos.get(segundo);
         if (a == b) {
@@ -108,6 +108,7 @@ public final class SistemaCrianza {
         long siguiente = ahora + COOLDOWN_MS;
         a.setProximaCrianzEpochMs(siguiente);
         b.setProximaCrianzEpochMs(siguiente);
+        boolean equipoLlenoAntes = jugador.equipoLleno();
         jugador.agregarPokemon(cria);
 
         System.out.println("\n¡Ha nacido un huevo Pokémon!");
@@ -115,9 +116,9 @@ public final class SistemaCrianza {
         System.out.println("IVs heredados como media de ambos progenitores:");
         System.out.println("  " + cria.resumenIVs());
         System.out.println("Ambos progenitores podrán volver a criar dentro de 30 minutos reales.");
-        System.out.println(jugador.getEquipo().size() > 6
-                ? "El Pokémon se ha enviado al PC."
-                : "El Pokémon se ha añadido a tu equipo o al PC si este ya estaba completo.");
+        System.out.println(equipoLlenoAntes
+                ? "El equipo estaba completo: el Pokémon se ha enviado al PC."
+                : "El Pokémon se ha añadido a tu equipo.");
         return true;
     }
 
@@ -156,11 +157,11 @@ public final class SistemaCrianza {
         }
     }
 
-    private static int leerIndice(java.util.Scanner sc, int max) {
+    private static int leerIndice(java.util.Scanner sc, int max, List<Integer> disponibles) {
         int elegido = Entrada.leerEntero(sc);
         if (elegido == 0) return -1;
-        if (elegido < 1 || elegido > max) {
-            System.out.println("Selección no válida.");
+        if (elegido < 1 || elegido > max || !disponibles.contains(elegido - 1)) {
+            System.out.println("Selección no válida. Escoge un número de los que aparecen en la lista.");
             return -1;
         }
         return elegido - 1;
