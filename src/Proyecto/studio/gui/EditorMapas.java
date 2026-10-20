@@ -1,6 +1,7 @@
 package Proyecto.studio.gui;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageInputStream;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -33,7 +34,7 @@ public final class EditorMapas {
     private final DefaultListModel<Integer> modeloPaleta = new DefaultListModel<>();
     private final JList<Integer> listaPaleta = new JList<>(modeloPaleta);
     private final JLabel estado = new JLabel("Capa: Suelo · clic izquierdo pinta, derecho borra");
-    private final JComboBox<String> selectorCapa = new JComboBox<>(new String[]{"Suelo", "Objetos", "Superior"});
+    private final JComboBox<String> selectorCapa = new JComboBox<>(new String[]{"Suelo", "Objetos", "Superior", "Hierba", "Evento", "Agua"});
 
     private EditorMapas() {
         for (int[] capaInicial : capas) java.util.Arrays.fill(capaInicial, -1);
