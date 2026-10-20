@@ -88,6 +88,8 @@ public class Combate {
     public static void combateRival(Jugador Jugar, Rival tontito,PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
         System.out.println("\n=== ¡COMIENZA EL COMBATE CONTRA " + rival.getNombre() + "! ===");
 
+        jugador.iniciarCombate();
+        rival.iniciarCombate();
         boolean combateActivo = !equipoMR(tontito)&&!equipoM(Jugar);
         while (combateActivo) {
             mostrarEstado(jugador, rival);
@@ -119,11 +121,15 @@ public class Combate {
                 System.out.println("Opción inválida, pierdes el turno.");
             }
         }
+        jugador.desmegaevolucionar();
+        rival.desmegaevolucionar();
     }
 
     public static void combatepodemita(Jugador jugadorCompleto, PokemonLuchador pokemonJugador, PokemonLuchador pokemonpodemita, Gobierno gobierno, Scanner sc){
         System.out.println("\n=== ¡Un Podemita ha aparecido y quiere pelear contra tí! ===");
         System.out.println("Podemita: ¡Ganare por Pedro Sanchez, viva la izquierda!");
+        pokemonJugador.iniciarCombate();
+        pokemonpodemita.iniciarCombate();
         boolean combateActivo = !equipoMG(gobierno)&&!equipoM(jugadorCompleto);
         while (combateActivo){
             mostrarEstado(pokemonJugador, pokemonpodemita);
@@ -176,12 +182,16 @@ public class Combate {
             }
 
         }
+        pokemonJugador.desmegaevolucionar();
+        pokemonpodemita.desmegaevolucionar();
     }
 
     // Combate contra Pokémon salvaje
     public static void combateSalvaje(Jugador jugadorCompleto, PokemonLuchador pokemonJugador, PokemonLuchador salvaje, Scanner sc) {
         System.out.println("\n=== ¡Un Pokémon salvaje aparece! ===");
 
+        pokemonJugador.iniciarCombate();
+        salvaje.iniciarCombate();
         boolean combateActivo = salvaje.estaVivo()&&!equipoM(jugadorCompleto);
 
         while (combateActivo) {
@@ -307,6 +317,8 @@ public class Combate {
                 System.out.println("Opción inválida, pierdes el turno.");
             }
         }
+        pokemonJugador.desmegaevolucionar();
+        salvaje.desmegaevolucionar();
     }
 
     // Mostrar estado de los Pokémon
@@ -332,27 +344,49 @@ public class Combate {
     // Turno del jugador
     public static void turnoJugador(PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
         List<Movimiento> movs = jugador.getMovimientos();
+        boolean puedeMega = MegaEvoluciones.puedeOfrecerse(jugador);
 
-        if (movs.isEmpty()) {
+        if (movs.isEmpty() && !puedeMega) {
             System.out.println("¡Tu Pokémon no tiene movimientos!");
             return;
         }
 
-        if (jugador.sinPp()) {
+        if (jugador.sinPp() && !puedeMega) {
             System.out.println("¡A " + jugador.getNombre() + " no le quedan PP!");
             System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
             jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
             return;
         }
 
-        System.out.println("\nElige un movimiento:");
-        for (int i = 0; i < movs.size(); i++) {
-            System.out.println((i + 1) + ". " + movs.get(i).getNombre() + " (Potencia " + (movs.get(i).getPotencia()+jugador.getNivel()/2) + ")"
-                    + detalleMovimiento(jugador, movs.get(i)));
+        if (jugador.sinPp()) {
+            System.out.println("\n¡A " + jugador.getNombre() + " no le quedan PP!");
+            System.out.println("0. Mega-evolucionar (consume el turno)");
+            System.out.println("99. Usar Forcejeo");
+            System.out.print("Elige acción: ");
+            int accion = Entrada.leerEntero(sc);
+            if (accion == 0) MegaEvoluciones.intentarDuranteCombate(jugador, sc);
+            else if (accion == 99) {
+                System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
+                jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
+            } else System.out.println("Acción no válida; pierdes el turno.");
+            return;
         }
 
+        System.out.println("\nElige un movimiento:");
+        for (int i = 0; i < movs.size(); i++) {
+            System.out.println((i + 1) + ". " + movs.get(i).getNombre() + " (Potencia "
+                    + (movs.get(i).getPotencia() + jugador.getNivel() / 2) + ")"
+                    + detalleMovimiento(jugador, movs.get(i)));
+        }
+        if (puedeMega) System.out.println("0. Mega-evolucionar (consume el turno)");
+        System.out.print("Elige acción: ");
+
         while (true) {
-            int eleccion = sc.nextInt();
+            int eleccion = Entrada.leerEntero(sc);
+            if (eleccion == 0 && puedeMega) {
+                MegaEvoluciones.intentarDuranteCombate(jugador, sc);
+                return;
+            }
             if (eleccion < 1 || eleccion > movs.size()) {
                 System.out.println("Movimiento inválido. Pierdes el turno.");
                 return;
