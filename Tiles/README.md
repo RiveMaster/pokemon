@@ -1,12 +1,14 @@
-# Tiles del editor de mapas
+# Tiles y objetos del editor de mapas
 
-Coloca aquí tus archivos PNG para que los lea Pokémon Studio al abrir el editor de mapas.
+Coloca aquí tus archivos PNG para que Pokémon Studio los lea al abrir el editor de mapas.
 
 - Se aceptan tiles individuales de **16 × 16 píxeles**.
-- También se aceptan spritesheets PNG con ancho y alto múltiplos de 16; cada imagen se divide en una cuadrícula de tiles de 16 × 16.
-- Se leen los PNG que estén directamente dentro de esta carpeta (no subcarpetas).
-- Los archivos se ordenan alfabéticamente por nombre. Si necesitas mantener un orden concreto en una spritesheet, organiza los tiles dentro de la propia imagen.
-- Si no hay ningún PNG válido, el editor usará los tiles de ejemplo.
+- También se aceptan spritesheets PNG con ancho y alto múltiplos de 16; cada imagen se divide en tiles de 16 × 16.
+- Se omite cualquier tile completamente transparente: tiene que haber al menos un píxel con alfa mayor que cero.
+- Los PNG se leen directamente desde esta carpeta (no desde subcarpetas) y se ordenan alfabéticamente por nombre.
+- Si la carpeta no contiene PNG, se muestran los tiles de ejemplo. Si contiene PNG pero todos están vacíos, no se añadirán tiles de ejemplo.
+- Los objetos grandes se crean desde la pestaña **Crear objetos** del editor: escoge ancho/alto, pinta el diseño con tiles, dale un nombre y guárdalo. Después selecciona el objeto y haz clic sobre el mapa para colocar copias. Clic derecho sobre una colocación la elimina.
+- La biblioteca de objetos, sus colocaciones, los tiles, las capas y colisiones se guardan en el archivo de proyecto `.pmap`.
 
 Inicia el editor desde la raíz del proyecto para que encuentre esta carpeta:
 
