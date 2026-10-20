@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 import java.io.Serializable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PokemonLuchador implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -22,12 +25,26 @@ public class PokemonLuchador implements Serializable {
     private int ataque;
     private int defensa;
     private int velocidad;
+    private int ataqueEspecial;
+    private int defensaEspecial;
 
-    // IVs
+    // IVs estándar: seis valores independientes en el rango 0–31.
     private int ivVida;
     private int ivAtaque;
     private int ivDefensa;
+    private int ivAtaqueEspecial;
+    private int ivDefensaEspecial;
     private int ivVelocidad;
+    private int versionGenetica = 2;
+
+    // Genética y crianza: el cooldown usa tiempo Unix para sobrevivir a cerrar el juego.
+    private SexoPokemon sexo;
+    private long proximaCrianzEpochMs;
+    
+    // Megapiedra equipada y estado temporal de combate.
+    private String megapiedra;
+    private transient PokemonBase baseAntesMega;
+    private transient boolean megaUsadaEsteCombate;
 
     // Combate avanzado (solo con las reglas activadas; las partidas antiguas los leen como null)
     private String habilidad;                       // símbolo de la habilidad elegida
@@ -78,6 +95,180 @@ public class PokemonLuchador implements Serializable {
         vidaActual = vidaMax;
     }
 
+    public PokemonLuchador(PokemonBase base, int nivel) {
+        this(base, nivel, generarIVsAleatorios(), GeneticaPokemon.sexoAleatorio(base));
+    }
+
+    /** Constructor compatible con los trucos antiguos que asignaban el mismo IV a todos los stats. */
+    public PokemonLuchador(PokemonBase base, int nivel, int stats) {
+        this(base, nivel, new int[]{acotarIV(stats), acotarIV(stats), acotarIV(stats),
+                acotarIV(stats), acotarIV(stats), acotarIV(stats)}, GeneticaPokemon.sexoAleatorio(base));
+    }
+
+    /** Constructor usado por crianza: permite fijar los seis IVs heredados y el sexo. */
+    public PokemonLuchador(PokemonBase base, int nivel, int[] ivs, SexoPokemon sexo) {
+        if (base == null) throw new IllegalArgumentException("La especie del Pokémon no puede ser null.");
+        if (ivs == null || ivs.length != 6)
+            throw new IllegalArgumentException("Un Pokémon debe recibir exactamente seis IVs.");
+        this.base = base;
+        this.nivel = Math.max(1, nivel);
+        this.versionGenetica = 2;
+        this.ivVida = acotarIV(ivs[0]);
+        this.ivAtaque = acotarIV(ivs[1]);
+        this.ivDefensa = acotarIV(ivs[2]);
+        this.ivAtaqueEspecial = acotarIV(ivs[3]);
+        this.ivDefensaEspecial = acotarIV(ivs[4]);
+        this.ivVelocidad = acotarIV(ivs[5]);
+        this.sexo = (base.getNombre().equalsIgnoreCase("Ditto")) ? SexoPokemon.AMBOS
+                : (sexo == null ? GeneticaPokemon.sexoAleatorio(base) : sexo);
+        recalcularStatsIniciales();
+        vidaActual = vidaMax;
+    }
+
+    private static int[] generarIVsAleatorios() {
+        int[] ivs = new int[6];
+        for (int i = 0; i < ivs.length; i++) ivs[i] = ThreadLocalRandom.current().nextInt(32);
+        return ivs;
+    }
+
+    private static int acotarIV(int valor) { return Math.max(0, Math.min(31, valor)); }
+
+    private static int ataqueEspecialBase(PokemonBase b) {
+        return b.getAtaqueEspBase() > 0 ? b.getAtaqueEspBase() : b.getAtaqueBase();
+    }
+
+    private static int defensaEspecialBase(PokemonBase b) {
+        return b.getDefensaEspBase() > 0 ? b.getDefensaEspBase() : b.getDefensaBase();
+    }
+
+    private void recalcularStatsIniciales() {
+        vidaMax = Math.max(1, base.getVidaBase() + ivVida + Math.max(0, nivel - 1) * 3);
+        ataque = Math.max(1, base.getAtaqueBase() + ivAtaque + Math.max(0, nivel - 1) * 2);
+        defensa = Math.max(1, base.getDefensaBase() + ivDefensa + Math.max(0, nivel - 1) * 2);
+        ataqueEspecial = Math.max(1, ataqueEspecialBase(base) + ivAtaqueEspecial + Math.max(0, nivel - 1) * 2);
+        defensaEspecial = Math.max(1, defensaEspecialBase(base) + ivDefensaEspecial + Math.max(0, nivel - 1) * 2);
+        velocidad = Math.max(1, base.getVelocidadBase() + ivVelocidad + Math.max(0, nivel - 1) * 2);
+    }
+
+    private static int migrarIVAntiguo(int iv) {
+        // Versiones anteriores guardaban -3..+3. Se proyectan proporcionalmente a 0..31.
+        return acotarIV((int) Math.round((Math.max(-3, Math.min(3, iv)) + 3) * (31.0 / 6.0)));
+    }
+
+    /** Actualiza partidas antiguas sin perder sus datos ni dejar los campos genéticos nuevos a null. */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        if (versionGenetica < 2) {
+            ivVida = migrarIVAntiguo(ivVida);
+            ivAtaque = migrarIVAntiguo(ivAtaque);
+            ivDefensa = migrarIVAntiguo(ivDefensa);
+            ivVelocidad = migrarIVAntiguo(ivVelocidad);
+            ivAtaqueEspecial = ThreadLocalRandom.current().nextInt(32);
+            ivDefensaEspecial = ThreadLocalRandom.current().nextInt(32);
+            if (ataqueEspecial <= 0) ataqueEspecial = ataqueEspecialBase(base) + ivAtaqueEspecial;
+            if (defensaEspecial <= 0) defensaEspecial = defensaEspecialBase(base) + ivDefensaEspecial;
+            versionGenetica = 2;
+        }
+        if (sexo == null) sexo = GeneticaPokemon.sexoAleatorio(base);
+        if (base != null && base.getNombre().equalsIgnoreCase("Ditto")) sexo = SexoPokemon.AMBOS;
+        if (proximaCrianzEpochMs < 0) proximaCrianzEpochMs = 0;
+        baseAntesMega = null;
+        megaUsadaEsteCombate = false;
+        if (base != null && base.esMega()) {
+            String especie = base.getEspecieBaseMega();
+            PokemonBase normal = especie == null ? null : Pokedex.buscarPorNombre(especie);
+            if (normal != null) {
+                base = normal;
+                recalcularStatsIniciales();
+                vidaActual = Math.min(vidaActual, vidaMax);
+            }
+        }
+    }
+
+    public int getIvVida() { return ivVida; }
+    public int getIvAtaque() { return ivAtaque; }
+    public int getIvDefensa() { return ivDefensa; }
+    public int getIvAtaqueEspecial() { return ivAtaqueEspecial; }
+    public int getIvDefensaEspecial() { return ivDefensaEspecial; }
+    public int getIvVelocidad() { return ivVelocidad; }
+    public int[] getIVs() { return new int[]{ivVida, ivAtaque, ivDefensa, ivAtaqueEspecial, ivDefensaEspecial, ivVelocidad}; }
+
+    public String resumenIVs() {
+        return "PS " + ivVida + "/31 · Atq. " + ivAtaque + "/31 · Def. " + ivDefensa
+                + "/31 · Atq. Esp. " + ivAtaqueEspecial + "/31 · Def. Esp. " + ivDefensaEspecial
+                + "/31 · Vel. " + ivVelocidad + "/31";
+    }
+
+    public SexoPokemon getSexo() {
+        if (sexo == null) sexo = GeneticaPokemon.sexoAleatorio(base);
+        if (base != null && base.getNombre().equalsIgnoreCase("Ditto")) sexo = SexoPokemon.AMBOS;
+        return sexo;
+    }
+
+    public long getProximaCrianzEpochMs() { return proximaCrianzEpochMs; }
+    public void setProximaCrianzEpochMs(long cuando) { proximaCrianzEpochMs = Math.max(0L, cuando); }
+    public long milisegundosParaCriar() { return Math.max(0L, proximaCrianzEpochMs - System.currentTimeMillis()); }
+    public boolean puedeCriarAhora() { return milisegundosParaCriar() == 0L; }
+
+    public String getMegapiedra() { return megapiedra; }
+    public void setMegapiedra(String piedra) { megapiedra = piedra == null || piedra.isBlank() ? null : piedra; }
+    public boolean puedeMegaEvolucionarEsteCombate() {
+        return !megaUsadaEsteCombate && base != null && !base.esMega();
+    }
+
+    /** Inicia el estado temporal de megaevolución para un combate nuevo. */
+    public void iniciarCombate() {
+        desmegaevolucionar();
+        megaUsadaEsteCombate = false;
+    }
+
+    public boolean megaevolucionar(PokemonBase formaMega) {
+        if (!puedeMegaEvolucionarEsteCombate() || formaMega == null || !formaMega.esMega()) return false;
+        String piedraNecesaria = formaMega.getMegapiedraMega();
+        if (piedraNecesaria != null && !piedraNecesaria.equalsIgnoreCase(megapiedra)) return false;
+        if (piedraNecesaria == null && !base.getNombre().equalsIgnoreCase("Rayquaza")) return false;
+        if (formaMega.getEspecieBaseMega() == null
+                || !GeneticaPokemon.normalizar(formaMega.getEspecieBaseMega()).equals(GeneticaPokemon.normalizar(base.getNombre())))
+            return false;
+
+        double proporcionVida = vidaMax <= 0 ? 1.0 : (double) vidaActual / vidaMax;
+        PokemonBase anterior = base;
+        baseAntesMega = anterior;
+        vidaMax = Math.max(1, vidaMax + formaMega.getVidaBase() - anterior.getVidaBase());
+        vidaActual = Math.max(1, Math.min(vidaMax, (int) Math.round(vidaMax * proporcionVida)));
+        ataque += formaMega.getAtaqueBase() - anterior.getAtaqueBase();
+        defensa += formaMega.getDefensaBase() - anterior.getDefensaBase();
+        velocidad += formaMega.getVelocidadBase() - anterior.getVelocidadBase();
+        ataqueEspecial += ataqueEspecialBase(formaMega) - ataqueEspecialBase(anterior);
+        defensaEspecial += defensaEspecialBase(formaMega) - defensaEspecialBase(anterior);
+        base = formaMega;
+        megaUsadaEsteCombate = true;
+        return true;
+    }
+
+    public void desmegaevolucionar() {
+        if (baseAntesMega == null) {
+            if (base != null && base.esMega()) {
+                PokemonBase normal = Pokedex.buscarPorNombre(base.getEspecieBaseMega());
+                if (normal != null) {
+                    baseAntesMega = normal;
+                }
+            }
+        }
+        if (baseAntesMega == null) return;
+        PokemonBase anterior = baseAntesMega;
+        double proporcionVida = vidaMax <= 0 ? 1.0 : (double) vidaActual / vidaMax;
+        vidaMax = Math.max(1, vidaMax + anterior.getVidaBase() - base.getVidaBase());
+        vidaActual = Math.max(1, Math.min(vidaMax, (int) Math.round(vidaMax * proporcionVida)));
+        ataque += anterior.getAtaqueBase() - base.getAtaqueBase();
+        defensa += anterior.getDefensaBase() - base.getDefensaBase();
+        velocidad += anterior.getVelocidadBase() - base.getVelocidadBase();
+        ataqueEspecial += ataqueEspecialBase(anterior) - ataqueEspecialBase(base);
+        defensaEspecial += defensaEspecialBase(anterior) - defensaEspecialBase(base);
+        base = anterior;
+        baseAntesMega = null;
+    }
+
     public static void combate(PokemonLuchador jugador, PokemonLuchador rival) {
     }
 
@@ -120,9 +311,9 @@ public class PokemonLuchador implements Serializable {
         return defensa;
     }
 
-    public int getVelocidad() {
-        return velocidad;
-    }
+    public int getVelocidad() { return velocidad; }
+    public int getAtaqueEspecial() { return ataqueEspecial; }
+    public int getDefensaEspecial() { return defensaEspecial; }
 
     public int getExpActual() {
         return expActual;
@@ -262,6 +453,8 @@ public class PokemonLuchador implements Serializable {
         ataque += 2;
         defensa += 2;
         velocidad += 2;
+        ataqueEspecial += 2;
+        defensaEspecial += 2;
 
         vidaActual = vidaMax; // Cura al subir de nivel
 
@@ -282,6 +475,8 @@ public class PokemonLuchador implements Serializable {
                 ataque = base.getAtaqueBase() + ivAtaque + (nivel * 2);
                 defensa = base.getDefensaBase() + ivDefensa + (nivel * 2);
                 velocidad = base.getVelocidadBase() + ivVelocidad + (nivel * 2);
+                ataqueEspecial = ataqueEspecialBase(base) + ivAtaqueEspecial + (nivel * 2);
+                defensaEspecial = defensaEspecialBase(base) + ivDefensaEspecial + (nivel * 2);
                 vidaActual = vidaMax;  // Cura completa tras evolución
 
                 System.out.println("\n¡Qué! ¡" + nombreAntiguo + " está evolucionando!");
@@ -366,15 +561,11 @@ public class PokemonLuchador implements Serializable {
 
     /** Ataque o ataque especial efectivo (el especial usa la base de la especie y el mismo crecimiento por nivel e IV). */
     private double ataqueEfectivo(Movimiento m) {
-        if (m.esEspecial() && base.getAtaqueEspBase() > 0)
-            return base.getAtaqueEspBase() + ivAtaque + (ataque - base.getAtaqueBase() - ivAtaque);
-        return ataque;
+        return m.esEspecial() ? ataqueEspecial : ataque;
     }
 
     private double defensaEfectiva(Movimiento m) {
-        if (m.esEspecial() && base.getDefensaEspBase() > 0)
-            return base.getDefensaEspBase() + ivDefensa + (defensa - base.getDefensaBase() - ivDefensa);
-        return defensa;
+        return m.esEspecial() ? defensaEspecial : defensa;
     }
 
     /** Usa un movimiento: gasta PP y ataca. Forcejeo (sin PP) tiene retroceso. Sin reglas activas equivale a atacarCon. */
