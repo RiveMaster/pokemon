@@ -372,8 +372,15 @@ public final class EditorMapas {
         return distintoDe(base, -1, -1);
     }
 
-    private int distintoDe(int a, int b, int c) {
-        for (int i = 0; i < tiles.size(); i++) if (i != a && i != b && i != c) return i;
+    private int distintoDe(int... excluidos) {
+        for (int i = 0; i < tiles.size(); i++) {
+            boolean excluido = false;
+            for (int indice : excluidos) if (i == indice) {
+                excluido = true;
+                break;
+            }
+            if (!excluido) return i;
+        }
         return -1;
     }
 
