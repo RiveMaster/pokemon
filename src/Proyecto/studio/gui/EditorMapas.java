@@ -578,10 +578,7 @@ private void guardar() {
         if (!path.toString().toLowerCase().endsWith(".png")) path = Path.of(path + ".png");
         BufferedImage img = new BufferedImage(ancho * TILE, alto * TILE, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
-        for (int c = 0; c < 3; c++) for (int i = 0; i < ancho * alto; i++) {
-            int t = capas[c][i];
-            if (t >= 0) g.drawImage(tiles.get(t), (i % ancho) * TILE, (i / ancho) * TILE, null);
-        }
+        dibujarContenido(g, 1);
         g.dispose();
         try { ImageIO.write(img, "png", path.toFile()); JOptionPane.showMessageDialog(frame, "PNG exportado (" + img.getWidth() + "×" + img.getHeight() + "):\n" + path.toAbsolutePath()); }
         catch (IOException ex) { error("No se pudo exportar el PNG: " + ex.getMessage()); }
@@ -672,38 +669,95 @@ private void guardar() {
         g.dispose(); return im;
     }
 
+    private void dibujarContenido(Graphics2D g, int escala) {
+        int tam = TILE * escala;
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        for (int capaActual = 0; capaActual < 3; capaActual++) {
+            for (int i = 0; i < ancho * alto; i++) {
+                int t = capas[capaActual][i];
+                if (t >= 0 && t < tiles.size()) {
+                    int x = (i % ancho) * tam;
+                    int y = (i / ancho) * tam;
+                    g.drawImage(tiles.get(t), x, y, tam, tam, null);
+                }
+            }
+            // Los objetos se dibujan en su capa, después de los tiles de esa capa.
+            for (ColocacionObjeto p : colocaciones) {
+                if (p.capa != capaActual || p.objeto < 0 || p.objeto >= objetos.size()) continue;
+                ObjetoMapa objeto = objetos.get(p.objeto);
+                for (int oy = 0; oy < objeto.alto; oy++) {
+                    for (int ox = 0; ox < objeto.ancho; ox++) {
+                        int t = objeto.celdas[oy * objeto.ancho + ox];
+                        if (t < 0 || t >= tiles.size()) continue;
+                        int x = (p.x + ox) * tam;
+                        int y = (p.y + oy) * tam;
+                        g.drawImage(tiles.get(t), x, y, tam, tam, null);
+                    }
+                }
+            }
+        }
+    }
+
     private final class MapaCanvas extends JPanel {
         MapaCanvas() {
             setBackground(new Color(50, 50, 50));
             setPreferredSize(new Dimension(ancho * TILE * ZOOM, alto * TILE * ZOOM));
             MouseAdapter mouse = new MouseAdapter() {
+                private int ultimoStampX = -1, ultimoStampY = -1;
+
                 private void pintar(MouseEvent e) {
                     int x = e.getX() / (TILE * ZOOM), y = e.getY() / (TILE * ZOOM);
                     if (x < 0 || y < 0 || x >= ancho || y >= alto) return;
                     int i = y * ancho + x;
-                    if (modoColision) colisiones[i] = SwingUtilities.isRightMouseButton(e) ? false : true;
-                    else capas[capa][i] = SwingUtilities.isRightMouseButton(e) ? -1 : seleccionado;
-                    repaint(x * TILE * ZOOM, y * TILE * ZOOM, TILE * ZOOM, TILE * ZOOM);
+                    boolean derecho = esClicDerecho(e);
+                    if (modoColision) {
+                        colisiones[i] = !derecho;
+                    } else if (modoObjeto && objetoSeleccionado >= 0 && objetoSeleccionado < objetos.size()) {
+                        if (derecho) {
+                            borrarObjetoEn(x, y);
+                            ultimoStampX = x;
+                            ultimoStampY = y;
+                        } else if (x != ultimoStampX || y != ultimoStampY) {
+                            colocarObjeto(x, y, capa);
+                            ultimoStampX = x;
+                            ultimoStampY = y;
+                        }
+                    } else {
+                        capas[capa][i] = derecho ? -1 : seleccionado;
+                    }
+                    repaint();
                 }
+
                 @Override public void mousePressed(MouseEvent e) { pintar(e); }
                 @Override public void mouseDragged(MouseEvent e) { pintar(e); }
+                @Override public void mouseReleased(MouseEvent e) {
+                    ultimoStampX = -1;
+                    ultimoStampY = -1;
+                }
             };
-            addMouseListener(mouse); addMouseMotionListener(mouse);
+            addMouseListener(mouse);
+            addMouseMotionListener(mouse);
         }
-        @Override public Dimension getPreferredSize() { return new Dimension(ancho * TILE * ZOOM, alto * TILE * ZOOM); }
+
+        @Override public Dimension getPreferredSize() {
+            return new Dimension(ancho * TILE * ZOOM, alto * TILE * ZOOM);
+        }
+
         @Override protected void paintComponent(Graphics gg) {
-            super.paintComponent(gg); Graphics2D g = (Graphics2D) gg.create();
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            super.paintComponent(gg);
+            Graphics2D g = (Graphics2D) gg.create();
+            dibujarContenido(g, ZOOM);
             for (int i = 0; i < ancho * alto; i++) {
-                int x = (i % ancho) * TILE * ZOOM, y = (i / ancho) * TILE * ZOOM;
-                for (int c = 0; c < 3; c++) {
-                    int t = capas[c][i];
-                    if (t >= 0 && t < tiles.size()) g.drawImage(tiles.get(t), x, y, TILE * ZOOM, TILE * ZOOM, null);
-                }
+                int x = (i % ancho) * TILE * ZOOM;
+                int y = (i / ancho) * TILE * ZOOM;
                 if (modoColision && colisiones[i]) {
-                    g.setColor(new Color(235, 45, 45, 115)); g.fillRect(x, y, TILE * ZOOM, TILE * ZOOM);
+                    g.setColor(new Color(235, 45, 45, 115));
+                    g.fillRect(x, y, TILE * ZOOM, TILE * ZOOM);
                 }
-                if (rejilla) { g.setColor(new Color(0, 0, 0, 75)); g.drawRect(x, y, TILE * ZOOM, TILE * ZOOM); }
+                if (rejilla) {
+                    g.setColor(new Color(0, 0, 0, 75));
+                    g.drawRect(x, y, TILE * ZOOM, TILE * ZOOM);
+                }
             }
             g.dispose();
         }
