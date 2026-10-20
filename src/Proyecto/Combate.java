@@ -382,15 +382,19 @@ public class Combate {
             else if (accion == 99) {
                 System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
                 jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
-            } else System.out.println("Acción no válida; pierdes el turno.");
+            } else {
+                System.out.println("Acción no válida; pierdes el turno.");
+            }
             return;
         }
 
-        System.out.println("\nElige un movimiento:");
-        for (int i = 0; i < movs.size(); i++) {
-            System.out.println((i + 1) + ". " + movs.get(i).getNombre() + " (Potencia "
-                    + (movs.get(i).getPotencia() + jugador.getNivel() / 2) + ")"
-                    + detalleMovimiento(jugador, movs.get(i)));
+        if (!movs.isEmpty()) {
+            System.out.println("\nElige un movimiento:");
+            for (int i = 0; i < movs.size(); i++) {
+                System.out.println((i + 1) + ". " + movs.get(i).getNombre() + " (Potencia "
+                        + (movs.get(i).getPotencia() + jugador.getNivel() / 2) + ")"
+                        + detalleMovimiento(jugador, movs.get(i)));
+            }
         }
         if (puedeMega) System.out.println("0. Mega-evolucionar (consume el turno)");
         System.out.print("Elige acción: ");
