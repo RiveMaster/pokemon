@@ -233,6 +233,7 @@ public final class EditorMapas {
             if (seleccionado >= 0 && seleccionado < tiposTile.size()
                     && selectorTipoTile.getSelectedItem() instanceof TipoTile tipo) {
                 tiposTile.set(seleccionado, tipo);
+                actualizarPropiedadesTileEnMapa(seleccionado);
                 actualizarEstado();
                 canvas.repaint();
                 listaPaleta.repaint();
@@ -1031,6 +1032,36 @@ private void guardar() {
             case 10 -> { g.setColor(new Color(90, 45, 35)); g.fillRect(1, 1, 14, 14); g.setColor(detalle); g.fillRect(3, 3, 10, 10); }
         }
         g.dispose(); return im;
+    }
+
+    /**
+     * Si el usuario cambia el tipo de un tile que ya está pintado, actualiza
+     * las propiedades de las celdas que usan ese tile.
+     */
+    private void actualizarPropiedadesTileEnMapa(int tileModificado) {
+        for (int i = 0; i < ancho * alto; i++) {
+            boolean afectada = false;
+            for (int capaActual = 0; capaActual < capas.length; capaActual++) {
+                if (capas[capaActual][i] == tileModificado) {
+                    afectada = true;
+                    break;
+                }
+            }
+            if (!afectada) continue;
+
+            boolean bloquea = false;
+            boolean hierba = false;
+            for (int capaActual = 0; capaActual < capas.length; capaActual++) {
+                int t = capas[capaActual][i];
+                if (t < 0 || t >= tiposTile.size()) continue;
+                TipoTile tipo = tiposTile.get(t);
+                if (tipo == TipoTile.BLOQUEO || tipo == TipoTile.AGUA) bloquea = true;
+                if (capaActual == 0 && tipo == TipoTile.HIERBA) hierba = true;
+            }
+            colisiones[i] = bloquea;
+            hierbaEncuentros[i] = !bloquea && hierba;
+        }
+        canvas.repaint();
     }
 
     /** Aplica al mapa la propiedad lógica asignada al tile que se está colocando. */
