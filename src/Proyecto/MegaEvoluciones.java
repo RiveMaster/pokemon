@@ -290,6 +290,12 @@ public final class MegaEvoluciones {
             System.out.println("Selección no válida.");
             return;
         }
+        ObjetoEquipable objetoAnterior = pokemon.getObjeto();
+        if (objetoAnterior != null) {
+            pokemon.setObjeto(null);
+            jugador.añadirObjetoEquipable(objetoAnterior, 1);
+            System.out.println(objetoAnterior.getNombre() + " vuelve a la mochila para dejar sitio a la megapiedra.");
+        }
         pokemon.setMegapiedra(compatibles.get(si - 1));
         System.out.println(pokemon.getNombre() + " lleva ahora " + pokemon.getMegapiedra() + ".");
     }
