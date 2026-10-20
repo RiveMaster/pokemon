@@ -693,6 +693,7 @@ private void guardar() {
             for (TipoTile tipo : tiposTile) out.writeByte(tipo.ordinal());
             for (int[] layer : capas) for (int v : layer) out.writeInt(v);
             for (boolean b : colisiones) out.writeBoolean(b);
+            for (boolean b : colisionesManuales) out.writeBoolean(b);
             for (boolean b : hierbaEncuentros) out.writeBoolean(b);
 
             out.writeInt(objetos.size());
@@ -766,6 +767,10 @@ private void guardar() {
             }
             boolean[] newCollisions = new boolean[size];
             for (int i = 0; i < size; i++) newCollisions[i] = in.readBoolean();
+            boolean[] newManualCollisions = newCollisions.clone();
+            if (version >= 4) {
+                for (int i = 0; i < size; i++) newManualCollisions[i] = in.readBoolean();
+            }
             boolean[] newGrass = new boolean[size];
             if (version >= 3) {
                 for (int i = 0; i < size; i++) newGrass[i] = in.readBoolean();
@@ -808,6 +813,7 @@ private void guardar() {
             tiposTile.addAll(nuevosTipos);
             capas = newLayers;
             colisiones = newCollisions;
+            colisionesManuales = newManualCollisions;
             hierbaEncuentros = newGrass;
             objetos.clear();
             objetos.addAll(nuevosObjetos);
@@ -824,6 +830,7 @@ private void guardar() {
             seleccionado = tiles.isEmpty() ? -1 : 0;
             listaPaleta.setSelectedIndex(seleccionado);
             actualizarTipoSeleccionado();
+            recalcularTodasPropiedades();
             canvas.revalidate();
             canvas.repaint();
             actualizarEstado();
