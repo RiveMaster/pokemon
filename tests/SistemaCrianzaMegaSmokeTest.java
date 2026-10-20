@@ -74,7 +74,7 @@ public final class SistemaCrianzaMegaSmokeTest {
         // Un objeto de herencia fuerza el IV del progenitor que lo lleva, sin tocar los otros cinco.
         PokemonLuchador madreConPesa = new PokemonLuchador(bulbasaur, 20, ivMadre, SexoPokemon.HEMBRA);
         PokemonLuchador padreConPesa = new PokemonLuchador(charmander, 20, ivPadre, SexoPokemon.MACHO);
-        padreConPesa.setObjeto(ObjetoEquipable.PESA_REcia);
+        padreConPesa.setObjeto(ObjetoEquipable.PESA_RECIA);
         Jugador jugadorConObjeto = new Jugador("SmokeTestObjeto", madreConPesa, 0);
         jugadorConObjeto.agregarPokemon(padreConPesa);
         check(SistemaCrianza.criar(new Scanner("1\n2\n"), jugadorConObjeto),
