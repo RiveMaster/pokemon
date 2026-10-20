@@ -711,6 +711,7 @@ public class Jugador implements Serializable {
 
         ObjetoEquipable nuevo = disponibles.get(eleccion - 1);
         ObjetoEquipable viejo = pokemon.getObjeto();
+        String megapiedraAnterior = pokemon.getMegapiedra();
 
         int quedan = objetosEquipables.get(nuevo) - 1;
         if (quedan <= 0) {
@@ -720,6 +721,11 @@ public class Jugador implements Serializable {
         }
 
         pokemon.setObjeto(nuevo);
+        if (megapiedraAnterior != null) {
+            // Un Pokémon solo puede llevar un objeto a la vez; las megapiedras también ocupan ese hueco.
+            pokemon.setMegapiedra(null);
+            System.out.println(megapiedraAnterior + " vuelve a la mochila de megapiedras.");
+        }
         if (viejo != null) {
             añadirObjetoEquipable(viejo, 1);
             System.out.println(viejo.getNombre() + " vuelve a la mochila.");
