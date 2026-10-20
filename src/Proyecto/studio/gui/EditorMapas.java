@@ -1033,6 +1033,29 @@ private void guardar() {
         g.dispose(); return im;
     }
 
+    /** Aplica al mapa la propiedad lógica asignada al tile que se está colocando. */
+    private void aplicarPropiedadesTile(int indiceMapa, int indiceTile) {
+        if (indiceMapa < 0 || indiceMapa >= colisiones.length
+                || indiceTile < 0 || indiceTile >= tiposTile.size()) return;
+        TipoTile tipo = tiposTile.get(indiceTile);
+        switch (tipo) {
+            case BLOQUEO, AGUA -> {
+                colisiones[indiceMapa] = true;
+                hierbaEncuentros[indiceMapa] = false;
+            }
+            case HIERBA -> {
+                colisiones[indiceMapa] = false;
+                hierbaEncuentros[indiceMapa] = true;
+            }
+            case NORMAL, EVENTO -> {
+                if (capa == 0) {
+                    colisiones[indiceMapa] = false;
+                    hierbaEncuentros[indiceMapa] = false;
+                }
+            }
+        }
+    }
+
     private void dibujarContenido(Graphics2D g, int escala) {
         int tam = TILE * escala;
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -1086,8 +1109,15 @@ private void guardar() {
                             ultimoStampX = x;
                             ultimoStampY = y;
                         }
-                    } else {
-                        capas[capa][i] = derecho ? -1 : seleccionado;
+                    } else if (derecho) {
+                        capas[capa][i] = -1;
+                        if (capa == 0) {
+                            colisiones[i] = false;
+                            hierbaEncuentros[i] = false;
+                        }
+                    } else if (seleccionado >= 0 && seleccionado < tiles.size()) {
+                        capas[capa][i] = seleccionado;
+                        aplicarPropiedadesTile(i, seleccionado);
                     }
                     repaint();
                 }
@@ -1114,8 +1144,11 @@ private void guardar() {
             for (int i = 0; i < ancho * alto; i++) {
                 int x = (i % ancho) * TILE * ZOOM;
                 int y = (i / ancho) * TILE * ZOOM;
-                if (modoColision && colisiones[i]) {
-                    g.setColor(new Color(235, 45, 45, 115));
+                if ((modoColision || mostrarPropiedades) && colisiones[i]) {
+                    g.setColor(new Color(235, 45, 45, 125));
+                    g.fillRect(x, y, TILE * ZOOM, TILE * ZOOM);
+                } else if (mostrarPropiedades && hierbaEncuentros[i]) {
+                    g.setColor(new Color(30, 220, 70, 125));
                     g.fillRect(x, y, TILE * ZOOM, TILE * ZOOM);
                 }
                 if (rejilla) {
