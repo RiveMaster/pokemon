@@ -133,8 +133,10 @@ public final class MegaEvoluciones {
     }
 
     public static Set<String> todasLasPiedras() {
-        return FORMAS.stream().map(Forma::megapiedra).filter(Objects::nonNull)
+        Set<String> piedras = FORMAS.stream().map(Forma::megapiedra).filter(Objects::nonNull)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+        piedras.add("Ascenso Draco"); // Rayquaza megaevoluciona al conocer este movimiento.
+        return Collections.unmodifiableSet(piedras);
     }
 
     /** Añade las 93 formas a la Pokédex, pero las deja marcadas para que no aparezcan como especies salvajes. */
@@ -251,7 +253,10 @@ public final class MegaEvoluciones {
         }
         PokemonLuchador pokemon = pokemons.get(pi - 1);
         List<String> compatibles = disponibles.stream().filter(stone ->
-                paraEspecie(pokemon.getBase().getNombre()).stream().anyMatch(f -> stone.equals(f.megapiedra())))
+                paraEspecie(pokemon.getBase().getNombre()).stream().anyMatch(f ->
+                        Objects.equals(stone, f.megapiedra())
+                                || (f.megapiedra() == null && "Rayquaza".equalsIgnoreCase(f.especie())
+                                && "Ascenso Draco".equalsIgnoreCase(stone))))
                 .toList();
         if (compatibles.isEmpty()) {
             System.out.println(pokemon.getNombre() + " no tiene megaevoluciones en el catálogo o no hay piedra compatible.");
@@ -294,7 +299,10 @@ public final class MegaEvoluciones {
             return false;
         }
         List<Forma> opciones = paraEspecie(pokemon.getBase().getNombre()).stream()
-                .filter(f -> Objects.equals(f.megapiedra(), pokemon.getMegapiedra())).toList();
+                .filter(f -> Objects.equals(f.megapiedra(), pokemon.getMegapiedra())
+                        || (f.megapiedra() == null && "Rayquaza".equalsIgnoreCase(f.especie())
+                        && "Ascenso Draco".equalsIgnoreCase(pokemon.getMegapiedra())))
+                .toList();
         if (opciones.isEmpty()) {
             System.out.println("La megapiedra que lleva no corresponde a su especie.");
             return false;
