@@ -17,6 +17,8 @@ public class Menu {
         System.out.println("7. Guardar partida");
         System.out.println("8. Salir del juego");
         System.out.println("9. Volver");
+        System.out.println("10. Criadero Pokémon");
+        System.out.println("11. Centro de Megaevolución");
         System.out.println("Elegir opcion:");
         int opcion = Entrada.leerEntero(sc);
         switch (opcion){
@@ -34,6 +36,8 @@ public class Menu {
                 System.exit(1);
             }
             case 9-> {return null;}
+            case 10 -> SistemaCrianza.visitar(sc, jugador);
+            case 11 -> MegaEvoluciones.gestionarPiedras(sc, jugador);
             default -> System.out.println("Opción no válida.");
         }
         return null;
