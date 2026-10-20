@@ -65,11 +65,14 @@ public final class EditorMapas {
         abrir.addActionListener(e -> cargar());
         JButton exportar = new JButton("Exportar PNG");
         exportar.addActionListener(e -> exportarPng());
+        JButton exportarTiles = new JButton("Exportar tiles");
+        exportarTiles.addActionListener(e -> exportarTiles());
         JButton col = new JButton("Pintar colisiones");
         col.addActionListener(e -> { modoColision = !modoColision; actualizarEstado(); canvas.repaint(); });
         JCheckBox cuadricula = new JCheckBox("Cuadrícula", true);
         cuadricula.addActionListener(e -> { rejilla = cuadricula.isSelected(); canvas.repaint(); });
-        barra.add(nuevo); barra.add(abrir); barra.add(guardar); barra.add(importar); barra.add(exportar); barra.add(col); barra.add(cuadricula);
+        barra.add(nuevo); barra.add(abrir); barra.add(guardar); barra.add(importar);
+        barra.add(exportarTiles); barra.add(exportar); barra.add(col); barra.add(cuadricula);
         frame.add(barra, BorderLayout.NORTH);
 
         selectorCapa.addActionListener(e -> { capa = selectorCapa.getSelectedIndex(); actualizarEstado(); canvas.repaint(); });
@@ -594,6 +597,106 @@ private void guardar() {
         g.dispose();
         try { ImageIO.write(img, "png", path.toFile()); JOptionPane.showMessageDialog(frame, "PNG exportado (" + img.getWidth() + "×" + img.getHeight() + "):\n" + path.toAbsolutePath()); }
         catch (IOException ex) { error("No se pudo exportar el PNG: " + ex.getMessage()); }
+    }
+
+    /**
+     * Exporta por separado todos los PNG de Tiles/. Cada spritesheet tiene su propia
+     * carpeta y dentro se escriben los tiles visibles de 16x16.
+     */
+    private void exportarTiles() {
+        Path fuente = Path.of("Tiles");
+        if (!Files.isDirectory(fuente)) {
+            error("No existe la carpeta de origen: " + fuente.toAbsolutePath());
+            return;
+        }
+
+        List<Path> pngs;
+        try (java.util.stream.Stream<Path> archivos = Files.list(fuente)) {
+            pngs = archivos
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().toLowerCase(java.util.Locale.ROOT).endsWith(".png"))
+                    .sorted(java.util.Comparator.comparing(
+                            p -> p.getFileName().toString(), String.CASE_INSENSITIVE_ORDER))
+                    .toList();
+        } catch (IOException ex) {
+            error("No se pudo leer la carpeta Tiles/: " + ex.getMessage());
+            return;
+        }
+
+        if (pngs.isEmpty()) {
+            error("No hay archivos PNG en " + fuente.toAbsolutePath());
+            return;
+        }
+
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Selecciona dónde crear las carpetas de tiles");
+        selector.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        selector.setAcceptAllFileFilterUsed(false);
+        if (selector.showSaveDialog(frame) != JFileChooser.APPROVE_OPTION) return;
+
+        Path destino = selector.getSelectedFile().toPath();
+        int hojasExportadas = 0;
+        int tilesExportados = 0;
+        int tilesVacios = 0;
+        int hojasOmitidas = 0;
+        java.util.Set<String> carpetasUsadas = new java.util.HashSet<>();
+
+        try {
+            Files.createDirectories(destino);
+            for (Path png : pngs) {
+                BufferedImage imagen = ImageIO.read(png.toFile());
+                if (imagen == null || imagen.getWidth() % TILE != 0 || imagen.getHeight() % TILE != 0) {
+                    hojasOmitidas++;
+                    continue;
+                }
+
+                String base = png.getFileName().toString();
+                int punto = base.lastIndexOf('.');
+                if (punto > 0) base = base.substring(0, punto);
+                base = base.replaceAll("[^\\p{L}\\p{N}._-]", "_");
+                if (base.isBlank() || base.equals(".") || base.equals("..")) base = "spritesheet";
+                String unico = base;
+                int sufijo = 2;
+                while (!carpetasUsadas.add(unico.toLowerCase(java.util.Locale.ROOT))) {
+                    unico = base + "_" + sufijo++;
+                }
+
+                Path carpeta = destino.resolve(unico);
+                Files.createDirectories(carpeta);
+                int deEstaHoja = 0;
+                for (int y = 0; y < imagen.getHeight(); y += TILE) {
+                    for (int x = 0; x < imagen.getWidth(); x += TILE) {
+                        BufferedImage tile = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+                        Graphics2D g = tile.createGraphics();
+                        g.drawImage(imagen, 0, 0, TILE, TILE, x, y, x + TILE, y + TILE, null);
+                        g.dispose();
+
+                        if (!tienePixelVisible(tile)) {
+                            tilesVacios++;
+                            continue;
+                        }
+
+                        String nombreTile = String.format(java.util.Locale.ROOT,
+                                "tile_%03d_%03d.png", x / TILE, y / TILE);
+                        if (!ImageIO.write(tile, "png", carpeta.resolve(nombreTile).toFile())) {
+                            throw new IOException("No se pudo escribir " + carpeta.resolve(nombreTile));
+                        }
+                        tilesExportados++;
+                        deEstaHoja++;
+                    }
+                }
+                if (deEstaHoja > 0) hojasExportadas++;
+            }
+
+            String mensaje = "Exportación terminada.\nCarpetas con tiles: " + hojasExportadas
+                    + "\nTiles PNG guardados: " + tilesExportados
+                    + "\nTiles transparentes omitidos: " + tilesVacios
+                    + "\nSpritesheets inválidas omitidas: " + hojasOmitidas
+                    + "\nDestino: " + destino.toAbsolutePath();
+            JOptionPane.showMessageDialog(frame, mensaje, "Exportar tiles", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException ex) {
+            error("La exportación se interrumpió: " + ex.getMessage());
+        }
     }
 
     private void error(String msg) { JOptionPane.showMessageDialog(frame, msg, "Error", JOptionPane.ERROR_MESSAGE); }
