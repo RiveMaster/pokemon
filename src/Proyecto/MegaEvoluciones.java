@@ -176,6 +176,16 @@ public final class MegaEvoluciones {
         return base != null && base.esMega();
     }
 
+    public static boolean puedeOfrecerse(PokemonLuchador pokemon) {
+        if (pokemon == null || pokemon.getBase() == null || pokemon.getMegapiedra() == null
+                || !pokemon.puedeMegaEvolucionarEsteCombate()) return false;
+        String especie = pokemon.getBase().getNombre();
+        return paraEspecie(especie).stream().anyMatch(f ->
+                Objects.equals(f.megapiedra(), pokemon.getMegapiedra())
+                        || (f.megapiedra() == null && "Rayquaza".equalsIgnoreCase(f.especie())
+                        && "Ascenso Draco".equalsIgnoreCase(pokemon.getMegapiedra())));
+    }
+
     /** Menú fuera de combate para comprar megapiedras y equiparlas a Pokémon del equipo/PC. */
     public static void gestionarPiedras(Scanner sc, Jugador jugador) {
         while (true) {
