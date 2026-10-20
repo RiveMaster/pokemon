@@ -16,6 +16,7 @@ public class CombateEntrenador {
             return true;
         }
 
+        MegaEvoluciones.iniciarCombate();
         for (PokemonLuchador p : jugador.getEquipo()) {
             p.desmegaevolucionar();
             p.iniciarCombate();
@@ -105,6 +106,7 @@ public class CombateEntrenador {
             for (PokemonLuchador p : jugador.getEquipo()) p.desmegaevolucionar();
             for (PokemonLuchador p : jugador.getPc()) p.desmegaevolucionar();
             for (PokemonLuchador p : rivales) p.desmegaevolucionar();
+            MegaEvoluciones.terminarCombate();
         }
     }
 
