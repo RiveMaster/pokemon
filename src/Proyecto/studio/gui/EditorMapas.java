@@ -678,8 +678,10 @@ private void guardar() {
                 out.writeInt(data.length);
                 out.write(data);
             }
+            for (TipoTile tipo : tiposTile) out.writeByte(tipo.ordinal());
             for (int[] layer : capas) for (int v : layer) out.writeInt(v);
             for (boolean b : colisiones) out.writeBoolean(b);
+            for (boolean b : hierbaEncuentros) out.writeBoolean(b);
 
             out.writeInt(objetos.size());
             for (ObjetoMapa objeto : objetos) {
@@ -730,6 +732,17 @@ private void guardar() {
                 newTiles.add(fixed);
             }
 
+            List<TipoTile> nuevosTipos = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                TipoTile tipo = TipoTile.NORMAL;
+                if (version >= 3) {
+                    int ordinal = in.readUnsignedByte();
+                    if (ordinal >= TipoTile.values().length) throw new IOException("Tipo de tile desconocido.");
+                    tipo = TipoTile.values()[ordinal];
+                }
+                nuevosTipos.add(tipo);
+            }
+
             int size = nw * nh;
             int[][] newLayers = new int[3][size];
             for (int[] layer : newLayers) {
@@ -741,6 +754,10 @@ private void guardar() {
             }
             boolean[] newCollisions = new boolean[size];
             for (int i = 0; i < size; i++) newCollisions[i] = in.readBoolean();
+            boolean[] newGrass = new boolean[size];
+            if (version >= 3) {
+                for (int i = 0; i < size; i++) newGrass[i] = in.readBoolean();
+            }
 
             List<ObjetoMapa> nuevosObjetos = new ArrayList<>();
             List<ColocacionObjeto> nuevasColocaciones = new ArrayList<>();
@@ -775,8 +792,11 @@ private void guardar() {
             alto = nh;
             tiles.clear();
             tiles.addAll(newTiles);
+            tiposTile.clear();
+            tiposTile.addAll(nuevosTipos);
             capas = newLayers;
             colisiones = newCollisions;
+            hierbaEncuentros = newGrass;
             objetos.clear();
             objetos.addAll(nuevosObjetos);
             if (listaObjetos != null) {
@@ -791,6 +811,7 @@ private void guardar() {
             for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
             seleccionado = tiles.isEmpty() ? -1 : 0;
             listaPaleta.setSelectedIndex(seleccionado);
+            actualizarTipoSeleccionado();
             canvas.revalidate();
             canvas.repaint();
             actualizarEstado();
