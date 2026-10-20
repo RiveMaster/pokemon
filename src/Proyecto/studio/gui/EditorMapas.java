@@ -25,6 +25,7 @@ public final class EditorMapas {
     private final List<ColocacionObjeto> colocaciones = new ArrayList<>();
     private int objetoSeleccionado = -1;
     private boolean modoObjeto = false;
+    private JList<ObjetoMapa> listaObjetos;
     private int[][] capas = new int[3][ancho * alto];
     private boolean[] colisiones = new boolean[ancho * alto];
     private boolean modoColision = false, rejilla = true;
@@ -193,6 +194,7 @@ public final class EditorMapas {
         panel.setBorder(new EmptyBorder(6, 6, 6, 6));
         panel.add(new JLabel("<html><b>Objetos compuestos</b><br>Árboles, casas, gimnasios...</html>"), BorderLayout.NORTH);
         JList<ObjetoMapa> lista = new JList<>();
+        listaObjetos = lista;
         lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         lista.setListData(objetos.toArray(new ObjetoMapa[0]));
         lista.addListSelectionListener(e -> {
@@ -559,6 +561,10 @@ private void guardar() {
             colisiones = newCollisions;
             objetos.clear();
             objetos.addAll(nuevosObjetos);
+            if (listaObjetos != null) {
+                listaObjetos.clearSelection();
+                listaObjetos.setListData(objetos.toArray(new ObjetoMapa[0]));
+            }
             colocaciones.clear();
             colocaciones.addAll(nuevasColocaciones);
             objetoSeleccionado = -1;
