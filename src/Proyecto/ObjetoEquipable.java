@@ -19,7 +19,7 @@ public enum ObjetoEquipable {
     SEMILLA_MILAGRO("Semilla Milagro", "Aumenta un 20% el daño de los ataques de tipo Planta.", 350, "Grass"),
     IMAN("Imán", "Aumenta un 20% el daño de los ataques de tipo Eléctrico.", 350, "Electric"),
     PIEDRA_DURA("Piedra Dura", "Aumenta un 20% el daño de los ataques de tipo Roca.", 350, "Rock"),
-    PESA_REcia("Pesa recia (IV PS)", "Al criar, fuerza que el IV de PS se herede del Pokémon que la lleva.", 1800, null, 0),
+    PESA_RECIA("Pesa recia (IV PS)", "Al criar, fuerza que el IV de PS se herede del Pokémon que la lleva.", 1800, null, 0),
     BRAZAL_RECIO("Brazal recio (IV Ataque)", "Al criar, fuerza que el IV de Ataque se herede del Pokémon que lo lleva.", 1800, null, 1),
     CINTA_RECIA("Cinto recio (IV Defensa)", "Al criar, fuerza que el IV de Defensa se herede del Pokémon que lo lleva.", 1800, null, 2),
     LENTE_RECIA("Lente recia (IV At. Esp.)", "Al criar, fuerza que el IV de Ataque Especial se herede del Pokémon que la lleva.", 1800, null, 3),
