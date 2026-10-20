@@ -174,7 +174,7 @@ public class PokemonLuchador implements Serializable {
     public String getMegapiedra() { return megapiedra; }
     public void setMegapiedra(String piedra) { megapiedra = piedra == null || piedra.isBlank() ? null : piedra; }
     public boolean puedeMegaEvolucionarEsteCombate() {
-        return !megaUsadaEsteCombate && base != null && !base.esMega();
+        return vidaActual > 0 && !megaUsadaEsteCombate && base != null && !base.esMega();
     }
 
     /** Inicia el estado temporal de megaevolución para un combate nuevo. */
@@ -192,6 +192,7 @@ public class PokemonLuchador implements Serializable {
                 || !GeneticaPokemon.normalizar(formaMega.getEspecieBaseMega()).equals(GeneticaPokemon.normalizar(base.getNombre())))
             return false;
 
+        if (vidaActual <= 0) return false;
         double proporcionVida = vidaMax <= 0 ? 1.0 : (double) vidaActual / vidaMax;
         PokemonBase anterior = base;
         baseAntesMega = anterior;
@@ -218,9 +219,10 @@ public class PokemonLuchador implements Serializable {
         }
         if (baseAntesMega == null) return;
         PokemonBase anterior = baseAntesMega;
+        boolean debilitado = vidaActual <= 0;
         double proporcionVida = vidaMax <= 0 ? 1.0 : (double) vidaActual / vidaMax;
         vidaMax = Math.max(1, vidaMax + anterior.getVidaBase() - base.getVidaBase());
-        vidaActual = Math.max(1, Math.min(vidaMax, (int) Math.round(vidaMax * proporcionVida)));
+        vidaActual = debilitado ? 0 : Math.max(1, Math.min(vidaMax, (int) Math.round(vidaMax * proporcionVida)));
         ataque += anterior.getAtaqueBase() - base.getAtaqueBase();
         defensa += anterior.getDefensaBase() - base.getDefensaBase();
         velocidad += anterior.getVelocidadBase() - base.getVelocidadBase();
