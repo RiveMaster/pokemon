@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 public final class SistemaCrianzaMegaSmokeTest {
     private SistemaCrianzaMegaSmokeTest() { }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         new Pokedex().cargarpokemons();
         probarCatalogoMega();
         probarSexoYCompatibilidad();
