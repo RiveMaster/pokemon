@@ -88,6 +88,7 @@ public class Combate {
     public static void combateRival(Jugador Jugar, Rival tontito,PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
         System.out.println("\n=== ¡COMIENZA EL COMBATE CONTRA " + rival.getNombre() + "! ===");
 
+        MegaEvoluciones.iniciarCombate();
         jugador.iniciarCombate();
         rival.iniciarCombate();
         boolean combateActivo = !equipoMR(tontito)&&!equipoM(Jugar);
@@ -123,11 +124,13 @@ public class Combate {
         }
         jugador.desmegaevolucionar();
         rival.desmegaevolucionar();
+        MegaEvoluciones.terminarCombate();
     }
 
     public static void combatepodemita(Jugador jugadorCompleto, PokemonLuchador pokemonJugador, PokemonLuchador pokemonpodemita, Gobierno gobierno, Scanner sc){
         System.out.println("\n=== ¡Un Podemita ha aparecido y quiere pelear contra tí! ===");
         System.out.println("Podemita: ¡Ganare por Pedro Sanchez, viva la izquierda!");
+        MegaEvoluciones.iniciarCombate();
         finalizarMegaJugador(jugadorCompleto);
         jugadorCompleto.getEquipo().forEach(PokemonLuchador::iniciarCombate);
         jugadorCompleto.getPc().forEach(PokemonLuchador::iniciarCombate);
@@ -188,12 +191,14 @@ public class Combate {
         finalizarMegaJugador(jugadorCompleto);
         pokemonJugador.desmegaevolucionar();
         pokemonpodemita.desmegaevolucionar();
+        MegaEvoluciones.terminarCombate();
     }
 
     // Combate contra Pokémon salvaje
     public static void combateSalvaje(Jugador jugadorCompleto, PokemonLuchador pokemonJugador, PokemonLuchador salvaje, Scanner sc) {
         System.out.println("\n=== ¡Un Pokémon salvaje aparece! ===");
 
+        MegaEvoluciones.iniciarCombate();
         finalizarMegaJugador(jugadorCompleto);
         jugadorCompleto.getEquipo().forEach(PokemonLuchador::iniciarCombate);
         jugadorCompleto.getPc().forEach(PokemonLuchador::iniciarCombate);
@@ -327,6 +332,7 @@ public class Combate {
         finalizarMegaJugador(jugadorCompleto);
         pokemonJugador.desmegaevolucionar();
         salvaje.desmegaevolucionar();
+        MegaEvoluciones.terminarCombate();
     }
 
     private static void finalizarMegaJugador(Jugador jugador) {
