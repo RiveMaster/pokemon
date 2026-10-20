@@ -37,7 +37,8 @@ public final class EditorMapas {
     private EditorMapas() {
         for (int[] capaInicial : capas) java.util.Arrays.fill(capaInicial, -1);
         crearTiles();
-        if (tiles.isEmpty()) crearTilesEjemplo();
+        if (tiles.isEmpty() && !hayPngEnCarpetaTiles()) crearTilesEjemplo();
+        seleccionado = tiles.isEmpty() ? -1 : 0;
         for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
         construirVentana();
     }
@@ -122,7 +123,9 @@ public final class EditorMapas {
             if (nw < 1 || nh < 1 || nw > 300 || nh > 300) throw new NumberFormatException();
             ancho = nw; alto = nh; capas = new int[3][ancho * alto];
             for (int[] c : capas) java.util.Arrays.fill(c, -1);
-            colisiones = new boolean[ancho * alto]; canvas.revalidate(); canvas.repaint(); actualizarEstado();
+            colisiones = new boolean[ancho * alto];
+            colocaciones.clear();
+            canvas.revalidate(); canvas.repaint(); actualizarEstado();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(frame, "Usa dimensiones entre 1 y 300 tiles.", "Dimensiones no válidas", JOptionPane.WARNING_MESSAGE);
         }
@@ -487,7 +490,8 @@ private void guardar() {
             int version = in.readInt();
             if (version < 1 || version > VERSION) throw new IOException("Versión de proyecto no compatible: " + version);
             int nw = in.readInt(), nh = in.readInt(), count = in.readInt();
-            if (nw < 1 || nh < 1 || nw > 300 || nh > 300 || count < 1 || count > 10000)
+            if (nw < 1 || nh < 1 || nw > 300 || nh > 300 || count < 0 || count > 10000
+                    || (version == 1 && count == 0))
                 throw new IOException("Dimensiones o paleta inválidas.");
 
             List<BufferedImage> newTiles = new ArrayList<>();
@@ -560,8 +564,8 @@ private void guardar() {
             modoObjeto = false;
             modeloPaleta.clear();
             for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
-            seleccionado = 0;
-            listaPaleta.setSelectedIndex(0);
+            seleccionado = tiles.isEmpty() ? -1 : 0;
+            listaPaleta.setSelectedIndex(seleccionado);
             canvas.revalidate();
             canvas.repaint();
             actualizarEstado();
@@ -625,6 +629,17 @@ private void guardar() {
             }
         } catch (IOException e) {
             error("No se pudieron importar los tiles desde " + ruta.toAbsolutePath() + ": " + e.getMessage());
+        }
+    }
+
+    private boolean hayPngEnCarpetaTiles() {
+        Path ruta = Path.of("Tiles");
+        if (!Files.isDirectory(ruta)) return false;
+        try (java.util.stream.Stream<Path> archivos = Files.list(ruta)) {
+            return archivos.anyMatch(p -> Files.isRegularFile(p)
+                    && p.getFileName().toString().toLowerCase(java.util.Locale.ROOT).endsWith(".png"));
+        } catch (IOException ex) {
+            return false;
         }
     }
 
