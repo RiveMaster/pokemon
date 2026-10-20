@@ -18,7 +18,7 @@ import java.util.List;
  * Los mapas se guardan en formato binario .pmap e incluyen la paleta de tiles.
  */
 public final class EditorMapas {
-    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 3;
+    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 4;
     private final JFrame frame = new JFrame("Pokémon Studio — Editor de mapas");
     private int ancho = 20, alto = 15, seleccionado = 0, capa = 0;
     private final List<BufferedImage> tiles = new ArrayList<>();
@@ -30,6 +30,7 @@ public final class EditorMapas {
     private JList<ObjetoMapa> listaObjetos;
     private int[][] capas = new int[3][ancho * alto];
     private boolean[] colisiones = new boolean[ancho * alto];
+    private boolean[] colisionesManuales = new boolean[ancho * alto];
     private boolean[] hierbaEncuentros = new boolean[ancho * alto];
     private boolean modoColision = false, rejilla = true, mostrarPropiedades = false;
     private final MapaCanvas canvas = new MapaCanvas();
@@ -45,6 +46,7 @@ public final class EditorMapas {
         alto = altoInicial;
         capas = new int[3][ancho * alto];
         colisiones = new boolean[ancho * alto];
+        colisionesManuales = new boolean[ancho * alto];
         hierbaEncuentros = new boolean[ancho * alto];
         for (int[] capaInicial : capas) java.util.Arrays.fill(capaInicial, -1);
         crearTiles();
@@ -171,6 +173,7 @@ public final class EditorMapas {
             ancho = nw; alto = nh; capas = new int[3][ancho * alto];
             for (int[] c : capas) java.util.Arrays.fill(c, -1);
             colisiones = new boolean[ancho * alto];
+            colisionesManuales = new boolean[ancho * alto];
             hierbaEncuentros = new boolean[ancho * alto];
             colocaciones.clear();
             canvas.revalidate(); canvas.repaint(); actualizarEstado();
@@ -251,8 +254,8 @@ public final class EditorMapas {
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 java.util.Arrays.fill(capas[capa], -1);
                 if (capa == 0) {
-                    java.util.Arrays.fill(colisiones, false);
-                    java.util.Arrays.fill(hierbaEncuentros, false);
+                    java.util.Arrays.fill(colisionesManuales, false);
+                    recalcularTodasPropiedades();
                 }
                 canvas.repaint();
             }
@@ -1139,12 +1142,8 @@ private void guardar() {
                     int i = y * ancho + x;
                     boolean derecho = esClicDerecho(e);
                     if (modoColision) {
-                        colisiones[i] = !derecho;
-                        if (!derecho) {
-                            hierbaEncuentros[i] = false;
-                        } else if (capas[0][i] >= 0 && capas[0][i] < tiposTile.size()) {
-                            hierbaEncuentros[i] = tiposTile.get(capas[0][i]) == TipoTile.HIERBA;
-                        }
+                        colisionesManuales[i] = !derecho;
+                        recalcularPropiedadesCelda(i);
                     } else if (modoObjeto && objetoSeleccionado >= 0 && objetoSeleccionado < objetos.size()) {
                         if (derecho) {
                             borrarObjetoEn(x, y);
