@@ -1124,6 +1124,9 @@ public final class GeneticaPokemon {
     public static boolean compartenGrupoHuevo(PokemonBase a, PokemonBase b) {
         Datos da = de(a), db = de(b);
         if (da == null || db == null || !da.puedeCriar() || !db.puedeCriar()) return false;
+        boolean dittoA = "ditto".equals(normalizar(a.getNombre()));
+        boolean dittoB = "ditto".equals(normalizar(b.getNombre()));
+        if (dittoA || dittoB) return dittoA ^ dittoB;
         for (String grupo : da.gruposHuevo) if (db.gruposHuevo.contains(grupo)) return true;
         return false;
     }
