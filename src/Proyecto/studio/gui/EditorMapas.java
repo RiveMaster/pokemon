@@ -48,6 +48,7 @@ public final class EditorMapas {
         for (int[] capaInicial : capas) java.util.Arrays.fill(capaInicial, -1);
         crearTiles();
         if (tiles.isEmpty() && !hayPngEnCarpetaTiles()) crearTilesEjemplo();
+        while (tiposTile.size() < tiles.size()) tiposTile.add(TipoTile.NORMAL);
         seleccionado = tiles.isEmpty() ? -1 : 0;
         for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
         listaPaleta.setSelectedIndex(seleccionado);
@@ -107,8 +108,10 @@ public final class EditorMapas {
         col.addActionListener(e -> { modoColision = !modoColision; actualizarEstado(); canvas.repaint(); });
         JCheckBox cuadricula = new JCheckBox("Cuadrícula", true);
         cuadricula.addActionListener(e -> { rejilla = cuadricula.isSelected(); canvas.repaint(); });
+        JCheckBox propiedades = new JCheckBox("Ver propiedades");
+        propiedades.addActionListener(e -> { mostrarPropiedades = propiedades.isSelected(); canvas.repaint(); });
         barra.add(nuevo); barra.add(abrir); barra.add(guardar); barra.add(importar);
-        barra.add(exportarTiles); barra.add(exportar); barra.add(col); barra.add(cuadricula);
+        barra.add(exportarTiles); barra.add(exportar); barra.add(col); barra.add(cuadricula); barra.add(propiedades);
         frame.add(barra, BorderLayout.NORTH);
 
         selectorCapa.addActionListener(e -> { capa = selectorCapa.getSelectedIndex(); actualizarEstado(); canvas.repaint(); });
@@ -167,6 +170,7 @@ public final class EditorMapas {
             ancho = nw; alto = nh; capas = new int[3][ancho * alto];
             for (int[] c : capas) java.util.Arrays.fill(c, -1);
             colisiones = new boolean[ancho * alto];
+            hierbaEncuentros = new boolean[ancho * alto];
             colocaciones.clear();
             canvas.revalidate(); canvas.repaint(); actualizarEstado();
         } catch (NumberFormatException ex) {
@@ -195,6 +199,7 @@ public final class EditorMapas {
                         continue;
                     }
                     tiles.add(tile);
+                    tiposTile.add(TipoTile.NORMAL);
                     modeloPaleta.addElement(tiles.size() - 1);
                     n++;
                 }
@@ -943,7 +948,10 @@ private void guardar() {
                         Graphics2D g = tile.createGraphics();
                         g.drawImage(imagen, 0, 0, TILE, TILE, x, y, x + TILE, y + TILE, null);
                         g.dispose();
-                        if (tienePixelVisible(tile)) tiles.add(tile);
+                        if (tienePixelVisible(tile)) {
+                            tiles.add(tile);
+                            tiposTile.add(TipoTile.NORMAL);
+                        }
                     }
                 }
             }
