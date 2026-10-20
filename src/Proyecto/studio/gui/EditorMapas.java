@@ -18,7 +18,7 @@ import java.util.List;
  * Los mapas se guardan en formato binario .pmap e incluyen la paleta de tiles.
  */
 public final class EditorMapas {
-    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 4;
+    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 5;
     private final JFrame frame = new JFrame("Pokémon Studio — Editor de mapas");
     private int ancho = 20, alto = 15, seleccionado = 0, capa = 0;
     private final List<BufferedImage> tiles = new ArrayList<>();
@@ -289,7 +289,7 @@ public final class EditorMapas {
                 List<GeneradorMapas.DefinicionObjeto> biblioteca = new ArrayList<>();
                 for (int i = 0; i < objetos.size(); i++) {
                     ObjetoMapa o = objetos.get(i);
-                    biblioteca.add(new GeneradorMapas.DefinicionObjeto(i, o.nombre, o.ancho, o.alto, o.celdas));
+                    biblioteca.add(new GeneradorMapas.DefinicionObjeto(i, o.nombre, o.ancho, o.alto, o.celdas, o.categoria.name()));
                 }
 
                 GeneradorMapas.Opciones ajustes = new GeneradorMapas.Opciones(
@@ -716,6 +716,12 @@ public final class EditorMapas {
         int altoInicial = original == null ? 3 : original.alto;
         JSpinner columnas = new JSpinner(new SpinnerNumberModel(anchoInicial, 1, 32, 1));
         JSpinner filas = new JSpinner(new SpinnerNumberModel(altoInicial, 1, 32, 1));
+        JComboBox<CategoriaObjeto> categoria = new JComboBox<>(CategoriaObjeto.values());
+        if (original != null) categoria.setSelectedItem(original.categoria);
+        else categoria.setSelectedItem(CategoriaObjeto.inferir(nombre.getText()));
+        nombre.addActionListener(e -> {
+            if (original == null) categoria.setSelectedItem(CategoriaObjeto.inferir(nombre.getText()));
+        });
         JPanel encabezado = new JPanel(new FlowLayout(FlowLayout.LEFT));
         encabezado.add(new JLabel("Nombre:"));
         encabezado.add(nombre);
@@ -723,6 +729,8 @@ public final class EditorMapas {
         encabezado.add(columnas);
         encabezado.add(new JLabel("Alto (tiles):"));
         encabezado.add(filas);
+        encabezado.add(new JLabel("Tipo:"));
+        encabezado.add(categoria);
 
         final int[] tileActual = {seleccionado};
         int[] datosIniciales = new int[anchoInicial * altoInicial];
@@ -773,7 +781,8 @@ public final class EditorMapas {
                         "Falta el nombre", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            ObjetoMapa guardado = new ObjetoMapa(n, lienzo.getColumnas(), lienzo.getFilas(), lienzo.getCeldas());
+            ObjetoMapa guardado = new ObjetoMapa(n, lienzo.getColumnas(), lienzo.getFilas(), lienzo.getCeldas(),
+                    (CategoriaObjeto) categoria.getSelectedItem());
             if (indiceOriginal >= 0 && indiceOriginal < objetos.size()) objetos.set(indiceOriginal, guardado);
             else objetos.add(guardado);
             lista.setListData(objetos.toArray(new ObjetoMapa[0]));
@@ -856,17 +865,43 @@ public final class EditorMapas {
         }
     }
 
+    private enum CategoriaObjeto {
+        CASA("Casa / edificio"), CENTRO_POKEMON("Centro Pokémon"), GIMNASIO("Gimnasio"),
+        TIENDA("Tienda"), ARBOL("Árbol / vegetación"), ROCA("Roca / obstáculo"),
+        DECORACION("Decoración"), OTRO("Otro");
+
+        private final String etiqueta;
+        CategoriaObjeto(String etiqueta) { this.etiqueta = etiqueta; }
+        @Override public String toString() { return etiqueta; }
+
+        static CategoriaObjeto inferir(String nombre) {
+            String n = nombre == null ? "" : nombre.toLowerCase(java.util.Locale.ROOT);
+            if (n.contains("pokecentro") || n.contains("centro pok") || n.contains("pokemon center")) return CENTRO_POKEMON;
+            if (n.contains("gimnasio") || n.contains("gym")) return GIMNASIO;
+            if (n.contains("tienda") || n.contains("shop")) return TIENDA;
+            if (n.contains("casa") || n.contains("house") || n.contains("edificio")) return CASA;
+            if (n.contains("arbol") || n.contains("árbol") || n.contains("tree") || n.contains("arbusto")) return ARBOL;
+            if (n.contains("roca") || n.contains("piedra") || n.contains("rock")) return ROCA;
+            return OTRO;
+        }
+    }
+
     private static final class ObjetoMapa {
         final String nombre;
         final int ancho, alto;
         final int[] celdas;
+        final CategoriaObjeto categoria;
         ObjetoMapa(String nombre, int ancho, int alto, int[] celdas) {
+            this(nombre, ancho, alto, celdas, CategoriaObjeto.inferir(nombre));
+        }
+        ObjetoMapa(String nombre, int ancho, int alto, int[] celdas, CategoriaObjeto categoria) {
             this.nombre = nombre;
             this.ancho = ancho;
             this.alto = alto;
             this.celdas = celdas.clone();
+            this.categoria = categoria == null ? CategoriaObjeto.OTRO : categoria;
         }
-        @Override public String toString() { return nombre + " (" + ancho + "×" + alto + ")"; }
+        @Override public String toString() { return nombre + " [" + categoria + "] (" + ancho + "×" + alto + ")"; }
     }
 
     private static final class ColocacionObjeto {
@@ -935,6 +970,7 @@ private void guardar() {
                 out.writeInt(objeto.ancho);
                 out.writeInt(objeto.alto);
                 for (int tile : objeto.celdas) out.writeInt(tile);
+                out.writeUTF(objeto.categoria.name());
             }
             out.writeInt(colocaciones.size());
             for (ColocacionObjeto p : colocaciones) {
@@ -1024,7 +1060,13 @@ private void guardar() {
                         if (t < -1 || t >= count) throw new IOException("Índice de tile de objeto fuera de rango.");
                         celdasObjeto[j] = t;
                     }
-                    nuevosObjetos.add(new ObjetoMapa(nombre, ow, oh, celdasObjeto));
+                    CategoriaObjeto categoriaObjeto = CategoriaObjeto.inferir(nombre);
+                    if (version >= 5) {
+                        String categoriaTexto = in.readUTF();
+                        try { categoriaObjeto = CategoriaObjeto.valueOf(categoriaTexto); }
+                        catch (IllegalArgumentException ex) { throw new IOException("Categoría de objeto desconocida: " + categoriaTexto); }
+                    }
+                    nuevosObjetos.add(new ObjetoMapa(nombre, ow, oh, celdasObjeto, categoriaObjeto));
                 }
                 int numeroColocaciones = in.readInt();
                 if (numeroColocaciones < 0 || numeroColocaciones > 1_000_000)
