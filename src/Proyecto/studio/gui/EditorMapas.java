@@ -40,6 +40,7 @@ public final class EditorMapas {
         if (tiles.isEmpty() && !hayPngEnCarpetaTiles()) crearTilesEjemplo();
         seleccionado = tiles.isEmpty() ? -1 : 0;
         for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
+        listaPaleta.setSelectedIndex(seleccionado);
         construirVentana();
     }
 
