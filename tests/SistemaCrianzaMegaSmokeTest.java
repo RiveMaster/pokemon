@@ -117,8 +117,8 @@ public final class SistemaCrianzaMegaSmokeTest {
         MegaEvoluciones.Forma forma = MegaEvoluciones.paraEspecie("Charizard").stream()
                 .filter(f -> f.nombreForma().equals("Charizard-Mega-X")).findFirst()
                 .orElseThrow(() -> new AssertionError("Falta Mega-Charizard X."));
-        check(pokemon.megaevolucionar(MegaEvoluciones.crearBase(charizard, forma)),
-                "Charizard con Charizardite X debe megaevolucionar a X.");
+        check(MegaEvoluciones.intentarDuranteCombate(pokemon, new Scanner("")),
+                "Charizard con Charizardite X debe megaevolucionar a X mediante la acción de combate.");
         check(pokemon.getNombre().equals("Charizard-Mega-X"), "No cambió a la forma Mega.");
         check(!pokemon.puedeMegaEvolucionarEsteCombate(), "No debe poder megaevolucionar dos veces en el mismo combate.");
         PokemonLuchador segundoPokemon = new PokemonLuchador(charizard, 50,
