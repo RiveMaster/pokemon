@@ -11,6 +11,13 @@ import java.util.stream.Collectors;
 public final class MegaEvoluciones {
     private MegaEvoluciones() { }
 
+    // El juego permite una megaevolución por lado y combate.
+    private static boolean megaUsadaEnCombate;
+
+    public static void iniciarCombate() { megaUsadaEnCombate = false; }
+    public static void terminarCombate() { megaUsadaEnCombate = false; }
+    public static boolean yaSeMegaEvolucionoEnCombate() { return megaUsadaEnCombate; }
+
     public record Forma(String especie, String nombreForma, String tipo1, String tipo2,
                         int vida, int ataque, int defensa, int ataqueEspecial, int defensaEspecial,
                         int velocidad, String megapiedra, String habilidad) {
@@ -177,7 +184,7 @@ public final class MegaEvoluciones {
     }
 
     public static boolean puedeOfrecerse(PokemonLuchador pokemon) {
-        if (pokemon == null || pokemon.getBase() == null || pokemon.getMegapiedra() == null
+        if (megaUsadaEnCombate || pokemon == null || pokemon.getBase() == null || pokemon.getMegapiedra() == null
                 || !pokemon.puedeMegaEvolucionarEsteCombate()) return false;
         String especie = pokemon.getBase().getNombre();
         return paraEspecie(especie).stream().anyMatch(f ->
@@ -307,7 +314,8 @@ public final class MegaEvoluciones {
 
     /** Opción de combate: la megaevolución usa la piedra que lleva el Pokémon y ocupa la acción del turno. */
     public static boolean intentarDuranteCombate(PokemonLuchador pokemon, Scanner sc) {
-        if (pokemon == null || pokemon.getMegapiedra() == null || !pokemon.puedeMegaEvolucionarEsteCombate()) {
+        if (megaUsadaEnCombate || pokemon == null || pokemon.getMegapiedra() == null
+                || !pokemon.puedeMegaEvolucionarEsteCombate()) {
             System.out.println("Este Pokémon no puede megaevolucionar: necesita una megapiedra compatible y no haber megaevolucionado ya en este combate.");
             return false;
         }
@@ -324,6 +332,7 @@ public final class MegaEvoluciones {
             Forma f = opciones.get(0);
             PokemonBase forma = crearBase(pokemon.getBase(), f);
             if (pokemon.megaevolucionar(forma)) {
+                megaUsadaEnCombate = true;
                 System.out.println("¡" + pokemon.getNombre() + " ha megaevolucionado!");
                 return true;
             }
@@ -335,6 +344,7 @@ public final class MegaEvoluciones {
         if (n < 1 || n > opciones.size()) return false;
         Forma f = opciones.get(n - 1);
         if (pokemon.megaevolucionar(crearBase(pokemon.getBase(), f))) {
+            megaUsadaEnCombate = true;
             System.out.println("¡" + pokemon.getNombre() + " ha megaevolucionado!");
             return true;
         }
