@@ -311,6 +311,7 @@ public final class EditorMapas {
                 for (int capaActual = 0; capaActual < 3; capaActual++) capas[capaActual] = resultado.capas[capaActual].clone();
                 colisionesManuales = resultado.colisionesManuales.clone();
                 hierbaEncuentros = resultado.hierbaEncuentros.clone();
+                aplicarVariantesCamino(road);
                 colocaciones.clear();
                 for (GeneradorMapas.Colocacion p : resultado.colocaciones) {
                     if (p.objeto >= 0 && p.objeto < objetos.size())
@@ -362,6 +363,57 @@ public final class EditorMapas {
     private int valorSelector(JComboBox<Integer> combo) {
         Integer value = (Integer) combo.getSelectedItem();
         return value == null ? -1 : value;
+    }
+
+    /**
+     * Aplica automáticamente tiles de borde, rectas, finales, cruces y esquinas
+     * cuando el usuario ha clasificado esas variantes en la paleta.
+     */
+    private void aplicarVariantesCamino(int tileCaminoBase) {
+        if (tileCaminoBase < 0 || ancho < 1 || alto < 1) return;
+        int[] original = capas[0].clone();
+        for (int y = 0; y < alto; y++) for (int x = 0; x < ancho; x++) {
+            int idx = y * ancho + x;
+            if (original[idx] != tileCaminoBase) continue;
+            boolean n = esCamino(original, x, y - 1, tileCaminoBase);
+            boolean e = esCamino(original, x + 1, y, tileCaminoBase);
+            boolean s = esCamino(original, x, y + 1, tileCaminoBase);
+            boolean o = esCamino(original, x - 1, y, tileCaminoBase);
+            int vecinos = (n ? 1 : 0) + (e ? 1 : 0) + (s ? 1 : 0) + (o ? 1 : 0);
+            TipoTile variante = null;
+            if (vecinos == 4) variante = TipoTile.CAMINO_CRUCE;
+            else if (vecinos == 3) {
+                if (!n) variante = TipoTile.CAMINO_T_N;
+                else if (!e) variante = TipoTile.CAMINO_T_E;
+                else if (!s) variante = TipoTile.CAMINO_T_S;
+                else variante = TipoTile.CAMINO_T_O;
+            } else if (vecinos == 2 && n && s) variante = TipoTile.CAMINO_VERTICAL;
+            else if (vecinos == 2 && e && o) variante = TipoTile.CAMINO_HORIZONTAL;
+            else if (vecinos == 1) {
+                if (n) variante = TipoTile.CAMINO_FINAL_N;
+                else if (e) variante = TipoTile.CAMINO_FINAL_E;
+                else if (s) variante = TipoTile.CAMINO_FINAL_S;
+                else variante = TipoTile.CAMINO_FINAL_O;
+            } else if (vecinos == 2) {
+                boolean diagonal = n && e ? esCamino(original, x + 1, y - 1, tileCaminoBase)
+                        : n && o ? esCamino(original, x - 1, y - 1, tileCaminoBase)
+                        : s && e ? esCamino(original, x + 1, y + 1, tileCaminoBase)
+                        : esCamino(original, x - 1, y + 1, tileCaminoBase);
+                if (n && e) variante = diagonal ? TipoTile.CAMINO_INTERIOR_NE : TipoTile.CAMINO_EXTERIOR_NE;
+                else if (n && o) variante = diagonal ? TipoTile.CAMINO_INTERIOR_NO : TipoTile.CAMINO_EXTERIOR_NO;
+                else if (s && e) variante = diagonal ? TipoTile.CAMINO_INTERIOR_SE : TipoTile.CAMINO_EXTERIOR_SE;
+                else variante = diagonal ? TipoTile.CAMINO_INTERIOR_SO : TipoTile.CAMINO_EXTERIOR_SO;
+            }
+            if (variante != null) {
+                int tile = primerTileTipo(variante, -1);
+                if (tile >= 0) capas[0][idx] = tile;
+            }
+        }
+    }
+
+    private boolean esCamino(int[] layer, int x, int y, int tileCaminoBase) {
+        return x >= 0 && y >= 0 && x < ancho && y < alto
+                && layer[y * ancho + x] == tileCaminoBase;
     }
 
     private int primerTileTipo(TipoTile tipo, int... excluidos) {
@@ -647,7 +699,20 @@ public final class EditorMapas {
         BLOQUEO("Bloquea el paso"),
         HIERBA("Hierba (encuentros Pokémon)"),
         AGUA("Agua"),
-        EVENTO("Evento");
+        EVENTO("Evento"),
+        CAMINO_HORIZONTAL("Camino recto horizontal"),
+        CAMINO_VERTICAL("Camino recto vertical"),
+        CAMINO_FINAL_N("Camino: final norte"), CAMINO_FINAL_E("Camino: final este"),
+        CAMINO_FINAL_S("Camino: final sur"), CAMINO_FINAL_O("Camino: final oeste"),
+        CAMINO_ESQUINA_NE("Camino: esquina NE"), CAMINO_ESQUINA_NO("Camino: esquina NO"),
+        CAMINO_ESQUINA_SE("Camino: esquina SE"), CAMINO_ESQUINA_SO("Camino: esquina SO"),
+        CAMINO_INTERIOR_NE("Camino: esquina interior NE"), CAMINO_INTERIOR_NO("Camino: esquina interior NO"),
+        CAMINO_INTERIOR_SE("Camino: esquina interior SE"), CAMINO_INTERIOR_SO("Camino: esquina interior SO"),
+        CAMINO_EXTERIOR_NE("Camino: esquina exterior NE"), CAMINO_EXTERIOR_NO("Camino: esquina exterior NO"),
+        CAMINO_EXTERIOR_SE("Camino: esquina exterior SE"), CAMINO_EXTERIOR_SO("Camino: esquina exterior SO"),
+        CAMINO_T_N("Camino: cruce en T abierto al norte"), CAMINO_T_E("Camino: cruce en T abierto al este"),
+        CAMINO_T_S("Camino: cruce en T abierto al sur"), CAMINO_T_O("Camino: cruce en T abierto al oeste"),
+        CAMINO_CRUCE("Camino: cruce de cuatro direcciones");
         private final String etiqueta;
         TipoTile(String etiqueta) { this.etiqueta = etiqueta; }
         @Override public String toString() { return etiqueta; }
