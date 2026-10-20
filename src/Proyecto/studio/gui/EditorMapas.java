@@ -1075,8 +1075,10 @@ private void guardar() {
                 hierbaEncuentros[indiceMapa] = false;
             }
             case HIERBA -> {
-                colisiones[indiceMapa] = false;
-                hierbaEncuentros[indiceMapa] = true;
+                if (capa == 0) {
+                    colisiones[indiceMapa] = false;
+                    hierbaEncuentros[indiceMapa] = true;
+                }
             }
             case NORMAL, EVENTO -> {
                 if (capa == 0) {
