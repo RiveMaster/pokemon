@@ -77,7 +77,7 @@ public final class SistemaCrianzaMegaSmokeTest {
         padreConPesa.setObjeto(ObjetoEquipable.PESA_REcia);
         Jugador jugadorConObjeto = new Jugador("SmokeTestObjeto", madreConPesa, 0);
         jugadorConObjeto.agregarPokemon(padreConPesa);
-        check(SistemaCrianza.criar(new Scanner("1\\n2\\n"), jugadorConObjeto),
+        check(SistemaCrianza.criar(new Scanner("1\n2\n"), jugadorConObjeto),
                 "La pareja equipada debería criar.");
         PokemonLuchador criaConPesa = jugadorConObjeto.getEquipo().get(jugadorConObjeto.getEquipo().size() - 1);
         check(criaConPesa.getIVs()[0] == ivPadre[0],
