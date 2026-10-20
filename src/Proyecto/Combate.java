@@ -128,6 +128,9 @@ public class Combate {
     public static void combatepodemita(Jugador jugadorCompleto, PokemonLuchador pokemonJugador, PokemonLuchador pokemonpodemita, Gobierno gobierno, Scanner sc){
         System.out.println("\n=== ¡Un Podemita ha aparecido y quiere pelear contra tí! ===");
         System.out.println("Podemita: ¡Ganare por Pedro Sanchez, viva la izquierda!");
+        finalizarMegaJugador(jugadorCompleto);
+        jugadorCompleto.getEquipo().forEach(PokemonLuchador::iniciarCombate);
+        jugadorCompleto.getPc().forEach(PokemonLuchador::iniciarCombate);
         pokemonJugador.iniciarCombate();
         pokemonpodemita.iniciarCombate();
         boolean combateActivo = !equipoMG(gobierno)&&!equipoM(jugadorCompleto);
@@ -182,6 +185,7 @@ public class Combate {
             }
 
         }
+        finalizarMegaJugador(jugadorCompleto);
         pokemonJugador.desmegaevolucionar();
         pokemonpodemita.desmegaevolucionar();
     }
@@ -190,6 +194,9 @@ public class Combate {
     public static void combateSalvaje(Jugador jugadorCompleto, PokemonLuchador pokemonJugador, PokemonLuchador salvaje, Scanner sc) {
         System.out.println("\n=== ¡Un Pokémon salvaje aparece! ===");
 
+        finalizarMegaJugador(jugadorCompleto);
+        jugadorCompleto.getEquipo().forEach(PokemonLuchador::iniciarCombate);
+        jugadorCompleto.getPc().forEach(PokemonLuchador::iniciarCombate);
         pokemonJugador.iniciarCombate();
         salvaje.iniciarCombate();
         boolean combateActivo = salvaje.estaVivo()&&!equipoM(jugadorCompleto);
@@ -317,8 +324,15 @@ public class Combate {
                 System.out.println("Opción inválida, pierdes el turno.");
             }
         }
+        finalizarMegaJugador(jugadorCompleto);
         pokemonJugador.desmegaevolucionar();
         salvaje.desmegaevolucionar();
+    }
+
+    private static void finalizarMegaJugador(Jugador jugador) {
+        if (jugador == null) return;
+        for (PokemonLuchador p : jugador.getEquipo()) p.desmegaevolucionar();
+        for (PokemonLuchador p : jugador.getPc()) p.desmegaevolucionar();
     }
 
     // Mostrar estado de los Pokémon
