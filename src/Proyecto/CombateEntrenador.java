@@ -16,6 +16,20 @@ public class CombateEntrenador {
             return true;
         }
 
+        for (PokemonLuchador p : jugador.getEquipo()) {
+            p.desmegaevolucionar();
+            p.iniciarCombate();
+        }
+        for (PokemonLuchador p : jugador.getPc()) {
+            p.desmegaevolucionar();
+            p.iniciarCombate();
+        }
+        for (PokemonLuchador p : rivales) {
+            p.desmegaevolucionar();
+            p.iniciarCombate();
+        }
+
+        try {
         int indiceRival = 0;
         PokemonLuchador rival = rivales.get(indiceRival);
         PokemonLuchador activo = primerVivo(jugador);
@@ -86,6 +100,11 @@ public class CombateEntrenador {
                 activo = cambioForzado(sc, jugador, activo);
                 if (activo == null) return false;
             }
+        }
+        } finally {
+            for (PokemonLuchador p : jugador.getEquipo()) p.desmegaevolucionar();
+            for (PokemonLuchador p : jugador.getPc()) p.desmegaevolucionar();
+            for (PokemonLuchador p : rivales) p.desmegaevolucionar();
         }
     }
 
