@@ -1,0 +1,36 @@
+name: Map generator smoke test
+
+on:
+  push:
+    paths:
+      - "src/Proyecto/studio/gui/EditorMapas.java"
+      - "src/Proyecto/studio/gui/GeneradorMapas.java"
+      - "tests/GeneradorMapasSmokeTest.java"
+      - ".github/workflows/map-generator.yml"
+  pull_request:
+    paths:
+      - "src/Proyecto/studio/gui/EditorMapas.java"
+      - "src/Proyecto/studio/gui/GeneradorMapas.java"
+      - "tests/GeneradorMapasSmokeTest.java"
+      - ".github/workflows/map-generator.yml"
+
+jobs:
+  compile-and-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Compile the map editor and generator
+        run: |
+          mkdir -p build
+          javac --release 17 -encoding UTF-8 -d build \
+            src/Proyecto/studio/gui/GeneradorMapas.java \
+            src/Proyecto/studio/gui/EditorMapas.java \
+            tests/GeneradorMapasSmokeTest.java
+      - name: Test deterministic map generation
+        run: java -cp build GeneradorMapasSmokeTest
