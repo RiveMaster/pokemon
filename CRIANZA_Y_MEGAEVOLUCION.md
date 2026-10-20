@@ -90,7 +90,7 @@ La tienda ofrece seis objetos de crianza, uno por atributo:
 | Banda recia (IV Def. Esp.) | Defensa especial |
 | Franja recia (IV Velocidad) | Velocidad |
 
-Cuestan 1.800 € cada uno. Equipa el objeto al progenitor que tiene el IV deseado antes de criar. Ese IV de la cría será exactamente el del portador; los otros cinco siguen usando la media redondeada de ambos padres. Si los dos llevan un objeto que fuerza el mismo IV, se elige aleatoriamente cuál de los dos lo transmite. Los objetos se guardan en la mochila/partida como el resto de equipables.
+Cuestan 1.800 € cada uno. Un Pokémon solo puede llevar un objeto a la vez: equipar una megapiedra devuelve el objeto anterior a la mochila, y equipar un objeto normal retira la megapiedra equipada sin perderla. Equipa el objeto al progenitor que tiene el IV deseado antes de criar. Ese IV de la cría será exactamente el del portador; los otros cinco siguen usando la media redondeada de ambos padres. Si los dos llevan un objeto que fuerza el mismo IV, se elige aleatoriamente cuál de los dos lo transmite. Los objetos se guardan en la mochila/partida como el resto de equipables.
 
 ## Editor de mapas: biblioteca y pueblos
 
