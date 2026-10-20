@@ -435,51 +435,140 @@ public final class EditorMapas {
         }
     }
 
-    private void guardar() {
-        JFileChooser fc = new JFileChooser(); fc.setSelectedFile(new java.io.File("mapa.pmap"));
+private void guardar() {
+        JFileChooser fc = new JFileChooser();
+        fc.setSelectedFile(new java.io.File("mapa.pmap"));
         if (fc.showSaveDialog(frame) != JFileChooser.APPROVE_OPTION) return;
         Path path = fc.getSelectedFile().toPath();
-        if (!path.toString().toLowerCase().endsWith(".pmap")) path = Path.of(path + ".pmap");
+        if (!path.toString().toLowerCase(java.util.Locale.ROOT).endsWith(".pmap")) path = Path.of(path + ".pmap");
         try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(path)))) {
-            out.writeInt(MAGIC); out.writeInt(VERSION); out.writeInt(ancho); out.writeInt(alto);
+            out.writeInt(MAGIC);
+            out.writeInt(VERSION);
+            out.writeInt(ancho);
+            out.writeInt(alto);
             out.writeInt(tiles.size());
             for (BufferedImage tile : tiles) {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 ImageIO.write(tile, "png", bytes);
-                byte[] data = bytes.toByteArray(); out.writeInt(data.length); out.write(data);
+                byte[] data = bytes.toByteArray();
+                out.writeInt(data.length);
+                out.write(data);
             }
             for (int[] layer : capas) for (int v : layer) out.writeInt(v);
             for (boolean b : colisiones) out.writeBoolean(b);
+
+            out.writeInt(objetos.size());
+            for (ObjetoMapa objeto : objetos) {
+                out.writeUTF(objeto.nombre);
+                out.writeInt(objeto.ancho);
+                out.writeInt(objeto.alto);
+                for (int tile : objeto.celdas) out.writeInt(tile);
+            }
+            out.writeInt(colocaciones.size());
+            for (ColocacionObjeto p : colocaciones) {
+                out.writeInt(p.objeto);
+                out.writeInt(p.x);
+                out.writeInt(p.y);
+                out.writeInt(p.capa);
+            }
             JOptionPane.showMessageDialog(frame, "Proyecto guardado en:\n" + path.toAbsolutePath());
-        } catch (IOException ex) { error("No se pudo guardar el proyecto: " + ex.getMessage()); }
+        } catch (IOException ex) {
+            error("No se pudo guardar el proyecto: " + ex.getMessage());
+        }
     }
 
     private void cargar() {
-        JFileChooser fc = new JFileChooser(); fc.setDialogTitle("Abrir proyecto de mapa");
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Abrir proyecto de mapa");
         if (fc.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) return;
-        try (DataInputStream in = new DataInputStream(new BufferedInputStream(Files.newInputStream(fc.getSelectedFile().toPath())))) {
+        try (DataInputStream in = new DataInputStream(
+                new BufferedInputStream(Files.newInputStream(fc.getSelectedFile().toPath())))) {
             if (in.readInt() != MAGIC) throw new IOException("El archivo no es un proyecto .pmap válido.");
-            int version = in.readInt(); if (version != VERSION) throw new IOException("Versión de proyecto no compatible: " + version);
+            int version = in.readInt();
+            if (version < 1 || version > VERSION) throw new IOException("Versión de proyecto no compatible: " + version);
             int nw = in.readInt(), nh = in.readInt(), count = in.readInt();
-            if (nw < 1 || nh < 1 || nw > 300 || nh > 300 || count < 1 || count > 10000) throw new IOException("Dimensiones o paleta inválidas.");
+            if (nw < 1 || nh < 1 || nw > 300 || nh > 300 || count < 1 || count > 10000)
+                throw new IOException("Dimensiones o paleta inválidas.");
+
             List<BufferedImage> newTiles = new ArrayList<>();
             for (int i = 0; i < count; i++) {
-                int len = in.readInt(); if (len < 1 || len > 10_000_000) throw new IOException("Tile corrupto.");
-                byte[] data = in.readNBytes(len); if (data.length != len) throw new EOFException();
+                int len = in.readInt();
+                if (len < 1 || len > 10_000_000) throw new IOException("Tile corrupto.");
+                byte[] data = in.readNBytes(len);
+                if (data.length != len) throw new EOFException();
                 BufferedImage tile = ImageIO.read(new ByteArrayInputStream(data));
                 if (tile == null) throw new IOException("No se pudo leer un tile.");
                 BufferedImage fixed = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
-                fixed.getGraphics().drawImage(tile, 0, 0, TILE, TILE, null); newTiles.add(fixed);
+                Graphics2D tg = fixed.createGraphics();
+                tg.drawImage(tile, 0, 0, TILE, TILE, null);
+                tg.dispose();
+                newTiles.add(fixed);
             }
-            int size = nw * nh; int[][] newLayers = new int[3][size];
-            for (int[] layer : newLayers) for (int i = 0; i < size; i++) {
-                int v = in.readInt(); if (v < -1 || v >= count) throw new IOException("Índice de tile fuera de rango."); layer[i] = v;
+
+            int size = nw * nh;
+            int[][] newLayers = new int[3][size];
+            for (int[] layer : newLayers) {
+                for (int i = 0; i < size; i++) {
+                    int v = in.readInt();
+                    if (v < -1 || v >= count) throw new IOException("Índice de tile fuera de rango.");
+                    layer[i] = v;
+                }
             }
-            boolean[] newCollisions = new boolean[size]; for (int i = 0; i < size; i++) newCollisions[i] = in.readBoolean();
-            ancho = nw; alto = nh; tiles.clear(); tiles.addAll(newTiles); capas = newLayers; colisiones = newCollisions;
-            modeloPaleta.clear(); for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
-            seleccionado = 0; listaPaleta.setSelectedIndex(0); canvas.revalidate(); canvas.repaint(); actualizarEstado();
-        } catch (IOException | RuntimeException ex) { error("No se pudo abrir el proyecto: " + ex.getMessage()); }
+            boolean[] newCollisions = new boolean[size];
+            for (int i = 0; i < size; i++) newCollisions[i] = in.readBoolean();
+
+            List<ObjetoMapa> nuevosObjetos = new ArrayList<>();
+            List<ColocacionObjeto> nuevasColocaciones = new ArrayList<>();
+            if (version >= 2) {
+                int numeroObjetos = in.readInt();
+                if (numeroObjetos < 0 || numeroObjetos > 10000) throw new IOException("Cantidad de objetos inválida.");
+                for (int i = 0; i < numeroObjetos; i++) {
+                    String nombre = in.readUTF();
+                    int ow = in.readInt(), oh = in.readInt();
+                    if (ow < 1 || oh < 1 || ow > 32 || oh > 32) throw new IOException("Dimensiones de objeto inválidas.");
+                    int[] celdasObjeto = new int[ow * oh];
+                    for (int j = 0; j < celdasObjeto.length; j++) {
+                        int t = in.readInt();
+                        if (t < -1 || t >= count) throw new IOException("Índice de tile de objeto fuera de rango.");
+                        celdasObjeto[j] = t;
+                    }
+                    nuevosObjetos.add(new ObjetoMapa(nombre, ow, oh, celdasObjeto));
+                }
+                int numeroColocaciones = in.readInt();
+                if (numeroColocaciones < 0 || numeroColocaciones > 1_000_000)
+                    throw new IOException("Cantidad de objetos colocados inválida.");
+                for (int i = 0; i < numeroColocaciones; i++) {
+                    int objeto = in.readInt(), x = in.readInt(), y = in.readInt(), capaObjeto = in.readInt();
+                    if (objeto < 0 || objeto >= nuevosObjetos.size() || x < 0 || y < 0
+                            || x >= nw || y >= nh || capaObjeto < 0 || capaObjeto > 2)
+                        throw new IOException("Colocación de objeto inválida.");
+                    nuevasColocaciones.add(new ColocacionObjeto(objeto, x, y, capaObjeto));
+                }
+            }
+
+            ancho = nw;
+            alto = nh;
+            tiles.clear();
+            tiles.addAll(newTiles);
+            capas = newLayers;
+            colisiones = newCollisions;
+            objetos.clear();
+            objetos.addAll(nuevosObjetos);
+            colocaciones.clear();
+            colocaciones.addAll(nuevasColocaciones);
+            objetoSeleccionado = -1;
+            modoObjeto = false;
+            modeloPaleta.clear();
+            for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
+            seleccionado = 0;
+            listaPaleta.setSelectedIndex(0);
+            canvas.revalidate();
+            canvas.repaint();
+            actualizarEstado();
+            JOptionPane.showMessageDialog(frame, "Proyecto cargado correctamente.");
+        } catch (IOException | RuntimeException ex) {
+            error("No se pudo abrir el proyecto: " + ex.getMessage());
+        }
     }
 
     private void exportarPng() {
