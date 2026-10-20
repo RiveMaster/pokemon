@@ -122,6 +122,7 @@ public final class EditorMapas {
             if (!e.getValueIsAdjusting() && listaPaleta.getSelectedValue() != null) {
                 seleccionado = listaPaleta.getSelectedValue();
                 modoObjeto = false;
+                actualizarTipoSeleccionado();
                 actualizarEstado();
             }
         });
@@ -213,19 +214,191 @@ public final class EditorMapas {
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
         panel.add(new JLabel("Tiles (16 × 16)"), BorderLayout.NORTH);
         panel.add(new JScrollPane(listaPaleta), BorderLayout.CENTER);
+
+        JButton crear = new JButton("Crear tile píxel a píxel");
+        crear.addActionListener(e -> crearTilePixelArt());
+        JButton editar = new JButton("Editar tile seleccionado");
+        editar.addActionListener(e -> editarTileSeleccionado());
+        JPanel pixelBotones = new JPanel(new GridLayout(1, 2, 4, 4));
+        pixelBotones.add(crear);
+        pixelBotones.add(editar);
+
+        selectorTipoTile.setToolTipText("Propiedad lógica del tile: normal, bloquea, hierba, agua o evento.");
+        selectorTipoTile.addActionListener(e -> {
+            if (seleccionado >= 0 && seleccionado < tiposTile.size()
+                    && selectorTipoTile.getSelectedItem() instanceof TipoTile tipo) {
+                tiposTile.set(seleccionado, tipo);
+                actualizarEstado();
+                canvas.repaint();
+                listaPaleta.repaint();
+            }
+        });
+        JPanel tipoPanel = new JPanel(new BorderLayout(4, 4));
+        tipoPanel.add(new JLabel("Tipo del tile seleccionado:"), BorderLayout.NORTH);
+        tipoPanel.add(selectorTipoTile, BorderLayout.CENTER);
+
         JButton limpiar = new JButton("Vaciar capa");
         limpiar.addActionListener(e -> {
             if (JOptionPane.showConfirmDialog(frame, "¿Vaciar la capa " + nombreCapa(capa) + "?", "Confirmar",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 java.util.Arrays.fill(capas[capa], -1);
+                if (capa == 0) {
+                    java.util.Arrays.fill(colisiones, false);
+                    java.util.Arrays.fill(hierbaEncuentros, false);
+                }
                 canvas.repaint();
             }
         });
         JPanel opciones = new JPanel(new BorderLayout(4, 4));
         opciones.add(selectorCapa, BorderLayout.NORTH);
         opciones.add(limpiar, BorderLayout.SOUTH);
-        panel.add(opciones, BorderLayout.SOUTH);
+        JPanel abajo = new JPanel(new GridLayout(0, 1, 4, 4));
+        abajo.add(pixelBotones);
+        abajo.add(tipoPanel);
+        abajo.add(opciones);
+        panel.add(abajo, BorderLayout.SOUTH);
         return panel;
+    }
+
+    private void actualizarTipoSeleccionado() {
+        if (seleccionado >= 0 && seleccionado < tiposTile.size())
+            selectorTipoTile.setSelectedItem(tiposTile.get(seleccionado));
+    }
+
+    private void crearTilePixelArt() {
+        BufferedImage nuevo = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        tiles.add(nuevo);
+        tiposTile.add(TipoTile.NORMAL);
+        int indice = tiles.size() - 1;
+        modeloPaleta.addElement(indice);
+        listaPaleta.setSelectedIndex(indice);
+        seleccionado = indice;
+        actualizarTipoSeleccionado();
+        editarTile(indice);
+    }
+
+    private void editarTileSeleccionado() {
+        if (seleccionado < 0 || seleccionado >= tiles.size()) {
+            JOptionPane.showMessageDialog(frame, "Selecciona un tile primero.", "Sin tile seleccionado",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        editarTile(seleccionado);
+    }
+
+    private void editarTile(int indice) {
+        if (indice < 0 || indice >= tiles.size()) return;
+        BufferedImage trabajo = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D copia = trabajo.createGraphics();
+        copia.drawImage(tiles.get(indice), 0, 0, null);
+        copia.dispose();
+
+        JDialog dialogo = new JDialog(frame, "Editor de píxeles — tile " + indice, true);
+        dialogo.setLayout(new BorderLayout(8, 8));
+        final Color[] colorActual = {Color.BLACK};
+        JLabel muestraColor = new JLabel("Color actual: #000000");
+        JButton elegirColor = new JButton("Elegir color…");
+        elegirColor.addActionListener(e -> {
+            Color elegido = JColorChooser.showDialog(dialogo, "Color del pincel", colorActual[0]);
+            if (elegido != null) {
+                colorActual[0] = elegido;
+                muestraColor.setText(String.format(java.util.Locale.ROOT, "Color actual: #%02X%02X%02X",
+                        elegido.getRed(), elegido.getGreen(), elegido.getBlue()));
+                muestraColor.setForeground(elegido);
+            }
+        });
+
+        PixelCanvas pixelCanvas = new PixelCanvas(trabajo, () -> colorActual[0]);
+        JPanel barra = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        barra.add(elegirColor);
+        barra.add(muestraColor);
+        barra.add(new JLabel("Clic izquierdo pinta; clic derecho borra a transparente."));
+        dialogo.add(barra, BorderLayout.NORTH);
+        dialogo.add(new JScrollPane(pixelCanvas), BorderLayout.CENTER);
+
+        JButton borrarTodo = new JButton("Borrar todo");
+        borrarTodo.addActionListener(e -> {
+            Graphics2D g = trabajo.createGraphics();
+            g.setComposite(AlphaComposite.Clear);
+            g.fillRect(0, 0, TILE, TILE);
+            g.dispose();
+            pixelCanvas.repaint();
+        });
+        JButton cancelar = new JButton("Cancelar");
+        cancelar.addActionListener(e -> dialogo.dispose());
+        JButton guardar = new JButton("Guardar tile");
+        guardar.addActionListener(e -> {
+            tiles.set(indice, trabajo);
+            modeloPaleta.set(indice, indice);
+            listaPaleta.repaint();
+            canvas.repaint();
+            dialogo.dispose();
+        });
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        botones.add(borrarTodo);
+        botones.add(cancelar);
+        botones.add(guardar);
+        dialogo.add(botones, BorderLayout.SOUTH);
+        dialogo.setSize(730, 650);
+        dialogo.setLocationRelativeTo(frame);
+        dialogo.setVisible(true);
+    }
+
+    private final class PixelCanvas extends JPanel {
+        private final BufferedImage imagen;
+        private final java.util.function.Supplier<Color> color;
+
+        PixelCanvas(BufferedImage imagen, java.util.function.Supplier<Color> color) {
+            this.imagen = imagen;
+            this.color = color;
+            setBackground(new Color(90, 90, 90));
+            MouseAdapter raton = new MouseAdapter() {
+                private void pintar(MouseEvent e) {
+                    int celda = Math.max(16, Math.min(32, Math.min(getWidth() / TILE, getHeight() / TILE)));
+                    int x = e.getX() / celda;
+                    int y = e.getY() / celda;
+                    if (x < 0 || y < 0 || x >= TILE || y >= TILE) return;
+                    if (esClicDerecho(e)) imagen.setRGB(x, y, 0x00000000);
+                    else imagen.setRGB(x, y, PixelCanvas.this.color.get().getRGB());
+                    repaint();
+                }
+                @Override public void mousePressed(MouseEvent e) { pintar(e); }
+                @Override public void mouseDragged(MouseEvent e) { pintar(e); }
+            };
+            addMouseListener(raton);
+            addMouseMotionListener(raton);
+        }
+
+        @Override public Dimension getPreferredSize() { return new Dimension(TILE * 28, TILE * 28); }
+
+        @Override protected void paintComponent(Graphics graphics) {
+            super.paintComponent(graphics);
+            Graphics2D g = (Graphics2D) graphics.create();
+            int celda = Math.max(16, Math.min(32, Math.min(getWidth() / TILE, getHeight() / TILE)));
+            for (int y = 0; y < TILE; y++) for (int x = 0; x < TILE; x++) {
+                g.setColor(((x + y) & 1) == 0 ? new Color(235, 235, 235) : new Color(190, 190, 190));
+                g.fillRect(x * celda, y * celda, celda, celda);
+                int argb = imagen.getRGB(x, y);
+                if (((argb >>> 24) & 0xFF) > 0) {
+                    g.setColor(new Color(argb, true));
+                    g.fillRect(x * celda, y * celda, celda, celda);
+                }
+                g.setColor(new Color(0, 0, 0, 100));
+                g.drawRect(x * celda, y * celda, celda, celda);
+            }
+            g.dispose();
+        }
+    }
+
+    private enum TipoTile {
+        NORMAL("Normal"),
+        BLOQUEO("Bloquea el paso"),
+        HIERBA("Hierba (encuentros Pokémon)"),
+        AGUA("Agua"),
+        EVENTO("Evento");
+        private final String etiqueta;
+        TipoTile(String etiqueta) { this.etiqueta = etiqueta; }
+        @Override public String toString() { return etiqueta; }
     }
 
     /** Pestaña de biblioteca para crear y reutilizar objetos compuestos por tiles. */
