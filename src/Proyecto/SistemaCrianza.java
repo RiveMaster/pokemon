@@ -99,8 +99,22 @@ public final class SistemaCrianza {
         int[] iva = a.getIVs();
         int[] ivb = b.getIVs();
         int[] ivCria = new int[6];
-        for (int i = 0; i < ivCria.length; i++)
+        for (int i = 0; i < ivCria.length; i++) {
+            // Por defecto se conserva la regla solicitada: media redondeada de ambos progenitores.
             ivCria[i] = (int) Math.round((iva[i] + ivb[i]) / 2.0);
+            int herenciaA = a.getObjeto() == null ? -1 : a.getObjeto().getIvHeredado();
+            int herenciaB = b.getObjeto() == null ? -1 : b.getObjeto().getIvHeredado();
+            boolean fuerzaA = herenciaA == i;
+            boolean fuerzaB = herenciaB == i;
+            if (fuerzaA && fuerzaB) {
+                // Si ambos llevan el mismo objeto de IV, se elige al azar cuál de los dos transmite ese IV.
+                ivCria[i] = java.util.concurrent.ThreadLocalRandom.current().nextBoolean() ? iva[i] : ivb[i];
+            } else if (fuerzaA) {
+                ivCria[i] = iva[i];
+            } else if (fuerzaB) {
+                ivCria[i] = ivb[i];
+            }
+        }
 
         SexoPokemon sexoCria = GeneticaPokemon.sexoAleatorio(baseHuevo);
         PokemonLuchador cria = new PokemonLuchador(baseHuevo, 1, ivCria, sexoCria);
