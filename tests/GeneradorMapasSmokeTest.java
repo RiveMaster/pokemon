@@ -32,6 +32,7 @@ public final class GeneradorMapasSmokeTest {
                     GeneradorMapas.Resultado a = GeneradorMapas.generar(opciones, objetos);
                     GeneradorMapas.Resultado b = GeneradorMapas.generar(opciones, objetos);
                     comprobar(a, ancho, alto, objetos);
+                    comprobarCamino(a, estilo);
                     if (!mismosResultados(a, b)) {
                         throw new AssertionError("La semilla no reproduce el mismo mapa: "
                                 + ancho + "x" + alto + ", " + estilo);
@@ -74,12 +75,46 @@ public final class GeneradorMapasSmokeTest {
 
         Map<Integer, GeneradorMapas.DefinicionObjeto> porIndice = new HashMap<>();
         for (GeneradorMapas.DefinicionObjeto objeto : objetos) porIndice.put(objeto.indice, objeto);
-        for (GeneradorMapas.Colocacion p : r.colocaciones) {
+        for (int i = 0; i < r.colocaciones.size(); i++) {
+            GeneradorMapas.Colocacion p = r.colocaciones.get(i);
             GeneradorMapas.DefinicionObjeto objeto = porIndice.get(p.objeto);
             if (objeto == null) throw new AssertionError("Referencia de objeto inexistente.");
             if (p.x < 0 || p.y < 0 || p.x + objeto.ancho > ancho || p.y + objeto.alto > alto)
                 throw new AssertionError("Objeto fuera del mapa.");
             if (p.capa < 0 || p.capa > 2) throw new AssertionError("Capa de objeto inválida.");
+            for (int j = i + 1; j < r.colocaciones.size(); j++) {
+                GeneradorMapas.Colocacion q = r.colocaciones.get(j);
+                GeneradorMapas.DefinicionObjeto otro = porIndice.get(q.objeto);
+                if (otro != null && p.x < q.x + otro.ancho && p.x + objeto.ancho > q.x
+                        && p.y < q.y + otro.alto && p.y + objeto.alto > q.y)
+                    throw new AssertionError("Dos objetos se solapan.");
+            }
+        }
+    }
+
+    private static void comprobarCamino(GeneradorMapas.Resultado r, GeneradorMapas.Estilo estilo) {
+        if (estilo == GeneradorMapas.Estilo.PUEBLO) {
+            int filaCentral = r.alto / 2;
+            for (int x = 0; x < r.ancho; x++) {
+                if (r.capas[0][filaCentral * r.ancho + x] != 1)
+                    throw new AssertionError("La calle horizontal del pueblo no llega al borde.");
+            }
+            int columnaCentral = r.ancho / 2;
+            for (int y = 0; y < r.alto; y++) {
+                if (r.capas[0][y * r.ancho + columnaCentral] != 1)
+                    throw new AssertionError("La calle vertical del pueblo no llega al borde.");
+            }
+        } else {
+            for (int x = 0; x < r.ancho; x++) {
+                boolean conectada = false;
+                for (int y = 0; y < r.alto; y++) {
+                    if (r.capas[0][y * r.ancho + x] == 1) {
+                        conectada = true;
+                        break;
+                    }
+                }
+                if (!conectada) throw new AssertionError("La ruta no cruza el mapa de izquierda a derecha.");
+            }
         }
     }
 
