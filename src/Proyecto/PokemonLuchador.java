@@ -57,45 +57,6 @@ public class PokemonLuchador implements Serializable {
 
 
     public PokemonLuchador(PokemonBase base, int nivel) {
-
-        this.base = base;
-        this.nivel = nivel;
-
-        Random r = new Random();
-
-        // IVs: entre -3 y +3
-        ivVida = r.nextInt(7) - 3;
-        ivAtaque = r.nextInt(7) - 3;
-        ivDefensa = r.nextInt(7) - 3;
-        ivVelocidad = r.nextInt(7) - 3;
-
-        // Stats totales
-        vidaMax = base.getVidaBase() + ivVida;
-        ataque = base.getAtaqueBase() + ivAtaque;
-        defensa = base.getDefensaBase() + ivDefensa;
-        velocidad = base.getVelocidadBase() + ivVelocidad;
-
-        vidaActual = vidaMax;
-    }
-
-    public PokemonLuchador(PokemonBase trucado, int nivel, int stats){
-        this.base = trucado;
-        this.nivel = nivel;
-        // IVs: entre -3 y +3
-        ivVida = stats;
-        ivAtaque = stats;
-        ivDefensa = stats;
-        ivVelocidad = stats;
-        // Stats totales
-        vidaMax = base.getVidaBase() + ivVida +getNivel();
-        ataque = base.getAtaqueBase() + ivAtaque+getNivel();
-        defensa = base.getDefensaBase() + ivDefensa+getNivel();
-        velocidad = base.getVelocidadBase() + ivVelocidad+getNivel();
-
-        vidaActual = vidaMax;
-    }
-
-    public PokemonLuchador(PokemonBase base, int nivel) {
         this(base, nivel, generarIVsAleatorios(), GeneticaPokemon.sexoAleatorio(base));
     }
 
