@@ -189,8 +189,7 @@ public final class EditorMapas {
         JCheckBox agua = new JCheckBox("Crear lagos / costa", true);
         JCheckBox obstaculos = new JCheckBox("Crear árboles / obstáculos", true);
         JCheckBox edificios = new JCheckBox("Colocar objetos de la biblioteca (pueblo)", true);
-        JCheckBox clasificarTiles = new JCheckBox("Asignar tipos Normal / Hierba / Agua / Bloqueo a los tiles elegidos", true);
-        clasificarTiles.setToolTipText("Las propiedades se guardan por tile y se aplican también cuando ese tile se use en otros mapas.");
+        JLabel clasificarTiles = new JLabel("<html>Los tiles elegidos se clasifican automáticamente por función.<br>La propiedad también se aplica en otros mapas.</html>");
 
         JComboBox<Integer> tileBase = crearSelectorTile();
         JComboBox<Integer> tileCamino = crearSelectorTile();
@@ -214,6 +213,9 @@ public final class EditorMapas {
         tileHierba.setSelectedItem(hierbaDefault);
         tileAgua.setSelectedItem(aguaDefault);
         tileObstaculo.setSelectedItem(obstaculoDefault);
+        if (hierbaDefault < 0) hierba.setSelected(false);
+        if (aguaDefault < 0) agua.setSelected(false);
+        if (obstaculoDefault < 0) obstaculos.setSelected(false);
 
         JPanel dimensiones = new JPanel(new FlowLayout(FlowLayout.LEFT));
         dimensiones.add(new JLabel("Ancho (tiles):")); dimensiones.add(anchoCampo);
@@ -273,18 +275,16 @@ public final class EditorMapas {
                 if (base < 0) throw new IllegalArgumentException("Selecciona un tile de suelo base.");
                 validarRolesTiles(base, road, grassTile, waterTile, obstacleTile);
 
-                String aviso = "Se reemplazará el mapa que estás editando. ¿Continuar?";
-                if (clasificarTiles.isSelected()) aviso += "\n\nLos tiles elegidos se clasificarán según su función. Esa propiedad también se aplica en otros usos de esos tiles.";
+                String aviso = "Se reemplazará el mapa que estás editando. ¿Continuar?"
+                        + "\n\nLos tiles elegidos se clasificarán automáticamente según su función. Esa propiedad también se aplica en otros usos de esos tiles.";
                 if (JOptionPane.showConfirmDialog(dialogo, aviso, "Generar mapa",
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) return;
 
-                if (clasificarTiles.isSelected()) {
-                    tiposTile.set(base, TipoTile.NORMAL);
-                    if (road >= 0) tiposTile.set(road, TipoTile.NORMAL);
-                    if (grassTile >= 0) tiposTile.set(grassTile, TipoTile.HIERBA);
-                    if (waterTile >= 0) tiposTile.set(waterTile, TipoTile.AGUA);
-                    if (obstacleTile >= 0) tiposTile.set(obstacleTile, TipoTile.BLOQUEO);
-                }
+                tiposTile.set(base, TipoTile.NORMAL);
+                if (road >= 0) tiposTile.set(road, TipoTile.NORMAL);
+                if (grassTile >= 0) tiposTile.set(grassTile, TipoTile.HIERBA);
+                if (waterTile >= 0) tiposTile.set(waterTile, TipoTile.AGUA);
+                if (obstacleTile >= 0) tiposTile.set(obstacleTile, TipoTile.BLOQUEO);
 
                 List<GeneradorMapas.DefinicionObjeto> biblioteca = new ArrayList<>();
                 for (int i = 0; i < objetos.size(); i++) {
