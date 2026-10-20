@@ -1,8 +1,11 @@
 package Proyecto;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /** Pruebas funcionales básicas para el sistema de crianza y las megaevoluciones. */
 public final class SistemaCrianzaMegaSmokeTest {
@@ -14,6 +17,7 @@ public final class SistemaCrianzaMegaSmokeTest {
         probarSexoYCompatibilidad();
         probarCrianzaEIVs();
         probarCooldown();
+        probarPersistenciaGenetica();
         probarMegaEnCombate();
         System.out.println("OK: catálogo Mega, sexos, compatibilidad, herencia de seis IVs, cooldown y megaevolución.");
     }
@@ -84,12 +88,31 @@ public final class SistemaCrianzaMegaSmokeTest {
         check(padre.puedeCriarAhora(), "El cooldown vencido debe permitir criar.");
     }
 
+    private static void probarPersistenciaGenetica() throws Exception {
+        PokemonLuchador original = new PokemonLuchador(required("Pikachu"), 12,
+                new int[]{1, 2, 3, 4, 5, 6}, SexoPokemon.HEMBRA);
+        long fin = System.currentTimeMillis() + SistemaCrianza.COOLDOWN_MS;
+        original.setProximaCrianzEpochMs(fin);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (ObjectOutputStream salida = new ObjectOutputStream(bytes)) {
+            salida.writeObject(original);
+        }
+        PokemonLuchador cargado;
+        try (ObjectInputStream entrada = new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+            cargado = (PokemonLuchador) entrada.readObject();
+        }
+        check(cargado.getSexo() == SexoPokemon.HEMBRA, "El sexo debe conservarse al guardar/cargar.");
+        check(Arrays.equals(cargado.getIVs(), original.getIVs()), "Los seis IVs deben conservarse al guardar/cargar.");
+        check(cargado.getProximaCrianzEpochMs() == fin, "El cooldown debe conservarse al guardar/cargar.");
+    }
+
     private static void probarMegaEnCombate() {
         PokemonBase charizard = required("Charizard");
         PokemonLuchador pokemon = new PokemonLuchador(charizard, 50,
                 new int[]{16, 20, 18, 28, 15, 24}, SexoPokemon.MACHO);
         pokemon.setMegapiedra("Charizardite X");
         int ataqueOriginal = pokemon.getAtaque();
+        MegaEvoluciones.iniciarCombate();
         pokemon.iniciarCombate();
         MegaEvoluciones.Forma forma = MegaEvoluciones.paraEspecie("Charizard").stream()
                 .filter(f -> f.nombreForma().equals("Charizard-Mega-X")).findFirst()
@@ -98,9 +121,16 @@ public final class SistemaCrianzaMegaSmokeTest {
                 "Charizard con Charizardite X debe megaevolucionar a X.");
         check(pokemon.getNombre().equals("Charizard-Mega-X"), "No cambió a la forma Mega.");
         check(!pokemon.puedeMegaEvolucionarEsteCombate(), "No debe poder megaevolucionar dos veces en el mismo combate.");
+        PokemonLuchador segundoPokemon = new PokemonLuchador(charizard, 50,
+                new int[]{15, 15, 15, 15, 15, 15}, SexoPokemon.HEMBRA);
+        segundoPokemon.setMegapiedra("Charizardite Y");
+        segundoPokemon.iniciarCombate();
+        check(!MegaEvoluciones.puedeOfrecerse(segundoPokemon),
+                "Un mismo entrenador no debe megaevolucionar dos Pokémon en el mismo combate.");
         pokemon.desmegaevolucionar();
         check(pokemon.getNombre().equals("Charizard"), "Debe volver a la forma normal al terminar el combate.");
         check(pokemon.getAtaque() == ataqueOriginal, "Los stats deben restaurarse al desmegaevolucionar.");
+        MegaEvoluciones.terminarCombate();
     }
 
     private static PokemonBase required(String nombre) {
