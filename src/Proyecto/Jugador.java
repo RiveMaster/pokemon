@@ -34,6 +34,8 @@ public class Jugador implements Serializable {
     // Objetos equipables en la mochila, medallas de gimnasio y posición actual
     private HashMap<ObjetoEquipable, Integer> objetosEquipables = new HashMap<>();
     private Set<String> medallas = new LinkedHashSet<>();
+    // Megapiedras de la mochila: se guardan junto a la partida.
+    private Set<String> megapiedras = new LinkedHashSet<>();
     private Ubicacion ubicacion = Ubicacion.VILLAVERDE;
 
     // Generación en la que se juega, la más alta desbloqueada y jefes del Gobierno derrotados
@@ -71,6 +73,19 @@ public class Jugador implements Serializable {
     }
 
     public List<PokemonLuchador> getPc(){return pc;}
+
+    public Set<String> getMegapiedras() {
+        if (megapiedras == null) megapiedras = new LinkedHashSet<>();
+        return megapiedras;
+    }
+
+    public boolean tieneMegapiedra(String nombre) {
+        return nombre != null && getMegapiedras().contains(nombre);
+    }
+
+    public void obtenerMegapiedra(String nombre) {
+        if (nombre != null && !nombre.isBlank()) getMegapiedras().add(nombre);
+    }
 
     public int getDinero() { return dinero; }
 
@@ -198,6 +213,7 @@ public class Jugador implements Serializable {
         // Los campos añadidos después de crear una partida vienen a null al cargarla
         if (objetosEquipables == null) objetosEquipables = new HashMap<>();
         if (medallas == null) medallas = new LinkedHashSet<>();
+        if (megapiedras == null) megapiedras = new LinkedHashSet<>();
         if (ubicacion == null) ubicacion = Ubicacion.VILLAVERDE;
         if (jefesDerrotados == null) jefesDerrotados = new LinkedHashSet<>();
         if (miembrosGimnasioDerrotados == null) miembrosGimnasioDerrotados = new LinkedHashSet<>();
