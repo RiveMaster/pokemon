@@ -17,10 +17,14 @@ import java.util.List;
  * Los mapas se guardan en formato binario .pmap e incluyen la paleta de tiles.
  */
 public final class EditorMapas {
-    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 1;
+    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 2;
     private final JFrame frame = new JFrame("Pokémon Studio — Editor de mapas");
     private int ancho = 20, alto = 15, seleccionado = 0, capa = 0;
     private final List<BufferedImage> tiles = new ArrayList<>();
+    private final List<ObjetoMapa> objetos = new ArrayList<>();
+    private final List<ColocacionObjeto> colocaciones = new ArrayList<>();
+    private int objetoSeleccionado = -1;
+    private boolean modoObjeto = false;
     private int[][] capas = new int[3][ancho * alto];
     private boolean[] colisiones = new boolean[ancho * alto];
     private boolean modoColision = false, rejilla = true;
@@ -65,35 +69,29 @@ public final class EditorMapas {
         frame.add(barra, BorderLayout.NORTH);
 
         selectorCapa.addActionListener(e -> { capa = selectorCapa.getSelectedIndex(); actualizarEstado(); canvas.repaint(); });
-        JPanel panelIzq = new JPanel(new BorderLayout(4, 4));
-        panelIzq.setBorder(new EmptyBorder(5, 5, 5, 5));
-        panelIzq.add(new JLabel("Tiles (16 × 16)"), BorderLayout.NORTH);
         listaPaleta.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         listaPaleta.setVisibleRowCount(-1);
-        listaPaleta.setFixedCellWidth(48);
-        listaPaleta.setFixedCellHeight(48);
+        listaPaleta.setFixedCellWidth(54);
+        listaPaleta.setFixedCellHeight(54);
         listaPaleta.setCellRenderer(new TileRenderer());
         listaPaleta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaPaleta.setSelectedIndex(0);
         listaPaleta.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && listaPaleta.getSelectedValue() != null) {
                 seleccionado = listaPaleta.getSelectedValue();
+                modoObjeto = false;
                 actualizarEstado();
             }
         });
-        panelIzq.add(new JScrollPane(listaPaleta), BorderLayout.CENTER);
-        JButton limpiar = new JButton("Vaciar capa");
-        limpiar.addActionListener(e -> {
-            if (JOptionPane.showConfirmDialog(frame, "¿Vaciar la capa " + nombreCapa(capa) + "?", "Confirmar", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                java.util.Arrays.fill(capas[capa], -1); canvas.repaint();
-            }
+        JTabbedPane herramientas = new JTabbedPane();
+        herramientas.addTab("Tiles", crearPanelTiles());
+        herramientas.addTab("Crear objetos", crearPanelObjetos());
+        herramientas.addChangeListener(e -> {
+            modoObjeto = herramientas.getSelectedIndex() == 1 && objetoSeleccionado >= 0;
+            actualizarEstado();
+            canvas.repaint();
         });
-        JPanel opciones = new JPanel(new BorderLayout());
-        opciones.add(selectorCapa, BorderLayout.NORTH);
-        opciones.add(limpiar, BorderLayout.SOUTH);
-        panelIzq.add(opciones, BorderLayout.SOUTH);
-        panelIzq.setPreferredSize(new Dimension(230, 600));
-        frame.add(panelIzq, BorderLayout.WEST);
+        herramientas.setPreferredSize(new Dimension(310, 600));
+        frame.add(herramientas, BorderLayout.WEST);
 
         JScrollPane mapaScroll = new JScrollPane(canvas);
         mapaScroll.getViewport().setBackground(new Color(65, 65, 65));
@@ -107,8 +105,11 @@ public final class EditorMapas {
 
     private static String nombreCapa(int c) { return new String[]{"Suelo", "Objetos", "Superior"}[c]; }
     private void actualizarEstado() {
-        estado.setText((modoColision ? "MODO COLISIONES · " : "") + "Capa: " + nombreCapa(capa)
-                + " · Tile: " + seleccionado + " · " + ancho + "×" + alto + " · clic izq. pinta, der. borra");
+        String herramienta = modoColision ? "MODO COLISIONES" :
+                (modoObjeto && objetoSeleccionado >= 0 && objetoSeleccionado < objetos.size()
+                        ? "Objeto: " + objetos.get(objetoSeleccionado).nombre : "Tile: " + seleccionado);
+        estado.setText(herramienta + " · Capa: " + nombreCapa(capa) + " · " + ancho + "×" + alto
+                + " · clic izq. coloca/pinta, der. borra");
     }
 
     private void nuevoMapa() {
