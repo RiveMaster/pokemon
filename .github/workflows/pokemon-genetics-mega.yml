@@ -1,0 +1,32 @@
+name: Pokemon genetics breeding and mega evolution tests
+
+on:
+  push:
+    paths:
+      - "src/Proyecto/**"
+      - "tests/SistemaCrianzaMegaSmokeTest.java"
+      - ".github/workflows/pokemon-genetics-mega.yml"
+  pull_request:
+    paths:
+      - "src/Proyecto/**"
+      - "tests/SistemaCrianzaMegaSmokeTest.java"
+      - ".github/workflows/pokemon-genetics-mega.yml"
+
+jobs:
+  compile-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Compile all game and Studio sources
+        run: |
+          mkdir -p build
+          find src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d build
+          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java
+      - name: Test breeding, IVs, cooldown and mega evolution
+        run: java -ea -cp build Proyecto.SistemaCrianzaMegaSmokeTest
