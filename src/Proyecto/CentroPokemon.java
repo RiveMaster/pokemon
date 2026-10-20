@@ -55,8 +55,8 @@ public class CentroPokemon {
 
         System.out.println("Ataque: " + pokemon.getAtaque() + " (Base: " + base.getAtaqueBase() + ")");
         System.out.println("Defensa: " + pokemon.getDefensa() + " (Base: " + base.getDefensaBase() + ")");
-        System.out.println("Ataque especial: " + pokemon.getAtaqueEspecial() + " (Base: " + base.getAtaqueEspBase() + ")");
-        System.out.println("Defensa especial: " + pokemon.getDefensaEspecial() + " (Base: " + base.getDefensaEspBase() + ")");
+        System.out.println("Ataque especial: " + pokemon.getAtaqueEspecial() + " (Base: " + (base.getAtaqueEspBase() > 0 ? base.getAtaqueEspBase() : base.getAtaqueBase()) + ")");
+        System.out.println("Defensa especial: " + pokemon.getDefensaEspecial() + " (Base: " + (base.getDefensaEspBase() > 0 ? base.getDefensaEspBase() : base.getDefensaBase()) + ")");
         System.out.println("Velocidad: " + pokemon.getVelocidad() + " (Base: " + base.getVelocidadBase() + ")");
         System.out.println("IVs: " + pokemon.resumenIVs());
         System.out.println("Megapiedra: " + (pokemon.getMegapiedra() == null ? "ninguna" : pokemon.getMegapiedra()));
