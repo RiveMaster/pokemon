@@ -188,7 +188,11 @@ public final class EditorMapas {
         JCheckBox hierba = new JCheckBox("Crear zonas de hierba", true);
         JCheckBox agua = new JCheckBox("Crear lagos / costa", true);
         JCheckBox obstaculos = new JCheckBox("Crear árboles / obstáculos", true);
-        JCheckBox edificios = new JCheckBox("Colocar objetos de la biblioteca (pueblo)", true);
+        JCheckBox edificios = new JCheckBox("Colocar edificios", true);
+        JCheckBox casas = new JCheckBox("Casas", true);
+        JCheckBox centroPokemon = new JCheckBox("Centro Pokémon", true);
+        JCheckBox gimnasio = new JCheckBox("Gimnasio", true);
+        JCheckBox tienda = new JCheckBox("Tienda", true);
         JLabel clasificarTiles = new JLabel("<html>Los tiles elegidos se clasifican automáticamente por función.<br>La propiedad se guarda en este proyecto y afecta a sus otros usos.</html>");
 
         JComboBox<Integer> tileBase = crearSelectorTile();
@@ -235,6 +239,8 @@ public final class EditorMapas {
         opciones.add(camino); opciones.add(hierba);
         opciones.add(agua); opciones.add(obstaculos);
         opciones.add(edificios); opciones.add(new JLabel("Los edificios se usan en estilo Pueblo."));
+        opciones.add(casas); opciones.add(centroPokemon);
+        opciones.add(gimnasio); opciones.add(tienda);
 
         JPanel paleta = new JPanel(new GridLayout(0, 2, 6, 5));
         paleta.setBorder(BorderFactory.createTitledBorder("Tiles para cada función"));
@@ -295,7 +301,8 @@ public final class EditorMapas {
                 GeneradorMapas.Opciones ajustes = new GeneradorMapas.Opciones(
                         w, h, seed, (GeneradorMapas.Estilo) estiloCampo.getSelectedItem(),
                         densidadCampo.getValue(), camino.isSelected(), hierba.isSelected(), agua.isSelected(),
-                        obstaculos.isSelected(), edificios.isSelected(), base, road, grassTile, waterTile, obstacleTile);
+                        obstaculos.isSelected(), edificios.isSelected(), base, road, grassTile, waterTile, obstacleTile,
+                        casas.isSelected(), centroPokemon.isSelected(), gimnasio.isSelected(), tienda.isSelected());
                 GeneradorMapas.Resultado resultado = GeneradorMapas.generar(ajustes, biblioteca);
 
                 ancho = resultado.ancho;
