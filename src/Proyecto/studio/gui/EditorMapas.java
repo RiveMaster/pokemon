@@ -1099,6 +1099,11 @@ private void guardar() {
                     boolean derecho = esClicDerecho(e);
                     if (modoColision) {
                         colisiones[i] = !derecho;
+                        if (!derecho) {
+                            hierbaEncuentros[i] = false;
+                        } else if (capas[0][i] >= 0 && capas[0][i] < tiposTile.size()) {
+                            hierbaEncuentros[i] = tiposTile.get(capas[0][i]) == TipoTile.HIERBA;
+                        }
                     } else if (modoObjeto && objetoSeleccionado >= 0 && objetoSeleccionado < objetos.size()) {
                         if (derecho) {
                             borrarObjetoEn(x, y);
