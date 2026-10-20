@@ -189,7 +189,7 @@ public final class EditorMapas {
         JCheckBox agua = new JCheckBox("Crear lagos / costa", true);
         JCheckBox obstaculos = new JCheckBox("Crear árboles / obstáculos", true);
         JCheckBox edificios = new JCheckBox("Colocar objetos de la biblioteca (pueblo)", true);
-        JLabel clasificarTiles = new JLabel("<html>Los tiles elegidos se clasifican automáticamente por función.<br>La propiedad también se aplica en otros mapas.</html>");
+        JLabel clasificarTiles = new JLabel("<html>Los tiles elegidos se clasifican automáticamente por función.<br>La propiedad se guarda en este proyecto y afecta a sus otros usos.</html>");
 
         JComboBox<Integer> tileBase = crearSelectorTile();
         JComboBox<Integer> tileCamino = crearSelectorTile();
@@ -276,7 +276,7 @@ public final class EditorMapas {
                 validarRolesTiles(base, road, grassTile, waterTile, obstacleTile);
 
                 String aviso = "Se reemplazará el mapa que estás editando. ¿Continuar?"
-                        + "\n\nLos tiles elegidos se clasificarán automáticamente según su función. Esa propiedad también se aplica en otros usos de esos tiles.";
+                        + "\n\nLos tiles elegidos se clasificarán automáticamente según su función. La propiedad se guarda en este proyecto y afecta a los demás lugares donde se usan esos tiles.";
                 if (JOptionPane.showConfirmDialog(dialogo, aviso, "Generar mapa",
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) return;
 
