@@ -677,7 +677,7 @@ private void guardar() {
                         }
 
                         String nombreTile = String.format(java.util.Locale.ROOT,
-                                "tile_%03d_%03d.png", x / TILE, y / TILE);
+                                "tile_%03d_%03d.png", y / TILE, x / TILE);
                         if (!ImageIO.write(tile, "png", carpeta.resolve(nombreTile).toFile())) {
                             throw new IOException("No se pudo escribir " + carpeta.resolve(nombreTile));
                         }
