@@ -137,12 +137,26 @@ public final class EditorMapas {
             if (img == null || img.getWidth() % TILE != 0 || img.getHeight() % TILE != 0)
                 throw new IOException("La imagen debe ser PNG y sus dimensiones múltiplos de 16 píxeles.");
             int n = 0;
-            for (int y = 0; y < img.getHeight(); y += TILE) for (int x = 0; x < img.getWidth(); x += TILE) {
-                tiles.add(img.getSubimage(x, y, TILE, TILE));
-                modeloPaleta.addElement(tiles.size() - 1); n++;
+            int vacios = 0;
+            for (int y = 0; y < img.getHeight(); y += TILE) {
+                for (int x = 0; x < img.getWidth(); x += TILE) {
+                    BufferedImage tile = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g = tile.createGraphics();
+                    g.drawImage(img, 0, 0, TILE, TILE, x, y, x + TILE, y + TILE, null);
+                    g.dispose();
+                    if (!tienePixelVisible(tile)) {
+                        vacios++;
+                        continue;
+                    }
+                    tiles.add(tile);
+                    modeloPaleta.addElement(tiles.size() - 1);
+                    n++;
+                }
             }
-            listaPaleta.setSelectedIndex(tiles.size() - n);
-            JOptionPane.showMessageDialog(frame, "Importados " + n + " tiles de " + fc.getSelectedFile().getName() + ".");
+            if (n > 0) listaPaleta.setSelectedIndex(tiles.size() - n);
+            JOptionPane.showMessageDialog(frame, "Importados " + n + " tiles de " + fc.getSelectedFile().getName()
+                    + (vacios > 0 ? ". Se omitieron " + vacios + " tiles totalmente transparentes." : ".")
+                    + (n == 0 ? "\nNo se ha añadido ningún tile: todos estaban vacíos." : ""));
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(frame, "No se pudo importar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -519,13 +533,23 @@ public final class EditorMapas {
                         Graphics2D g = tile.createGraphics();
                         g.drawImage(imagen, 0, 0, TILE, TILE, x, y, x + TILE, y + TILE, null);
                         g.dispose();
-                        tiles.add(tile);
+                        if (tienePixelVisible(tile)) tiles.add(tile);
                     }
                 }
             }
         } catch (IOException e) {
             error("No se pudieron importar los tiles desde " + ruta.toAbsolutePath() + ": " + e.getMessage());
         }
+    }
+
+    /** Un tile cuenta como ocupado si al menos un píxel tiene alfa distinto de cero. */
+    private static boolean tienePixelVisible(BufferedImage imagen) {
+        for (int y = 0; y < imagen.getHeight(); y++) {
+            for (int x = 0; x < imagen.getWidth(); x++) {
+                if (((imagen.getRGB(x, y) >>> 24) & 0xFF) != 0) return true;
+            }
+        }
+        return false;
     }
 
     private void crearTilesEjemplo() {
