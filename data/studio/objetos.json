@@ -6,7 +6,9 @@
     "bolsillo": "pokeballs",
     "precio": 50,
     "descripcion": "Sirve para capturar Pokémon salvajes.",
-    "banderas": ["tienda"]
+    "banderas": [
+      "tienda"
+    ]
   },
   {
     "id": 2,
@@ -15,7 +17,9 @@
     "bolsillo": "medicina",
     "precio": 300,
     "descripcion": "Cura a un Pokémon.",
-    "banderas": ["tienda"]
+    "banderas": [
+      "tienda"
+    ]
   },
   {
     "id": 3,
@@ -24,7 +28,9 @@
     "bolsillo": "mts",
     "precio": 200,
     "descripcion": "Una MT con un movimiento al azar.",
-    "banderas": ["tienda"]
+    "banderas": [
+      "tienda"
+    ]
   },
   {
     "id": 4,
@@ -33,7 +39,10 @@
     "bolsillo": "equipables",
     "precio": 600,
     "descripcion": "Recupera 1/16 de la vida máxima al inicio de cada turno.",
-    "banderas": ["tienda", "equipable"]
+    "banderas": [
+      "tienda",
+      "equipable"
+    ]
   },
   {
     "id": 5,
@@ -42,7 +51,10 @@
     "bolsillo": "equipables",
     "precio": 150,
     "descripcion": "Cura 30 PS cuando la vida baja a la mitad o menos. Se consume.",
-    "banderas": ["tienda", "equipable"]
+    "banderas": [
+      "tienda",
+      "equipable"
+    ]
   },
   {
     "id": 6,
@@ -51,7 +63,10 @@
     "bolsillo": "equipables",
     "precio": 500,
     "descripcion": "Con la vida completa, aguanta con 1 PS un golpe que lo debilitaría. Se consume.",
-    "banderas": ["tienda", "equipable"]
+    "banderas": [
+      "tienda",
+      "equipable"
+    ]
   },
   {
     "id": 7,
@@ -60,7 +75,10 @@
     "bolsillo": "equipables",
     "precio": 400,
     "descripcion": "Aumenta un 10% el daño de todos sus ataques.",
-    "banderas": ["tienda", "equipable"]
+    "banderas": [
+      "tienda",
+      "equipable"
+    ]
   },
   {
     "id": 8,
@@ -69,7 +87,10 @@
     "bolsillo": "equipables",
     "precio": 700,
     "descripcion": "Aumenta un 30% el daño, pero pierde 1/10 de su vida al atacar.",
-    "banderas": ["tienda", "equipable"]
+    "banderas": [
+      "tienda",
+      "equipable"
+    ]
   },
   {
     "id": 9,
@@ -78,7 +99,10 @@
     "bolsillo": "equipables",
     "precio": 450,
     "descripcion": "Reduce un 15% el daño recibido.",
-    "banderas": ["tienda", "equipable"]
+    "banderas": [
+      "tienda",
+      "equipable"
+    ]
   },
   {
     "id": 10,
@@ -87,7 +111,11 @@
     "bolsillo": "equipables",
     "precio": 350,
     "descripcion": "Aumenta un 20% el daño de los ataques de tipo Fuego.",
-    "banderas": ["tienda", "equipable", "potencia_fire"]
+    "banderas": [
+      "tienda",
+      "equipable",
+      "potencia_fire"
+    ]
   },
   {
     "id": 11,
@@ -96,7 +124,11 @@
     "bolsillo": "equipables",
     "precio": 350,
     "descripcion": "Aumenta un 20% el daño de los ataques de tipo Agua.",
-    "banderas": ["tienda", "equipable", "potencia_water"]
+    "banderas": [
+      "tienda",
+      "equipable",
+      "potencia_water"
+    ]
   },
   {
     "id": 12,
@@ -105,7 +137,11 @@
     "bolsillo": "equipables",
     "precio": 350,
     "descripcion": "Aumenta un 20% el daño de los ataques de tipo Planta.",
-    "banderas": ["tienda", "equipable", "potencia_grass"]
+    "banderas": [
+      "tienda",
+      "equipable",
+      "potencia_grass"
+    ]
   },
   {
     "id": 13,
@@ -114,7 +150,11 @@
     "bolsillo": "equipables",
     "precio": 350,
     "descripcion": "Aumenta un 20% el daño de los ataques de tipo Eléctrico.",
-    "banderas": ["tienda", "equipable", "potencia_electric"]
+    "banderas": [
+      "tienda",
+      "equipable",
+      "potencia_electric"
+    ]
   },
   {
     "id": 14,
@@ -123,6 +163,88 @@
     "bolsillo": "equipables",
     "precio": 350,
     "descripcion": "Aumenta un 20% el daño de los ataques de tipo Roca.",
-    "banderas": ["tienda", "equipable", "potencia_rock"]
+    "banderas": [
+      "tienda",
+      "equipable",
+      "potencia_rock"
+    ]
+  },
+  {
+    "id": 15,
+    "simbolo": "pesa_recia_iv_ps",
+    "nombre": "Pesa recia (IV PS)",
+    "bolsillo": "equipables",
+    "precio": 1800,
+    "descripcion": "Al criar, fuerza que el IV de PS se herede del Pokémon que la lleva.",
+    "banderas": [
+      "tienda",
+      "equipable",
+      "herencia_iv_ps"
+    ]
+  },
+  {
+    "id": 16,
+    "simbolo": "brazal_recio_iv_ataque",
+    "nombre": "Brazal recio (IV Ataque)",
+    "bolsillo": "equipables",
+    "precio": 1800,
+    "descripcion": "Al criar, fuerza que el IV de Ataque se herede del Pokémon que lo lleva.",
+    "banderas": [
+      "tienda",
+      "equipable",
+      "herencia_iv_ataque"
+    ]
+  },
+  {
+    "id": 17,
+    "simbolo": "cinto_recio_iv_defensa",
+    "nombre": "Cinto recio (IV Defensa)",
+    "bolsillo": "equipables",
+    "precio": 1800,
+    "descripcion": "Al criar, fuerza que el IV de Defensa se herede del Pokémon que lo lleva.",
+    "banderas": [
+      "tienda",
+      "equipable",
+      "herencia_iv_defensa"
+    ]
+  },
+  {
+    "id": 18,
+    "simbolo": "lente_recia_iv_ataque_especial",
+    "nombre": "Lente recia (IV At. Esp.)",
+    "bolsillo": "equipables",
+    "precio": 1800,
+    "descripcion": "Al criar, fuerza que el IV de Ataque Especial se herede del Pokémon que la lleva.",
+    "banderas": [
+      "tienda",
+      "equipable",
+      "herencia_iv_ataque_especial"
+    ]
+  },
+  {
+    "id": 19,
+    "simbolo": "banda_recia_iv_defensa_especial",
+    "nombre": "Banda recia (IV Def. Esp.)",
+    "bolsillo": "equipables",
+    "precio": 1800,
+    "descripcion": "Al criar, fuerza que el IV de Defensa Especial se herede del Pokémon que la lleva.",
+    "banderas": [
+      "tienda",
+      "equipable",
+      "herencia_iv_defensa_especial"
+    ]
+  },
+  {
+    "id": 20,
+    "simbolo": "franja_recia_iv_velocidad",
+    "nombre": "Franja recia (IV Velocidad)",
+    "bolsillo": "equipables",
+    "precio": 1800,
+    "descripcion": "Al criar, fuerza que el IV de Velocidad se herede del Pokémon que la lleva.",
+    "banderas": [
+      "tienda",
+      "equipable",
+      "herencia_iv_velocidad"
+    ]
   }
 ]
