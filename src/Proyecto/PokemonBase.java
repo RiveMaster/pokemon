@@ -23,6 +23,12 @@ public class PokemonBase implements Serializable {
     private int ataqueEspBase, defensaEspBase;
     private List<String> habilidades;
 
+    // Metadatos de las formas Mega añadidas al catálogo.
+    private boolean mega;
+    private String especieBaseMega;
+    private String megapiedraMega;
+    private String habilidadMega;
+
     public PokemonBase(String nombre, String tipo1, String tipo2, int vidaBase, int ataqueBase, int defensaBase, int velocidadBase, int nivelEvolucion, String evolucion, List<Movimiento> movimientosPorNivel) {
 
 
@@ -108,6 +114,19 @@ public class PokemonBase implements Serializable {
             this.defensaEspBase = defensaEspBase;
             this.habilidades = habilidades == null ? null : List.copyOf(habilidades);
         }
+
+        /** Marca esta entrada como forma Mega y conserva la especie a la que vuelve al acabar el combate. */
+        public void configurarMega(String especieBase, String megapiedra, String habilidadMega) {
+            this.mega = true;
+            this.especieBaseMega = especieBase;
+            this.megapiedraMega = megapiedra;
+            this.habilidadMega = habilidadMega;
+        }
+
+        public boolean esMega() { return mega; }
+        public String getEspecieBaseMega() { return especieBaseMega; }
+        public String getMegapiedraMega() { return megapiedraMega; }
+        public String getHabilidadMega() { return habilidadMega; }
 
 
 }
