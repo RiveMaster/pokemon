@@ -131,7 +131,7 @@ public enum Generacion {
             List<PokemonBase> todos = Pokedex.getTodos();
             List<PokemonBase> lista = new ArrayList<>();
             for (PokemonBase b : todos.subList(desde - 1, Math.min(hasta, todos.size()))) {
-                if (!EXCLUIDOS.contains(b.getNombre())) lista.add(b);
+                if (!EXCLUIDOS.contains(b.getNombre()) && !b.esMega()) lista.add(b);
             }
             cache = lista;
         }
