@@ -75,3 +75,29 @@ Una megaevolución es temporal: aplica las estadísticas/tipos/habilidad de la f
 ## Fuentes de datos
 
 El catálogo de formas se contrastó con la información pública de [Pokémon Legends: Z-A — Mega Pokémon](https://legends.pokemon.com/en-us/mega-pokemon) y sus formas disponibles. Los grupos huevo, proporciones de sexo, preevoluciones y datos de formas se incorporan al código para no requerir Internet en tiempo de ejecución. La lista de formas y sus valores se puede revisar en `MegaEvoluciones.java`.
+
+
+## Objetos equipables y herencia dirigida de IVs
+
+La tienda ofrece seis objetos de crianza, uno por atributo:
+
+| Objeto | IV que hereda directamente del portador |
+|---|---|
+| Pesa recia (IV PS) | PS |
+| Brazal recio (IV Ataque) | Ataque |
+| Cinto recio (IV Defensa) | Defensa |
+| Lente recia (IV At. Esp.) | Ataque especial |
+| Banda recia (IV Def. Esp.) | Defensa especial |
+| Franja recia (IV Velocidad) | Velocidad |
+
+Cuestan 1.800 € cada uno. Equipa el objeto al progenitor que tiene el IV deseado antes de criar. Ese IV de la cría será exactamente el del portador; los otros cinco siguen usando la media redondeada de ambos padres. Si los dos llevan un objeto que fuerza el mismo IV, se elige aleatoriamente cuál de los dos lo transmite. Los objetos se guardan en la mochila/partida como el resto de equipables.
+
+## Editor de mapas: biblioteca y pueblos
+
+En Pokémon Studio, abre **Editor de mapas → Crear objetos**. Cada objeto puede clasificarse como Casa/edificio, Centro Pokémon, Gimnasio, Tienda, Árbol/vegetación, Roca/obstáculo, Decoración u Otro. La categoría se guarda dentro del proyecto `.pmap`; los proyectos anteriores siguen siendo compatibles y su categoría se infiere a partir del nombre.
+
+En **Generar mapa → Pueblo / ciudad**, puedes decidir si el generador coloca casas, Centro Pokémon, gimnasio y tienda, además de controlar la densidad de vegetación y el tamaño/semilla del mapa. Crea al menos un objeto con cada categoría que quieras usar. Los edificios conservan una zona de acceso y las colocaciones no deben solaparse.
+
+### Caminos y esquinas automáticas
+
+En la paleta de tiles, asigna el tipo correspondiente a las variantes que tengas dibujadas en tu tileset: recta horizontal/vertical, final norte/este/sur/oeste, esquinas NE/NO/SE/SO, esquinas interiores/exteriores, cruces en T y cruce de cuatro direcciones. Al generar el camino, el editor detecta las conexiones de los tiles y sustituye el tile de camino base por la variante que corresponda cuando exista en la paleta. Si no has importado una variante concreta, usa el tile de camino normal como respaldo. Para que las esquinas queden visualmente correctas, importa las variantes del mismo estilo gráfico y clasifica cada PNG en la paleta.
