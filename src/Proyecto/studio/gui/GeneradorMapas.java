@@ -122,14 +122,24 @@ public final class GeneradorMapas {
         }
         if (o.incluirObstaculos) crearObstaculos(obstacles, path, water, w, h, o.densidad, o.estilo, random);
 
+        // Evita que los obstáculos generados tapen los edificios.
+        for (Colocacion colocacion : placements) {
+            DefinicionObjeto obj = buscarObjeto(biblioteca, colocacion.objeto);
+            if (obj == null) continue;
+            for (int oy = 0; oy < obj.alto; oy++) {
+                for (int ox = 0; ox < obj.ancho; ox++) {
+                    int x = colocacion.x + ox, y = colocacion.y + oy;
+                    if (dentro(x, y, w, h)) obstacles[y * w + x] = false;
+                }
+            }
+        }
+
         for (int i = 0; i < size; i++) {
             if (water[i] && o.tileAgua >= 0) {
                 layers[0][i] = o.tileAgua;
-                manual[i] = true;
             }
             if (obstacles[i] && !path[i] && !water[i] && o.tileObstaculo >= 0) {
                 layers[1][i] = o.tileObstaculo;
-                manual[i] = true;
             }
             if (o.incluirHierba && grassPatch[i] && !water[i] && !path[i] && o.tileHierba >= 0) {
                 layers[0][i] = o.tileHierba;
