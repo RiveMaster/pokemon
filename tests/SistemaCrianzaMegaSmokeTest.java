@@ -70,6 +70,18 @@ public final class SistemaCrianzaMegaSmokeTest {
         check(cria.getNombre().equalsIgnoreCase("Bulbasaur"), "La cría debe corresponder a la especie base de la madre.");
         check(Arrays.equals(cria.getIVs(), new int[]{5, 15, 25, 31, 16, 16}),
                 "Los IV de la cría deben ser la media redondeada: " + Arrays.toString(cria.getIVs()));
+
+        // Un objeto de herencia fuerza el IV del progenitor que lo lleva, sin tocar los otros cinco.
+        PokemonLuchador madreConPesa = new PokemonLuchador(bulbasaur, 20, ivMadre, SexoPokemon.HEMBRA);
+        PokemonLuchador padreConPesa = new PokemonLuchador(charmander, 20, ivPadre, SexoPokemon.MACHO);
+        padreConPesa.setObjeto(ObjetoEquipable.PESA_REcia);
+        Jugador jugadorConObjeto = new Jugador("SmokeTestObjeto", madreConPesa, 0);
+        jugadorConObjeto.agregarPokemon(padreConPesa);
+        check(SistemaCrianza.criar(new Scanner("1\\n2\\n"), jugadorConObjeto),
+                "La pareja equipada debería criar.");
+        PokemonLuchador criaConPesa = jugadorConObjeto.getEquipo().get(jugadorConObjeto.getEquipo().size() - 1);
+        check(criaConPesa.getIVs()[0] == ivPadre[0],
+                "La Pesa recia debe forzar el IV de PS del progenitor equipado.");
         check(cria.getNivel() == 1, "La cría debe empezar al nivel 1.");
         check(madre.getProximaCrianzEpochMs() == padre.getProximaCrianzEpochMs(),
                 "Los dos padres deben compartir el mismo instante de fin de cooldown.");
