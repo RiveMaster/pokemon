@@ -97,6 +97,8 @@ public final class EditorMapas {
         JPanel barra = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton nuevo = new JButton("Nuevo mapa");
         nuevo.addActionListener(e -> nuevoMapa());
+        JButton generar = new JButton("Generar mapa");
+        generar.addActionListener(e -> generarMapaDialogo());
         JButton importar = new JButton("Importar PNG");
         importar.addActionListener(e -> importarPng());
         JButton guardar = new JButton("Guardar proyecto");
@@ -113,7 +115,7 @@ public final class EditorMapas {
         cuadricula.addActionListener(e -> { rejilla = cuadricula.isSelected(); canvas.repaint(); });
         JCheckBox propiedades = new JCheckBox("Ver propiedades");
         propiedades.addActionListener(e -> { mostrarPropiedades = propiedades.isSelected(); canvas.repaint(); });
-        barra.add(nuevo); barra.add(abrir); barra.add(guardar); barra.add(importar);
+        barra.add(nuevo); barra.add(generar); barra.add(abrir); barra.add(guardar); barra.add(importar);
         barra.add(exportarTiles); barra.add(exportar); barra.add(col); barra.add(cuadricula); barra.add(propiedades);
         frame.add(barra, BorderLayout.NORTH);
 
@@ -160,6 +162,227 @@ public final class EditorMapas {
                         ? "Objeto: " + objetos.get(objetoSeleccionado).nombre : "Tile: " + seleccionado);
         estado.setText(herramienta + " · Capa: " + nombreCapa(capa) + " · " + ancho + "×" + alto
                 + " · clic izq. coloca/pinta, der. borra");
+    }
+
+    /** Abre el asistente de generación procedural y aplica el resultado al mapa editable. */
+    private void generarMapaDialogo() {
+        if (tiles.isEmpty()) {
+            error("Primero importa o crea al menos un tile.");
+            return;
+        }
+
+        JDialog dialogo = new JDialog(frame, "Generador de mapas Pokémon", true);
+        dialogo.setLayout(new BorderLayout(8, 8));
+
+        JSpinner anchoCampo = new JSpinner(new SpinnerNumberModel(ancho, 1, 300, 1));
+        JSpinner altoCampo = new JSpinner(new SpinnerNumberModel(alto, 1, 300, 1));
+        JTextField semillaCampo = new JTextField(Long.toString(System.currentTimeMillis()), 14);
+        JComboBox<GeneradorMapas.Estilo> estiloCampo = new JComboBox<>(GeneradorMapas.Estilo.values());
+        JSlider densidadCampo = new JSlider(0, 100, 45);
+        densidadCampo.setMajorTickSpacing(25);
+        densidadCampo.setMinorTickSpacing(5);
+        densidadCampo.setPaintTicks(true);
+        densidadCampo.setPaintLabels(true);
+
+        JCheckBox camino = new JCheckBox("Crear caminos conectados", true);
+        JCheckBox hierba = new JCheckBox("Crear zonas de hierba", true);
+        JCheckBox agua = new JCheckBox("Crear lagos / costa", true);
+        JCheckBox obstaculos = new JCheckBox("Crear árboles / obstáculos", true);
+        JCheckBox edificios = new JCheckBox("Colocar objetos de la biblioteca (pueblo)", true);
+        JCheckBox clasificarTiles = new JCheckBox("Asignar tipos Normal / Hierba / Agua / Bloqueo a los tiles elegidos", true);
+        clasificarTiles.setToolTipText("Las propiedades se guardan por tile y se aplican también cuando ese tile se use en otros mapas.");
+
+        JComboBox<Integer> tileBase = crearSelectorTile();
+        JComboBox<Integer> tileCamino = crearSelectorTile();
+        JComboBox<Integer> tileHierba = crearSelectorTile();
+        JComboBox<Integer> tileAgua = crearSelectorTile();
+        JComboBox<Integer> tileObstaculo = crearSelectorTile();
+
+        int baseDefault = primerTileTipo(TipoTile.NORMAL, -1);
+        if (baseDefault < 0) baseDefault = 0;
+        int caminoDefault = siguienteTileNormal(baseDefault);
+        if (caminoDefault < 0) caminoDefault = baseDefault;
+        int hierbaDefault = primerTileTipo(TipoTile.HIERBA, baseDefault);
+        if (hierbaDefault < 0) hierbaDefault = distintoDe(baseDefault, caminoDefault, -1);
+        int aguaDefault = primerTileTipo(TipoTile.AGUA, baseDefault, caminoDefault, hierbaDefault);
+        if (aguaDefault < 0) aguaDefault = distintoDe(baseDefault, caminoDefault, hierbaDefault);
+        int obstaculoDefault = primerTileTipo(TipoTile.BLOQUEO, baseDefault, caminoDefault, hierbaDefault, aguaDefault);
+        if (obstaculoDefault < 0) obstaculoDefault = distintoDe(baseDefault, caminoDefault, hierbaDefault, aguaDefault);
+
+        tileBase.setSelectedItem(baseDefault);
+        tileCamino.setSelectedItem(caminoDefault);
+        tileHierba.setSelectedItem(hierbaDefault);
+        tileAgua.setSelectedItem(aguaDefault);
+        tileObstaculo.setSelectedItem(obstaculoDefault);
+
+        JPanel dimensiones = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        dimensiones.add(new JLabel("Ancho (tiles):")); dimensiones.add(anchoCampo);
+        dimensiones.add(new JLabel("Alto (tiles):")); dimensiones.add(altoCampo);
+        dimensiones.add(new JLabel("Semilla:")); dimensiones.add(semillaCampo);
+
+        JPanel terreno = new JPanel(new GridLayout(0, 1, 4, 4));
+        terreno.setBorder(BorderFactory.createTitledBorder("Estilo y densidad"));
+        terreno.add(estiloCampo);
+        JPanel sliderPanel = new JPanel(new BorderLayout(6, 0));
+        sliderPanel.add(new JLabel("Densidad de vegetación:"), BorderLayout.WEST);
+        sliderPanel.add(densidadCampo, BorderLayout.CENTER);
+        terreno.add(sliderPanel);
+
+        JPanel opciones = new JPanel(new GridLayout(0, 2, 6, 3));
+        opciones.setBorder(BorderFactory.createTitledBorder("Elementos a generar"));
+        opciones.add(camino); opciones.add(hierba);
+        opciones.add(agua); opciones.add(obstaculos);
+        opciones.add(edificios); opciones.add(new JLabel("Los edificios se usan en estilo Pueblo."));
+
+        JPanel paleta = new JPanel(new GridLayout(0, 2, 6, 5));
+        paleta.setBorder(BorderFactory.createTitledBorder("Tiles para cada función"));
+        paleta.add(new JLabel("Suelo base:")); paleta.add(tileBase);
+        paleta.add(new JLabel("Camino:")); paleta.add(tileCamino);
+        paleta.add(new JLabel("Hierba:")); paleta.add(tileHierba);
+        paleta.add(new JLabel("Agua:")); paleta.add(tileAgua);
+        paleta.add(new JLabel("Árbol / obstáculo:")); paleta.add(tileObstaculo);
+        paleta.add(clasificarTiles); paleta.add(new JLabel("Los tiles se muestran como miniaturas."));
+
+        JPanel centro = new JPanel();
+        centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
+        centro.add(dimensiones);
+        centro.add(terreno);
+        centro.add(opciones);
+        centro.add(paleta);
+        dialogo.add(new JScrollPane(centro), BorderLayout.CENTER);
+
+        JLabel nota = new JLabel("<html>Genera mapas reproducibles con la misma semilla. " +
+                "Los caminos conectan los bordes; los objetos usan la biblioteca de «Crear objetos».</html>");
+        nota.setBorder(new EmptyBorder(4, 8, 4, 8));
+        dialogo.add(nota, BorderLayout.NORTH);
+
+        JButton cancelar = new JButton("Cancelar");
+        cancelar.addActionListener(e -> dialogo.dispose());
+        JButton generar = new JButton("Generar y reemplazar mapa");
+        generar.addActionListener(e -> {
+            try {
+                int w = (Integer) anchoCampo.getValue();
+                int h = (Integer) altoCampo.getValue();
+                long seed = Long.parseLong(semillaCampo.getText().trim());
+                int base = valorSelector(tileBase);
+                int road = camino.isSelected() ? valorSelector(tileCamino) : -1;
+                int grassTile = hierba.isSelected() ? valorSelector(tileHierba) : -1;
+                int waterTile = agua.isSelected() ? valorSelector(tileAgua) : -1;
+                int obstacleTile = obstaculos.isSelected() ? valorSelector(tileObstaculo) : -1;
+
+                if (base < 0) throw new IllegalArgumentException("Selecciona un tile de suelo base.");
+                validarRolesTiles(base, road, grassTile, waterTile, obstacleTile);
+
+                String aviso = "Se reemplazará el mapa que estás editando. ¿Continuar?";
+                if (clasificarTiles.isSelected()) aviso += "\n\nLos tiles elegidos se clasificarán según su función. Esa propiedad también se aplica en otros usos de esos tiles.";
+                if (JOptionPane.showConfirmDialog(dialogo, aviso, "Generar mapa",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) return;
+
+                if (clasificarTiles.isSelected()) {
+                    tiposTile.set(base, TipoTile.NORMAL);
+                    if (road >= 0) tiposTile.set(road, TipoTile.NORMAL);
+                    if (grassTile >= 0) tiposTile.set(grassTile, TipoTile.HIERBA);
+                    if (waterTile >= 0) tiposTile.set(waterTile, TipoTile.AGUA);
+                    if (obstacleTile >= 0) tiposTile.set(obstacleTile, TipoTile.BLOQUEO);
+                }
+
+                List<GeneradorMapas.DefinicionObjeto> biblioteca = new ArrayList<>();
+                for (int i = 0; i < objetos.size(); i++) {
+                    ObjetoMapa o = objetos.get(i);
+                    biblioteca.add(new GeneradorMapas.DefinicionObjeto(i, o.nombre, o.ancho, o.alto, o.celdas));
+                }
+
+                GeneradorMapas.Opciones ajustes = new GeneradorMapas.Opciones(
+                        w, h, seed, (GeneradorMapas.Estilo) estiloCampo.getSelectedItem(),
+                        densidadCampo.getValue(), camino.isSelected(), hierba.isSelected(), agua.isSelected(),
+                        obstaculos.isSelected(), edificios.isSelected(), base, road, grassTile, waterTile, obstacleTile);
+                GeneradorMapas.Resultado resultado = GeneradorMapas.generar(ajustes, biblioteca);
+
+                ancho = resultado.ancho;
+                alto = resultado.alto;
+                capas = new int[3][];
+                for (int capaActual = 0; capaActual < 3; capaActual++) capas[capaActual] = resultado.capas[capaActual].clone();
+                colisionesManuales = resultado.colisionesManuales.clone();
+                hierbaEncuentros = resultado.hierbaEncuentros.clone();
+                colocaciones.clear();
+                for (GeneradorMapas.Colocacion p : resultado.colocaciones) {
+                    if (p.objeto >= 0 && p.objeto < objetos.size())
+                        colocaciones.add(new ColocacionObjeto(p.objeto, p.x, p.y, p.capa));
+                }
+
+                modoColision = false;
+                modoObjeto = false;
+                objetoSeleccionado = -1;
+                capa = 0;
+                seleccionado = base;
+                listaPaleta.setSelectedIndex(seleccionado);
+                actualizarTipoSeleccionado();
+                recalcularTodasPropiedades();
+                canvas.revalidate();
+                canvas.repaint();
+                actualizarEstado();
+                dialogo.dispose();
+                JOptionPane.showMessageDialog(frame,
+                        "Mapa generado correctamente.\nTamaño: " + ancho + " × " + alto +
+                                " tiles (" + (ancho * 16) + " × " + (alto * 16) + " píxeles).\nSemilla: " + seed +
+                                "\nObjetos colocados: " + colocaciones.size() +
+                                "\nPuedes seguir editándolo y guardarlo como .pmap.",
+                        "Generador de mapas", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialogo, "La semilla debe ser un número entero.", "Semilla no válida", JOptionPane.WARNING_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(dialogo, ex.getMessage(), "Configuración no válida", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        botones.add(cancelar);
+        botones.add(generar);
+        dialogo.add(botones, BorderLayout.SOUTH);
+        dialogo.setSize(820, 660);
+        dialogo.setLocationRelativeTo(frame);
+        dialogo.setVisible(true);
+    }
+
+    private JComboBox<Integer> crearSelectorTile() {
+        JComboBox<Integer> combo = new JComboBox<>();
+        for (int i = 0; i < tiles.size(); i++) combo.addItem(i);
+        combo.setRenderer(new TileRenderer());
+        combo.setPreferredSize(new Dimension(230, 40));
+        return combo;
+    }
+
+    private int valorSelector(JComboBox<Integer> combo) {
+        Integer value = (Integer) combo.getSelectedItem();
+        return value == null ? -1 : value;
+    }
+
+    private int primerTileTipo(TipoTile tipo, int... excluidos) {
+        for (int i = 0; i < tiposTile.size(); i++) {
+            boolean excluido = false;
+            for (int n : excluidos) if (i == n) excluido = true;
+            if (!excluido && tiposTile.get(i) == tipo) return i;
+        }
+        return -1;
+    }
+
+    private int siguienteTileNormal(int base) {
+        int normal = primerTileTipo(TipoTile.NORMAL, base);
+        if (normal >= 0) return normal;
+        return distintoDe(base, -1, -1);
+    }
+
+    private int distintoDe(int a, int b, int c) {
+        for (int i = 0; i < tiles.size(); i++) if (i != a && i != b && i != c) return i;
+        return -1;
+    }
+
+    private void validarRolesTiles(int base, int road, int grass, int water, int obstacle) {
+        if (tiles.size() < 1) throw new IllegalArgumentException("Importa o crea tiles antes de generar.");
+        if (grass >= 0 && (grass == base || grass == road)) throw new IllegalArgumentException("El tile de hierba debe ser distinto del suelo y el camino.");
+        if (water >= 0 && (water == base || water == road || water == grass)) throw new IllegalArgumentException("El tile de agua debe ser distinto del suelo, camino y hierba.");
+        if (obstacle >= 0 && (obstacle == base || obstacle == road || obstacle == grass || obstacle == water))
+            throw new IllegalArgumentException("El tile de obstáculos debe ser distinto de los demás tiles seleccionados.");
     }
 
     private void nuevoMapa() {
