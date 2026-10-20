@@ -18,10 +18,11 @@ import java.util.List;
  * Los mapas se guardan en formato binario .pmap e incluyen la paleta de tiles.
  */
 public final class EditorMapas {
-    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 2;
+    private static final int TILE = 16, ZOOM = 2, MAGIC = 0x504D4150, VERSION = 3;
     private final JFrame frame = new JFrame("Pokémon Studio — Editor de mapas");
     private int ancho = 20, alto = 15, seleccionado = 0, capa = 0;
     private final List<BufferedImage> tiles = new ArrayList<>();
+    private final List<TipoTile> tiposTile = new ArrayList<>();
     private final List<ObjetoMapa> objetos = new ArrayList<>();
     private final List<ColocacionObjeto> colocaciones = new ArrayList<>();
     private int objetoSeleccionado = -1;
@@ -29,26 +30,61 @@ public final class EditorMapas {
     private JList<ObjetoMapa> listaObjetos;
     private int[][] capas = new int[3][ancho * alto];
     private boolean[] colisiones = new boolean[ancho * alto];
-    private boolean modoColision = false, rejilla = true;
+    private boolean[] hierbaEncuentros = new boolean[ancho * alto];
+    private boolean modoColision = false, rejilla = true, mostrarPropiedades = false;
     private final MapaCanvas canvas = new MapaCanvas();
     private final DefaultListModel<Integer> modeloPaleta = new DefaultListModel<>();
     private final JList<Integer> listaPaleta = new JList<>(modeloPaleta);
     private final JLabel estado = new JLabel("Capa: Suelo · clic izquierdo pinta, derecho borra");
-    private final JComboBox<String> selectorCapa = new JComboBox<>(new String[]{"Suelo", "Objetos", "Superior", "Hierba", "Evento", "Agua"});
+    private final JComboBox<String> selectorCapa = new JComboBox<>(new String[]{"Suelo", "Objetos", "Superior"});
+    private final JComboBox<TipoTile> selectorTipoTile = new JComboBox<>(TipoTile.values());
 
-    private EditorMapas() {
+    private EditorMapas(int anchoInicial, int altoInicial) {
+        ancho = anchoInicial;
+        alto = altoInicial;
+        capas = new int[3][ancho * alto];
+        colisiones = new boolean[ancho * alto];
+        hierbaEncuentros = new boolean[ancho * alto];
         for (int[] capaInicial : capas) java.util.Arrays.fill(capaInicial, -1);
         crearTiles();
         if (tiles.isEmpty() && !hayPngEnCarpetaTiles()) crearTilesEjemplo();
         seleccionado = tiles.isEmpty() ? -1 : 0;
         for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
         listaPaleta.setSelectedIndex(seleccionado);
+        actualizarTipoSeleccionado();
         construirVentana();
     }
 
     public static void abrir() {
         if (GraphicsEnvironment.isHeadless()) throw new IllegalStateException("No hay entorno gráfico disponible.");
-        SwingUtilities.invokeLater(() -> new EditorMapas().frame.setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            int[] dimensiones = pedirDimensionesIniciales();
+            if (dimensiones != null) new EditorMapas(dimensiones[0], dimensiones[1]).frame.setVisible(true);
+        });
+    }
+
+    private static int[] pedirDimensionesIniciales() {
+        JTextField ancho = new JTextField("30", 6);
+        JTextField alto = new JTextField("20", 6);
+        JPanel panel = new JPanel(new GridLayout(2, 2, 8, 8));
+        panel.add(new JLabel("Ancho del mapa (tiles):"));
+        panel.add(ancho);
+        panel.add(new JLabel("Alto del mapa (tiles):"));
+        panel.add(alto);
+        while (true) {
+            int resultado = JOptionPane.showConfirmDialog(null, panel, "Nuevo mapa Pokémon",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (resultado != JOptionPane.OK_OPTION) return null;
+            try {
+                int w = Integer.parseInt(ancho.getText().trim());
+                int h = Integer.parseInt(alto.getText().trim());
+                if (w >= 1 && w <= 300 && h >= 1 && h <= 300) return new int[]{w, h};
+            } catch (NumberFormatException ignorado) {
+                // Se muestra el aviso común de debajo.
+            }
+            JOptionPane.showMessageDialog(null, "El ancho y alto deben estar entre 1 y 300 tiles.",
+                    "Dimensiones no válidas", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void construirVentana() {
