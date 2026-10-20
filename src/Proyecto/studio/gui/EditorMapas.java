@@ -253,10 +253,8 @@ public final class EditorMapas {
             if (JOptionPane.showConfirmDialog(frame, "¿Vaciar la capa " + nombreCapa(capa) + "?", "Confirmar",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 java.util.Arrays.fill(capas[capa], -1);
-                if (capa == 0) {
-                    java.util.Arrays.fill(colisionesManuales, false);
-                    recalcularTodasPropiedades();
-                }
+                if (capa == 0) java.util.Arrays.fill(colisionesManuales, false);
+                recalcularTodasPropiedades();
                 canvas.repaint();
             }
         });
@@ -1052,59 +1050,51 @@ private void guardar() {
         g.dispose(); return im;
     }
 
-    /**
-     * Si el usuario cambia el tipo de un tile que ya está pintado, actualiza
-     * las propiedades de las celdas que usan ese tile.
-     */
+    /** Recalcula las propiedades derivadas de las capas y los objetos colocados. */
     private void actualizarPropiedadesTileEnMapa(int tileModificado) {
-        for (int i = 0; i < ancho * alto; i++) {
-            boolean afectada = false;
-            for (int capaActual = 0; capaActual < capas.length; capaActual++) {
-                if (capas[capaActual][i] == tileModificado) {
-                    afectada = true;
-                    break;
-                }
-            }
-            if (!afectada) continue;
-
-            boolean bloquea = false;
-            boolean hierba = false;
-            for (int capaActual = 0; capaActual < capas.length; capaActual++) {
-                int t = capas[capaActual][i];
-                if (t < 0 || t >= tiposTile.size()) continue;
-                TipoTile tipo = tiposTile.get(t);
-                if (tipo == TipoTile.BLOQUEO || tipo == TipoTile.AGUA) bloquea = true;
-                if (capaActual == 0 && tipo == TipoTile.HIERBA) hierba = true;
-            }
-            colisiones[i] = bloquea;
-            hierbaEncuentros[i] = !bloquea && hierba;
-        }
+        recalcularTodasPropiedades();
         canvas.repaint();
     }
 
-    /** Aplica al mapa la propiedad lógica asignada al tile que se está colocando. */
     private void aplicarPropiedadesTile(int indiceMapa, int indiceTile) {
-        if (indiceMapa < 0 || indiceMapa >= colisiones.length
-                || indiceTile < 0 || indiceTile >= tiposTile.size()) return;
-        TipoTile tipo = tiposTile.get(indiceTile);
-        switch (tipo) {
-            case BLOQUEO, AGUA -> {
-                colisiones[indiceMapa] = true;
-                hierbaEncuentros[indiceMapa] = false;
-            }
-            case HIERBA -> {
-                if (capa == 0) {
-                    colisiones[indiceMapa] = false;
-                    hierbaEncuentros[indiceMapa] = true;
-                }
-            }
-            case NORMAL, EVENTO -> {
-                if (capa == 0) {
-                    colisiones[indiceMapa] = false;
-                    hierbaEncuentros[indiceMapa] = false;
-                }
-            }
+        if (indiceMapa < 0 || indiceMapa >= colisiones.length) return;
+        recalcularPropiedadesCelda(indiceMapa);
+    }
+
+    private void recalcularTodasPropiedades() {
+        for (int i = 0; i < ancho * alto; i++) recalcularPropiedadesCelda(i);
+    }
+
+    private void recalcularPropiedadesCelda(int indiceMapa) {
+        if (indiceMapa < 0 || indiceMapa >= colisiones.length) return;
+        boolean bloquea = colisionesManuales[indiceMapa];
+        boolean hierba = false;
+
+        for (int capaActual = 0; capaActual < capas.length; capaActual++) {
+            int t = capas[capaActual][indiceMapa];
+            if (t < 0 || t >= tiposTile.size()) continue;
+            TipoTile tipo = tiposTile.get(t);
+            if (tipo == TipoTile.BLOQUEO || tipo == TipoTile.AGUA) bloquea = true;
+            if (capaActual == 0 && tipo == TipoTile.HIERBA) hierba = true;
         }
+
+        int x = indiceMapa % ancho;
+        int y = indiceMapa / ancho;
+        for (ColocacionObjeto colocacion : colocaciones) {
+            if (colocacion.objeto < 0 || colocacion.objeto >= objetos.size()) continue;
+            ObjetoMapa objeto = objetos.get(colocacion.objeto);
+            int ox = x - colocacion.x;
+            int oy = y - colocacion.y;
+            if (ox < 0 || oy < 0 || ox >= objeto.ancho || oy >= objeto.alto) continue;
+            int t = objeto.celdas[oy * objeto.ancho + ox];
+            if (t < 0 || t >= tiposTile.size()) continue;
+            TipoTile tipo = tiposTile.get(t);
+            if (tipo == TipoTile.BLOQUEO || tipo == TipoTile.AGUA) bloquea = true;
+            if (colocacion.capa == 0 && tipo == TipoTile.HIERBA) hierba = true;
+        }
+
+        colisiones[indiceMapa] = bloquea;
+        hierbaEncuentros[indiceMapa] = !bloquea && hierba;
     }
 
     private void dibujarContenido(Graphics2D g, int escala) {
@@ -1163,10 +1153,7 @@ private void guardar() {
                         }
                     } else if (derecho) {
                         capas[capa][i] = -1;
-                        if (capa == 0) {
-                            colisiones[i] = false;
-                            hierbaEncuentros[i] = false;
-                        }
+                        recalcularPropiedadesCelda(i);
                     } else if (seleccionado >= 0 && seleccionado < tiles.size()) {
                         capas[capa][i] = seleccionado;
                         aplicarPropiedadesTile(i, seleccionado);
