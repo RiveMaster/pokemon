@@ -36,10 +36,11 @@ public final class SistemaCrianzaMegaSmokeTest {
         PokemonBase ditto = required("Ditto");
         PokemonLuchador madre = new PokemonLuchador(bulbasaur, 10, new int[]{0, 0, 0, 0, 0, 0}, SexoPokemon.HEMBRA);
         PokemonLuchador padre = new PokemonLuchador(charmander, 10, new int[]{31, 31, 31, 31, 31, 31}, SexoPokemon.MACHO);
+        PokemonLuchador otraHembra = new PokemonLuchador(bulbasaur, 10, new int[]{1, 1, 1, 1, 1, 1}, SexoPokemon.HEMBRA);
         PokemonLuchador otroMacho = new PokemonLuchador(charmander, 10, new int[]{1, 1, 1, 1, 1, 1}, SexoPokemon.MACHO);
         PokemonLuchador dittoP = new PokemonLuchador(ditto, 10, new int[]{3, 3, 3, 3, 3, 3}, SexoPokemon.AMBOS);
         check(SistemaCrianza.sonCompatibles(madre, padre), "Bulbasaur y Charmander deben ser compatibles por grupo huevo.");
-        check(!SistemaCrianza.sonCompatibles(madre, otroMacho), "Dos Pokémon del mismo sexo no deben criar.");
+        check(!SistemaCrianza.sonCompatibles(madre, otraHembra), "Dos Pokémon del mismo sexo no deben criar.");
         check(SistemaCrianza.sonCompatibles(dittoP, otroMacho), "Ditto debe criar con un Pokémon macho.");
         check(!SistemaCrianza.sonCompatibles(dittoP,
                 new PokemonLuchador(ditto, 10, new int[]{1, 1, 1, 1, 1, 1}, SexoPokemon.AMBOS)),
