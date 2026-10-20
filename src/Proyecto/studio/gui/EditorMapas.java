@@ -38,6 +38,7 @@ public final class EditorMapas {
     private final JLabel estado = new JLabel("Capa: Suelo · clic izquierdo pinta, derecho borra");
     private final JComboBox<String> selectorCapa = new JComboBox<>(new String[]{"Suelo", "Objetos", "Superior"});
     private final JComboBox<TipoTile> selectorTipoTile = new JComboBox<>(TipoTile.values());
+    private boolean actualizandoSelectorTipo = false;
 
     private EditorMapas(int anchoInicial, int altoInicial) {
         ancho = anchoInicial;
@@ -230,6 +231,7 @@ public final class EditorMapas {
 
         selectorTipoTile.setToolTipText("Propiedad lógica del tile: normal, bloquea, hierba, agua o evento.");
         selectorTipoTile.addActionListener(e -> {
+            if (actualizandoSelectorTipo) return;
             if (seleccionado >= 0 && seleccionado < tiposTile.size()
                     && selectorTipoTile.getSelectedItem() instanceof TipoTile tipo) {
                 tiposTile.set(seleccionado, tipo);
@@ -267,8 +269,14 @@ public final class EditorMapas {
     }
 
     private void actualizarTipoSeleccionado() {
-        if (seleccionado >= 0 && seleccionado < tiposTile.size())
-            selectorTipoTile.setSelectedItem(tiposTile.get(seleccionado));
+        if (seleccionado >= 0 && seleccionado < tiposTile.size()) {
+            actualizandoSelectorTipo = true;
+            try {
+                selectorTipoTile.setSelectedItem(tiposTile.get(seleccionado));
+            } finally {
+                actualizandoSelectorTipo = false;
+            }
+        }
     }
 
     private void crearTilePixelArt() {
