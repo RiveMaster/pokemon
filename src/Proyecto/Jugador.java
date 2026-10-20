@@ -411,10 +411,18 @@ public class Jugador implements Serializable {
         for (int i=0;i< equipo.size();i++) {
             System.out.println("Nombre: " + equipo.get(i).getNombre());
             System.out.println("Nivel: " + equipo.get(i).getNivel());
+            System.out.println("Sexo: " + equipo.get(i).getSexo());
             System.out.println("Vida: " + equipo.get(i).getVidaActual() + "/" + equipo.get(i).getVidaMax());
             System.out.println("Ataque: " + equipo.get(i).getAtaque());
             System.out.println("Defensa: " + equipo.get(i).getDefensa());
+            System.out.println("Ataque especial: " + equipo.get(i).getAtaqueEspecial());
+            System.out.println("Defensa especial: " + equipo.get(i).getDefensaEspecial());
             System.out.println("Velocidad: " + equipo.get(i).getVelocidad());
+            System.out.println("IVs: " + equipo.get(i).resumenIVs());
+            if (equipo.get(i).getMegapiedra() != null)
+                System.out.println("Megapiedra: " + equipo.get(i).getMegapiedra());
+            if (!equipo.get(i).puedeCriarAhora())
+                System.out.println("Cooldown de crianza: " + (equipo.get(i).milisegundosParaCriar() / 60000) + " min restantes");
             System.out.println("EXP: " + equipo.get(i).getExpActual() + "/" + equipo.get(i).getExpParaSubirNivel());
             ObjetoEquipable llevado = equipo.get(i).getObjeto();
             System.out.println("Objeto: " + (llevado == null ? "ninguno" : llevado.getNombre()));
