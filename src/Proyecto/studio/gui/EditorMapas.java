@@ -32,7 +32,8 @@ public final class EditorMapas {
 
     private EditorMapas() {
         for (int[] capaInicial : capas) java.util.Arrays.fill(capaInicial, -1);
-        crearTilesEjemplo();
+        crearTiles();
+        if (tiles.isEmpty()) crearTilesEjemplo();
         for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
         construirVentana();
     }
@@ -210,6 +211,48 @@ public final class EditorMapas {
     }
 
     private void error(String msg) { JOptionPane.showMessageDialog(frame, msg, "Error", JOptionPane.ERROR_MESSAGE); }
+
+    /**
+     * Carga PNG desde la carpeta Tiles/, relativa al directorio desde el que se inicia el juego.
+     * Acepta PNG sueltos de 16x16 y spritesheets cuyas dimensiones sean múltiplos de 16.
+     */
+    private void crearTiles() {
+        Path ruta = Path.of("Tiles");
+        if (!Files.isDirectory(ruta)) return; // Se usarán los tiles de ejemplo si no existe la carpeta.
+
+        try (java.util.stream.Stream<Path> archivos = Files.list(ruta)) {
+            List<Path> pngs = archivos
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().toLowerCase(java.util.Locale.ROOT).endsWith(".png"))
+                    .sorted(java.util.Comparator.comparing(
+                            p -> p.getFileName().toString(), String.CASE_INSENSITIVE_ORDER))
+                    .toList();
+
+            for (Path archivo : pngs) {
+                BufferedImage imagen = ImageIO.read(archivo.toFile());
+                if (imagen == null) {
+                    System.err.println("No se pudo leer como PNG: " + archivo);
+                    continue;
+                }
+                if (imagen.getWidth() % TILE != 0 || imagen.getHeight() % TILE != 0) {
+                    System.err.println("Se omite " + archivo + ": ancho y alto deben ser múltiplos de " + TILE + " píxeles.");
+                    continue;
+                }
+
+                for (int y = 0; y < imagen.getHeight(); y += TILE) {
+                    for (int x = 0; x < imagen.getWidth(); x += TILE) {
+                        BufferedImage tile = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+                        Graphics2D g = tile.createGraphics();
+                        g.drawImage(imagen, 0, 0, TILE, TILE, x, y, x + TILE, y + TILE, null);
+                        g.dispose();
+                        tiles.add(tile);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            error("No se pudieron importar los tiles desde " + ruta.toAbsolutePath() + ": " + e.getMessage());
+        }
+    }
 
     private void crearTilesEjemplo() {
         tiles.add(tile(new Color(78, 160, 72), new Color(100, 185, 82), 1));
