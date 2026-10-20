@@ -117,8 +117,11 @@ public final class GeneradorMapas {
         else if (o.incluirAgua && random.nextInt(100) < 22) crearAgua(water, path, w, h, random, false);
         if (o.incluirHierba) crearParchesHierba(grassPatch, path, water, w, h, o.densidad, random);
 
-        if (o.incluirObjetos && o.estilo == Estilo.PUEBLO && biblioteca != null && !biblioteca.isEmpty()) {
-            colocarEdificios(placements, manual, path, water, grassPatch, w, h, biblioteca, random);
+        if (o.incluirObjetos && biblioteca != null && !biblioteca.isEmpty()) {
+            if (o.estilo == Estilo.PUEBLO)
+                colocarEdificios(placements, manual, path, water, grassPatch, w, h, biblioteca, random);
+            colocarElementosNaturales(placements, manual, path, water, grassPatch, w, h,
+                    biblioteca, o.densidad, o.estilo, random);
         }
         if (o.incluirObstaculos) crearObstaculos(obstacles, path, water, w, h, o.densidad, o.estilo, random);
 
@@ -157,7 +160,7 @@ public final class GeneradorMapas {
             }
         }
 
-        // Los edificios bloquean la huella, con una celda de acceso en la parte inferior.
+        // Los edificios bloquean la huella y conservan un acceso; árboles/rocas bloquean su base.
         for (Colocacion p : placements) {
             DefinicionObjeto obj = buscarObjeto(biblioteca, p.objeto);
             if (obj == null) continue;
@@ -166,11 +169,14 @@ public final class GeneradorMapas {
             for (int oy = 0; oy < obj.alto; oy++) {
                 for (int ox = 0; ox < obj.ancho; ox++) {
                     int x = p.x + ox, y = p.y + oy;
-                    if (!dentro(x, y, w, h) || (x == puertaX && y == puertaY)) continue;
-                    manual[y * w + x] = true;
-                    grass[y * w + x] = false;
+                    if (!dentro(x, y, w, h)) continue;
+                    int idx = y * w + x;
+                    grass[idx] = false;
+                    if (p.capa == 1 && (x != puertaX || y != puertaY)) manual[idx] = true;
                 }
             }
+            if (p.capa == 2 && dentro(puertaX, puertaY, w, h))
+                manual[puertaY * w + puertaX] = true;
         }
 
         for (int i = 0; i < size; i++) if (manual[i]) grass[i] = false;
@@ -252,7 +258,7 @@ public final class GeneradorMapas {
 
     private static void crearObstaculos(boolean[] obstacles, boolean[] path, boolean[] water,
                                         int w, int h, int densidad, Estilo estilo, Random r) {
-        if (w < 3 || h < 3) return;
+        if (densidad <= 0 || w < 3 || h < 3) return;
         if (estilo == Estilo.RUTA_BOSQUE || estilo == Estilo.COSTA_LAGO) {
             int grosor = h >= 12 ? 1 : 0;
             for (int x = 0; x < w; x++) {
@@ -295,6 +301,10 @@ public final class GeneradorMapas {
             if (obj != null && obj.ancho > 0 && obj.alto > 0 && obj.ancho <= w - 2 && obj.alto <= h - 2)
                 candidatos.add(obj);
         }
+        List<DefinicionObjeto> edificiosNombrados = new ArrayList<>();
+        for (DefinicionObjeto obj : candidatos) if (esObjetoEdificio(obj)) edificiosNombrados.add(obj);
+        if (!edificiosNombrados.isEmpty()) candidatos = edificiosNombrados;
+        else candidatos.removeIf(GeneradorMapas::esObjetoNatural);
         if (candidatos.isEmpty()) return;
         candidatos.sort(Comparator.comparingInt(GeneradorMapas::puntuacionObjeto).reversed());
         int limite = Math.max(1, w / 7);
@@ -326,6 +336,64 @@ public final class GeneradorMapas {
                 if (px != doorX || py != doorY) manual[cell] = true;
             }
         }
+    }
+
+    /** Sitúa árboles, arbustos y rocas de la biblioteca sobre la capa superior. */
+    private static void colocarElementosNaturales(List<Colocacion> salida, boolean[] manual, boolean[] path,
+                                                  boolean[] water, boolean[] grass, int w, int h,
+                                                  List<DefinicionObjeto> biblioteca, int densidad,
+                                                  Estilo estilo, Random random) {
+        if (densidad <= 0 || w < 5 || h < 5) return;
+        List<DefinicionObjeto> candidatos = new ArrayList<>();
+        for (DefinicionObjeto obj : biblioteca) {
+            if (obj != null && esObjetoNatural(obj) && obj.ancho > 0 && obj.alto > 0
+                    && obj.ancho <= Math.min(12, w - 2) && obj.alto <= Math.min(12, h - 2))
+                candidatos.add(obj);
+        }
+        if (candidatos.isEmpty()) return;
+        candidatos.sort(Comparator.comparingInt((DefinicionObjeto obj) -> obj.ancho * obj.alto).reversed());
+        int divisor = estilo == Estilo.PUEBLO ? 5200 : (estilo == Estilo.PRADERA ? 3200 : 1900);
+        int limite = Math.min(80, Math.max(1, (w * h * densidad) / divisor));
+        int colocados = 0;
+        int intentos = Math.max(40, limite * 15);
+        for (int intento = 0; intento < intentos && colocados < limite; intento++) {
+            DefinicionObjeto obj = candidatos.get(random.nextInt(candidatos.size()));
+            int x = random.nextInt(Math.max(1, w - obj.ancho + 1));
+            int y = random.nextInt(Math.max(1, h - obj.alto + 1));
+            if (!rectanguloLibre(x, y, obj.ancho, obj.alto, path, water, w, h)) continue;
+            boolean enHierba = false;
+            for (int yy = y; yy < y + obj.alto; yy++)
+                for (int xx = x; xx < x + obj.ancho; xx++)
+                    if (grass[yy * w + xx]) enHierba = true;
+            if (enHierba) continue;
+            boolean overlap = false;
+            for (Colocacion actual : salida) {
+                DefinicionObjeto otro = buscarObjeto(biblioteca, actual.objeto);
+                if (otro != null && seSolapan(x, y, obj.ancho, obj.alto, actual.x, actual.y, otro.ancho, otro.alto)) {
+                    overlap = true;
+                    break;
+                }
+            }
+            if (overlap) continue;
+            salida.add(new Colocacion(obj.indice, x, y, 2));
+            colocados++;
+            int baseX = x + obj.ancho / 2, baseY = y + obj.alto - 1;
+            if (dentro(baseX, baseY, w, h)) manual[baseY * w + baseX] = true;
+            for (int yy = y; yy < y + obj.alto; yy++)
+                for (int xx = x; xx < x + obj.ancho; xx++) grass[yy * w + xx] = false;
+        }
+    }
+
+    private static boolean esObjetoNatural(DefinicionObjeto obj) {
+        String n = obj.nombre.toLowerCase(Locale.ROOT);
+        return contiene(n, "arbol", "árbol", "tree", "arbusto", "bush", "roca", "rock",
+                "piedra", "stone", "tronco", "log", "pino", "pine", "planta", "plant");
+    }
+
+    private static boolean esObjetoEdificio(DefinicionObjeto obj) {
+        String n = obj.nombre.toLowerCase(Locale.ROOT);
+        return contiene(n, "casa", "house", "hogar", "edificio", "building", "gimnasio",
+                "gym", "centro", "tienda", "shop", "pokecentro", "pokemon center", "estacion", "station");
     }
 
     private static int puntuacionObjeto(DefinicionObjeto obj) {
