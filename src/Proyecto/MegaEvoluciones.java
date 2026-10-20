@@ -113,7 +113,7 @@ public final class MegaEvoluciones {
         new Forma("Scovillain", "Scovillain-Mega", "Grass", "Fire", 65, 138, 85, 138, 85, 75, "Scovillainite", "Spicy Spray"),
         new Forma("Glimmora", "Glimmora-Mega", "Rock", "Poison", 83, 90, 105, 150, 96, 101, "Glimmoranite", "Adaptability"),
         new Forma("Tatsugiri", "Tatsugiri-Curly-Mega", "Dragon", "Water", 68, 65, 90, 135, 125, 92, "Tatsugirinite", "Commander"),
-        new Forma("Baxcalibur", "Baxcalibur-Mega", "Dragon", "Ice", 115, 175, 117, 105, 101, 87, "Baxcalibrite", "Thermal Exchange"),
+        new Forma("Baxcalibur", "Baxcalibur-Mega", "Dragon", "Ice", 115, 175, 117, 105, 101, 87, "Baxcalibrite", "Thermal Exchange")
     );
 
     private static final Map<String, List<Forma>> POR_ESPECIE = FORMAS.stream()
