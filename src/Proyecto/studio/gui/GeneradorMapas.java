@@ -282,14 +282,6 @@ public final class GeneradorMapas {
                 }
             }
         }
-        for (int x = 0; x < Math.min(3, w); x++) {
-            int y = h / 2;
-            for (int dy = -1; dy <= 1; dy++) if (dentro(x, y + dy, w, h)) obstacles[(y + dy) * w + x] = false;
-        }
-        for (int x = Math.max(0, w - 3); x < w; x++) {
-            int y = h / 2;
-            for (int dy = -1; dy <= 1; dy++) if (dentro(x, y + dy, w, h)) obstacles[(y + dy) * w + x] = false;
-        }
         for (int i = 0; i < obstacles.length; i++) if (path[i] || water[i]) obstacles[i] = false;
     }
 
