@@ -834,10 +834,65 @@ public final class EditorMapas {
         contenidoCentro.add(new JLabel("Pinta el objeto: clic izquierdo coloca tile, clic derecho borra."),
                 BorderLayout.NORTH);
         contenidoCentro.add(new JScrollPane(lienzo), BorderLayout.CENTER);
-        JPanel ladoPaleta = new JPanel(new BorderLayout());
+        JPanel ladoPaleta = new JPanel(new BorderLayout(4, 4));
         ladoPaleta.add(new JLabel("Selecciona un tile"), BorderLayout.NORTH);
         ladoPaleta.add(new JScrollPane(paleta), BorderLayout.CENTER);
-        ladoPaleta.setPreferredSize(new Dimension(190, 390));
+        JButton importarTilesObjeto = new JButton("Importar PNG...");
+        importarTilesObjeto.setToolTipText("Importa una spritesheet o imagen con dimensiones múltiplos de 16 y añade sus tiles a esta paleta.");
+        importarTilesObjeto.addActionListener(e -> {
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Importar tiles para este objeto (PNG)");
+            if (fc.showOpenDialog(dialogo) != JFileChooser.APPROVE_OPTION) return;
+            try {
+                BufferedImage img = ImageIO.read(fc.getSelectedFile());
+                if (img == null || img.getWidth() % TILE != 0 || img.getHeight() % TILE != 0)
+                    throw new IOException("La imagen debe tener dimensiones múltiplos de 16 píxeles.");
+                int añadidos = 0, vacios = 0;
+                for (int yy = 0; yy < img.getHeight(); yy += TILE) {
+                    for (int xx = 0; xx < img.getWidth(); xx += TILE) {
+                        BufferedImage t = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+                        Graphics2D g = t.createGraphics();
+                        g.drawImage(img, 0, 0, TILE, TILE, xx, yy, xx + TILE, yy + TILE, null);
+                        g.dispose();
+                        if (!tienePixelVisible(t)) { vacios++; continue; }
+                        tiles.add(t);
+                        tiposTile.add(TipoTile.NORMAL);
+                        int nuevoIndice = tiles.size() - 1;
+                        modeloPaleta.addElement(nuevoIndice);
+                        paleta.setListData(modeloPaleta.toArray(new Integer[0]));
+                        añadidos++;
+                    }
+                }
+                if (añadidos > 0) {
+                    int nuevoIndice = tiles.size() - 1;
+                    paleta.setSelectedValue(nuevoIndice, true);
+                    tileActual[0] = nuevoIndice;
+                    listaPaleta.setSelectedIndex(nuevoIndice);
+                    seleccionado = nuevoIndice;
+                    actualizarTipoSeleccionado();
+                    canvas.repaint();
+                }
+                JOptionPane.showMessageDialog(dialogo, "Tiles añadidos: " + añadidos + ". Vacíos omitidos: " + vacios + ".");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(dialogo, "No se pudo importar el PNG: " + ex.getMessage(),
+                        "Error de importación", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        JButton crearTileObjeto = new JButton("Crear tile nuevo...");
+        crearTileObjeto.addActionListener(e -> {
+            crearTilePixelArt();
+            if (!tiles.isEmpty()) {
+                int nuevoIndice = tiles.size() - 1;
+                paleta.setListData(modeloPaleta.toArray(new Integer[0]));
+                paleta.setSelectedValue(nuevoIndice, true);
+                tileActual[0] = nuevoIndice;
+            }
+        });
+        JPanel herramientasPaleta = new JPanel(new GridLayout(0, 1, 3, 3));
+        herramientasPaleta.add(importarTilesObjeto);
+        herramientasPaleta.add(crearTileObjeto);
+        ladoPaleta.add(herramientasPaleta, BorderLayout.SOUTH);
+        ladoPaleta.setPreferredSize(new Dimension(220, 430));
 
         JPanel contenido = new JPanel(new BorderLayout(6, 6));
         contenido.add(encabezado, BorderLayout.NORTH);
