@@ -28,6 +28,7 @@ public final class GeneradorMapas {
         public final boolean incluirCamino, incluirHierba, incluirAgua, incluirObstaculos, incluirObjetos;
         public final boolean incluirCasas, incluirCentroPokemon, incluirGimnasio, incluirTienda;
         public final int tileBase, tileCamino, tileHierba, tileAgua, tileObstaculo;
+        public final int[] tilesCamino, tilesObstaculo;
 
         public Opciones(int ancho, int alto, long semilla, Estilo estilo, int densidad,
                         boolean incluirCamino, boolean incluirHierba, boolean incluirAgua,
@@ -44,6 +45,19 @@ public final class GeneradorMapas {
                         int tileBase, int tileCamino, int tileHierba, int tileAgua, int tileObstaculo,
                         boolean incluirCasas, boolean incluirCentroPokemon, boolean incluirGimnasio,
                         boolean incluirTienda) {
+            this(ancho, alto, semilla, estilo, densidad, incluirCamino, incluirHierba, incluirAgua,
+                    incluirObstaculos, incluirObjetos, tileBase,
+                    tileCamino < 0 ? new int[0] : new int[]{tileCamino}, tileHierba, tileAgua,
+                    tileObstaculo < 0 ? new int[0] : new int[]{tileObstaculo},
+                    incluirCasas, incluirCentroPokemon, incluirGimnasio, incluirTienda);
+        }
+
+        public Opciones(int ancho, int alto, long semilla, Estilo estilo, int densidad,
+                        boolean incluirCamino, boolean incluirHierba, boolean incluirAgua,
+                        boolean incluirObstaculos, boolean incluirObjetos,
+                        int tileBase, int[] tilesCamino, int tileHierba, int tileAgua, int[] tilesObstaculo,
+                        boolean incluirCasas, boolean incluirCentroPokemon, boolean incluirGimnasio,
+                        boolean incluirTienda) {
             if (ancho < 1 || ancho > 500 || alto < 1 || alto > 500)
                 throw new IllegalArgumentException("El mapa debe medir entre 1 y 500 tiles por lado.");
             this.ancho = ancho;
@@ -57,10 +71,12 @@ public final class GeneradorMapas {
             this.incluirObstaculos = incluirObstaculos;
             this.incluirObjetos = incluirObjetos;
             this.tileBase = tileBase;
-            this.tileCamino = tileCamino;
+            this.tilesCamino = tilesCamino == null ? new int[0] : tilesCamino.clone();
+            this.tileCamino = this.tilesCamino.length == 0 ? -1 : this.tilesCamino[0];
             this.tileHierba = tileHierba;
             this.tileAgua = tileAgua;
-            this.tileObstaculo = tileObstaculo;
+            this.tilesObstaculo = tilesObstaculo == null ? new int[0] : tilesObstaculo.clone();
+            this.tileObstaculo = this.tilesObstaculo.length == 0 ? -1 : this.tilesObstaculo[0];
             this.incluirCasas = incluirCasas;
             this.incluirCentroPokemon = incluirCentroPokemon;
             this.incluirGimnasio = incluirGimnasio;
@@ -162,8 +178,8 @@ public final class GeneradorMapas {
             if (water[i] && o.tileAgua >= 0) {
                 layers[0][i] = o.tileAgua;
             }
-            if (obstacles[i] && !path[i] && !water[i] && o.tileObstaculo >= 0) {
-                layers[1][i] = o.tileObstaculo;
+            if (obstacles[i] && !path[i] && !water[i] && o.tilesObstaculo.length > 0) {
+                layers[1][i] = o.tilesObstaculo[random.nextInt(o.tilesObstaculo.length)];
             }
             if (o.incluirHierba && grassPatch[i] && !water[i] && !path[i] && o.tileHierba >= 0) {
                 layers[0][i] = o.tileHierba;
@@ -171,10 +187,10 @@ public final class GeneradorMapas {
             }
         }
 
-        if (o.incluirCamino && o.tileCamino >= 0) {
+        if (o.incluirCamino && o.tilesCamino.length > 0) {
             for (int i = 0; i < size; i++) {
                 if (path[i]) {
-                    layers[0][i] = o.tileCamino;
+                    layers[0][i] = o.tilesCamino[random.nextInt(o.tilesCamino.length)];
                     manual[i] = false;
                     grass[i] = false;
                 }
