@@ -44,8 +44,8 @@ public final class GeneradorMapas {
                         int tileBase, int tileCamino, int tileHierba, int tileAgua, int tileObstaculo,
                         boolean incluirCasas, boolean incluirCentroPokemon, boolean incluirGimnasio,
                         boolean incluirTienda) {
-            if (ancho < 1 || ancho > 300 || alto < 1 || alto > 300)
-                throw new IllegalArgumentException("El mapa debe medir entre 1 y 300 tiles por lado.");
+            if (ancho < 1 || ancho > 500 || alto < 1 || alto > 500)
+                throw new IllegalArgumentException("El mapa debe medir entre 1 y 500 tiles por lado.");
             this.ancho = ancho;
             this.alto = alto;
             this.semilla = semilla;

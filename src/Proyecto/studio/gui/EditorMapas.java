@@ -82,11 +82,11 @@ public final class EditorMapas {
             try {
                 int w = Integer.parseInt(ancho.getText().trim());
                 int h = Integer.parseInt(alto.getText().trim());
-                if (w >= 1 && w <= 300 && h >= 1 && h <= 300) return new int[]{w, h};
+                if (w >= 1 && w <= 500 && h >= 1 && h <= 500) return new int[]{w, h};
             } catch (NumberFormatException ignorado) {
                 // Se muestra el aviso común de debajo.
             }
-            JOptionPane.showMessageDialog(null, "El ancho y alto deben estar entre 1 y 300 tiles.",
+            JOptionPane.showMessageDialog(null, "El ancho y alto deben estar entre 1 y 500 tiles.",
                     "Dimensiones no válidas", JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -174,8 +174,8 @@ public final class EditorMapas {
         JDialog dialogo = new JDialog(frame, "Generador de mapas Pokémon", true);
         dialogo.setLayout(new BorderLayout(8, 8));
 
-        JSpinner anchoCampo = new JSpinner(new SpinnerNumberModel(ancho, 1, 300, 1));
-        JSpinner altoCampo = new JSpinner(new SpinnerNumberModel(alto, 1, 300, 1));
+        JSpinner anchoCampo = new JSpinner(new SpinnerNumberModel(ancho, 1, 500, 1));
+        JSpinner altoCampo = new JSpinner(new SpinnerNumberModel(alto, 1, 500, 1));
         JTextField semillaCampo = new JTextField(Long.toString(System.currentTimeMillis()), 14);
         JComboBox<GeneradorMapas.Estilo> estiloCampo = new JComboBox<>(GeneradorMapas.Estilo.values());
         JSlider densidadCampo = new JSlider(0, 100, 45);
