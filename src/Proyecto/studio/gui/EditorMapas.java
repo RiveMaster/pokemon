@@ -196,10 +196,10 @@ public final class EditorMapas {
         JLabel clasificarTiles = new JLabel("<html>Los tiles elegidos se clasifican automáticamente por función.<br>La propiedad se guarda en este proyecto y afecta a sus otros usos.</html>");
 
         JComboBox<Integer> tileBase = crearSelectorTile();
-        JComboBox<Integer> tileCamino = crearSelectorTile();
+        JList<Integer> tilesCamino = crearSelectorTilesMultiples();
         JComboBox<Integer> tileHierba = crearSelectorTile();
         JComboBox<Integer> tileAgua = crearSelectorTile();
-        JComboBox<Integer> tileObstaculo = crearSelectorTile();
+        JList<Integer> tilesObstaculo = crearSelectorTilesMultiples();
 
         int baseDefault = primerTileTipo(TipoTile.NORMAL, -1);
         if (baseDefault < 0) baseDefault = 0;
@@ -213,10 +213,10 @@ public final class EditorMapas {
         if (obstaculoDefault < 0) obstaculoDefault = distintoDe(baseDefault, caminoDefault, hierbaDefault, aguaDefault);
 
         tileBase.setSelectedItem(baseDefault);
-        tileCamino.setSelectedItem(caminoDefault);
+        if (caminoDefault >= 0) tilesCamino.setSelectedValue(caminoDefault, true);
         tileHierba.setSelectedItem(hierbaDefault);
         tileAgua.setSelectedItem(aguaDefault);
-        tileObstaculo.setSelectedItem(obstaculoDefault);
+        if (obstaculoDefault >= 0) tilesObstaculo.setSelectedValue(obstaculoDefault, true);
         if (hierbaDefault < 0) hierba.setSelected(false);
         if (aguaDefault < 0) agua.setSelected(false);
         if (obstaculoDefault < 0) obstaculos.setSelected(false);
@@ -245,10 +245,10 @@ public final class EditorMapas {
         JPanel paleta = new JPanel(new GridLayout(0, 2, 6, 5));
         paleta.setBorder(BorderFactory.createTitledBorder("Tiles para cada función"));
         paleta.add(new JLabel("Suelo base:")); paleta.add(tileBase);
-        paleta.add(new JLabel("Camino:")); paleta.add(tileCamino);
+        paleta.add(new JLabel("Tiles de camino (Ctrl/Mayús para varios):")); paleta.add(new JScrollPane(tilesCamino));
         paleta.add(new JLabel("Hierba:")); paleta.add(tileHierba);
         paleta.add(new JLabel("Agua:")); paleta.add(tileAgua);
-        paleta.add(new JLabel("Árbol / obstáculo:")); paleta.add(tileObstaculo);
+        paleta.add(new JLabel("Tiles de árboles / obstáculos (selección múltiple):")); paleta.add(new JScrollPane(tilesObstaculo));
         paleta.add(clasificarTiles); paleta.add(new JLabel("Los tiles se muestran como miniaturas."));
 
         JPanel centro = new JPanel();
@@ -273,13 +273,17 @@ public final class EditorMapas {
                 int h = (Integer) altoCampo.getValue();
                 long seed = Long.parseLong(semillaCampo.getText().trim());
                 int base = valorSelector(tileBase);
-                int road = camino.isSelected() ? valorSelector(tileCamino) : -1;
+                int[] roads = camino.isSelected() ? valoresSeleccionados(tilesCamino) : new int[0];
+                int road = roads.length == 0 ? -1 : roads[0];
                 int grassTile = hierba.isSelected() ? valorSelector(tileHierba) : -1;
                 int waterTile = agua.isSelected() ? valorSelector(tileAgua) : -1;
-                int obstacleTile = obstaculos.isSelected() ? valorSelector(tileObstaculo) : -1;
+                int[] obstacleTiles = obstaculos.isSelected() ? valoresSeleccionados(tilesObstaculo) : new int[0];
+                int obstacleTile = obstacleTiles.length == 0 ? -1 : obstacleTiles[0];
 
                 if (base < 0) throw new IllegalArgumentException("Selecciona un tile de suelo base.");
                 validarRolesTiles(base, road, grassTile, waterTile, obstacleTile);
+                for (int t : roads) if (t == base || t == grassTile || t == waterTile) throw new IllegalArgumentException("Los tiles de camino deben ser distintos del suelo, hierba y agua.");
+                for (int t : obstacleTiles) if (t == base || t == road || t == grassTile || t == waterTile) throw new IllegalArgumentException("Los tiles de obstáculos deben ser distintos del suelo, camino, hierba y agua.");
 
                 String aviso = "Se reemplazará el mapa que estás editando. ¿Continuar?"
                         + "\n\nLos tiles elegidos se clasificarán automáticamente según su función. La propiedad se guarda en este proyecto y afecta a los demás lugares donde se usan esos tiles.";
@@ -301,7 +305,7 @@ public final class EditorMapas {
                 GeneradorMapas.Opciones ajustes = new GeneradorMapas.Opciones(
                         w, h, seed, (GeneradorMapas.Estilo) estiloCampo.getSelectedItem(),
                         densidadCampo.getValue(), camino.isSelected(), hierba.isSelected(), agua.isSelected(),
-                        obstaculos.isSelected(), edificios.isSelected(), base, road, grassTile, waterTile, obstacleTile,
+                        obstaculos.isSelected(), edificios.isSelected(), base, roads, grassTile, waterTile, obstacleTiles,
                         casas.isSelected(), centroPokemon.isSelected(), gimnasio.isSelected(), tienda.isSelected());
                 GeneradorMapas.Resultado resultado = GeneradorMapas.generar(ajustes, biblioteca);
 
@@ -363,6 +367,21 @@ public final class EditorMapas {
     private int valorSelector(JComboBox<Integer> combo) {
         Integer value = (Integer) combo.getSelectedItem();
         return value == null ? -1 : value;
+    }
+
+    private JList<Integer> crearSelectorTilesMultiples() {
+        JList<Integer> lista = new JList<>(modeloPaleta);
+        lista.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        lista.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        lista.setVisibleRowCount(2);
+        lista.setFixedCellWidth(48);
+        lista.setFixedCellHeight(42);
+        lista.setCellRenderer(new TileRenderer());
+        return lista;
+    }
+
+    private int[] valoresSeleccionados(JList<Integer> lista) {
+        return lista.getSelectedValuesList().stream().mapToInt(Integer::intValue).toArray();
     }
 
     /**
