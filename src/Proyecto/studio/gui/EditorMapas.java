@@ -878,6 +878,57 @@ public final class EditorMapas {
                         "Error de importación", JOptionPane.ERROR_MESSAGE);
             }
         });
+        JButton importarObjetoCompleto = new JButton("Importar objeto PNG completo...");
+        importarObjetoCompleto.setToolTipText("Importa una imagen completa dividida en tiles de 16×16 y la coloca en la cuadrícula del objeto.");
+        importarObjetoCompleto.addActionListener(e -> {
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Importar objeto completo desde PNG");
+            if (fc.showOpenDialog(dialogo) != JFileChooser.APPROVE_OPTION) return;
+            try {
+                BufferedImage img = ImageIO.read(fc.getSelectedFile());
+                if (img == null || img.getWidth() % TILE != 0 || img.getHeight() % TILE != 0)
+                    throw new IOException("El PNG debe tener ancho y alto múltiplos de 16 píxeles.");
+                int w = img.getWidth() / TILE, h = img.getHeight() / TILE;
+                if (w > 32 || h > 32) throw new IOException("El objeto importado no puede superar 32×32 tiles.");
+                int[] celdasImportadas = new int[w * h];
+                java.util.Arrays.fill(celdasImportadas, -1);
+                for (int yy = 0; yy < h; yy++) {
+                    for (int xx = 0; xx < w; xx++) {
+                        BufferedImage t = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+                        Graphics2D g = t.createGraphics();
+                        g.drawImage(img, 0, 0, TILE, TILE, xx * TILE, yy * TILE,
+                                (xx + 1) * TILE, (yy + 1) * TILE, null);
+                        g.dispose();
+                        if (!tienePixelVisible(t)) continue;
+                        tiles.add(t);
+                        tiposTile.add(TipoTile.NORMAL);
+                        int nuevoIndice = tiles.size() - 1;
+                        modeloPaleta.addElement(nuevoIndice);
+                        celdasImportadas[yy * w + xx] = nuevoIndice;
+                    }
+                }
+                columnas.setValue(w);
+                filas.setValue(h);
+                lienzo.establecerCeldas(w, h, celdasImportadas);
+                nombre.setText(fc.getSelectedFile().getName().replaceFirst("(?i)\\.png$", ""));
+                categoria.setSelectedItem(CategoriaObjeto.inferir(nombre.getText()));
+                paleta.setListData(modeloPaleta.toArray(new Integer[0]));
+                if (!tiles.isEmpty()) {
+                    int nuevoIndice = tiles.size() - 1;
+                    paleta.setSelectedValue(nuevoIndice, true);
+                    tileActual[0] = nuevoIndice;
+                    listaPaleta.setSelectedIndex(nuevoIndice);
+                    seleccionado = nuevoIndice;
+                    actualizarTipoSeleccionado();
+                }
+                canvas.repaint();
+                JOptionPane.showMessageDialog(dialogo, "Objeto importado: " + w + "×" + h +
+                        " tiles. Los tiles transparentes se han dejado vacíos.");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(dialogo, "No se pudo importar el objeto: " + ex.getMessage(),
+                        "Error de importación", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         JButton crearTileObjeto = new JButton("Crear tile nuevo...");
         crearTileObjeto.addActionListener(e -> {
             crearTilePixelArt();
@@ -889,6 +940,7 @@ public final class EditorMapas {
             }
         });
         JPanel herramientasPaleta = new JPanel(new GridLayout(0, 1, 3, 3));
+        herramientasPaleta.add(importarObjetoCompleto);
         herramientasPaleta.add(importarTilesObjeto);
         herramientasPaleta.add(crearTileObjeto);
         ladoPaleta.add(herramientasPaleta, BorderLayout.SOUTH);
@@ -967,6 +1019,16 @@ public final class EditorMapas {
             columnas = nuevasColumnas;
             filas = nuevasFilas;
             celdas = nuevas;
+            revalidate();
+            repaint();
+        }
+
+        void establecerCeldas(int nuevasColumnas, int nuevasFilas, int[] nuevasCeldas) {
+            if (nuevasCeldas == null || nuevasCeldas.length != nuevasColumnas * nuevasFilas)
+                throw new IllegalArgumentException("Las dimensiones del objeto no coinciden con sus tiles.");
+            columnas = nuevasColumnas;
+            filas = nuevasFilas;
+            celdas = nuevasCeldas.clone();
             revalidate();
             repaint();
         }
