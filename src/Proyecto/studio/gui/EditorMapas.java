@@ -859,7 +859,7 @@ public final class EditorMapas {
                         tiposTile.add(TipoTile.NORMAL);
                         int nuevoIndice = tiles.size() - 1;
                         modeloPaleta.addElement(nuevoIndice);
-                        paleta.setListData(modeloPaleta.toArray(new Integer[0]));
+                        // La JList comparte modeloPaleta, por lo que se actualiza automáticamente.
                         añadidos++;
                     }
                 }
@@ -912,7 +912,7 @@ public final class EditorMapas {
                 lienzo.establecerCeldas(w, h, celdasImportadas);
                 nombre.setText(fc.getSelectedFile().getName().replaceFirst("(?i)\\.png$", ""));
                 categoria.setSelectedItem(CategoriaObjeto.inferir(nombre.getText()));
-                paleta.setListData(modeloPaleta.toArray(new Integer[0]));
+                // La JList comparte modeloPaleta, por lo que se actualiza automáticamente.
                 if (!tiles.isEmpty()) {
                     int nuevoIndice = tiles.size() - 1;
                     paleta.setSelectedValue(nuevoIndice, true);
@@ -934,7 +934,7 @@ public final class EditorMapas {
             crearTilePixelArt();
             if (!tiles.isEmpty()) {
                 int nuevoIndice = tiles.size() - 1;
-                paleta.setListData(modeloPaleta.toArray(new Integer[0]));
+                // La JList comparte modeloPaleta, por lo que se actualiza automáticamente.
                 paleta.setSelectedValue(nuevoIndice, true);
                 tileActual[0] = nuevoIndice;
             }
