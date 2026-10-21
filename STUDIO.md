@@ -210,3 +210,14 @@ Prueba de compilación y comportamiento: `tests/SistemaCrianzaMegaSmokeTest.java
 - El generador de pueblos permite activar/desactivar cada clase de edificio. La paleta acepta variantes de camino para rectas, finales, esquinas interiores/exteriores y cruces, aplicadas automáticamente según las conexiones detectadas.
 - El formato de proyecto `.pmap` se incrementa a versión 5 para guardar la categoría de los objetos; la carga conserva compatibilidad con versiones 1–4.
 - Documentación de uso: [`CRIANZA_Y_MEGAEVOLUCION.md`](CRIANZA_Y_MEGAEVOLUCION.md).
+
+## Importar y crear objetos directamente en el editor de mapas
+
+En la pestaña **Crear objetos**, abre **Crear objeto...** para dibujar un árbol, casa, Centro Pokémon, gimnasio, tienda u otra estructura. Desde la paleta del propio diálogo puedes:
+
+- **Importar objeto PNG completo**: importa una imagen transparente cuyo ancho y alto sean múltiplos de 16 píxeles; cada celda visible se convierte en un tile y las celdas transparentes quedan vacías. El objeto importado se puede ajustar y guardar con su categoría.
+- **Importar PNG...**: importa una spritesheet y añade sus tiles a la paleta para construir el objeto manualmente.
+- **Crear tile nuevo...**: crea un tile de 16×16 píxeles y abre el editor píxel a píxel con selector de color.
+
+Los objetos guardados quedan en la biblioteca del proyecto y se pueden colocar en el mapa y usar en la generación de pueblos. Los objetos PNG completos admiten un máximo de 32×32 tiles.
+
