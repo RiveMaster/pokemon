@@ -58,7 +58,7 @@ public class Villaverde {
                                 System.out.println("No se encontro el Pokemon deseado, saliendo del menu de pokemon.");
                             } else{
                                 System.out.println("Introduce el nivel: ");
-                                jugadorCompleto.agregarPokemon(new PokemonLuchador(Pokedex.buscarPorNombre(nombre), sc.nextInt(), 3));
+                                jugadorCompleto.agregarPokemon(new PokemonLuchador(Pokedex.buscarPorNombre(nombre), sc.nextInt(), 31));
                             }
                         }
                         case 3->{

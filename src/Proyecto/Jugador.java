@@ -438,10 +438,6 @@ public class Jugador implements Serializable {
         }
         return false;
     }
-    public void obtenerPokemon(String pokemon){
-        PokemonLuchador nuevo=new PokemonLuchador(Pokedex.buscarPorNombre(pokemon), 100, 3);
-        agregarPokemon(nuevo);
-    }
 
     public boolean capturarPokemon(PokemonLuchador pokemon, String tipoPokeball) {
         // Nota: ya no se bloquea la captura si el equipo está lleno.
