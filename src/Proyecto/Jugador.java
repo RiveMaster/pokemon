@@ -483,9 +483,9 @@ public class Jugador implements Serializable {
         if (!usarMedicina(tipocura, pokemon)) {
             System.out.println("No tienes esa cura."); // No se pudo usar la cura (no hay disponibles)
         }if (tipocura.equals("pocion")) {
-            pokemon.curar(100);
+            pokemon.curar(50);
         }if (tipocura.equals("superpocion")) {
-            pokemon.curar(150);
+            pokemon.curar(120);
         }if (tipocura.equals("hiperpocion")) {
             pokemon.curar(200);
         }
