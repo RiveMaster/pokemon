@@ -238,6 +238,160 @@ public final class GeneradorMapas {
         return new Resultado(w, h, layers, manual, grass, placements, o.semilla);
     }
 
+
+    /**
+     * Generación con tema interno: capa 0 = césped de fondo, capa 1 = terreno
+     * (suelo, agua, hierba y camino autotilado), capa 2 = edificios y elementos
+     * compuestos. Los índices visuales los proporciona el editor, nunca el jugador.
+     */
+    private static Resultado generarTemaFijo(Opciones o, List<DefinicionObjeto> biblioteca) {
+        int w=o.ancho, h=o.alto, size=w*h;
+        Random random=new Random(o.semilla);
+        int[][] layers=new int[3][size];
+        for(int[] layer:layers) java.util.Arrays.fill(layer,-1);
+        java.util.Arrays.fill(layers[0],o.tileFondo);
+        boolean[] manual=new boolean[size], grass=new boolean[size];
+        boolean[] path=new boolean[size], water=new boolean[size], grassPatch=new boolean[size];
+        List<Colocacion> placements=new ArrayList<>();
+
+        if(o.incluirCamino) crearCaminos(path,w,h,o.estilo,random);
+        if(o.incluirAgua && w>=5 && h>=5) {
+            if(o.estilo==Estilo.COSTA_LAGO) crearAgua(water,path,w,h,random,true);
+            else if(random.nextInt(100)<(o.estilo==Estilo.PUEBLO?12:32))
+                crearAgua(water,path,w,h,random,false);
+        }
+        if(o.incluirHierba && o.densidad>0)
+            crearParchesHierba(grassPatch,path,water,w,h,o.densidad,random);
+
+        // El suelo base aparece como plazas y explanadas de transición, no tapa el fondo continuo.
+        if(o.estilo==Estilo.PUEBLO && o.tileBase>=0) {
+            int cx=w/2, cy=h/2;
+            for(int y=Math.max(0,cy-2);y<=Math.min(h-1,cy+2);y++)
+                for(int x=Math.max(0,cx-2);x<=Math.min(w-1,cx+2);x++)
+                    layers[1][y*w+x]=o.tileBase;
+        }
+
+        if(o.incluirObjetos && biblioteca!=null && !biblioteca.isEmpty() && o.estilo==Estilo.PUEBLO)
+            colocarEdificiosPorCiudad(placements,manual,path,water,grassPatch,w,h,biblioteca,random,o);
+
+        // Árboles y vegetación son objetos compuestos; nunca se trocean en colocaciones independientes.
+        if(o.incluirObjetos && biblioteca!=null && !biblioteca.isEmpty())
+            colocarElementosNaturales(placements,manual,path,water,grassPatch,w,h,
+                    biblioteca,o.densidad,o.estilo,random);
+
+        // La capa intermedia contiene exclusivamente terreno y autotiles.
+        for(int i=0;i<size;i++) {
+            if(water[i] && o.tileAgua>=0) layers[1][i]=o.tileAgua;
+            else if(grassPatch[i] && !path[i] && o.tileHierba>=0) {
+                layers[1][i]=o.tileHierba;
+                grass[i]=true;
+            }
+        }
+        if(o.incluirCamino && o.tilesCamino.length>0) {
+            for(int y=0;y<h;y++) for(int x=0;x<w;x++) {
+                int idx=y*w+x;
+                if(!path[idx]) continue;
+                int mask=0;
+                if(dentro(x,y-1,w,h)&&path[(y-1)*w+x]) mask|=1;
+                if(dentro(x+1,y,w,h)&&path[y*w+x+1]) mask|=2;
+                if(dentro(x,y+1,w,h)&&path[(y+1)*w+x]) mask|=4;
+                if(dentro(x-1,y,w,h)&&path[y*w+x-1]) mask|=8;
+                boolean diagonal=(mask==3 && dentro(x+1,y-1,w,h)&&path[(y-1)*w+x+1])
+                        ||(mask==9 && dentro(x-1,y-1,w,h)&&path[(y-1)*w+x-1])
+                        ||(mask==6 && dentro(x+1,y+1,w,h)&&path[(y+1)*w+x+1])
+                        ||(mask==12 && dentro(x-1,y+1,w,h)&&path[(y+1)*w+x-1]);
+                int variante=varianteCamino13(mask,diagonal);
+                layers[1][idx]=o.tilesCamino[Math.min(variante,o.tilesCamino.length-1)];
+                manual[idx]=false;
+                grass[idx]=false;
+            }
+        }
+
+        // Edificios y árboles ocupan la capa superior; sus huellas se calculan sin rellenar los huecos transparentes.
+        for(Colocacion p:placements) {
+            DefinicionObjeto obj=buscarObjeto(biblioteca,p.objeto);
+            if(obj==null) continue;
+            for(int oy=0;oy<obj.alto;oy++) for(int ox=0;ox<obj.ancho;ox++) {
+                int tile=obj.celdas.length>oy*obj.ancho+ox?obj.celdas[oy*obj.ancho+ox]:-1;
+                if(tile<0) continue;
+                int x=p.x+ox,y=p.y+oy;
+                if(!dentro(x,y,w,h)) continue;
+                int idx=y*w+x;
+                grass[idx]=false;
+                if(p.capa==2) manual[idx]=true;
+            }
+        }
+        for(int i=0;i<size;i++) if(manual[i]) grass[i]=false;
+        return new Resultado(w,h,layers,manual,grass,placements,o.semilla);
+    }
+
+    /** Índices del atlas Camino1..Camino13, en el orden especificado en el diseño. */
+    private static int varianteCamino13(int mask, boolean diagonal) {
+        // Camino2/6/8/12 son transiciones orientadas césped-camino.
+        if(mask==4) return 1;   // camino hacia abajo: césped arriba
+        if(mask==8) return 5;   // camino hacia la izquierda: césped derecha
+        if(mask==2) return 7;   // camino hacia la derecha: césped izquierda
+        if(mask==1) return 11;  // camino hacia arriba: césped abajo
+        if(mask==3) return diagonal?3:0;    // NE: interior/exterior
+        if(mask==9) return diagonal?4:2;    // NW: interior/exterior
+        if(mask==6) return diagonal?8:10;   // SE: interior/exterior
+        if(mask==12) return diagonal?9:12;  // SW: interior/exterior
+        return 6; // Camino7: rectas, T, cruces y centro completo.
+    }
+
+    private static void colocarEdificiosPorCiudad(List<Colocacion> salida, boolean[] manual,
+            boolean[] path, boolean[] water, boolean[] grass, int w, int h,
+            List<DefinicionObjeto> biblioteca, Random random, Opciones opciones) {
+        List<DefinicionObjeto> centros=new ArrayList<>(), tiendas=new ArrayList<>(),
+                gimnasios=new ArrayList<>(), casas=new ArrayList<>();
+        for(DefinicionObjeto obj:biblioteca) {
+            if(obj==null || obj.ancho<1 || obj.alto<1) continue;
+            String c=obj.categoria.toUpperCase(Locale.ROOT);
+            if(c.equals("CENTRO_POKEMON")||c.equals("CENTRO_POKÉMON")) centros.add(obj);
+            else if(c.equals("TIENDA")) tiendas.add(obj);
+            else if(c.equals("GIMNASIO")) gimnasios.add(obj);
+            else if(c.equals("CASA")) casas.add(obj);
+        }
+        int regionW=Math.max(24,Math.min(36,w)), regionH=Math.max(20,Math.min(28,h));
+        int cols=Math.max(1,(w+regionW-1)/regionW), rows=Math.max(1,(h+regionH-1)/regionH);
+        for(int ry=0;ry<rows;ry++) for(int rx=0;rx<cols;rx++) {
+            int left=rx*regionW, top=ry*regionH;
+            int right=Math.min(w,left+regionW), bottom=Math.min(h,top+regionH);
+            if(opciones.incluirCentroPokemon) colocarEnZona(centros,salida,left,top,right,bottom,path,water,w,h,random);
+            if(opciones.incluirTienda) colocarEnZona(tiendas,salida,left,top,right,bottom,path,water,w,h,random);
+            if(opciones.incluirGimnasio) colocarEnZona(gimnasios,salida,left,top,right,bottom,path,water,w,h,random);
+            if(opciones.incluirCasas && !casas.isEmpty()) {
+                int area=(right-left)*(bottom-top);
+                int cantidad=Math.max(2,Math.min(5,area/260));
+                for(int n=0;n<cantidad;n++) colocarEnZona(casas,salida,left,top,right,bottom,path,water,w,h,random);
+            }
+        }
+    }
+
+    private static void colocarEnZona(List<DefinicionObjeto> candidatos,List<Colocacion> salida,
+            int left,int top,int right,int bottom,boolean[] path,boolean[] water,int w,int h,Random random) {
+        if(candidatos.isEmpty()) return;
+        int margen=1;
+        for(int intento=0;intento<Math.max(20,(right-left)*(bottom-top));intento++) {
+            DefinicionObjeto obj=candidatos.get(random.nextInt(candidatos.size()));
+            int maxX=right-left-obj.ancho-1, maxY=bottom-top-obj.alto-1;
+            if(maxX<0||maxY<0) return;
+            int x=left+margen+random.nextInt(Math.max(1,maxX));
+            int y=top+margen+random.nextInt(Math.max(1,maxY));
+            if(!rectanguloLibre(x,y,obj.ancho,obj.alto,path,water,w,h)) continue;
+            boolean overlap=false;
+            for(Colocacion p:salida) {
+                DefinicionObjeto otro=buscarObjeto(candidatos,p.objeto);
+                if(otro==null) otro=null;
+                if(x<p.x+(otro==null?0:otro.ancho)&&x+obj.ancho>p.x
+                        &&y<p.y+(otro==null?0:otro.alto)&&y+obj.alto>p.y) { overlap=true; break; }
+            }
+            if(overlap) continue;
+            salida.add(new Colocacion(obj.indice,x,y,2));
+            return;
+        }
+    }
+
     private static void crearCaminos(boolean[] path, int w, int h, Estilo estilo, Random r) {
         if (estilo == Estilo.PUEBLO) {
             int grosor = h >= 16 && w >= 16 ? 2 : 1;
