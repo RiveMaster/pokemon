@@ -176,7 +176,7 @@ public final class GeneradorMapas {
             if (o.estilo == Estilo.PUEBLO)
                 colocarEdificios(placements, manual, path, water, grassPatch, w, h, biblioteca, random, o);
             colocarElementosNaturales(placements, manual, path, water, grassPatch, w, h,
-                    biblioteca, o.densidad, o.estilo, random);
+                    biblioteca, o.densidad, o.estilo, random, false);
         }
         if (o.incluirObstaculos) crearObstaculos(obstacles, path, water, w, h, o.densidad, o.estilo, random);
 
@@ -277,7 +277,7 @@ public final class GeneradorMapas {
         // Árboles y vegetación son objetos compuestos; nunca se trocean en colocaciones independientes.
         if(o.incluirObjetos && biblioteca!=null && !biblioteca.isEmpty())
             colocarElementosNaturales(placements,manual,path,water,grassPatch,w,h,
-                    biblioteca,o.densidad,o.estilo,random);
+                    biblioteca,o.densidad,o.estilo,random,true);
 
         // La capa intermedia contiene exclusivamente terreno y autotiles.
         for(int i=0;i<size;i++) {
@@ -318,7 +318,10 @@ public final class GeneradorMapas {
                 if(!dentro(x,y,w,h)) continue;
                 int idx=y*w+x;
                 grass[idx]=false;
-                if(p.capa==2) manual[idx]=true;
+                if("ARBOL".equalsIgnoreCase(obj.categoria)) {
+                    if(x==p.x+obj.ancho/2 && y==p.y+obj.alto-1) manual[idx]=true;
+                } else if("ROCA".equalsIgnoreCase(obj.categoria)) manual[idx]=true;
+                else if(x!=p.x+obj.ancho/2 || y!=p.y+obj.alto-1) manual[idx]=true;
             }
         }
         for(int i=0;i<size;i++) if(manual[i]) grass[i]=false;
@@ -347,6 +350,7 @@ public final class GeneradorMapas {
         for(DefinicionObjeto obj:biblioteca) {
             if(obj==null || obj.ancho<1 || obj.alto<1) continue;
             String c=obj.categoria.toUpperCase(Locale.ROOT);
+            if(!obj.nombre.startsWith("[Tema Pokémon]")) continue;
             if(c.equals("CENTRO_POKEMON")||c.equals("CENTRO_POKÉMON")) centros.add(obj);
             else if(c.equals("TIENDA")) tiendas.add(obj);
             else if(c.equals("GIMNASIO")) gimnasios.add(obj);
@@ -357,19 +361,20 @@ public final class GeneradorMapas {
         for(int ry=0;ry<rows;ry++) for(int rx=0;rx<cols;rx++) {
             int left=rx*regionW, top=ry*regionH;
             int right=Math.min(w,left+regionW), bottom=Math.min(h,top+regionH);
-            if(opciones.incluirCentroPokemon) colocarEnZona(centros,salida,left,top,right,bottom,path,water,w,h,random);
-            if(opciones.incluirTienda) colocarEnZona(tiendas,salida,left,top,right,bottom,path,water,w,h,random);
-            if(opciones.incluirGimnasio) colocarEnZona(gimnasios,salida,left,top,right,bottom,path,water,w,h,random);
+            if(opciones.incluirCentroPokemon) colocarEnZona(centros,salida,biblioteca,left,top,right,bottom,path,water,w,h,random);
+            if(opciones.incluirTienda) colocarEnZona(tiendas,salida,biblioteca,left,top,right,bottom,path,water,w,h,random);
+            if(opciones.incluirGimnasio) colocarEnZona(gimnasios,salida,biblioteca,left,top,right,bottom,path,water,w,h,random);
             if(opciones.incluirCasas && !casas.isEmpty()) {
                 int area=(right-left)*(bottom-top);
                 int cantidad=Math.max(2,Math.min(5,area/260));
-                for(int n=0;n<cantidad;n++) colocarEnZona(casas,salida,left,top,right,bottom,path,water,w,h,random);
+                for(int n=0;n<cantidad;n++) colocarEnZona(casas,salida,biblioteca,left,top,right,bottom,path,water,w,h,random);
             }
         }
     }
 
     private static void colocarEnZona(List<DefinicionObjeto> candidatos,List<Colocacion> salida,
-            int left,int top,int right,int bottom,boolean[] path,boolean[] water,int w,int h,Random random) {
+            List<DefinicionObjeto> biblioteca,int left,int top,int right,int bottom,
+            boolean[] path,boolean[] water,int w,int h,Random random) {
         if(candidatos.isEmpty()) return;
         int margen=1;
         for(int intento=0;intento<Math.max(20,(right-left)*(bottom-top));intento++) {
@@ -381,10 +386,10 @@ public final class GeneradorMapas {
             if(!rectanguloLibre(x,y,obj.ancho,obj.alto,path,water,w,h)) continue;
             boolean overlap=false;
             for(Colocacion p:salida) {
-                DefinicionObjeto otro=buscarObjeto(candidatos,p.objeto);
-                if(otro==null) otro=null;
-                if(x<p.x+(otro==null?0:otro.ancho)&&x+obj.ancho>p.x
-                        &&y<p.y+(otro==null?0:otro.alto)&&y+obj.alto>p.y) { overlap=true; break; }
+                DefinicionObjeto otro=buscarObjeto(biblioteca,p.objeto);
+                if(otro!=null && seSolapan(x,y,obj.ancho,obj.alto,p.x,p.y,otro.ancho,otro.alto)) {
+                    overlap=true; break;
+                }
             }
             if(overlap) continue;
             salida.add(new Colocacion(obj.indice,x,y,2));
@@ -551,11 +556,12 @@ public final class GeneradorMapas {
     private static void colocarElementosNaturales(List<Colocacion> salida, boolean[] manual, boolean[] path,
                                                   boolean[] water, boolean[] grass, int w, int h,
                                                   List<DefinicionObjeto> biblioteca, int densidad,
-                                                  Estilo estilo, Random random) {
+                                                  Estilo estilo, Random random, boolean soloTema) {
         if (densidad <= 0 || w < 5 || h < 5) return;
         List<DefinicionObjeto> candidatos = new ArrayList<>();
         for (DefinicionObjeto obj : biblioteca) {
-            if (obj != null && esObjetoNatural(obj) && obj.ancho > 0 && obj.alto > 0
+            if (obj != null && (soloTema ? obj.nombre.startsWith("[Tema Pokémon] Árbol") : esObjetoNatural(obj))
+                    && obj.ancho > 0 && obj.alto > 0
                     && obj.ancho <= Math.min(12, w - 2) && obj.alto <= Math.min(12, h - 2))
                 candidatos.add(obj);
         }
