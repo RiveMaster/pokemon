@@ -386,6 +386,16 @@ public final class EditorMapas {
         return -1;
     }
 
+    private int[] tilesDeTipo(TipoTile tipo, int excluir, int maximo) {
+        List<Integer> encontrados = new ArrayList<>();
+        for (int i = 0; i < tiposTile.size() && encontrados.size() < maximo; i++) {
+            if (i != excluir && tiposTile.get(i) == tipo) encontrados.add(i);
+        }
+        int[] resultado = new int[encontrados.size()];
+        for (int i = 0; i < resultado.length; i++) resultado[i] = encontrados.get(i);
+        return resultado;
+    }
+
     private int siguienteTileNormal(int base) {
         int normal = primerTileTipo(TipoTile.NORMAL, base);
         if (normal >= 0) return normal;
