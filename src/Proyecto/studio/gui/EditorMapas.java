@@ -184,43 +184,15 @@ public final class EditorMapas {
         densidadCampo.setPaintTicks(true);
         densidadCampo.setPaintLabels(true);
 
-        JCheckBox camino = new JCheckBox("Crear caminos conectados", true);
-        JCheckBox hierba = new JCheckBox("Crear zonas de hierba", true);
-        JCheckBox agua = new JCheckBox("Crear lagos / costa", true);
-        JCheckBox obstaculos = new JCheckBox("Crear árboles / obstáculos", true);
-        JCheckBox edificios = new JCheckBox("Colocar edificios", true);
-        JCheckBox casas = new JCheckBox("Casas", true);
-        JCheckBox centroPokemon = new JCheckBox("Centro Pokémon", true);
-        JCheckBox gimnasio = new JCheckBox("Gimnasio", true);
-        JCheckBox tienda = new JCheckBox("Tienda", true);
-        JLabel clasificarTiles = new JLabel("<html>Los tiles elegidos se clasifican automáticamente por función.<br>La propiedad se guarda en este proyecto y afecta a sus otros usos.</html>");
-
-        JComboBox<Integer> tileBase = crearSelectorTile();
-        JList<Integer> tilesCamino = crearSelectorTilesMultiples();
-        JComboBox<Integer> tileHierba = crearSelectorTile();
-        JComboBox<Integer> tileAgua = crearSelectorTile();
-        JList<Integer> tilesObstaculo = crearSelectorTilesMultiples();
-
+        // El tema visual es interno: el jugador solo define tamaño, estilo, densidad y semilla.
         int baseDefault = primerTileTipo(TipoTile.NORMAL, -1);
-        if (baseDefault < 0) baseDefault = 0;
-        int caminoDefault = siguienteTileNormal(baseDefault);
-        if (caminoDefault < 0) caminoDefault = baseDefault;
-        int hierbaDefault = primerTileTipo(TipoTile.HIERBA, baseDefault);
-        if (hierbaDefault < 0) hierbaDefault = distintoDe(baseDefault, caminoDefault, -1);
-        int aguaDefault = primerTileTipo(TipoTile.AGUA, baseDefault, caminoDefault, hierbaDefault);
-        if (aguaDefault < 0) aguaDefault = distintoDe(baseDefault, caminoDefault, hierbaDefault);
-        int obstaculoDefault = primerTileTipo(TipoTile.BLOQUEO, baseDefault, caminoDefault, hierbaDefault, aguaDefault);
-        if (obstaculoDefault < 0) obstaculoDefault = distintoDe(baseDefault, caminoDefault, hierbaDefault, aguaDefault);
-
-        tileBase.setSelectedItem(baseDefault);
-        if (caminoDefault >= 0) tilesCamino.setSelectedValue(caminoDefault, true);
-        tileHierba.setSelectedItem(hierbaDefault);
-        tileAgua.setSelectedItem(aguaDefault);
-        if (obstaculoDefault >= 0) tilesObstaculo.setSelectedValue(obstaculoDefault, true);
-        if (hierbaDefault < 0) hierba.setSelected(false);
-        if (aguaDefault < 0) agua.setSelected(false);
-        if (obstaculoDefault < 0) obstaculos.setSelected(false);
-
+        if (baseDefault < 0 && !tiles.isEmpty()) baseDefault = 0;
+        int[] roads = tilesDeTipo(TipoTile.NORMAL, baseDefault, 13);
+        int grassTile = primerTileTipo(TipoTile.HIERBA, baseDefault);
+        int waterTile = primerTileTipo(TipoTile.AGUA, baseDefault);
+        int obstacleTile = primerTileTipo(TipoTile.BLOQUEO, baseDefault);
+        if (obstacleTile < 0) obstacleTile = distintoDe(baseDefault, grassTile, waterTile);
+        if (roads.length == 0 && baseDefault >= 0) roads = new int[]{baseDefault};
         JPanel dimensiones = new JPanel(new FlowLayout(FlowLayout.LEFT));
         dimensiones.add(new JLabel("Ancho (tiles):")); dimensiones.add(anchoCampo);
         dimensiones.add(new JLabel("Alto (tiles):")); dimensiones.add(altoCampo);
@@ -234,29 +206,14 @@ public final class EditorMapas {
         sliderPanel.add(densidadCampo, BorderLayout.CENTER);
         terreno.add(sliderPanel);
 
-        JPanel opciones = new JPanel(new GridLayout(0, 2, 6, 3));
-        opciones.setBorder(BorderFactory.createTitledBorder("Elementos a generar"));
-        opciones.add(camino); opciones.add(hierba);
-        opciones.add(agua); opciones.add(obstaculos);
-        opciones.add(edificios); opciones.add(new JLabel("Los edificios se usan en estilo Pueblo."));
-        opciones.add(casas); opciones.add(centroPokemon);
-        opciones.add(gimnasio); opciones.add(tienda);
-
-        JPanel paleta = new JPanel(new GridLayout(0, 2, 6, 5));
-        paleta.setBorder(BorderFactory.createTitledBorder("Tiles para cada función"));
-        paleta.add(new JLabel("Suelo base:")); paleta.add(tileBase);
-        paleta.add(new JLabel("Tiles de camino (Ctrl/Mayús para varios):")); paleta.add(new JScrollPane(tilesCamino));
-        paleta.add(new JLabel("Hierba:")); paleta.add(tileHierba);
-        paleta.add(new JLabel("Agua:")); paleta.add(tileAgua);
-        paleta.add(new JLabel("Tiles de árboles / obstáculos (selección múltiple):")); paleta.add(new JScrollPane(tilesObstaculo));
-        paleta.add(clasificarTiles); paleta.add(new JLabel("Los tiles se muestran como miniaturas."));
+        JLabel temaFijo = new JLabel("<html><b>Tema Pokémon Studio</b><br>El programa asigna automáticamente césped, suelo, caminos, agua, vegetación, árboles y edificios. Su apariencia no se puede cambiar desde este generador.</html>");
+        temaFijo.setBorder(BorderFactory.createTitledBorder("Tema visual automático"));
 
         JPanel centro = new JPanel();
         centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
         centro.add(dimensiones);
         centro.add(terreno);
-        centro.add(opciones);
-        centro.add(paleta);
+        centro.add(temaFijo);
         dialogo.add(new JScrollPane(centro), BorderLayout.CENTER);
 
         JLabel nota = new JLabel("<html>Genera mapas reproducibles con la misma semilla. " +
@@ -272,29 +229,15 @@ public final class EditorMapas {
                 int w = (Integer) anchoCampo.getValue();
                 int h = (Integer) altoCampo.getValue();
                 long seed = Long.parseLong(semillaCampo.getText().trim());
-                int base = valorSelector(tileBase);
-                int[] roads = camino.isSelected() ? valoresSeleccionados(tilesCamino) : new int[0];
+                int base = baseDefault;
+                int[] obstacleTiles = obstacleTile < 0 ? new int[0] : new int[]{obstacleTile};
                 int road = roads.length == 0 ? -1 : roads[0];
-                int grassTile = hierba.isSelected() ? valorSelector(tileHierba) : -1;
-                int waterTile = agua.isSelected() ? valorSelector(tileAgua) : -1;
-                int[] obstacleTiles = obstaculos.isSelected() ? valoresSeleccionados(tilesObstaculo) : new int[0];
-                int obstacleTile = obstacleTiles.length == 0 ? -1 : obstacleTiles[0];
 
-                if (base < 0) throw new IllegalArgumentException("Selecciona un tile de suelo base.");
-                validarRolesTiles(base, road, grassTile, waterTile, obstacleTile);
-                for (int t : roads) if (t == base || t == grassTile || t == waterTile) throw new IllegalArgumentException("Los tiles de camino deben ser distintos del suelo, hierba y agua.");
-                for (int t : obstacleTiles) if (t == base || t == road || t == grassTile || t == waterTile) throw new IllegalArgumentException("Los tiles de obstáculos deben ser distintos del suelo, camino, hierba y agua.");
+                if (base < 0) throw new IllegalArgumentException("No hay tiles de suelo disponibles en la biblioteca del proyecto.");
 
-                String aviso = "Se reemplazará el mapa que estás editando. ¿Continuar?"
-                        + "\n\nLos tiles elegidos se clasificarán automáticamente según su función. La propiedad se guarda en este proyecto y afecta a los demás lugares donde se usan esos tiles.";
+                String aviso = "Se reemplazará el mapa que estás editando. El tema visual y sus asignaciones son internos y no se pueden personalizar desde aquí. ¿Continuar?";
                 if (JOptionPane.showConfirmDialog(dialogo, aviso, "Generar mapa",
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) return;
-
-                tiposTile.set(base, TipoTile.NORMAL);
-                if (road >= 0) tiposTile.set(road, TipoTile.NORMAL);
-                if (grassTile >= 0) tiposTile.set(grassTile, TipoTile.HIERBA);
-                if (waterTile >= 0) tiposTile.set(waterTile, TipoTile.AGUA);
-                if (obstacleTile >= 0) tiposTile.set(obstacleTile, TipoTile.BLOQUEO);
 
                 List<GeneradorMapas.DefinicionObjeto> biblioteca = new ArrayList<>();
                 for (int i = 0; i < objetos.size(); i++) {
@@ -304,9 +247,8 @@ public final class EditorMapas {
 
                 GeneradorMapas.Opciones ajustes = new GeneradorMapas.Opciones(
                         w, h, seed, (GeneradorMapas.Estilo) estiloCampo.getSelectedItem(),
-                        densidadCampo.getValue(), camino.isSelected(), hierba.isSelected(), agua.isSelected(),
-                        obstaculos.isSelected(), edificios.isSelected(), base, roads, grassTile, waterTile, obstacleTiles,
-                        casas.isSelected(), centroPokemon.isSelected(), gimnasio.isSelected(), tienda.isSelected());
+                        densidadCampo.getValue(), true, true, true, true, true,
+                        base, roads, grassTile, waterTile, obstacleTiles, true, true, true, true);
                 GeneradorMapas.Resultado resultado = GeneradorMapas.generar(ajustes, biblioteca);
 
                 ancho = resultado.ancho;
