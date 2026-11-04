@@ -1699,7 +1699,7 @@ private void guardar() {
             if (t < 0 || t >= tiposTile.size()) continue;
             TipoTile tipo = tiposTile.get(t);
             if (tipo == TipoTile.BLOQUEO || tipo == TipoTile.AGUA) bloquea = true;
-            if (capaActual == 0 && tipo == TipoTile.HIERBA) hierba = true;
+            if (tipo == TipoTile.HIERBA) hierba = true;
         }
 
         int x = indiceMapa % ancho;
