@@ -315,10 +315,13 @@ public final class EditorMapas {
         for (int i = 0; i < temaCaminos.length; i++)
             temaCaminos[i] = agregarTileTema(crearTexturaTema(4, i), TipoTile.NORMAL);
 
-        boolean hayArbolCompuesto = false, hayCasa = false, hayCentro = false, hayTienda = false, hayGym = false;
+        boolean hayArbolCompuesto = false, hayCasa = false, hayCasa2 = false, hayCasa3 = false;
+        boolean hayCentro = false, hayTienda = false, hayGym = false;
         for (ObjetoMapa o : objetos) {
             if (o.nombre.equals("[Tema Pokémon] Árbol 4x4") && o.ancho == 4 && o.alto == 4) hayArbolCompuesto = true;
             if (o.nombre.equals("[Tema Pokémon] Casa")) hayCasa = true;
+            if (o.nombre.equals("[Tema Pokémon] Casa 2")) hayCasa2 = true;
+            if (o.nombre.equals("[Tema Pokémon] Casa 3")) hayCasa3 = true;
             if (o.nombre.equals("[Tema Pokémon] Centro Pokémon")) hayCentro = true;
             if (o.nombre.equals("[Tema Pokémon] Tienda Pokémon")) hayTienda = true;
             if (o.nombre.equals("[Tema Pokémon] Gimnasio")) hayGym = true;
@@ -332,6 +335,10 @@ public final class EditorMapas {
                 });
         if (!hayCasa) agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
                 crearEdificioTema(0), null);
+        if (!hayCasa2) agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
+                crearEdificioTema(4), null);
+        if (!hayCasa3) agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
+                crearEdificioTema(5), null);
         if (!hayCentro) agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
                 crearEdificioTema(1), null);
         if (!hayTienda) agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
@@ -411,8 +418,10 @@ public final class EditorMapas {
     private BufferedImage crearEdificioTema(int tipo) {
         BufferedImage im=new BufferedImage(48,48,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g=im.createGraphics();
-        Color[] techos={new Color(153,65,54),new Color(210,65,68),new Color(72,125,190),new Color(105,83,160)};
-        Color[] paredes={new Color(225,207,160),new Color(222,222,211),new Color(235,211,149),new Color(184,190,205)};
+        Color[] techos={new Color(153,65,54),new Color(210,65,68),new Color(72,125,190),
+                new Color(105,83,160),new Color(133,91,52),new Color(72,123,89)};
+        Color[] paredes={new Color(225,207,160),new Color(222,222,211),new Color(235,211,149),
+                new Color(184,190,205),new Color(226,190,139),new Color(203,218,180)};
         g.setColor(new Color(0,0,0,55)); g.fillOval(3,40,42,6);
         g.setColor(techos[tipo]); g.fillPolygon(new int[]{1,24,47},new int[]{19,1,19},3);
         g.fillRect(5,16,38,7);
