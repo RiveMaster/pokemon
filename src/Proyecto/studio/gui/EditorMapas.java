@@ -372,7 +372,7 @@ public final class EditorMapas {
             for(int y=3;y<16;y+=5) for(int x=(y%2)*4;x<16;x+=8) g.drawLine(x,y,x+3,y);
             g.setColor(new Color(35,103,174)); g.drawLine(0,15,15,15);
         } else {
-            int[] masks={10,4,6,3,9,2,15,8,9,6,9,1,3};
+            int[] masks={3,4,9,3,9,2,15,8,6,12,6,1,12};
             int mask=masks[Math.max(0,Math.min(12,variante))];
             g.setColor(new Color(83,166,75)); g.fillRect(0,0,16,16);
             g.setColor(new Color(65,143,62));
@@ -1415,6 +1415,7 @@ private void guardar() {
             alto = nh;
             tiles.clear();
             tiles.addAll(newTiles);
+            tilesTemaProtegidos.clear();
             temaFondo = temaSuelo = temaHierba = temaAgua = -1;
             temaCaminos = new int[0];
             tiposTile.clear();
