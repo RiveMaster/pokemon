@@ -27,7 +27,7 @@ public final class GeneradorMapas {
         public final Estilo estilo;
         public final boolean incluirCamino, incluirHierba, incluirAgua, incluirObstaculos, incluirObjetos;
         public final boolean incluirCasas, incluirCentroPokemon, incluirGimnasio, incluirTienda;
-        public final int tileBase, tileCamino, tileHierba, tileAgua, tileObstaculo;
+        public final int tileFondo, tileBase, tileCamino, tileHierba, tileAgua, tileObstaculo;
         public final int[] tilesCamino, tilesObstaculo;
 
         public Opciones(int ancho, int alto, long semilla, Estilo estilo, int densidad,
@@ -58,6 +58,18 @@ public final class GeneradorMapas {
                         int tileBase, int[] tilesCamino, int tileHierba, int tileAgua, int[] tilesObstaculo,
                         boolean incluirCasas, boolean incluirCentroPokemon, boolean incluirGimnasio,
                         boolean incluirTienda) {
+            this(ancho, alto, semilla, estilo, densidad, incluirCamino, incluirHierba, incluirAgua,
+                    incluirObstaculos, incluirObjetos, -1, tileBase, tilesCamino, tileHierba, tileAgua,
+                    tilesObstaculo, incluirCasas, incluirCentroPokemon, incluirGimnasio, incluirTienda);
+        }
+
+        /** Constructor para el tema visual interno, con fondo independiente del terreno base. */
+        public Opciones(int ancho, int alto, long semilla, Estilo estilo, int densidad,
+                        boolean incluirCamino, boolean incluirHierba, boolean incluirAgua,
+                        boolean incluirObstaculos, boolean incluirObjetos,
+                        int tileFondo, int tileBase, int[] tilesCamino, int tileHierba, int tileAgua,
+                        int[] tilesObstaculo, boolean incluirCasas, boolean incluirCentroPokemon,
+                        boolean incluirGimnasio, boolean incluirTienda) {
             if (ancho < 1 || ancho > 500 || alto < 1 || alto > 500)
                 throw new IllegalArgumentException("El mapa debe medir entre 1 y 500 tiles por lado.");
             this.ancho = ancho;
@@ -70,6 +82,7 @@ public final class GeneradorMapas {
             this.incluirAgua = incluirAgua;
             this.incluirObstaculos = incluirObstaculos;
             this.incluirObjetos = incluirObjetos;
+            this.tileFondo = tileFondo;
             this.tileBase = tileBase;
             this.tilesCamino = tilesCamino == null ? new int[0] : tilesCamino.clone();
             this.tileCamino = this.tilesCamino.length == 0 ? -1 : this.tilesCamino[0];
@@ -133,6 +146,11 @@ public final class GeneradorMapas {
     }
 
     public static Resultado generar(Opciones o, List<DefinicionObjeto> biblioteca) {
+        if (o == null) throw new IllegalArgumentException("Faltan las opciones del generador.");
+        return o.tileFondo >= 0 ? generarTemaFijo(o, biblioteca) : generarLegacy(o, biblioteca);
+    }
+
+    private static Resultado generarLegacy(Opciones o, List<DefinicionObjeto> biblioteca) {
         if (o == null) throw new IllegalArgumentException("Faltan las opciones del generador.");
         int w = o.ancho, h = o.alto, size = w * h;
         Random random = new Random(o.semilla);
