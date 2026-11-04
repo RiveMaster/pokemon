@@ -104,6 +104,18 @@ public final class GeneradorMapasSmokeTest {
         int[] vacios = {0,3,4,7,11,12};
         for (int pos : vacios) if (arbol[pos] != -1)
             throw new AssertionError("La plantilla de árbol perdió un hueco vacío.");
+
+        GeneradorMapas.Opciones bosque = new GeneradorMapas.Opciones(
+                60, 40, 991L, GeneradorMapas.Estilo.RUTA_BOSQUE, 100,
+                true, true, true, true, true,
+                20, 21, caminos, 35, 36, new int[0], true, true, true, true);
+        GeneradorMapas.Resultado ruta = GeneradorMapas.generar(bosque, tema);
+        boolean arbolEnRuta = false;
+        for (GeneradorMapas.Colocacion p : ruta.colocaciones) {
+            if (p.objeto == 0) arbolEnRuta = true;
+            if (p.objeto != 0) throw new AssertionError("Un edificio de ciudad apareció en una ruta.");
+        }
+        if (!arbolEnRuta) throw new AssertionError("No se ha colocado el árbol compuesto en la ruta.");
     }
 
     private static void comprobar(GeneradorMapas.Resultado r, int ancho, int alto,
