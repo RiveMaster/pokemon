@@ -221,7 +221,7 @@ public final class EditorMapas {
         dialogo.add(new JScrollPane(centro), BorderLayout.CENTER);
 
         JLabel nota = new JLabel("<html>Genera mapas reproducibles con la misma semilla. " +
-                "Los caminos conectan los bordes; los objetos usan la biblioteca de «Crear objetos».</html>");
+                "El tema visual es interno: caminos autotilados, terreno, árboles y edificios protegidos.</html>");
         nota.setBorder(new EmptyBorder(4, 8, 4, 8));
         dialogo.add(nota, BorderLayout.NORTH);
 
@@ -338,6 +338,10 @@ public final class EditorMapas {
                 crearEdificioTema(2), null);
         if (!hayGym) agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
                 crearEdificioTema(3), null);
+        for (ObjetoMapa objeto : objetos) {
+            if (!objeto.nombre.startsWith("[Tema Pokémon]")) continue;
+            for (int indice : objeto.celdas) if (indice >= 0) tilesTemaProtegidos.add(indice);
+        }
         if (listaObjetos != null) listaObjetos.setListData(objetos.toArray(new ObjetoMapa[0]));
     }
 
