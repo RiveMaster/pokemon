@@ -51,8 +51,59 @@ public final class GeneradorMapasSmokeTest {
         comprobar(simple, 8, 9, List.of());
         if (simple.colocaciones.size() != 0) throw new AssertionError("Se crearon objetos cuando estaban desactivados.");
 
+        comprobarTemaFijo();
         System.out.println("OK: " + combinaciones
                 + " combinaciones de tamaño/estilo deterministas y caso sin elementos opcionales.");
+    }
+
+
+    private static void comprobarTemaFijo() {
+        int[] caminos = new int[13];
+        for (int i = 0; i < caminos.length; i++) caminos[i] = 22 + i;
+        int[] arbol = {
+                -1, 40, 41, -1,
+                -1, 42, 43, -1,
+                44, 45, 46, -1,
+                -1, 47, 48, 49
+        };
+        List<GeneradorMapas.DefinicionObjeto> tema = List.of(
+                new GeneradorMapas.DefinicionObjeto(0, "[Tema Pokémon] Árbol 4x4", 4, 4, arbol, "ARBOL"),
+                new GeneradorMapas.DefinicionObjeto(1, "[Tema Pokémon] Casa", 3, 3, new int[9], "CASA"),
+                new GeneradorMapas.DefinicionObjeto(2, "[Tema Pokémon] Centro Pokémon", 3, 3, new int[9], "CENTRO_POKEMON"),
+                new GeneradorMapas.DefinicionObjeto(3, "[Tema Pokémon] Tienda Pokémon", 3, 3, new int[9], "TIENDA"),
+                new GeneradorMapas.DefinicionObjeto(4, "[Tema Pokémon] Gimnasio", 3, 3, new int[9], "GIMNASIO"),
+                new GeneradorMapas.DefinicionObjeto(5, "Casa personalizada", 2, 2, new int[4], "CASA")
+        );
+        GeneradorMapas.Opciones opciones = new GeneradorMapas.Opciones(
+                36, 26, 123456L, GeneradorMapas.Estilo.PUEBLO, 70,
+                true, true, true, true, true,
+                20, 21, caminos, 35, 36, new int[0], true, true, true, true);
+        GeneradorMapas.Resultado a = GeneradorMapas.generar(opciones, tema);
+        GeneradorMapas.Resultado b = GeneradorMapas.generar(opciones, tema);
+        if (!mismosResultados(a, b)) throw new AssertionError("El tema fijo no es determinista.");
+        for (int tile : a.capas[0]) if (tile != 20)
+            throw new AssertionError("La capa inferior no conserva el césped continuo.");
+        for (int tile : a.capas[1]) if (tile < -1 || tile > 36)
+            throw new AssertionError("Tile fuera de rango en la capa intermedia.");
+        boolean centro=false, tienda=false, gimnasio=false, casa=false;
+        for (GeneradorMapas.Colocacion p : a.colocaciones) {
+            GeneradorMapas.DefinicionObjeto obj = null;
+            for (GeneradorMapas.DefinicionObjeto candidato : tema)
+                if (candidato.indice == p.objeto) obj = candidato;
+            if (obj == null) throw new AssertionError("Objeto no registrado.");
+            if (p.capa != 2) throw new AssertionError("Los objetos no están en la capa superior.");
+            if (obj.nombre.contains("Centro Pokémon")) centro=true;
+            if (obj.nombre.contains("Tienda Pokémon")) tienda=true;
+            if (obj.nombre.contains("Gimnasio")) gimnasio=true;
+            if (obj.nombre.equals("[Tema Pokémon] Casa")) casa=true;
+            if (obj.nombre.equals("Casa personalizada"))
+                throw new AssertionError("Se ha utilizado un objeto ajeno al tema.");
+        }
+        if (!centro || !tienda || !gimnasio || !casa)
+            throw new AssertionError("Faltan edificios requeridos en la ciudad.");
+        int[] vacios = {0,3,4,7,11,12};
+        for (int pos : vacios) if (arbol[pos] != -1)
+            throw new AssertionError("La plantilla de árbol perdió un hueco vacío.");
     }
 
     private static void comprobar(GeneradorMapas.Resultado r, int ancho, int alto,
