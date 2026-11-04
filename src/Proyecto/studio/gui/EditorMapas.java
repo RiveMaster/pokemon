@@ -41,6 +41,11 @@ public final class EditorMapas {
     private final JComboBox<TipoTile> selectorTipoTile = new JComboBox<>(TipoTile.values());
     private boolean actualizandoSelectorTipo = false;
 
+    // Índices privados del tema visual fijo que utiliza el generador automático.
+    private int temaFondo = -1, temaSuelo = -1, temaHierba = -1, temaAgua = -1;
+    private int[] temaCaminos = new int[0];
+
+
     private EditorMapas(int anchoInicial, int altoInicial) {
         ancho = anchoInicial;
         alto = altoInicial;
@@ -166,6 +171,7 @@ public final class EditorMapas {
 
     /** Abre el asistente de generación procedural y aplica el resultado al mapa editable. */
     private void generarMapaDialogo() {
+        asegurarTemaVisual();
         if (tiles.isEmpty()) {
             error("Primero importa o crea al menos un tile.");
             return;
@@ -185,14 +191,11 @@ public final class EditorMapas {
         densidadCampo.setPaintLabels(true);
 
         // El tema visual es interno: el jugador solo define tamaño, estilo, densidad y semilla.
-        int baseDefault = primerTileTipo(TipoTile.NORMAL, -1);
-        if (baseDefault < 0 && !tiles.isEmpty()) baseDefault = 0;
-        int[] roads = tilesDeTipo(TipoTile.NORMAL, baseDefault, 13);
-        int grassTile = primerTileTipo(TipoTile.HIERBA, baseDefault);
-        int waterTile = primerTileTipo(TipoTile.AGUA, baseDefault);
-        int obstacleTile = primerTileTipo(TipoTile.BLOQUEO, baseDefault);
-        if (obstacleTile < 0) obstacleTile = distintoDe(baseDefault, grassTile, waterTile);
-        if (roads.length == 0 && baseDefault >= 0) roads = new int[]{baseDefault};
+        int baseDefault = temaSuelo;
+        int[] roads = temaCaminos.clone();
+        int grassTile = temaHierba;
+        int waterTile = temaAgua;
+        int obstacleTile = -1;
         JPanel dimensiones = new JPanel(new FlowLayout(FlowLayout.LEFT));
         dimensiones.add(new JLabel("Ancho (tiles):")); dimensiones.add(anchoCampo);
         dimensiones.add(new JLabel("Alto (tiles):")); dimensiones.add(altoCampo);
@@ -230,10 +233,10 @@ public final class EditorMapas {
                 int h = (Integer) altoCampo.getValue();
                 long seed = Long.parseLong(semillaCampo.getText().trim());
                 int base = baseDefault;
-                int[] obstacleTiles = obstacleTile < 0 ? new int[0] : new int[]{obstacleTile};
+                int[] obstacleTiles = new int[0];
                 int road = roads.length == 0 ? -1 : roads[0];
 
-                if (base < 0) throw new IllegalArgumentException("No hay tiles de suelo disponibles en la biblioteca del proyecto.");
+                if (base < 0 || temaFondo < 0) throw new IllegalArgumentException("No se pudo inicializar el tema visual interno.");
 
                 String aviso = "Se reemplazará el mapa que estás editando. El tema visual y sus asignaciones son internos y no se pueden personalizar desde aquí. ¿Continuar?";
                 if (JOptionPane.showConfirmDialog(dialogo, aviso, "Generar mapa",
@@ -248,7 +251,7 @@ public final class EditorMapas {
                 GeneradorMapas.Opciones ajustes = new GeneradorMapas.Opciones(
                         w, h, seed, (GeneradorMapas.Estilo) estiloCampo.getSelectedItem(),
                         densidadCampo.getValue(), true, true, true, true, true,
-                        base, roads, grassTile, waterTile, obstacleTiles, true, true, true, true);
+                        temaFondo, base, roads, grassTile, waterTile, obstacleTiles, true, true, true, true);
                 GeneradorMapas.Resultado resultado = GeneradorMapas.generar(ajustes, biblioteca);
 
                 ancho = resultado.ancho;
@@ -257,7 +260,7 @@ public final class EditorMapas {
                 for (int capaActual = 0; capaActual < 3; capaActual++) capas[capaActual] = resultado.capas[capaActual].clone();
                 colisionesManuales = resultado.colisionesManuales.clone();
                 hierbaEncuentros = resultado.hierbaEncuentros.clone();
-                aplicarVariantesCamino(road);
+                // Los 13 caminos ya se han autotilado por vecindad en GeneradorMapas.
                 colocaciones.clear();
                 for (GeneradorMapas.Colocacion p : resultado.colocaciones) {
                     if (p.objeto >= 0 && p.objeto < objetos.size())
@@ -296,6 +299,141 @@ public final class EditorMapas {
         dialogo.setSize(820, 660);
         dialogo.setLocationRelativeTo(frame);
         dialogo.setVisible(true);
+    }
+
+
+    /** Instala en código el conjunto fijo de gráficos del generador. No depende de PNG externos. */
+    private void asegurarTemaVisual() {
+        if (temaFondo >= 0 && temaFondo < tiles.size() && temaCaminos.length == 13
+                && temaCaminos[12] < tiles.size()) return;
+        temaFondo = agregarTileTema(crearTexturaTema(0, 0), TipoTile.NORMAL);
+        temaSuelo = agregarTileTema(crearTexturaTema(1, 0), TipoTile.NORMAL);
+        temaHierba = agregarTileTema(crearTexturaTema(2, 0), TipoTile.HIERBA);
+        temaAgua = agregarTileTema(crearTexturaTema(3, 0), TipoTile.AGUA);
+        temaCaminos = new int[13];
+        for (int i = 0; i < temaCaminos.length; i++)
+            temaCaminos[i] = agregarTileTema(crearTexturaTema(4, i), TipoTile.NORMAL);
+
+        boolean hayArbolCompuesto = false, hayCasa = false, hayCentro = false, hayTienda = false, hayGym = false;
+        for (ObjetoMapa o : objetos) {
+            if (o.categoria == CategoriaObjeto.ARBOL && o.ancho == 4 && o.alto == 4) hayArbolCompuesto = true;
+            if (o.categoria == CategoriaObjeto.CASA) hayCasa = true;
+            if (o.categoria == CategoriaObjeto.CENTRO_POKEMON) hayCentro = true;
+            if (o.categoria == CategoriaObjeto.TIENDA) hayTienda = true;
+            if (o.categoria == CategoriaObjeto.GIMNASIO) hayGym = true;
+        }
+        if (!hayArbolCompuesto) agregarObjetoTema("Árbol 4x4 (10 piezas)", CategoriaObjeto.ARBOL,
+                4, 4, crearArbolTema(), new boolean[]{
+                        false,true,true,false,
+                        false,true,true,false,
+                        true,true,true,false,
+                        false,true,true,true
+                });
+        if (!hayCasa) agregarObjetoTema("Casa Pokémon", CategoriaObjeto.CASA, 3, 3,
+                crearEdificioTema(0), null);
+        if (!hayCentro) agregarObjetoTema("Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
+                crearEdificioTema(1), null);
+        if (!hayTienda) agregarObjetoTema("Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
+                crearEdificioTema(2), null);
+        if (!hayGym) agregarObjetoTema("Gimnasio Pokémon", CategoriaObjeto.GIMNASIO, 3, 3,
+                crearEdificioTema(3), null);
+        if (listaObjetos != null) listaObjetos.setListData(objetos.toArray(new ObjetoMapa[0]));
+    }
+
+    private int agregarTileTema(BufferedImage imagen, TipoTile tipo) {
+        int indice=tiles.size();
+        tiles.add(imagen);
+        tiposTile.add(tipo);
+        modeloPaleta.addElement(indice);
+        return indice;
+    }
+
+    /** tipo: césped base, suelo, hierba alta, agua, camino. */
+    private BufferedImage crearTexturaTema(int tipo, int variante) {
+        BufferedImage im=new BufferedImage(TILE,TILE,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g=im.createGraphics();
+        if(tipo==0 || tipo==2 || tipo==4) {
+            g.setColor(tipo==2?new Color(49,119,58):new Color(83,166,75)); g.fillRect(0,0,16,16);
+            g.setColor(tipo==2?new Color(30,91,46):new Color(65,143,62));
+            for(int y=1;y<16;y+=4) for(int x=(y%2==0?1:3);x<16;x+=5) g.fillRect(x,y,2,2);
+            if(tipo==2) {
+                g.setColor(new Color(119,185,79));
+                for(int x=2;x<16;x+=5) { g.drawLine(x,12,x-1,8); g.drawLine(x,12,x+1,9); }
+            }
+        } else if(tipo==1) {
+            g.setColor(new Color(190,164,112)); g.fillRect(0,0,16,16);
+            g.setColor(new Color(166,137,91));
+            for(int y=2;y<16;y+=5) for(int x=(y%2)*3;x<16;x+=7) g.fillRect(x,y,2,1);
+        } else if(tipo==3) {
+            g.setColor(new Color(48,125,196)); g.fillRect(0,0,16,16);
+            g.setColor(new Color(103,181,224));
+            for(int y=3;y<16;y+=5) for(int x=(y%2)*4;x<16;x+=8) g.drawLine(x,y,x+3,y);
+            g.setColor(new Color(35,103,174)); g.drawLine(0,15,15,15);
+        } else {
+            int[] masks={10,4,6,3,9,2,15,8,9,6,9,1,3};
+            int mask=masks[Math.max(0,Math.min(12,variante))];
+            g.setColor(new Color(83,166,75)); g.fillRect(0,0,16,16);
+            g.setColor(new Color(65,143,62));
+            for(int y=1;y<16;y+=5) for(int x=(y%2)*3;x<16;x+=7) g.fillRect(x,y,1,1);
+            g.setColor(new Color(202,177,126));
+            g.fillRect(5,5,6,6);
+            if((mask&1)!=0) g.fillRect(5,0,6,8);
+            if((mask&2)!=0) g.fillRect(8,5,8,6);
+            if((mask&4)!=0) g.fillRect(5,8,6,8);
+            if((mask&8)!=0) g.fillRect(0,5,8,6);
+            g.setColor(new Color(181,151,101));
+            g.drawLine(5,5,10,5); g.drawLine(5,10,10,10);
+        }
+        g.dispose();
+        return im;
+    }
+
+    /** Árbol dividido como objeto 4×4; solo se materializan las diez celdas descritas. */
+    private BufferedImage crearArbolTema() {
+        BufferedImage im=new BufferedImage(64,64,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g=im.createGraphics();
+        g.setColor(new Color(27,83,40)); g.fillOval(6,1,52,48);
+        g.setColor(new Color(39,119,51)); g.fillOval(9,0,46,43);
+        g.setColor(new Color(70,151,61)); g.fillOval(15,4,32,30);
+        g.setColor(new Color(93,170,72)); g.fillOval(18,7,17,12);
+        g.setColor(new Color(102,68,39)); g.fillRect(27,38,10,25);
+        g.setColor(new Color(129,87,48)); g.fillRect(29,40,4,19);
+        g.dispose();
+        return im;
+    }
+
+    private BufferedImage crearEdificioTema(int tipo) {
+        BufferedImage im=new BufferedImage(48,48,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g=im.createGraphics();
+        Color[] techos={new Color(153,65,54),new Color(210,65,68),new Color(72,125,190),new Color(105,83,160)};
+        Color[] paredes={new Color(225,207,160),new Color(222,222,211),new Color(235,211,149),new Color(184,190,205)};
+        g.setColor(new Color(0,0,0,55)); g.fillOval(3,40,42,6);
+        g.setColor(techos[tipo]); g.fillPolygon(new int[]{1,24,47},new int[]{19,1,19},3);
+        g.fillRect(5,16,38,7);
+        g.setColor(paredes[tipo]); g.fillRect(7,20,34,26);
+        g.setColor(new Color(76,60,49)); g.fillRect(20,31,9,15);
+        g.setColor(new Color(100,183,218)); g.fillRect(10,26,8,8); g.fillRect(31,26,8,8);
+        g.setColor(Color.WHITE); g.drawLine(10,30,17,30); g.drawLine(14,26,14,33);
+        g.setColor(new Color(88,66,48)); g.fillRect(23,36,2,2);
+        g.setColor(techos[tipo].darker()); g.drawLine(2,19,46,19);
+        g.dispose();
+        return im;
+    }
+
+    private void agregarObjetoTema(String nombre, CategoriaObjeto categoria, int anchoObjeto, int altoObjeto,
+                                   BufferedImage imagen, boolean[] mascara) {
+        int[] celdas=new int[anchoObjeto*altoObjeto];
+        java.util.Arrays.fill(celdas,-1);
+        for(int y=0;y<altoObjeto;y++) for(int x=0;x<anchoObjeto;x++) {
+            int pos=y*anchoObjeto+x;
+            if(mascara!=null && (pos>=mascara.length || !mascara[pos])) continue;
+            BufferedImage tile=new BufferedImage(TILE,TILE,BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g=tile.createGraphics();
+            g.drawImage(imagen,0,0,TILE,TILE,x*TILE,y*TILE,(x+1)*TILE,(y+1)*TILE,null);
+            g.dispose();
+            celdas[pos]=agregarTileTema(tile,TipoTile.NORMAL);
+        }
+        objetos.add(new ObjetoMapa(nombre,anchoObjeto,altoObjeto,celdas,categoria));
     }
 
     private JComboBox<Integer> crearSelectorTile() {
@@ -1244,6 +1382,8 @@ private void guardar() {
             alto = nh;
             tiles.clear();
             tiles.addAll(newTiles);
+            temaFondo = temaSuelo = temaHierba = temaAgua = -1;
+            temaCaminos = new int[0];
             tiposTile.clear();
             tiposTile.addAll(nuevosTipos);
             capas = newLayers;
