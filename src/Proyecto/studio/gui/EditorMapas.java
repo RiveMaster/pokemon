@@ -44,6 +44,7 @@ public final class EditorMapas {
     // Índices privados del tema visual fijo que utiliza el generador automático.
     private int temaFondo = -1, temaSuelo = -1, temaHierba = -1, temaAgua = -1;
     private int[] temaCaminos = new int[0];
+    private final java.util.Set<Integer> tilesTemaProtegidos = new java.util.HashSet<>();
 
 
     private EditorMapas(int anchoInicial, int altoInicial) {
@@ -345,6 +346,7 @@ public final class EditorMapas {
         tiles.add(imagen);
         tiposTile.add(tipo);
         modeloPaleta.addElement(indice);
+        tilesTemaProtegidos.add(indice);
         return indice;
     }
 
@@ -635,6 +637,14 @@ public final class EditorMapas {
             if (actualizandoSelectorTipo) return;
             if (seleccionado >= 0 && seleccionado < tiposTile.size()
                     && selectorTipoTile.getSelectedItem() instanceof TipoTile tipo) {
+                if (tilesTemaProtegidos.contains(seleccionado)) {
+                    actualizandoSelectorTipo = true;
+                    try { selectorTipoTile.setSelectedItem(tiposTile.get(seleccionado)); }
+                    finally { actualizandoSelectorTipo = false; }
+                    JOptionPane.showMessageDialog(frame, "La función de este tile forma parte del tema fijo.",
+                            "Tema visual protegido", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
                 tiposTile.set(seleccionado, tipo);
                 actualizarPropiedadesTileEnMapa(seleccionado);
                 actualizarEstado();
@@ -691,6 +701,11 @@ public final class EditorMapas {
     }
 
     private void editarTileSeleccionado() {
+        if (tilesTemaProtegidos.contains(seleccionado)) {
+            JOptionPane.showMessageDialog(frame, "Este tile pertenece al tema visual fijo y está protegido.",
+                    "Tema visual protegido", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         if (seleccionado < 0 || seleccionado >= tiles.size()) {
             JOptionPane.showMessageDialog(frame, "Selecciona un tile primero.", "Sin tile seleccionado",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -701,6 +716,11 @@ public final class EditorMapas {
 
     private void editarTile(int indice) {
         if (indice < 0 || indice >= tiles.size()) return;
+        if (tilesTemaProtegidos.contains(indice)) {
+            JOptionPane.showMessageDialog(frame, "Los gráficos del tema automático no se pueden modificar.",
+                    "Tema visual protegido", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         BufferedImage trabajo = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
         Graphics2D copia = trabajo.createGraphics();
         copia.drawImage(tiles.get(indice), 0, 0, null);
@@ -850,13 +870,25 @@ public final class EditorMapas {
         JButton editar = new JButton("Editar seleccionado");
         editar.addActionListener(e -> {
             int idx = lista.getSelectedIndex();
-            if (idx >= 0 && idx < objetos.size()) editarObjeto(objetos.get(idx), idx, lista);
+            if (idx >= 0 && idx < objetos.size()) {
+                if (objetos.get(idx).nombre.startsWith("[Tema Pokémon]")) {
+                    JOptionPane.showMessageDialog(frame, "Los objetos del tema automático son de solo lectura.",
+                            "Tema visual protegido", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                editarObjeto(objetos.get(idx), idx, lista);
+            }
         });
         JButton borrar = new JButton("Eliminar objeto");
         borrar.addActionListener(e -> {
             int idx = lista.getSelectedIndex();
             if (idx < 0 || idx >= objetos.size()) return;
             ObjetoMapa obj = objetos.get(idx);
+            if (obj.nombre.startsWith("[Tema Pokémon]")) {
+                JOptionPane.showMessageDialog(frame, "Los objetos del tema automático no se pueden eliminar.",
+                        "Tema visual protegido", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             if (JOptionPane.showConfirmDialog(frame,
                     "Eliminar «" + obj.nombre + "» y todas sus colocaciones del mapa?",
                     "Eliminar objeto", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
@@ -890,6 +922,7 @@ public final class EditorMapas {
     }
 
     private void editarObjeto(ObjetoMapa original, int indiceOriginal, JList<ObjetoMapa> lista) {
+        if (original != null && original.nombre.startsWith("[Tema Pokémon]")) return;
         JDialog dialogo = new JDialog(frame, original == null ? "Crear objeto" : "Editar objeto", true);
         dialogo.setLayout(new BorderLayout(6, 6));
         JTextField nombre = new JTextField(original == null ? "Nuevo objeto" : original.nombre, 18);
