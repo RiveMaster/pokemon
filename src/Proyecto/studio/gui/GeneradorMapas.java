@@ -261,7 +261,7 @@ public final class GeneradorMapas {
                 crearAgua(water,path,w,h,random,false);
         }
         if(o.incluirHierba && o.densidad>0)
-            crearParchesHierba(grassPatch,path,water,w,h,o.densidad,random);
+            crearParchesHierbaTema(grassPatch,path,water,w,h,o.densidad,random);
 
         // El suelo base aparece como plazas y explanadas de transición, no tapa el fondo continuo.
         if(o.estilo==Estilo.PUEBLO && o.tileBase>=0) {
@@ -326,6 +326,25 @@ public final class GeneradorMapas {
         }
         for(int i=0;i<size;i++) if(manual[i]) grass[i]=false;
         return new Resultado(w,h,layers,manual,grass,placements,o.semilla);
+    }
+
+
+    /** Parches menos densos para que permanezcan zonas de césped donde colocar objetos compuestos. */
+    private static void crearParchesHierbaTema(boolean[] grass, boolean[] path, boolean[] water,
+                                                int w, int h, int densidad, Random random) {
+        if(densidad<=0 || w<3 || h<3) return;
+        int parches=Math.max(1,(w*h*densidad)/8000);
+        for(int p=0;p<parches;p++) {
+            int cx=random.nextInt(w), cy=random.nextInt(h);
+            int rx=1+random.nextInt(Math.max(1,Math.min(4,w/7+1)));
+            int ry=1+random.nextInt(Math.max(1,Math.min(3,h/7+1)));
+            for(int y=Math.max(0,cy-ry);y<=Math.min(h-1,cy+ry);y++)
+                for(int x=Math.max(0,cx-rx);x<=Math.min(w-1,cx+rx);x++) {
+                    double dx=(x-cx)/(double)rx, dy=(y-cy)/(double)ry;
+                    int idx=y*w+x;
+                    if(dx*dx+dy*dy<=1.1 && !path[idx] && !water[idx]) grass[idx]=true;
+                }
+        }
     }
 
     /** Índices del atlas Camino1..Camino13, en el orden especificado en el diseño. */
