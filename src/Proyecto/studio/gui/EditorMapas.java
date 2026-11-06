@@ -328,8 +328,27 @@ public final class EditorMapas {
             temaCaminos[i] = agregarTileTema(imagen == null ? fallback : imagen, TipoTile.NORMAL);
         }
 
-        boolean hayArbol = false, hayCasa = false, hayCasa2 = false, hayCasa3 = false;
-        boolean hayCentro = false, hayTienda = false, hayGym = false;
+        boolean[] mascaraArbol = {
+                false,true,true,false,
+                false,true,true,false,
+                true,true,true,false,
+                false,true,true,true
+        };
+        agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
+                4, 4, crearArbolTema(), mascaraArbol, "arboles", "arbol", "tree");
+        agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
+                crearEdificioTema(0), null, "casa", "casa1", "house");
+        agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
+                crearEdificioTema(4), null, "casa2", "casa_2", "house2");
+        agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
+                crearEdificioTema(5), null, "casa3", "casa_3", "house3");
+        agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
+                crearEdificioTema(1), null, "centropokemon", "centro_pokemon", "pokecentro", "pokemoncenter");
+        agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
+                crearEdificioTema(2), null, "tiendapokemon", "tienda_pokemon", "tienda", "shop");
+        agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
+                crearEdificioTema(3), null, "gimnasiopokemon", "gimnasio", "gym");
+
         for (ObjetoMapa objeto : objetos) {
             if (objeto.nombre.equals("[Tema Pokémon] Árbol 4x4")) hayArbol = true;
             if (objeto.nombre.equals("[Tema Pokémon] Casa")) hayCasa = true;
@@ -566,7 +585,15 @@ public final class EditorMapas {
             g.dispose();
             celdas[pos]=agregarTileTema(tile,TipoTile.NORMAL);
         }
-        objetos.add(new ObjetoMapa(nombre,anchoObjeto,altoObjeto,celdas,categoria));
+        ObjetoMapa nuevo = new ObjetoMapa(nombre,anchoObjeto,altoObjeto,celdas,categoria);
+        for (int i = 0; i < objetos.size(); i++) {
+            if (objetos.get(i).nombre.equals(nombre)) {
+                objetos.set(i, nuevo); // Actualiza los gráficos al abrir un PMAP antiguo, conserva el índice.
+                if (listaObjetos != null) listaObjetos.setListData(objetos.toArray(new ObjetoMapa[0]));
+                return;
+            }
+        }
+        objetos.add(nuevo);
     }
 
     private JComboBox<Integer> crearSelectorTile() {
