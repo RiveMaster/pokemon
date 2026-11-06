@@ -293,6 +293,12 @@ public class PokemonLuchador implements Serializable {
                 || "Flying".equals(b.getTipo2()) || "Dragon".equals(b.getTipo2());
     }
 
+    /** Los Pokémon de tipo Agua pueden nadar y permitir cruzar zonas de agua. */
+    public boolean puedeNadar() {
+        PokemonBase b = getBase();
+        return "Water".equalsIgnoreCase(b.getTipo1()) || "Water".equalsIgnoreCase(b.getTipo2());
+    }
+
     public PokemonBase getBase() {
         return base;
     }
