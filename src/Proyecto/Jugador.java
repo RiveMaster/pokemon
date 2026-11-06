@@ -37,6 +37,8 @@ public class Jugador implements Serializable {
     // Megapiedras de la mochila: se guardan junto a la partida.
     private Set<String> megapiedras = new LinkedHashSet<>();
     private Ubicacion ubicacion = Ubicacion.VILLAVERDE;
+    // Coordenadas por mapa de exploración; las claves son los nombres de Ubicacion.
+    private HashMap<String, int[]> posicionesMapa = new HashMap<>();
 
     // Generación en la que se juega, la más alta desbloqueada y jefes del Gobierno derrotados
     private int generacionActual = 1;
@@ -96,6 +98,28 @@ public class Jugador implements Serializable {
     public boolean isMamaVisitada() { return mamaVisitada; }
 
     public Ubicacion getUbicacion() { return ubicacion; }
+
+    /** El jugador puede entrar en agua si un miembro vivo del equipo puede nadar o volar. */
+    public boolean puedeNavegarAgua() {
+        for (PokemonLuchador pokemon : getEquipo()) {
+            if (pokemon != null && pokemon.estaVivo()
+                    && (pokemon.puedeNadar() || pokemon.puedeVolar())) return true;
+        }
+        return false;
+    }
+
+    /** Devuelve una copia de las coordenadas guardadas para un mapa, o null si aún no se visitó. */
+    public int[] getPosicionMapa(String mapa) {
+        if (posicionesMapa == null) posicionesMapa = new HashMap<>();
+        int[] posicion = posicionesMapa.get(mapa);
+        return posicion == null ? null : posicion.clone();
+    }
+
+    public void guardarPosicionMapa(String mapa, int x, int y) {
+        if (mapa == null || mapa.isBlank() || x < 0 || y < 0) return;
+        if (posicionesMapa == null) posicionesMapa = new HashMap<>();
+        posicionesMapa.put(mapa, new int[]{x, y});
+    }
 
     public Set<String> getMedallas() { return medallas; }
 
@@ -215,6 +239,7 @@ public class Jugador implements Serializable {
         if (medallas == null) medallas = new LinkedHashSet<>();
         if (megapiedras == null) megapiedras = new LinkedHashSet<>();
         if (ubicacion == null) ubicacion = Ubicacion.VILLAVERDE;
+        if (posicionesMapa == null) posicionesMapa = new HashMap<>();
         if (jefesDerrotados == null) jefesDerrotados = new LinkedHashSet<>();
         if (miembrosGimnasioDerrotados == null) miembrosGimnasioDerrotados = new LinkedHashSet<>();
         if (generacionActual < 1) generacionActual = 1;   // partidas guardadas antes de existir las generaciones
