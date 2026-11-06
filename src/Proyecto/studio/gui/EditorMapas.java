@@ -308,8 +308,7 @@ public final class EditorMapas {
         if (temaFondo >= 0 && temaFondo < tiles.size() && temaCaminos.length == 13
                 && temaCaminos[12] < tiles.size()) return;
 
-        // La carpeta Tiles es la fuente prioritaria. Los gráficos dibujados por código
-        // solo actúan como sustitutos mientras falten los PNG correspondientes.
+        // Tiles/ es la fuente prioritaria. Los dibujos por código solo son sustitutos temporales.
         temaFondo = agregarTileTema(cargarTileTema(crearTexturaTema(0, 0),
                 "cesped", "grass", "fondo"), TipoTile.NORMAL);
         temaSuelo = agregarTileTema(cargarTileTema(crearTexturaTema(1, 0),
@@ -328,12 +327,15 @@ public final class EditorMapas {
             temaCaminos[i] = agregarTileTema(imagen == null ? fallback : imagen, TipoTile.NORMAL);
         }
 
+        // La máscara fija respeta las diez piezas y conserva las seis posiciones vacías.
         boolean[] mascaraArbol = {
                 false,true,true,false,
                 false,true,true,false,
                 true,true,true,false,
                 false,true,true,true
         };
+        // Se reemplazan los objetos reservados por su versión actual, manteniendo su índice
+        // en la biblioteca para que las colocaciones guardadas en un .pmap sigan siendo válidas.
         agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
                 4, 4, crearArbolTema(), mascaraArbol, "arboles", "arbol", "tree");
         agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
@@ -347,36 +349,6 @@ public final class EditorMapas {
         agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
                 crearEdificioTema(2), null, "tiendapokemon", "tienda_pokemon", "tienda", "shop");
         agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
-                crearEdificioTema(3), null, "gimnasiopokemon", "gimnasio", "gym");
-
-        for (ObjetoMapa objeto : objetos) {
-            if (objeto.nombre.equals("[Tema Pokémon] Árbol 4x4")) hayArbol = true;
-            if (objeto.nombre.equals("[Tema Pokémon] Casa")) hayCasa = true;
-            if (objeto.nombre.equals("[Tema Pokémon] Casa 2")) hayCasa2 = true;
-            if (objeto.nombre.equals("[Tema Pokémon] Casa 3")) hayCasa3 = true;
-            if (objeto.nombre.equals("[Tema Pokémon] Centro Pokémon")) hayCentro = true;
-            if (objeto.nombre.equals("[Tema Pokémon] Tienda Pokémon")) hayTienda = true;
-            if (objeto.nombre.equals("[Tema Pokémon] Gimnasio")) hayGym = true;
-        }
-        boolean[] mascaraArbol = {
-                false,true,true,false,
-                false,true,true,false,
-                true,true,true,false,
-                false,true,true,true
-        };
-        if (!hayArbol) agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
-                4, 4, crearArbolTema(), mascaraArbol, "arboles", "arbol", "tree");
-        if (!hayCasa) agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
-                crearEdificioTema(0), null, "casa", "house");
-        if (!hayCasa2) agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
-                crearEdificioTema(4), null, "casa2", "casa_2", "house2");
-        if (!hayCasa3) agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
-                crearEdificioTema(5), null, "casa3", "casa_3", "house3");
-        if (!hayCentro) agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
-                crearEdificioTema(1), null, "centropokemon", "centro_pokemon", "pokecentro", "pokemoncenter");
-        if (!hayTienda) agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
-                crearEdificioTema(2), null, "tiendapokemon", "tienda_pokemon", "tienda", "shop");
-        if (!hayGym) agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
                 crearEdificioTema(3), null, "gimnasiopokemon", "gimnasio", "gym");
 
         for (ObjetoMapa objeto : objetos) {
