@@ -335,19 +335,19 @@ public final class EditorMapas {
                 false,true,true,true
         };
         agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
-                4, 4, crearArbolTema(), mascaraArbol);
+                4, 4, crearArbolTema(), mascaraArbol, "arboles", "arbol", "tree");
         agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
-                crearEdificioTema(0), null);
+                crearEdificioTema(0), null, "casa", "house");
         agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
-                crearEdificioTema(4), null);
+                crearEdificioTema(4), null, "casa2", "casa_2", "house2");
         agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
-                crearEdificioTema(5), null);
+                crearEdificioTema(5), null, "casa3", "casa_3", "house3");
         agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
-                crearEdificioTema(1), null);
+                crearEdificioTema(1), null, "centropokemon", "centro_pokemon", "pokecentro", "pokemoncenter");
         agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
-                crearEdificioTema(2), null);
+                crearEdificioTema(2), null, "tiendapokemon", "tienda_pokemon", "tienda", "shop");
         agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
-                crearEdificioTema(3), null);
+                crearEdificioTema(3), null, "gimnasiopokemon", "gimnasio", "gym");
 
         for (ObjetoMapa objeto : objetos) {
             if (!objeto.nombre.startsWith("[Tema Pokémon]")) continue;
@@ -542,7 +542,8 @@ public final class EditorMapas {
     }
 
     private void agregarObjetoTema(String nombre, CategoriaObjeto categoria, int anchoObjeto, int altoObjeto,
-                                   BufferedImage imagen, boolean[] mascara) {
+                                   BufferedImage imagen, boolean[] mascara, String... nombresArchivo) {
+        imagen = cargarImagenCompuestaTema(imagen, anchoObjeto * TILE, altoObjeto * TILE, nombresArchivo);
         int[] celdas=new int[anchoObjeto*altoObjeto];
         java.util.Arrays.fill(celdas,-1);
         for(int y=0;y<altoObjeto;y++) for(int x=0;x<anchoObjeto;x++) {
