@@ -307,49 +307,155 @@ public final class EditorMapas {
     private void asegurarTemaVisual() {
         if (temaFondo >= 0 && temaFondo < tiles.size() && temaCaminos.length == 13
                 && temaCaminos[12] < tiles.size()) return;
-        temaFondo = agregarTileTema(crearTexturaTema(0, 0), TipoTile.NORMAL);
-        temaSuelo = agregarTileTema(crearTexturaTema(1, 0), TipoTile.NORMAL);
-        temaHierba = agregarTileTema(crearTexturaTema(2, 0), TipoTile.HIERBA);
-        temaAgua = agregarTileTema(crearTexturaTema(3, 0), TipoTile.AGUA);
-        temaCaminos = new int[13];
-        for (int i = 0; i < temaCaminos.length; i++)
-            temaCaminos[i] = agregarTileTema(crearTexturaTema(4, i), TipoTile.NORMAL);
 
-        boolean hayArbolCompuesto = false, hayCasa = false, hayCasa2 = false, hayCasa3 = false;
-        boolean hayCentro = false, hayTienda = false, hayGym = false;
-        for (ObjetoMapa o : objetos) {
-            if (o.nombre.equals("[Tema Pokémon] Árbol 4x4") && o.ancho == 4 && o.alto == 4) hayArbolCompuesto = true;
-            if (o.nombre.equals("[Tema Pokémon] Casa")) hayCasa = true;
-            if (o.nombre.equals("[Tema Pokémon] Casa 2")) hayCasa2 = true;
-            if (o.nombre.equals("[Tema Pokémon] Casa 3")) hayCasa3 = true;
-            if (o.nombre.equals("[Tema Pokémon] Centro Pokémon")) hayCentro = true;
-            if (o.nombre.equals("[Tema Pokémon] Tienda Pokémon")) hayTienda = true;
-            if (o.nombre.equals("[Tema Pokémon] Gimnasio")) hayGym = true;
+        // La carpeta Tiles es la fuente prioritaria. Los gráficos dibujados por código
+        // solo actúan como sustitutos mientras falten los PNG correspondientes.
+        temaFondo = agregarTileTema(cargarTileTema(crearTexturaTema(0, 0),
+                "cesped", "grass", "fondo"), TipoTile.NORMAL);
+        temaSuelo = agregarTileTema(cargarTileTema(crearTexturaTema(1, 0),
+                "suelobase", "suelo", "tierra", "ground"), TipoTile.NORMAL);
+        temaHierba = agregarTileTema(cargarTileTema(crearTexturaTema(2, 0),
+                "hierba", "hierbaalta", "tallgrass"), TipoTile.HIERBA);
+        temaAgua = agregarTileTema(cargarTileTema(crearTexturaTema(3, 0),
+                "agua", "water"), TipoTile.AGUA);
+
+        temaCaminos = new int[13];
+        for (int i = 0; i < temaCaminos.length; i++) {
+            BufferedImage fallback = crearTexturaTema(4, i);
+            BufferedImage imagen = cargarTileTema(null, "camino" + (i + 1),
+                    String.format(java.util.Locale.ROOT, "camino%02d", i + 1));
+            if (imagen == null) imagen = cargarCaminoDesdeAtlas(i);
+            temaCaminos[i] = agregarTileTema(imagen == null ? fallback : imagen, TipoTile.NORMAL);
         }
-        if (!hayArbolCompuesto) agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
-                4, 4, crearArbolTema(), new boolean[]{
-                        false,true,true,false,
-                        false,true,true,false,
-                        true,true,true,false,
-                        false,true,true,true
-                });
-        if (!hayCasa) agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
+
+        boolean[] mascaraArbol = {
+                false,true,true,false,
+                false,true,true,false,
+                true,true,true,false,
+                false,true,true,true
+        };
+        agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
+                4, 4, crearArbolTema(), mascaraArbol);
+        agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
                 crearEdificioTema(0), null);
-        if (!hayCasa2) agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
+        agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
                 crearEdificioTema(4), null);
-        if (!hayCasa3) agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
+        agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
                 crearEdificioTema(5), null);
-        if (!hayCentro) agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
+        agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
                 crearEdificioTema(1), null);
-        if (!hayTienda) agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
+        agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
                 crearEdificioTema(2), null);
-        if (!hayGym) agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
+        agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
                 crearEdificioTema(3), null);
+
         for (ObjetoMapa objeto : objetos) {
             if (!objeto.nombre.startsWith("[Tema Pokémon]")) continue;
             for (int indice : objeto.celdas) if (indice >= 0) tilesTemaProtegidos.add(indice);
         }
         if (listaObjetos != null) listaObjetos.setListData(objetos.toArray(new ObjetoMapa[0]));
+    }
+
+    /** Busca por nombre lógico ignorando mayúsculas, espacios y acentos. */
+    private Path buscarArchivoTema(String... nombres) {
+        Path carpeta = Path.of("Tiles");
+        if (!Files.isDirectory(carpeta)) return null;
+        try (java.util.stream.Stream<Path> archivos = Files.list(carpeta)) {
+            List<Path> pngs = archivos.filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().toLowerCase(java.util.Locale.ROOT).endsWith(".png"))
+                    .sorted(java.util.Comparator.comparing(p -> p.getFileName().toString(),
+                            String.CASE_INSENSITIVE_ORDER)).toList();
+            for (String nombre : nombres) {
+                String esperado = normalizarNombreTema(nombre);
+                for (Path archivo : pngs) {
+                    String archivoSinExtension = archivo.getFileName().toString();
+                    archivoSinExtension = archivoSinExtension.substring(0, archivoSinExtension.length() - 4);
+                    if (normalizarNombreTema(archivoSinExtension).equals(esperado)) return archivo;
+                }
+            }
+        } catch (IOException ex) {
+            System.err.println("No se pudo buscar un recurso en Tiles/: " + ex.getMessage());
+        }
+        return null;
+    }
+
+    private String normalizarNombreTema(String nombre) {
+        String sinAcentos = java.text.Normalizer.normalize(nombre, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}+", "");
+        return sinAcentos.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9]", "");
+    }
+
+    /** Carga el primer tile visible de un PNG de Tiles/, o devuelve null si no existe. */
+    private BufferedImage cargarTileTema(BufferedImage fallback, String... nombres) {
+        Path archivo = buscarArchivoTema(nombres);
+        if (archivo == null) return fallback;
+        try {
+            BufferedImage hoja = ImageIO.read(archivo.toFile());
+            if (hoja == null) return fallback;
+            if (hoja.getWidth() >= TILE && hoja.getHeight() >= TILE
+                    && hoja.getWidth() % TILE == 0 && hoja.getHeight() % TILE == 0) {
+                for (int y = 0; y < hoja.getHeight(); y += TILE) {
+                    for (int x = 0; x < hoja.getWidth(); x += TILE) {
+                        BufferedImage celda = extraerCeldaTema(hoja, x / TILE, y / TILE);
+                        if (tienePixelVisible(celda)) return celda;
+                    }
+                }
+            }
+            System.err.println("El recurso " + archivo + " no contiene tiles válidos de 16x16.");
+        } catch (IOException ex) {
+            System.err.println("No se pudo cargar " + archivo + ": " + ex.getMessage());
+        }
+        return fallback;
+    }
+
+    /** Permite usar Camino.png/Caminos.png como atlas de 13 celdas además de Camino1.png... */
+    private BufferedImage cargarCaminoDesdeAtlas(int indice) {
+        Path archivo = buscarArchivoTema("caminos", "caminos13", "camino");
+        if (archivo == null) return null;
+        try {
+            BufferedImage hoja = ImageIO.read(archivo.toFile());
+            if (hoja == null || hoja.getWidth() % TILE != 0 || hoja.getHeight() % TILE != 0) return null;
+            int columnas = hoja.getWidth() / TILE;
+            int filas = hoja.getHeight() / TILE;
+            if (columnas * filas < 13) return null;
+            return extraerCeldaTema(hoja, indice % columnas, indice / columnas);
+        } catch (IOException ex) {
+            System.err.println("No se pudo cargar el atlas de caminos " + archivo + ": " + ex.getMessage());
+            return null;
+        }
+    }
+
+    /** Carga una imagen compuesta desde Tiles/, recortando la esquina superior izquierda. */
+    private BufferedImage cargarImagenCompuestaTema(BufferedImage fallback, int anchoPx, int altoPx,
+                                                     String... nombres) {
+        Path archivo = buscarArchivoTema(nombres);
+        if (archivo == null) return fallback;
+        try {
+            BufferedImage imagen = ImageIO.read(archivo.toFile());
+            if (imagen == null || imagen.getWidth() < anchoPx || imagen.getHeight() < altoPx
+                    || imagen.getWidth() % TILE != 0 || imagen.getHeight() % TILE != 0) {
+                System.err.println("El recurso compuesto " + archivo + " debe medir al menos "
+                        + anchoPx + "x" + altoPx + " y usar celdas de 16x16.");
+                return fallback;
+            }
+            BufferedImage resultado = new BufferedImage(anchoPx, altoPx, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = resultado.createGraphics();
+            g.drawImage(imagen, 0, 0, anchoPx, altoPx, 0, 0, anchoPx, altoPx, null);
+            g.dispose();
+            return resultado;
+        } catch (IOException ex) {
+            System.err.println("No se pudo cargar el recurso compuesto " + archivo + ": " + ex.getMessage());
+            return fallback;
+        }
+    }
+
+    private static BufferedImage extraerCeldaTema(BufferedImage hoja, int columna, int fila) {
+        BufferedImage tile = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = tile.createGraphics();
+        g.drawImage(hoja, 0, 0, TILE, TILE,
+                columna * TILE, fila * TILE, (columna + 1) * TILE, (fila + 1) * TILE, null);
+        g.dispose();
+        return tile;
     }
 
     private int agregarTileTema(BufferedImage imagen, TipoTile tipo) {
