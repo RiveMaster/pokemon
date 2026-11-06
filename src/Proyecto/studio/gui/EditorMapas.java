@@ -328,25 +328,36 @@ public final class EditorMapas {
             temaCaminos[i] = agregarTileTema(imagen == null ? fallback : imagen, TipoTile.NORMAL);
         }
 
+        boolean hayArbol = false, hayCasa = false, hayCasa2 = false, hayCasa3 = false;
+        boolean hayCentro = false, hayTienda = false, hayGym = false;
+        for (ObjetoMapa objeto : objetos) {
+            if (objeto.nombre.equals("[Tema Pokémon] Árbol 4x4")) hayArbol = true;
+            if (objeto.nombre.equals("[Tema Pokémon] Casa")) hayCasa = true;
+            if (objeto.nombre.equals("[Tema Pokémon] Casa 2")) hayCasa2 = true;
+            if (objeto.nombre.equals("[Tema Pokémon] Casa 3")) hayCasa3 = true;
+            if (objeto.nombre.equals("[Tema Pokémon] Centro Pokémon")) hayCentro = true;
+            if (objeto.nombre.equals("[Tema Pokémon] Tienda Pokémon")) hayTienda = true;
+            if (objeto.nombre.equals("[Tema Pokémon] Gimnasio")) hayGym = true;
+        }
         boolean[] mascaraArbol = {
                 false,true,true,false,
                 false,true,true,false,
                 true,true,true,false,
                 false,true,true,true
         };
-        agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
+        if (!hayArbol) agregarObjetoTema("[Tema Pokémon] Árbol 4x4", CategoriaObjeto.ARBOL,
                 4, 4, crearArbolTema(), mascaraArbol, "arboles", "arbol", "tree");
-        agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
+        if (!hayCasa) agregarObjetoTema("[Tema Pokémon] Casa", CategoriaObjeto.CASA, 3, 3,
                 crearEdificioTema(0), null, "casa", "house");
-        agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
+        if (!hayCasa2) agregarObjetoTema("[Tema Pokémon] Casa 2", CategoriaObjeto.CASA, 3, 3,
                 crearEdificioTema(4), null, "casa2", "casa_2", "house2");
-        agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
+        if (!hayCasa3) agregarObjetoTema("[Tema Pokémon] Casa 3", CategoriaObjeto.CASA, 3, 3,
                 crearEdificioTema(5), null, "casa3", "casa_3", "house3");
-        agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
+        if (!hayCentro) agregarObjetoTema("[Tema Pokémon] Centro Pokémon", CategoriaObjeto.CENTRO_POKEMON, 3, 3,
                 crearEdificioTema(1), null, "centropokemon", "centro_pokemon", "pokecentro", "pokemoncenter");
-        agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
+        if (!hayTienda) agregarObjetoTema("[Tema Pokémon] Tienda Pokémon", CategoriaObjeto.TIENDA, 3, 3,
                 crearEdificioTema(2), null, "tiendapokemon", "tienda_pokemon", "tienda", "shop");
-        agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
+        if (!hayGym) agregarObjetoTema("[Tema Pokémon] Gimnasio", CategoriaObjeto.GIMNASIO, 3, 3,
                 crearEdificioTema(3), null, "gimnasiopokemon", "gimnasio", "gym");
 
         for (ObjetoMapa objeto : objetos) {
