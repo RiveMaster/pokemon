@@ -11,6 +11,7 @@ on:
     paths:
       - "src/Proyecto/**"
       - "tests/SistemaCrianzaMegaSmokeTest.java"
+      - "tests/ExploradorMapaSmokeTest.java"
       - ".github/workflows/pokemon-genetics-mega.yml"
 
 jobs:
