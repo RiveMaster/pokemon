@@ -62,7 +62,18 @@ public final class ExploradorMapa {
      * El método se invoca desde el hilo principal de la aventura, nunca desde Swing.
      */
     public static Resultado explorar(Jugador jugador, Zona zona) {
-        if (jugador == null || zona == null) return new Resultado(false, 0, 0);
+        if (zona == null) return new Resultado(false, 0, 0);
+        return explorarArea(jugador, zona.getUbicacion(), zona, true);
+    }
+
+    /** Explora un pueblo o ciudad sin encuentros salvajes. */
+    public static Resultado explorarCiudad(Jugador jugador, Ubicacion ubicacion) {
+        return explorarArea(jugador, ubicacion, null, false);
+    }
+
+    private static Resultado explorarArea(Jugador jugador, Ubicacion ubicacion,
+                                           Zona zona, boolean permitirEncuentros) {
+        if (jugador == null || ubicacion == null) return new Resultado(false, 0, 0);
         if (GraphicsEnvironment.isHeadless()) {
             System.out.println("La exploración WASD necesita un entorno gráfico.");
             return new Resultado(false, 0, 0);
@@ -71,16 +82,17 @@ public final class ExploradorMapa {
             throw new IllegalStateException("La exploración debe iniciarse desde el hilo del juego.");
         }
 
-        String mapaId = zona.getUbicacion().name();
-        MapaDatos mapa = cargarMapa(zona.getUbicacion());
+        String mapaId = ubicacion.name();
+        String titulo = zona == null ? ubicacion.getNombre() : zona.getNombre();
+        MapaDatos mapa = cargarMapa(ubicacion);
         int[] guardada = jugador.getPosicionMapa(mapaId);
         Point inicio = buscarInicio(mapa, guardada, jugador.puedeNavegarAgua());
         BufferedImage jugadorSprite = cargarSpriteJugador();
 
         CountDownLatch fin = new CountDownLatch(1);
         AtomicReference<Resultado> resultado = new AtomicReference<>();
-        SwingUtilities.invokeLater(() -> abrirVentana(jugador, zona, mapaId, mapa,
-                jugadorSprite, inicio, resultado, fin));
+        SwingUtilities.invokeLater(() -> abrirVentana(jugador, titulo, zona, permitirEncuentros,
+                mapaId, mapa, jugadorSprite, inicio, resultado, fin));
 
         try {
             fin.await();
@@ -95,10 +107,10 @@ public final class ExploradorMapa {
         return salida;
     }
 
-    private static void abrirVentana(Jugador jugador, Zona zona, String mapaId, MapaDatos mapa,
-                                     BufferedImage jugadorSprite, Point inicio,
+    private static void abrirVentana(Jugador jugador, String titulo, Zona zona, boolean permitirEncuentros,
+                                     String mapaId, MapaDatos mapa, BufferedImage jugadorSprite, Point inicio,
                                      AtomicReference<Resultado> resultado, CountDownLatch fin) {
-        JFrame ventana = new JFrame("Pokémon — " + zona.getNombre());
+        JFrame ventana = new JFrame("Pokémon — " + titulo);
         ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         ventana.setLayout(new BorderLayout());
 
@@ -122,7 +134,7 @@ public final class ExploradorMapa {
         };
 
         actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
-        instalarMovimiento(ventana, jugador, zona, mapa, lienzo, estado, mapaId,
+        instalarMovimiento(ventana, jugador, zona, permitirEncuentros, mapa, lienzo, estado, mapaId,
                 resultado, fin, cerrar);
 
         ventana.addWindowListener(new WindowAdapter() {
@@ -141,7 +153,7 @@ public final class ExploradorMapa {
         lienzo.requestFocusInWindow();
     }
 
-    private static void instalarMovimiento(JFrame ventana, Jugador jugador, Zona zona,
+    private static void instalarMovimiento(JFrame ventana, Jugador jugador, Zona zona, boolean permitirEncuentros,
                                            MapaDatos mapa, MapaCanvas lienzo, JLabel estado, String mapaId,
                                            AtomicReference<Resultado> resultado, CountDownLatch fin,
                                            Runnable cerrar) {
@@ -181,7 +193,8 @@ public final class ExploradorMapa {
                 centrarVista((JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, lienzo), lienzo);
                 actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
 
-                if (mapa.esHierba(nx, ny) && AZAR.nextInt(100) < 16) {
+                if (permitirEncuentros && zona != null && mapa.esHierba(nx, ny)
+                        && AZAR.nextInt(100) < 16) {
                     MapaCanvas.Posicion actual = lienzo.getPosicion();
                     resultado.set(new Resultado(true, actual.x, actual.y));
                     fin.countDown();
