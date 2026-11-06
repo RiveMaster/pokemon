@@ -60,6 +60,8 @@ public final class EditorMapas {
         while (tiposTile.size() < tiles.size()) tiposTile.add(TipoTile.NORMAL);
         seleccionado = tiles.isEmpty() ? -1 : 0;
         for (int i = 0; i < tiles.size(); i++) modeloPaleta.addElement(i);
+        // Resuelve el tema desde Tiles/ durante la apertura, usando sustitutos si faltan PNG.
+        asegurarTemaVisual();
         listaPaleta.setSelectedIndex(seleccionado);
         actualizarTipoSeleccionado();
         construirVentana();
