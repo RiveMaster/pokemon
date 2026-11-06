@@ -60,6 +60,9 @@ public class Pueblo {
             System.out.println("Aquí no hay gimnasio.");
         }
 
+        System.out.println("Explora las calles con W, A, S y D. En las ciudades no aparecen Pokémon salvajes.");
+        ExploradorMapa.explorarCiudad(jugador, p.ubicacion);
+
         while (true) {
             List<Mapa.Opcion> opciones = new ArrayList<>();
             opciones.add(new Mapa.Opcion("Centro Pokémon", () -> {
