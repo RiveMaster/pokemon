@@ -148,30 +148,9 @@ public final class ExploradorMapa {
         InputMap entradas = lienzo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap acciones = lienzo.getActionMap();
 
-        enlazar(entradas, acciones, "W", "arriba", () -> mover(0, -1));
-        enlazar(entradas, acciones, "A", "izquierda", () -> mover(-1, 0));
-        enlazar(entradas, acciones, "S", "abajo", () -> mover(0, 1));
-        enlazar(entradas, acciones, "D", "derecha", () -> mover(1, 0));
         entradas.put(KeyStroke.getKeyStroke("ESCAPE"), "salir");
         acciones.put("salir", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) { cerrar.run(); }
-        });
-
-        Runnable[] mover = new Runnable[1];
-        mover[0] = () -> actualizarEstado(estado, jugador, lienzo, mapa, zona.getUbicacion().name());
-        final int[] ultimoDxDy = {0, 0};
-        // Las acciones WASD se reasignan con sus desplazamientos mediante el mapa de nombres.
-        acciones.put("arriba", new AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { procesarMovimiento(0, -1); }
-        });
-        acciones.put("izquierda", new AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { procesarMovimiento(-1, 0); }
-        });
-        acciones.put("abajo", new AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { procesarMovimiento(0, 1); }
-        });
-        acciones.put("derecha", new AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { procesarMovimiento(1, 0); }
         });
 
         // Se mantiene un manejador local para que el cierre por encuentro sea inmediato.
@@ -220,18 +199,6 @@ public final class ExploradorMapa {
         });
         acciones.put("derecha", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) { movimiento.avanzar(1, 0); }
-        });
-    }
-
-    private static void procesarMovimiento(int dx, int dy) {
-        // Manejador vacío sustituido por el manejador ligado a cada ventana.
-    }
-
-    private static void enlazar(InputMap entradas, ActionMap acciones,
-                                String tecla, String nombre, Runnable accion) {
-        entradas.put(KeyStroke.getKeyStroke(tecla), nombre);
-        acciones.put(nombre, new AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { accion.run(); }
         });
     }
 
