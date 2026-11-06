@@ -122,7 +122,7 @@ public final class ExploradorMapa {
         };
 
         actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
-        instalarMovimiento(ventana, jugador, zona, mapa, lienzo, estado,
+        instalarMovimiento(ventana, jugador, zona, mapa, lienzo, estado, mapaId,
                 resultado, fin, cerrar);
 
         ventana.addWindowListener(new WindowAdapter() {
@@ -142,7 +142,7 @@ public final class ExploradorMapa {
     }
 
     private static void instalarMovimiento(JFrame ventana, Jugador jugador, Zona zona,
-                                           MapaDatos mapa, MapaCanvas lienzo, JLabel estado,
+                                           MapaDatos mapa, MapaCanvas lienzo, JLabel estado, String mapaId,
                                            AtomicReference<Resultado> resultado, CountDownLatch fin,
                                            Runnable cerrar) {
         InputMap entradas = lienzo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
