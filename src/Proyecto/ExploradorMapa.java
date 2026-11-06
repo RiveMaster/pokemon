@@ -528,6 +528,10 @@ public final class ExploradorMapa {
         return esHierba;
     }
 
+    static boolean puedeEntrarCasilla(boolean esAgua, boolean bloqueada, boolean puedeNadarOVolar) {
+        return !bloqueada && permiteAgua(esAgua, puedeNadarOVolar);
+    }
+
     private static final class MapaDatos {
         final int ancho, alto;
         final BufferedImage[] tiles;
@@ -588,16 +592,15 @@ public final class ExploradorMapa {
             if (!dentro(x, y)) return false;
             int i = y * ancho + x;
             boolean agua = esAgua(x, y);
-            if (!permiteAgua(agua, puedeNavegarAgua)) return false;
-            if (manuales[i] || colisionObjetos[i]) return false;
-
+            boolean bloqueada = manuales[i] || colisionObjetos[i];
             for (int[] capa : capas) {
                 int tile = capa[i];
-                if (esTipo(tile, TIPO_BLOQUEO)) return false;
+                if (esTipo(tile, TIPO_BLOQUEO)) bloqueada = true;
             }
-            // La máscara de colisión del editor incluye el agua. Si el equipo puede
-            // navegar, se ignora esa marca concreta, no las colisiones de arriba.
-            return agua || !colisiones[i];
+            // La máscara de colisión del editor incluye agua y objetos. Para nadar
+            // solo se ignora la marca genérica de agua, nunca árboles o paredes.
+            if (!agua && colisiones[i]) bloqueada = true;
+            return puedeEntrarCasilla(agua, bloqueada, puedeNavegarAgua);
         }
 
         private boolean esTipo(int indice, int tipo) {
