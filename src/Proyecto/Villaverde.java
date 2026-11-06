@@ -9,6 +9,9 @@ public class Villaverde {
     // Menú de Villaverde. Devuelve a dónde va el jugador (Ruta 1); el resto de opciones se quedan aquí.
     public static Ubicacion mostrarMenu(Scanner sc, Jugador jugadorCompleto) {
 
+        System.out.println("Explora Villaverde con W, A, S y D. Pulsa Esc para abrir el menú.");
+        ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
+
         while (true) {
             System.out.println("\n╔════════════════════════════════════╗");
             System.out.println("║      PUEBLO VILLAVERDE             ║");
@@ -19,6 +22,7 @@ public class Villaverde {
             System.out.println("2. Ir a " + primera.getNombre());
             System.out.println("3. Menú (mochila, MT, objetos, volar, guardar)");
             System.out.println("4. Viajar a otra generación");
+            System.out.println("5. Volver a explorar el pueblo (WASD)");
             System.out.print("\nElige una opción: ");
             int opcion = leerEntero(sc);
             sc.nextLine();
@@ -35,6 +39,7 @@ public class Villaverde {
                     }
                 }
                 case 4 -> viajarEntreGeneraciones(sc, jugadorCompleto);
+                case 5 -> ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
                 case 777999222 ->{
                     System.out.println("Entrando en modo debug para estats modificadas.");
                     System.out.println("Introduce la opcion:");
