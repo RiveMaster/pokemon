@@ -423,15 +423,18 @@ public final class ExploradorMapa {
 
     private static MapaDatos crearMapaProvisional(Ubicacion ubicacion) {
         int ancho = 36, alto = 24, size = ancho * alto;
+        boolean ciudad = ubicacion == Ubicacion.VILLAVERDE || Mapa.puebloDe(ubicacion) != null;
         BufferedImage[] tiles = {
                 tile(new Color(78, 157, 70), new Color(95, 177, 79)),
                 tile(new Color(190, 164, 118), new Color(212, 188, 141)),
                 hierbaTile(),
                 aguaTile(),
                 arbolTile(),
-                paredTile()
+                paredTile(),
+                edificioTile()
         };
-        byte[] tipos = {TIPO_NORMAL, TIPO_NORMAL, TIPO_HIERBA, TIPO_AGUA, TIPO_BLOQUEO, TIPO_BLOQUEO};
+        byte[] tipos = {TIPO_NORMAL, TIPO_NORMAL, TIPO_HIERBA, TIPO_AGUA,
+                TIPO_BLOQUEO, TIPO_BLOQUEO, TIPO_BLOQUEO};
         int[][] capas = new int[3][size];
         for (int[] capa : capas) Arrays.fill(capa, -1);
         Arrays.fill(capas[0], 0);
@@ -465,15 +468,39 @@ public final class ExploradorMapa {
             ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, 0, y, 4);
             ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, ancho - 1, y, 4);
         }
-        for (int y = 3; y < 7; y++) for (int x = 14; x < 19; x++) {
-            if (y == 3 || y == 6 || x == 14 || x == 18)
-                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, y, 5);
+        if (ciudad) {
+            // Manzanas urbanas con edificios y puertas orientadas hacia las calles.
+            int[][] casas = {{4,4},{11,4},{22,4},{29,4},{4,16},{11,16},{22,16},{29,16}};
+            for (int[] casa : casas) {
+                int x0 = casa[0], y0 = casa[1];
+                for (int oy = 0; oy < 3; oy++) for (int ox = 0; ox < 4; ox++) {
+                    if (oy == 2 && ox == 1) continue; // hueco de puerta
+                    ponerObstaculo(capas[2], colisiones, manuales, ancho, alto,
+                            x0 + ox, y0 + oy, 6);
+                }
+            }
+            // Un pequeño parque entre las manzanas.
+            for (int y = 9; y < 12; y++) for (int x = 3; x < 9; x++) {
+                int idx = y * ancho + x;
+                if (capas[1][idx] != 1) {
+                    capas[1][idx] = 2;
+                    hierba[idx] = true;
+                }
+            }
+        } else {
+            for (int y = 3; y < 7; y++) for (int x = 14; x < 19; x++) {
+                if (y == 3 || y == 6 || x == 14 || x == 18)
+                    ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, y, 5);
+            }
         }
         Random r = new Random(ubicacion == null ? 1 : ubicacion.ordinal() * 919L + 47);
-        for (int n = 0; n < 24; n++) {
+        int elementos = ciudad ? 10 : 24;
+        for (int n = 0; n < elementos; n++) {
             int x = 2 + r.nextInt(ancho - 4), y = 2 + r.nextInt(alto - 4);
             int idx = y * ancho + x;
-            if (capas[1][idx] == 1 || capas[1][idx] == 3 || (x >= 14 && x <= 18 && y >= 3 && y <= 6)) continue;
+            if (capas[1][idx] == 1 || capas[1][idx] == 3
+                    || (ciudad && ((x >= 4 && x < 15) || (x >= 22 && x < 33))
+                        && (y >= 4 && y < 19))) continue;
             ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, y, 4);
         }
         return new MapaDatos(ancho, alto, tiles, tipos, capas, colisiones, manuales, hierba,
@@ -524,6 +551,18 @@ public final class ExploradorMapa {
         g.setColor(new Color(47, 130, 57)); g.fillOval(2, 0, 12, 12);
         g.setColor(new Color(119, 171, 76)); g.fillOval(5, 2, 5, 4);
         g.setColor(new Color(104, 70, 42)); g.fillRect(7, 10, 3, 6);
+        g.dispose();
+        return im;
+    }
+
+    private static BufferedImage edificioTile() {
+        BufferedImage im = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = im.createGraphics();
+        g.setColor(new Color(149, 63, 54));
+        g.fillPolygon(new int[]{0, 8, 16}, new int[]{7, 0, 7}, 3);
+        g.setColor(new Color(220, 205, 164)); g.fillRect(2, 7, 12, 9);
+        g.setColor(new Color(63, 52, 48)); g.fillRect(6, 10, 4, 6);
+        g.setColor(new Color(111, 177, 210)); g.fillRect(3, 9, 2, 3); g.fillRect(11, 9, 2, 3);
         g.dispose();
         return im;
     }
