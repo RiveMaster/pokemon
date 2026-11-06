@@ -28,14 +28,19 @@ public class Ruta {
             ExploradorMapa.Resultado exploracion = ExploradorMapa.explorar(jugador, zona);
 
             if (exploracion.huboEncuentro()) {
-                int nivel = zona.getNivelMin()
-                        + RAND.nextInt(zona.getNivelMax() - zona.getNivelMin() + 1)
-                        + gen.getBonusNivel();
-                PokemonBase base = gen.aleatorio(zona.getTipos(), nivel, RAND);
-                PokemonLuchador salvaje = new PokemonLuchador(base, nivel);
                 System.out.println("\n¡La hierba se mueve!");
-                System.out.println("¡Un " + salvaje.getNombre() + " salvaje (Nivel " + nivel + ") ha aparecido!");
-                Combate.combateSalvaje(jugador, jugador.getPokemonActivo(), salvaje, sc);
+                // Los entrenadores mantienen su sistema original, pero solo pueden
+                // aparecer tras pisar hierba y activar un encuentro en el mapa.
+                boolean entrenador = Npc.intentar(sc, jugador, zona);
+                if (!entrenador) {
+                    int nivel = zona.getNivelMin()
+                            + RAND.nextInt(zona.getNivelMax() - zona.getNivelMin() + 1)
+                            + gen.getBonusNivel();
+                    PokemonBase base = gen.aleatorio(zona.getTipos(), nivel, RAND);
+                    PokemonLuchador salvaje = new PokemonLuchador(base, nivel);
+                    System.out.println("¡Un " + salvaje.getNombre() + " salvaje (Nivel " + nivel + ") ha aparecido!");
+                    Combate.combateSalvaje(jugador, jugador.getPokemonActivo(), salvaje, sc);
+                }
 
                 if (!jugador.equipoVM()) {
                     System.out.println("\nTe has quedado sin Pokémon en pie. Despiertas en "
@@ -68,4 +73,5 @@ public class Ruta {
                 }
             }
         }
-    }}
+    }
+}
