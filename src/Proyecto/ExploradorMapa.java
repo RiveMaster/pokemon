@@ -148,6 +148,10 @@ public final class ExploradorMapa {
         InputMap entradas = lienzo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap acciones = lienzo.getActionMap();
 
+        entradas.put(KeyStroke.getKeyStroke("W"), "arriba");
+        entradas.put(KeyStroke.getKeyStroke("A"), "izquierda");
+        entradas.put(KeyStroke.getKeyStroke("S"), "abajo");
+        entradas.put(KeyStroke.getKeyStroke("D"), "derecha");
         entradas.put(KeyStroke.getKeyStroke("ESCAPE"), "salir");
         acciones.put("salir", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) { cerrar.run(); }
@@ -308,7 +312,9 @@ public final class ExploradorMapa {
 
             boolean[] colisiones = new boolean[size];
             for (int i = 0; i < size; i++) colisiones[i] = in.readBoolean();
-            boolean[] manuales = colisiones.clone();
+            // Hasta la versión 3 no existía una máscara separada para colisiones manuales.
+            // No copiamos la máscara completa: incluía el agua y habría impedido nadar.
+            boolean[] manuales = new boolean[size];
             if (version >= 4) for (int i = 0; i < size; i++) manuales[i] = in.readBoolean();
             boolean[] hierba = new boolean[size];
             if (version >= 3) for (int i = 0; i < size; i++) hierba[i] = in.readBoolean();
