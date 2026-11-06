@@ -21,6 +21,15 @@ Coloca aquí tus archivos PNG para que Pokémon Studio los lea al abrir el edito
 - Los objetos grandes se crean desde la pestaña **Crear objetos** del editor: escoge ancho/alto, pinta el diseño con tiles, dale un nombre y guárdalo. Después selecciona el objeto y haz clic sobre el mapa para colocar copias. Clic derecho sobre una colocación la elimina.
 - La biblioteca de objetos, sus colocaciones, los tiles, las capas y colisiones se guardan en el archivo de proyecto `.pmap`.
 
+## Exploración del juego
+
+- En rutas, pueblos y ciudades el jugador se mueve por casillas con **W**, **A**, **S** y **D**. Pulsa **Esc** para volver al menú de la zona.
+- El jugador tiene un sprite de 16×16 generado por el programa. Puedes sustituirlo añadiendo `Tiles/Jugador.png` o `Tiles/Player.png` (se usa la celda superior izquierda).
+- El motor busca mapas de juego en `Mapas/UBICACION.pmap`, `mapas/UBICACION.pmap`, `Maps/UBICACION.pmap` o `UBICACION.pmap`, usando el nombre de la ubicación del código (por ejemplo, `RUTA1.pmap` o `BILBAO.pmap`). También acepta `mapa.pmap` como mapa común. Los archivos se crean con **Guardar proyecto** desde el editor.
+- Si no existe un `.pmap` para la ubicación, el juego crea un escenario provisional para esa zona y conserva la posición del jugador al volver a entrar.
+- Los encuentros salvajes se activan solo al caminar sobre tiles clasificados como **Hierba** en una ruta. En pueblos y ciudades no aparecen Pokémon salvajes.
+- El agua bloquea el paso salvo que el equipo tenga un Pokémon vivo de tipo Agua, Volador o Dragón. Las colisiones manuales, paredes, árboles, rocas y edificios siguen bloqueando el paso incluso con esa capacidad.
+
 Inicia el editor desde la raíz del proyecto para que encuentre esta carpeta:
 
 ```sh
