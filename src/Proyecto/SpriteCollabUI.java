@@ -342,26 +342,19 @@ public final class SpriteCollabUI {
 
         private void avanzar() {
             if (timer != null) timer.stop();
-            if (recursos == null) {
-                timer = new javax.swing.Timer(85, e -> {
+            AnimInfo info = recursos == null ? null : recursos.animaciones.get(animacion);
+            BufferedImage hoja = recursos == null ? null : recursos.hojas.get(animacion);
+            if (info == null || hoja == null || info.duraciones.isEmpty()) {
+                // Respaldo visual animado para especies que no tengan esa hoja de animación.
+                timer = new javax.swing.Timer(animacion.equals("Idle") ? 140 : 85, e -> {
                     tickFallback++;
                     if (!animacion.equals("Idle") && tickFallback >= 8) {
                         if (animacion.equals("Faint")) finalizado = true;
-                        else animacion = "Idle";
-                        tickFallback = 0;
+                        else { animacion = "Idle"; tickFallback = 0; avanzar(); }
                     }
                     repaint();
                 });
                 timer.start();
-                return;
-            }
-            AnimInfo info = recursos.animaciones.get(animacion);
-            BufferedImage hoja = recursos.hojas.get(animacion);
-            if (info == null || hoja == null || info.duraciones.isEmpty()) {
-                if (animacion.equals("Idle")) { repaint(); return; }
-                animacion = "Idle";
-                frame = 0;
-                avanzar();
                 return;
             }
             int total = Math.max(1, Math.min(info.duraciones.size(), hoja.getWidth() / Math.max(1, info.ancho)));
