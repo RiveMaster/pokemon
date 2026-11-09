@@ -84,11 +84,6 @@ public final class SpriteCollabUI {
                 g2.setPaint(new GradientPaint(0, 0, new Color(202, 230, 245),
                         0, getHeight(), new Color(226, 237, 205)));
                 g2.fillRect(0, 0, getWidth(), getHeight());
-                // Sombras/plataformas alineadas con el punto de apoyo de cada actor.
-                g2.setColor(new Color(120, 160, 104, 150));
-                int anchoSombra = 190;
-                g2.fillOval(180 - anchoSombra / 2, 292, anchoSombra, 30);
-                g2.fillOval(545 - anchoSombra / 2, 184, anchoSombra, 30);
                 g2.dispose();
             }
         };
@@ -288,6 +283,7 @@ public final class SpriteCollabUI {
             Path dir = CACHE.resolve(String.format(Locale.ROOT, "%04d", dex));
             Path xml = asegurar(carpeta + "AnimData.xml", dir.resolve("AnimData.xml"));
             set.animaciones = leerAnimaciones(xml);
+            set.tamanoSombra = leerTamanoSombra(xml);
             String[] nombres = {"Idle", "Attack", "Hurt", "Faint"};
             for (String nombre : nombres) {
                 AnimInfo info = set.animaciones.get(nombre);
@@ -340,6 +336,14 @@ public final class SpriteCollabUI {
             resultado.put(nombre, info);
         }
         return resultado;
+    }
+
+    private static int leerTamanoSombra(Path xml) {
+        try {
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml.toFile());
+            NodeList nodos = doc.getElementsByTagName("ShadowSize");
+            return nodos.getLength() == 0 ? 1 : Math.max(1, Integer.parseInt(nodos.item(0).getTextContent().trim()));
+        } catch (Exception ex) { return 1; }
     }
 
     private static String texto(Element e, String tag) {
@@ -402,6 +406,7 @@ public final class SpriteCollabUI {
         Map<String, AnimInfo> animaciones = Collections.emptyMap();
         BufferedImage retrato;
         String creditos = "";
+        int tamanoSombra = 1;
     }
 
     /** Panel animado: cada PNG contiene los fotogramas en horizontal y las direcciones en vertical. */
@@ -514,6 +519,12 @@ public final class SpriteCollabUI {
                 int h = Math.max(1, (int) Math.round(info.alto * escala));
                 int x = (getWidth() - w) / 2;
                 int y = getHeight() - h - 8;
+                // La sombra se pinta en el mismo sistema de coordenadas que el sprite:
+                // queda centrada bajo sus pies aunque cambien tamaño y animación.
+                int sombraW = Math.max(18, (int) (info.ancho * escala * 0.72 * Math.max(1, recursos.tamanoSombra)));
+                int sombraH = Math.max(5, sombraW / 5);
+                g.setColor(new Color(55, 70, 62, 78));
+                g.fillOval((getWidth() - sombraW) / 2, getHeight() - sombraH - 5, sombraW, sombraH);
                 g.drawImage(hoja, x, y, x + w, y + h, sx, sy, sx + info.ancho, sy + info.alto, null);
             } else if (recursos != null && recursos.retrato != null) {
                 double factor = escalaEspecie(pokemon);
