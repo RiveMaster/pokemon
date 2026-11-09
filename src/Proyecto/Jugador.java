@@ -539,6 +539,10 @@ public class Jugador implements Serializable {
         objetosClave.put(nombre, 1);
     }
 
+    public static boolean tieneObjetoClave(String nombre) {
+        return nombre != null && objetosClave != null && objetosClave.getOrDefault(nombre, 0) > 0;
+    }
+
     public void añadirMT(String nombre) {
         añadirObjeto(mts, nombre, 1);
     }
