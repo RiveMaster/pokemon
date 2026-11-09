@@ -111,8 +111,16 @@ public class Aventura {
 
         try {
             if (modo == 1) {
-                RedLAN.alojar(nombre, RedLAN.PUERTO_PREDETERMINADO);
+                RedLAN red = RedLAN.alojar(nombre, RedLAN.PUERTO_PREDETERMINADO);
                 System.out.println("\n¡Partida creada!");
+                System.out.println("Configurando automáticamente el router (UPnP)...");
+                boolean puertoAbierto = red.abrirPuertoAutomaticamente(RedLAN.PUERTO_PREDETERMINADO);
+                if (puertoAbierto) {
+                    System.out.println("¡Puerto TCP abierto automáticamente en el router!");
+                } else {
+                    System.out.println("No se pudo abrir automáticamente el puerto.");
+                    System.out.println("Activa UPnP en el router o configura manualmente TCP " + RedLAN.PUERTO_PREDETERMINADO + ".");
+                }
                 String ipPublica = obtenerIpPublica();
                 if (ipPublica != null) {
                     System.out.println("Comparte esta IP con tu amigo: " + ipPublica);
@@ -120,8 +128,7 @@ public class Aventura {
                     System.out.println("No se pudo detectar tu IP pública. Puedes consultarla en un navegador.");
                 }
                 System.out.println("Puerto: " + RedLAN.PUERTO_PREDETERMINADO + " (automático).");
-                System.out.println("IMPORTANTE: abre/reenruta ese puerto TCP en tu router hacia este ordenador.");
-                System.out.println("Si tu conexión usa CGNAT, necesitaréis una VPN de red virtual.");
+                if (!puertoAbierto) System.out.println("Si tu conexión usa CGNAT, necesitaréis una VPN de red virtual.");
             } else if (modo == 2) {
                 System.out.print("Introduce la IP que te ha enviado tu amigo: ");
                 String ip = sc.nextLine().trim();
