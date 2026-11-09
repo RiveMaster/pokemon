@@ -53,6 +53,8 @@ public class Villaverde {
                     System.out.println("4. Objeto");
                     System.out.println("5. Desbloquear todas las generaciones");
                     System.out.println("6. salir.");
+                    System.out.println("7. Obtener todas las megapiedras");
+                    System.out.println("8. Obtener Banda Dinamax");
                     int opcional=sc.nextInt();
                     sc.nextLine();
                     switch (opcional){
@@ -67,7 +69,13 @@ public class Villaverde {
                                 System.out.println("No se encontro el Pokemon deseado, saliendo del menu de pokemon.");
                             } else{
                                 System.out.println("Introduce el nivel: ");
-                                jugadorCompleto.agregarPokemon(new PokemonLuchador(Pokedex.buscarPorNombre(nombre), sc.nextInt(), 31));
+                                int nivel = sc.nextInt();
+                                sc.nextLine();
+                                PokemonLuchador creado = new PokemonLuchador(Pokedex.buscarPorNombre(nombre), nivel, 31);
+                                System.out.print("¿Quieres que sea shiny? (s/n): ");
+                                creado.setShiny(sc.nextLine().trim().equalsIgnoreCase("s"));
+                                jugadorCompleto.agregarPokemon(creado);
+                                System.out.println(creado.getNombre() + (creado.esShiny() ? " ✨ (Shiny)" : "") + " añadido.");
                             }
                         }
                         case 3->{
@@ -99,6 +107,14 @@ public class Villaverde {
                             System.out.println("Generaciones 1 a 10 desbloqueadas.");
                         }
                         case 6->{ }
+                        case 7->{
+                            for (String piedra : MegaEvoluciones.todasLasPiedras()) jugadorCompleto.obtenerMegapiedra(piedra);
+                            System.out.println("Todas las megapiedras del catálogo añadidas a la mochila.");
+                        }
+                        case 8->{
+                            jugadorCompleto.añadirObjetoClave("Banda Dinamax");
+                            System.out.println("Banda Dinamax añadida. La transformación Gigamax requiere todavía integrar sus formas y turnos de combate.");
+                        }
                         default -> System.out.println("Valor no permitido");
                     }
                 }
