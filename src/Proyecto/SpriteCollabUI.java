@@ -253,7 +253,7 @@ public final class SpriteCollabUI {
         if (dex <= 0) return;
         obtenerRecursos(dex).thenAccept(set -> SwingUtilities.invokeLater(() -> {
             if (set.retrato != null) {
-                Image scaled = set.retrato.getScaledInstance(ancho, alto, Image.SCALE_NEAREST);
+                Image scaled = set.retrato.getScaledInstance(ancho, alto, Image.SCALE_REPLICATE);
                 destino.setText("");
                 destino.setIcon(new ImageIcon(scaled));
                 destino.setToolTipText(set.creditos);
