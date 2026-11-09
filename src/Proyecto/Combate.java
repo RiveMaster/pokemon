@@ -376,12 +376,12 @@ public class Combate {
         boolean puedeMega = MegaEvoluciones.puedeOfrecerse(jugador);
         boolean puedeGigamax = Dinamax.puedeActivarse(jugador);
 
-        if (movs.isEmpty() && !puedeMega) {
+        if (movs.isEmpty() && !puedeMega && !puedeGigamax) {
             System.out.println("¡Tu Pokémon no tiene movimientos!");
             return;
         }
 
-        if (jugador.sinPp() && !puedeMega) {
+        if (jugador.sinPp() && !puedeMega && !puedeGigamax) {
             System.out.println("¡A " + jugador.getNombre() + " no le quedan PP!");
             System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
             jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
@@ -451,7 +451,6 @@ public class Combate {
     private static void activarGigamax(PokemonLuchador pokemon) {
         if (Dinamax.activar(pokemon)) {
             System.out.println("¡" + pokemon.getNombre() + " se ha vuelto Gigamax! (3 turnos)");
-            SpriteCollabUI.mostrarCombate(pokemon, null);
         } else {
             System.out.println("No se puede activar Gigamax. Comprueba la Banda Dinamax y la especie.");
         }
