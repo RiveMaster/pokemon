@@ -147,6 +147,50 @@ public final class SpriteCollabUI {
         });
     }
 
+    /** Vista específica del almacenamiento: cuadrícula amplia con contador de Pokémon. */
+    public static void mostrarPC(List<PokemonLuchador> pokemon) {
+        if (GraphicsEnvironment.isHeadless()) return;
+        List<PokemonLuchador> copia = pokemon == null
+                ? Collections.emptyList() : new ArrayList<>(pokemon);
+        SwingUtilities.invokeLater(() -> {
+            JFrame f = new JFrame("PC Pokémon · " + copia.size() + " almacenados");
+            f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            f.setMinimumSize(new Dimension(720, 520));
+
+            JPanel contenido = new JPanel(new BorderLayout(8, 8));
+            contenido.setBorder(new EmptyBorder(12, 12, 12, 12));
+            contenido.setBackground(new Color(225, 235, 245));
+
+            JLabel titulo = new JLabel("ALMACENAMIENTO POKÉMON", SwingConstants.CENTER);
+            titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 19f));
+            JLabel contador = new JLabel(copia.size() + " Pokémon guardados", SwingConstants.CENTER);
+            contador.setFont(contador.getFont().deriveFont(13f));
+            JPanel cabecera = new JPanel(new GridLayout(2, 1, 2, 2));
+            cabecera.setOpaque(false);
+            cabecera.add(titulo);
+            cabecera.add(contador);
+            contenido.add(cabecera, BorderLayout.NORTH);
+
+            JPanel rejilla = new JPanel(new GridLayout(0, 4, 10, 10));
+            rejilla.setBorder(new EmptyBorder(8, 4, 8, 4));
+            rejilla.setBackground(new Color(225, 235, 245));
+            if (copia.isEmpty()) {
+                JLabel vacio = new JLabel("Tu PC está vacío. ¡Captura Pokémon para almacenarlos aquí!",
+                        SwingConstants.CENTER);
+                vacio.setFont(vacio.getFont().deriveFont(Font.PLAIN, 15f));
+                rejilla.setLayout(new BorderLayout());
+                rejilla.add(vacio, BorderLayout.CENTER);
+            } else {
+                for (PokemonLuchador p : copia) rejilla.add(tarjeta(p));
+            }
+            contenido.add(new JScrollPane(rejilla), BorderLayout.CENTER);
+            f.setContentPane(contenido);
+            f.setSize(900, 650);
+            f.setLocationRelativeTo(null);
+            f.setVisible(true);
+        });
+    }
+
     private static JPanel tarjeta(PokemonLuchador p) {
         JPanel card = new JPanel(new BorderLayout(6, 6));
         card.setBackground(Color.WHITE);
