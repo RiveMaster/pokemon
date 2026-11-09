@@ -106,6 +106,7 @@ public class Aventura {
         System.out.println("4. Unirse por IP pública (Internet)");
         System.out.print("Elige: ");
         int modo = Entrada.leerEntero(sc);
+        sc.nextLine(); // Consumir el salto de línea antes de leer el nombre/IP.
         System.out.print("Nombre de entrenador: ");
         String nombre = sc.nextLine().trim();
         if (nombre.isEmpty()) nombre = "Entrenador";
