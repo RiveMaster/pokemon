@@ -10,7 +10,8 @@ public class Villaverde {
     public static Ubicacion mostrarMenu(Scanner sc, Jugador jugadorCompleto) {
 
         System.out.println("Explora Villaverde con W, A, S y D. Pulsa Esc para abrir el menú.");
-        ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
+        ExploradorMapa.Resultado exploracionInicial = ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
+        if (exploracionInicial.getDestino() != null) return exploracionInicial.getDestino();
 
         while (true) {
             System.out.println("\n╔════════════════════════════════════╗");
@@ -39,7 +40,10 @@ public class Villaverde {
                     }
                 }
                 case 4 -> viajarEntreGeneraciones(sc, jugadorCompleto);
-                case 5 -> ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
+                case 5 -> {
+                    ExploradorMapa.Resultado exploracion = ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
+                    if (exploracion.getDestino() != null) return exploracion.getDestino();
+                }
                 case 777999222 ->{
                     System.out.println("Entrando en modo debug para estats modificadas.");
                     System.out.println("Introduce la opcion:");
