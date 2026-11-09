@@ -19,6 +19,9 @@ public class PokemonLuchador implements Serializable {
     private List<Movimiento> movimientosAprendidos = new ArrayList<>();
     private ObjetoEquipable objeto; // objeto equipado (null = ninguno)
     private boolean shiny;
+    private transient int turnosGigamax;
+    private transient int vidaMaxAntesGigamax;
+    private transient boolean gigamaxUsadoEsteCombate;
 
     // Stats
     private int vidaMax;
@@ -136,6 +139,9 @@ public class PokemonLuchador implements Serializable {
         if (proximaCrianzEpochMs < 0) proximaCrianzEpochMs = 0;
         baseAntesMega = null;
         megaUsadaEsteCombate = false;
+        turnosGigamax = 0;
+        vidaMaxAntesGigamax = 0;
+        gigamaxUsadoEsteCombate = false;
         if (base != null && base.esMega()) {
             String especie = base.getEspecieBaseMega();
             PokemonBase normal = especie == null ? null : Pokedex.buscarPorNombre(especie);
@@ -181,7 +187,42 @@ public class PokemonLuchador implements Serializable {
     /** Inicia el estado temporal de megaevolución para un combate nuevo. */
     public void iniciarCombate() {
         desmegaevolucionar();
+        terminarGigamax();
         megaUsadaEsteCombate = false;
+        gigamaxUsadoEsteCombate = false;
+    }
+
+    public boolean estaEnGigamax() { return turnosGigamax > 0; }
+    public int getTurnosGigamax() { return turnosGigamax; }
+
+    /** Gigamax: aumenta temporalmente los PS máximos un 50% durante tres rondas. */
+    public boolean activarGigamax() {
+        if (vidaActual <= 0 || gigamaxUsadoEsteCombate || estaEnGigamax()
+                || !Dinamax.especieCompatible(getNombre())) return false;
+        vidaMaxAntesGigamax = vidaMax;
+        double proporcion = vidaMax <= 0 ? 1.0 : (double) vidaActual / vidaMax;
+        vidaMax = Math.max(1, (int) Math.ceil(vidaMaxAntesGigamax * 1.5));
+        vidaActual = Math.max(1, Math.min(vidaMax, (int) Math.round(vidaMax * proporcion)));
+        turnosGigamax = 3;
+        gigamaxUsadoEsteCombate = true;
+        return true;
+    }
+
+    /** Llamar una vez cuando termina la respuesta del rival: una ronda completa. */
+    public void avanzarTurnoGigamax() {
+        if (turnosGigamax <= 0) return;
+        turnosGigamax--;
+        if (turnosGigamax == 0) terminarGigamax();
+    }
+
+    public void terminarGigamax() {
+        if (vidaMaxAntesGigamax > 0) {
+            double proporcion = vidaMax <= 0 ? 0.0 : (double) vidaActual / vidaMax;
+            vidaMax = vidaMaxAntesGigamax;
+            vidaActual = Math.max(0, Math.min(vidaMax, (int) Math.round(vidaMax * proporcion)));
+        }
+        vidaMaxAntesGigamax = 0;
+        turnosGigamax = 0;
     }
 
     public boolean megaevolucionar(PokemonBase formaMega) {
