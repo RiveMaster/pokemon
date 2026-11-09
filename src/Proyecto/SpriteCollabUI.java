@@ -84,9 +84,11 @@ public final class SpriteCollabUI {
                 g2.setPaint(new GradientPaint(0, 0, new Color(202, 230, 245),
                         0, getHeight(), new Color(226, 237, 205)));
                 g2.fillRect(0, 0, getWidth(), getHeight());
-                g2.setColor(new Color(120, 160, 104));
-                g2.fillOval(35, 125, 250, 72);
-                g2.fillOval(Math.max(310, getWidth() - 285), 35, 245, 70);
+                // Sombras/plataformas alineadas con el punto de apoyo de cada actor.
+                g2.setColor(new Color(120, 160, 104, 150));
+                int anchoSombra = 190;
+                g2.fillOval(180 - anchoSombra / 2, 292, anchoSombra, 30);
+                g2.fillOval(545 - anchoSombra / 2, 184, anchoSombra, 30);
                 g2.dispose();
             }
         };
@@ -253,12 +255,25 @@ public final class SpriteCollabUI {
         if (dex <= 0) return;
         obtenerRecursos(dex).thenAccept(set -> SwingUtilities.invokeLater(() -> {
             if (set.retrato != null) {
-                Image scaled = set.retrato.getScaledInstance(ancho, alto, Image.SCALE_REPLICATE);
+                Image scaled = escalarManteniendoProporcion(set.retrato, ancho, alto);
                 destino.setText("");
                 destino.setIcon(new ImageIcon(scaled));
                 destino.setToolTipText(set.creditos);
             }
         }));
+    }
+
+    /** Escala retratos sin estirar ni deformar la proporción original. */
+    private static Image escalarManteniendoProporcion(BufferedImage imagen, int ancho, int alto) {
+        double escala = Math.min((double) ancho / imagen.getWidth(), (double) alto / imagen.getHeight());
+        int w = Math.max(1, (int) Math.round(imagen.getWidth() * escala));
+        int h = Math.max(1, (int) Math.round(imagen.getHeight() * escala));
+        BufferedImage salida = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = salida.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g.drawImage(imagen, 0, 0, w, h, null);
+        g.dispose();
+        return salida;
     }
 
     private static CompletableFuture<SpriteSet> obtenerRecursos(int dex) {
@@ -489,11 +504,16 @@ public final class SpriteCollabUI {
                 int direccion = jugador ? Math.min(4, filas - 1) : 0;
                 int f = Math.min(frame, columnas - 1);
                 int sx = f * info.ancho, sy = direccion * info.alto;
-                double escala = Math.min((getWidth() - 16.0) / info.ancho, (getHeight() - 12.0) / info.alto) * 0.68 * escalaEspecie(pokemon);
-                int w = Math.max(1, (int) (info.ancho * escala));
-                int h = Math.max(1, (int) (info.alto * escala));
+                double factor = escalaEspecie(pokemon);
+                double escalaBase = Math.min((getWidth() - 24.0) / info.ancho,
+                        (getHeight() - 24.0) / info.alto) * 0.68;
+                double escala = escalaBase * factor;
+                escala = Math.min(escala, Math.min((getWidth() - 12.0) / info.ancho,
+                        (getHeight() - 12.0) / info.alto));
+                int w = Math.max(1, (int) Math.round(info.ancho * escala));
+                int h = Math.max(1, (int) Math.round(info.alto * escala));
                 int x = (getWidth() - w) / 2;
-                int y = getHeight() - h - 4;
+                int y = getHeight() - h - 8;
                 g.drawImage(hoja, x, y, x + w, y + h, sx, sy, sx + info.ancho, sy + info.alto, null);
             } else if (recursos != null && recursos.retrato != null) {
                 double factor = escalaEspecie(pokemon);
