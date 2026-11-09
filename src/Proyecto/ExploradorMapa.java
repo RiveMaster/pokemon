@@ -45,16 +45,17 @@ public final class ExploradorMapa {
         private final boolean encuentro;
         private final int x;
         private final int y;
-
-        private Resultado(boolean encuentro, int x, int y) {
-            this.encuentro = encuentro;
-            this.x = x;
-            this.y = y;
+        private final Ubicacion destino;
+        private final int entradaX, entradaY;
+        private Resultado(boolean encuentro, int x, int y) { this(encuentro, x, y, null, -1, -1); }
+        private Resultado(boolean encuentro, int x, int y, Ubicacion destino, int entradaX, int entradaY) {
+            this.encuentro = encuentro; this.x = x; this.y = y;
+            this.destino = destino; this.entradaX = entradaX; this.entradaY = entradaY;
         }
-
         public boolean huboEncuentro() { return encuentro; }
         public int getX() { return x; }
         public int getY() { return y; }
+        public Ubicacion getDestino() { return destino; }
     }
 
     /**
@@ -104,6 +105,10 @@ public final class ExploradorMapa {
         Resultado salida = resultado.get();
         if (salida == null) salida = new Resultado(false, inicio.x, inicio.y);
         jugador.guardarPosicionMapa(mapaId, salida.x, salida.y);
+        if (salida.destino != null) {
+            jugador.guardarPosicionMapa(salida.destino.name(), salida.entradaX, salida.entradaY);
+            System.out.println("Has llegado a " + salida.destino.getNombre() + ".");
+        }
         return salida;
     }
 
@@ -174,9 +179,30 @@ public final class ExploradorMapa {
             void avanzar(int dx, int dy) {
                 MapaCanvas.Posicion p = lienzo.getPosicion();
                 int nx = p.x + dx, ny = p.y + dy;
+                int centroY = mapa.alto / 2;
+                // Las salidas de cada zona están en el centro de los laterales.
+                if ((nx < 0 || nx >= mapa.ancho) && Math.abs(ny - centroY) <= 1) {
+                    Ubicacion destino = vecinoHorizontal(mapaId, dx);
+                    if (destino != null) {
+                        MapaDatos mapaDestino = cargarMapa(destino);
+                        int entradaX = dx < 0 ? Math.max(1, mapaDestino.ancho - 2) : 1;
+                        int entradaY = mapaDestino.alto / 2;
+                        resultado.set(new Resultado(false, p.x, p.y, destino, entradaX, entradaY));
+                        fin.countDown(); ventana.dispose(); return;
+                    }
+                }
                 if (nx < 0 || ny < 0 || nx >= mapa.ancho || ny >= mapa.alto) {
-                    estado.setText("Has llegado al límite del mapa. Pulsa Esc para volver al menú.");
+                    estado.setText("Has llegado al límite del mapa. La salida está en el centro del lateral.");
                     return;
+                }
+                if ((nx == 0 || nx == mapa.ancho - 1) && Math.abs(ny - centroY) <= 1) {
+                    Ubicacion destino = vecinoHorizontal(mapaId, dx);
+                    if (destino != null) {
+                        MapaDatos mapaDestino = cargarMapa(destino);
+                        int entradaX = dx < 0 ? Math.max(1, mapaDestino.ancho - 2) : 1;
+                        resultado.set(new Resultado(false, p.x, p.y, destino, entradaX, mapaDestino.alto / 2));
+                        fin.countDown(); ventana.dispose(); return;
+                    }
                 }
                 boolean puedeNavegar = jugador.puedeNavegarAgua();
                 if (mapa.esAgua(nx, ny) && !puedeNavegar) {
@@ -217,6 +243,15 @@ public final class ExploradorMapa {
         acciones.put("derecha", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) { movimiento.avanzar(1, 0); }
         });
+    }
+
+    private static Ubicacion vecinoHorizontal(String mapaId, int dx) {
+        Ubicacion actual;
+        try { actual = Ubicacion.valueOf(mapaId); } catch (IllegalArgumentException ex) { return null; }
+        List<Ubicacion> recorrido = Mapa.getRecorrido();
+        int indice = recorrido.indexOf(actual);
+        int vecino = indice + (dx < 0 ? -1 : 1);
+        return indice < 0 || vecino < 0 || vecino >= recorrido.size() ? null : recorrido.get(vecino);
     }
 
     private static void actualizarEstado(JLabel etiqueta, Jugador jugador, MapaCanvas lienzo,
