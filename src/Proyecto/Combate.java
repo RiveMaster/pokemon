@@ -19,6 +19,7 @@ public class Combate {
         System.out.println("\n=== ¡COMIENZA EL COMBATE! ===\n");
 
         while (jugador.getPokemon().estaVivo() && rival.getPokemon().estaVivo()) {
+            SpriteCollabUI.mostrarCombate(jugador.getPokemon(), rival.getPokemon());
 
             // Mostrar barras de vida
             System.out.println("\n===============================");
@@ -60,7 +61,10 @@ public class Combate {
 
                     System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
 
+                    SpriteCollabUI.animarAtaque(jugador.getPokemon());
                     rival.getPokemon().recibirDaño(movJugador.getPotencia());
+                    if (rival.getPokemon().estaVivo()) SpriteCollabUI.animarDaño(rival.getPokemon());
+                    else SpriteCollabUI.animarDerrota(rival.getPokemon());
 
                     if (!rival.getPokemon().estaVivo()) {
                         System.out.println("\n" + rival.getNombre() + " ha sido debilitado!");
@@ -72,7 +76,10 @@ public class Combate {
                 // Turno rival
                 Movimiento movRival = rival.getPokemon().getMovimientos().get(0);
                 System.out.println("\nEl rival usa " + movRival.getNombre() + "!");
+                SpriteCollabUI.animarAtaque(rival.getPokemon());
                 jugador.getPokemon().recibirDaño(movRival.getPotencia());
+                if (jugador.getPokemon().estaVivo()) SpriteCollabUI.animarDaño(jugador.getPokemon());
+                else SpriteCollabUI.animarDerrota(jugador.getPokemon());
 
                 if (!jugador.getPokemon().estaVivo()) {
                     System.out.println("\n" + jugador.getNombre() + " ha sido debilitado...");
