@@ -225,6 +225,22 @@ public final class RedLAN {
         }
     }
 
+    /** Envía una respuesta únicamente al cliente que acaba de conectarse. */
+    private void enviarA(Socket cliente, String linea) {
+        BufferedWriter out = clientes.get(cliente);
+        if (out == null || cliente == null || cliente.isClosed()) return;
+        try {
+            synchronized (out) {
+                out.write(linea);
+                out.newLine();
+                out.flush();
+            }
+        } catch (IOException ex) {
+            eventos.add("ERROR|" + ex.getMessage());
+            try { cliente.close(); } catch (IOException ignored) { }
+        }
+    }
+
     private void difundir(String linea, Socket excluir) {
         for (Map.Entry<Socket, BufferedWriter> e : clientes.entrySet()) {
             if (e.getKey() == excluir) continue;
