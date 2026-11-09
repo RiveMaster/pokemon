@@ -123,7 +123,7 @@ public final class SpriteCollabUI {
 
     private static void actualizarLado(PokemonLuchador p, SpriteActor actor, JLabel datos, boolean jugador) {
         datos.setText("<html><div style='text-align:center'><b>" + escapar(p.getNombre())
-                + " · Nv. " + p.getNivel() + "</b><br>PS: " + p.getVidaActual() + " / "
+                + (p.esShiny() ? " ✨ SHINY" : "") + (p.estaEnGigamax() ? " · GIGAMAX" : "") + " · Nv. " + p.getNivel() + "</b><br>PS: " + p.getVidaActual() + " / "
                 + p.getVidaMax() + (p.estaVivo() ? "" : "<br><b>DEBILITADO</b>") + "</div></html>");
         actor.mostrarPokemon(p);
     }
@@ -364,6 +364,19 @@ public final class SpriteCollabUI {
                 .replace("\"", "&quot;");
     }
 
+    /** Escala visual relativa por especie; no modifica estadísticas. */
+    private static double escalaEspecie(PokemonLuchador p) {
+        if (p == null) return 1.0;
+        String n = p.getNombre().toLowerCase(Locale.ROOT);
+        double factor = 1.0;
+        if (n.contains("eternatus")) factor = 1.72;
+        else if (n.contains("rayquaza") || n.contains("wailord") || n.contains("groudon") || n.contains("kyogre") || n.contains("zygarde") || n.contains("giratina") || n.contains("lugia") || n.contains("ho-oh") || n.contains("reshiram") || n.contains("zekrom") || n.contains("necrozma")) factor = 1.48;
+        else if (n.contains("snorlax") || n.contains("gyarados") || n.contains("dragonite") || n.contains("steelix") || n.contains("onix") || n.contains("torterra") || n.contains("rhyperior") || n.contains("mamoswine")) factor = 1.28;
+        else if (n.contains("caterpie") || n.contains("weedle") || n.contains("joltik") || n.contains("cutiefly") || n.contains("cosmoem") || n.contains("flabebe") || n.contains("comfey")) factor = 0.58;
+        else if (n.contains("pichu") || n.contains("azurill") || n.contains("togepi") || n.contains("diglett") || n.contains("natu") || n.contains("snom")) factor = 0.72;
+        if (p.estaEnGigamax()) factor *= 1.22;
+        return Math.max(0.5, Math.min(1.8, factor));
+    }
     private static final class AnimInfo {
         int ancho, alto;
         final List<Integer> duraciones = new ArrayList<>();
@@ -476,14 +489,15 @@ public final class SpriteCollabUI {
                 int direccion = jugador ? Math.min(4, filas - 1) : 0;
                 int f = Math.min(frame, columnas - 1);
                 int sx = f * info.ancho, sy = direccion * info.alto;
-                double escala = Math.min((getWidth() - 16.0) / info.ancho, (getHeight() - 12.0) / info.alto);
+                double escala = Math.min((getWidth() - 16.0) / info.ancho, (getHeight() - 12.0) / info.alto) * escalaEspecie(pokemon);
                 int w = Math.max(1, (int) (info.ancho * escala));
                 int h = Math.max(1, (int) (info.alto * escala));
                 int x = (getWidth() - w) / 2;
                 int y = getHeight() - h - 4;
                 g.drawImage(hoja, x, y, x + w, y + h, sx, sy, sx + info.ancho, sy + info.alto, null);
             } else if (recursos != null && recursos.retrato != null) {
-                int w = Math.min(getWidth() - 20, 180), h = Math.min(getHeight() - 20, 180);
+                double factor = escalaEspecie(pokemon);
+                int w = Math.min(getWidth() - 20, (int)(180 * factor)), h = Math.min(getHeight() - 20, (int)(180 * factor));
                 int x = (getWidth() - w) / 2, y = (getHeight() - h) / 2;
                 if (animacion.equals("Attack")) x += jugador ? 28 : -28;
                 if (animacion.equals("Hurt")) x += (tickFallback % 2 == 0 ? -9 : 9);
