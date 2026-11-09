@@ -21,6 +21,7 @@ public class Aventura {
             System.out.println("2. Cargar partida");
             System.out.println("3. Editor de datos (Pokémon Studio, consola)");
             System.out.println("4. Editor de datos (Pokémon Studio, ventana gráfica)");
+            System.out.println("5. Multijugador LAN (anfitrión / conectar por IP)");
             System.out.print("\nElige una opción: ");
 
             opcion = sc.nextInt();
@@ -37,7 +38,13 @@ public class Aventura {
             System.out.println();
         }
 
-        if (opcion == 1) {
+        if (opcion == 5) {
+            configurarMultijugador();
+            System.out.println("\n1. Nueva partida\n2. Cargar partida");
+            System.out.print("Elige una opción: ");
+            int modo = Entrada.leerEntero(sc);
+            jugador = modo == 2 ? GuardarCargar.cargarPartida(sc) : Encuentros.encuentroInicial(sc);
+        } else if (opcion == 1) {
             // ===== NUEVA PARTIDA =====
             System.out.println("\n╔════════════════════════════════════╗");
             System.out.println("║      EMPEZANDO NUEVA PARTIDA       ║");
@@ -88,6 +95,41 @@ public class Aventura {
             System.out.println("\n💾 Guardando partida...");
             GuardarCargar.guardarPartida(sc, jugador);
             System.out.println("¡Hasta pronto, " + jugador.getNombre() + "!");
+        }
+    }
+
+    private static void configurarMultijugador() {
+        System.out.println("\n=== MULTIJUGADOR LAN ===");
+        System.out.println("1. Crear partida (anfitrión)");
+        System.out.println("2. Unirse a una partida por IP");
+        System.out.print("Elige: ");
+        int modo = Entrada.leerEntero(sc);
+        System.out.print("Nombre de entrenador: ");
+        String nombre = sc.nextLine().trim();
+        if (nombre.isEmpty()) nombre = "Entrenador";
+        try {
+            if (modo == 1) {
+                System.out.print("Puerto TCP [" + RedLAN.PUERTO_PREDETERMINADO + "]: ");
+                String texto = sc.nextLine().trim();
+                int puerto = texto.isEmpty() ? RedLAN.PUERTO_PREDETERMINADO : Integer.parseInt(texto);
+                RedLAN.alojar(nombre, puerto);
+                System.out.println("Servidor iniciado en el puerto " + puerto + ". Comparte tu IP local o pública.");
+                System.out.println("IP local: " + java.net.InetAddress.getLocalHost().getHostAddress());
+                System.out.println("Para Internet: configura el reenvío TCP del puerto " + puerto + " en tu router.");
+            } else if (modo == 2) {
+                System.out.print("IP del anfitrión: ");
+                String ip = sc.nextLine().trim();
+                System.out.print("Puerto [" + RedLAN.PUERTO_PREDETERMINADO + "]: ");
+                String texto = sc.nextLine().trim();
+                int puerto = texto.isEmpty() ? RedLAN.PUERTO_PREDETERMINADO : Integer.parseInt(texto);
+                RedLAN.conectar(nombre, ip, puerto);
+                System.out.println("Conectado al anfitrión " + ip + ":" + puerto);
+            } else {
+                System.out.println("Modo no válido; continuarás sin red.");
+            }
+        } catch (Exception ex) {
+            RedLAN.cerrar();
+            System.out.println("No se pudo iniciar la conexión: " + ex.getMessage());
         }
     }
 
