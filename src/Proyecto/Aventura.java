@@ -99,37 +99,68 @@ public class Aventura {
     }
 
     private static void configurarMultijugador() {
-        System.out.println("\n=== MULTIJUGADOR LAN ===");
-        System.out.println("1. Crear partida (anfitrión)");
-        System.out.println("2. Unirse a una partida por IP");
+        System.out.println("\n=== MULTIJUGADOR ===");
+        System.out.println("1. Crear partida en LAN");
+        System.out.println("2. Unirse por IP local (LAN)");
+        System.out.println("3. Crear partida online (Internet)");
+        System.out.println("4. Unirse por IP pública (Internet)");
         System.out.print("Elige: ");
         int modo = Entrada.leerEntero(sc);
         System.out.print("Nombre de entrenador: ");
         String nombre = sc.nextLine().trim();
         if (nombre.isEmpty()) nombre = "Entrenador";
+
+        boolean online = modo == 3 || modo == 4;
         try {
-            if (modo == 1) {
+            if (modo == 1 || modo == 3) {
                 System.out.print("Puerto TCP [" + RedLAN.PUERTO_PREDETERMINADO + "]: ");
                 String texto = sc.nextLine().trim();
                 int puerto = texto.isEmpty() ? RedLAN.PUERTO_PREDETERMINADO : Integer.parseInt(texto);
                 RedLAN.alojar(nombre, puerto);
-                System.out.println("Servidor iniciado en el puerto " + puerto + ". Comparte tu IP local o pública.");
+                System.out.println("Servidor iniciado en el puerto TCP " + puerto + ".");
                 System.out.println("IP local: " + java.net.InetAddress.getLocalHost().getHostAddress());
-                System.out.println("Para Internet: configura el reenvío TCP del puerto " + puerto + " en tu router.");
-            } else if (modo == 2) {
-                System.out.print("IP del anfitrión: ");
+                if (online) {
+                    String ipPublica = obtenerIpPublica();
+                    if (ipPublica != null) System.out.println("IP pública detectada: " + ipPublica);
+                    else System.out.println("No se pudo detectar la IP pública automáticamente.");
+                    System.out.println("Configura en el router el reenvío TCP del puerto " + puerto
+                            + " hacia este equipo y permite Java en el cortafuegos.");
+                    System.out.println("Comparte la IP pública con el otro jugador.");
+                    System.out.println("Si tu proveedor usa CGNAT, necesitarás una VPN tipo LAN virtual.");
+                } else {
+                    System.out.println("Comparte la IP local con los jugadores de tu misma red.");
+                    System.out.println("Permite Java en el cortafuegos para el puerto TCP " + puerto + ".");
+                }
+            } else if (modo == 2 || modo == 4) {
+                System.out.print(online ? "IP pública del anfitrión: " : "IP local del anfitrión: ");
                 String ip = sc.nextLine().trim();
                 System.out.print("Puerto [" + RedLAN.PUERTO_PREDETERMINADO + "]: ");
                 String texto = sc.nextLine().trim();
                 int puerto = texto.isEmpty() ? RedLAN.PUERTO_PREDETERMINADO : Integer.parseInt(texto);
                 RedLAN.conectar(nombre, ip, puerto);
-                System.out.println("Conectado al anfitrión " + ip + ":" + puerto);
+                System.out.println("Conectado a " + ip + ":" + puerto);
             } else {
-                System.out.println("Modo no válido; continuarás sin red.");
+                System.out.println("Modo no válido; continuarás sin conexión de red.");
             }
         } catch (Exception ex) {
             RedLAN.cerrar();
             System.out.println("No se pudo iniciar la conexión: " + ex.getMessage());
+        }
+    }
+
+    /** Consulta la IP pública mediante un servicio externo; devuelve null si no hay acceso. */
+    private static String obtenerIpPublica() {
+        try {
+            java.net.URL url = new java.net.URL("https://api.ipify.org");
+            java.net.URLConnection conexion = url.openConnection();
+            conexion.setConnectTimeout(3000);
+            conexion.setReadTimeout(3000);
+            try (java.io.BufferedReader lector = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(conexion.getInputStream(), java.nio.charset.StandardCharsets.UTF_8))) {
+                return lector.readLine();
+            }
+        } catch (Exception ex) {
+            return null;
         }
     }
 
