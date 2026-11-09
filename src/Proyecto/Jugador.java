@@ -758,6 +758,8 @@ public class Jugador implements Serializable {
 
     // === Mostrar mochila ===
     public void mostrar(Jugador jugadorCompleto) {
+        // Al abrir la mochila también se muestra la vista gráfica del equipo.
+        SpriteCollabUI.mostrarColeccion("Equipo Pokémon · Mochila", equipo);
         System.out.println("\n========= MOCHILA =========");
         System.out.println("Dinero: " + jugadorCompleto.getDinero() + "€");
 
