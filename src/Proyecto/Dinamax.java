@@ -5,11 +5,11 @@ import java.util.Set;
 /** Reglas básicas de Dinamax/Gigamax para los Pokémon con forma Gigamax oficial. */
 public final class Dinamax {
     private static final Set<String> ESPECIES_GIGAMAX = Set.of(
-            "Charizard", "Butterfree", "Pikachu", "Meowth", "Machamp", "Gengar",
+            "Venusaur", "Charizard", "Blastoise", "Butterfree", "Pikachu", "Meowth", "Machamp", "Gengar",
             "Kingler", "Lapras", "Eevee", "Snorlax", "Garbodor", "Melmetal",
             "Rillaboom", "Cinderace", "Inteleon", "Corviknight", "Orbeetle",
             "Drednaw", "Coalossal", "Flapple", "Appletun", "Sandaconda",
-            "Centiskorch", "Hatterene", "Grimmsnarl", "Alcremie", "Copperajah",
+            "Centiskorch", "Toxtricity", "Hatterene", "Grimmsnarl", "Alcremie", "Copperajah",
             "Duraludon", "Urshifu"
     );
 
