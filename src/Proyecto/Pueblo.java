@@ -61,7 +61,8 @@ public class Pueblo {
         }
 
         System.out.println("Explora las calles con W, A, S y D. En las ciudades no aparecen Pokémon salvajes.");
-        ExploradorMapa.explorarCiudad(jugador, p.ubicacion);
+        ExploradorMapa.Resultado exploracion = ExploradorMapa.explorarCiudad(jugador, p.ubicacion);
+        if (exploracion.getDestino() != null) return exploracion.getDestino();
 
         while (true) {
             List<Mapa.Opcion> opciones = new ArrayList<>();
