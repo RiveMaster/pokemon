@@ -424,7 +424,13 @@ public class Combate {
                 continue;
             }
             System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
+            SpriteCollabUI.animarAtaque(jugador);
+            int vidaAntes = rival.getVidaActual();
             jugador.usarMovimiento(movJugador, movJugador.getPotencia() + jugador.getNivel() / 2, rival);
+            if (rival.getVidaActual() < vidaAntes) {
+                if (rival.estaVivo()) SpriteCollabUI.animarDaño(rival);
+                else SpriteCollabUI.animarDerrota(rival);
+            }
             return;
         }
     }
@@ -443,14 +449,26 @@ public class Combate {
     public static void turnoRival(PokemonLuchador jugador, PokemonLuchador rival) {
         Movimiento movRival = elegirMovimientoRival(rival);
         System.out.println("\n" + rival.getNombre() + " usa " + movRival.getNombre() + "!");
+        SpriteCollabUI.animarAtaque(rival);
+        int vidaAntes = jugador.getVidaActual();
         rival.usarMovimiento(movRival, movRival.getPotencia(), jugador);
+        if (jugador.getVidaActual() < vidaAntes) {
+            if (jugador.estaVivo()) SpriteCollabUI.animarDaño(jugador);
+            else SpriteCollabUI.animarDerrota(jugador);
+        }
     }
 
     // Turno del rival salvaje (usa siempre un movimiento aleatorio)
     private static void turnoRivalSalvaje(PokemonLuchador jugador, PokemonLuchador salvaje) {
         Movimiento movRival = elegirMovimientoRival(salvaje);
         System.out.println("\nEl salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!");
+        SpriteCollabUI.animarAtaque(salvaje);
+        int vidaAntes = jugador.getVidaActual();
         salvaje.usarMovimiento(movRival, movRival.getPotencia(), jugador);
+        if (jugador.getVidaActual() < vidaAntes) {
+            if (jugador.estaVivo()) SpriteCollabUI.animarDaño(jugador);
+            else SpriteCollabUI.animarDerrota(jugador);
+        }
     }
 
 
