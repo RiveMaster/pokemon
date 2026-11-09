@@ -113,7 +113,7 @@ public class Villaverde {
                         }
                         case 8->{
                             jugadorCompleto.añadirObjetoClave("Banda Dinamax");
-                            System.out.println("Banda Dinamax añadida. La transformación Gigamax requiere todavía integrar sus formas y turnos de combate.");
+                            System.out.println("Banda Dinamax añadida. En combate, usa -1 con una especie compatible para activar Gigamax durante tres turnos.");
                         }
                         default -> System.out.println("Valor no permitido");
                     }
