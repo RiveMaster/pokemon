@@ -20,7 +20,7 @@ Se añade una capa de transporte TCP (Proyecto.RedLAN) y una entrada en el menú
 
 En el menú **5. Multijugador**, elige **3. Crear partida online** en el equipo anfitrión. El juego intenta mostrar la IP pública mediante un servicio externo; si no puede consultarlo, puedes comprobarla desde el navegador. En el equipo invitado elige **4. Unirse por IP pública** e introduce esa dirección.
 
-El anfitrión debe configurar en su router una regla de reenvío de **TCP 47821** hacia la IP local de su ordenador y permitir ese puerto en el cortafuegos. El cliente introduce la IP pública del anfitrión y el mismo puerto TCP elegido al crear la sala. Algunos proveedores usan CGNAT; en ese caso el reenvío de puertos convencional no funcionará y será necesario usar una VPN de red privada que sitúe ambos equipos en la misma LAN virtual.
+Al crear la partida online, el juego intenta abrir automáticamente **TCP 47821** en el router mediante UPnP IGD y elimina la regla al cerrar la sesión. Para que funcione, UPnP debe estar activado y permitido en el router. Si falla, configura manualmente el reenvío TCP 47821 hacia la IP local del ordenador y permite Java en el cortafuegos. El cliente introduce la IP pública del anfitrión y el mismo puerto TCP elegido al crear la sala. Algunos proveedores usan CGNAT o doble NAT; en ese caso UPnP en el router doméstico no bastará y será necesario solicitar una IP pública al proveedor o usar una VPN de red privada que sitúe ambos equipos en la misma LAN virtual.
 
 No compartas la IP pública en repositorios o capturas públicas.
 
