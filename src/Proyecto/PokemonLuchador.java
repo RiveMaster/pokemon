@@ -18,6 +18,7 @@ public class PokemonLuchador implements Serializable {
     private int turnosDormido = 0;
     private List<Movimiento> movimientosAprendidos = new ArrayList<>();
     private ObjetoEquipable objeto; // objeto equipado (null = ninguno)
+    private boolean shiny;
 
     // Stats
     private int vidaMax;
@@ -234,6 +235,10 @@ public class PokemonLuchador implements Serializable {
 
     public static void combate(PokemonLuchador jugador, PokemonLuchador rival) {
     }
+
+    public boolean esShiny() { return shiny; }
+
+    public void setShiny(boolean shiny) { this.shiny = shiny; }
 
     public String getNombre() {
         return base.getNombre();
