@@ -117,17 +117,28 @@ public class Aventura {
                     System.out.println("Intentando abrir el puerto del router mediante UPnP...");
                     boolean abierto = red.abrirPuertoAutomaticamente(RedLAN.PUERTO_PREDETERMINADO);
                     System.out.println(abierto ? "Puerto abierto automáticamente." :
-                            "UPnP no disponible. Actívalo en el router o utiliza una VPN.");
+                            "No se pudo abrir el puerto mediante UPnP.");
                     String ip = obtenerIpPublica();
-                    if (ip != null) System.out.println("IP pública para tu amigo: " + ip);
+                    if (ip != null) System.out.println("IP pública: " + ip);
                     else System.out.println("No se pudo detectar la IP pública.");
+
+                    String ipTailscale = obtenerIpTailscale();
+                    if (ipTailscale != null) {
+                        System.out.println("IP privada Tailscale: " + ipTailscale);
+                        System.out.println("Comparte esta IP si ambos equipos están conectados a la misma red Tailscale.");
+                    } else {
+                        System.out.println("Si tienes CGNAT, instala Tailscale en ambos equipos,");
+                        System.out.println("inicia sesión en la misma red privada y comparte la IP Tailscale del anfitrión.");
+                    }
                 } else {
                     System.out.println("IP local: " + java.net.InetAddress.getLocalHost().getHostAddress());
                     System.out.println("Comparte esta IP con jugadores de tu misma red.");
                 }
                 System.out.println("Puerto: " + RedLAN.PUERTO_PREDETERMINADO);
             } else if (modo == 2) {
-                System.out.print(online ? "IP pública del anfitrión: " : "IP local del anfitrión: ");
+                System.out.print(online
+                        ? "IP del anfitrión (pública o Tailscale 100.x.x.x): "
+                        : "IP local del anfitrión: ");
                 String ip = sc.nextLine().trim();
                 RedLAN.conectar(nombre, ip, RedLAN.PUERTO_PREDETERMINADO);
                 System.out.println("\n¡Conectado a la partida!");
@@ -138,6 +149,35 @@ public class Aventura {
             RedLAN.cerrar();
             System.out.println("No se pudo crear o conectar la partida: " + ex.getMessage());
         }
+    }
+
+    /**
+     * Busca una IPv4 de Tailscale (rango CGNAT 100.64.0.0/10) en las interfaces
+     * de red locales. No requiere dependencias externas.
+     */
+    private static String obtenerIpTailscale() {
+        try {
+            java.util.Enumeration<java.net.NetworkInterface> interfaces =
+                    java.net.NetworkInterface.getNetworkInterfaces();
+            while (interfaces != null && interfaces.hasMoreElements()) {
+                java.net.NetworkInterface ni = interfaces.nextElement();
+                if (!ni.isUp() || ni.isLoopback()) continue;
+                String nombre = ni.getName().toLowerCase(java.util.Locale.ROOT);
+                String display = ni.getDisplayName().toLowerCase(java.util.Locale.ROOT);
+                if (!nombre.contains("tailscale") && !display.contains("tailscale")) continue;
+                java.util.Enumeration<java.net.InetAddress> direcciones = ni.getInetAddresses();
+                while (direcciones.hasMoreElements()) {
+                    java.net.InetAddress direccion = direcciones.nextElement();
+                    if (direccion instanceof java.net.Inet4Address) {
+                        byte[] b = direccion.getAddress();
+                        int primero = b[0] & 0xff, segundo = b[1] & 0xff;
+                        if (primero == 100 && segundo >= 64 && segundo <= 127)
+                            return direccion.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception ignored) { }
+        return null;
     }
 
     /** Consulta la IP pública mediante un servicio externo; devuelve null si no hay acceso. */
