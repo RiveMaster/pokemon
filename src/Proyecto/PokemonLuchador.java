@@ -251,6 +251,7 @@ public class PokemonLuchador implements Serializable {
     }
 
     public void desmegaevolucionar() {
+        terminarGigamax();
         if (baseAntesMega == null) {
             if (base != null && base.esMega()) {
                 PokemonBase normal = Pokedex.buscarPorNombre(base.getEspecieBaseMega());
