@@ -21,7 +21,8 @@ public class Aventura {
             System.out.println("2. Cargar partida");
             System.out.println("3. Editor de datos (Pokémon Studio, consola)");
             System.out.println("4. Editor de datos (Pokémon Studio, ventana gráfica)");
-            System.out.println("5. Multijugador LAN (anfitrión / conectar por IP)");
+            System.out.println("5. Multijugador LAN (red local)");
+            System.out.println("6. Multijugador online (Internet)");
             System.out.print("\nElige una opción: ");
 
             opcion = sc.nextInt();
@@ -38,8 +39,8 @@ public class Aventura {
             System.out.println();
         }
 
-        if (opcion == 5) {
-            configurarMultijugador();
+        if (opcion == 5 || opcion == 6) {
+            configurarMultijugador(opcion == 6);
             System.out.println("\n1. Nueva partida\n2. Cargar partida");
             System.out.print("Elige una opción: ");
             int modo = Entrada.leerEntero(sc);
@@ -98,48 +99,44 @@ public class Aventura {
         }
     }
 
-    private static void configurarMultijugador() {
-        System.out.println("\n=== JUGAR ONLINE ===");
+    private static void configurarMultijugador(boolean online) {
+        System.out.println(online ? "\n=== JUGAR ONLINE ===" : "\n=== JUGAR POR LAN ===");
         System.out.println("1. Crear partida");
         System.out.println("2. Unirse a una partida");
         System.out.print("Elige: ");
         int modo = Entrada.leerEntero(sc);
-        sc.nextLine(); // Consumir salto de línea.
+        sc.nextLine();
         System.out.print("Nombre de entrenador: ");
         String nombre = sc.nextLine().trim();
         if (nombre.isEmpty()) nombre = "Entrenador";
-
         try {
             if (modo == 1) {
                 RedLAN red = RedLAN.alojar(nombre, RedLAN.PUERTO_PREDETERMINADO);
                 System.out.println("\n¡Partida creada!");
-                System.out.println("Configurando automáticamente el router (UPnP)...");
-                boolean puertoAbierto = red.abrirPuertoAutomaticamente(RedLAN.PUERTO_PREDETERMINADO);
-                if (puertoAbierto) {
-                    System.out.println("¡Puerto TCP abierto automáticamente en el router!");
+                if (online) {
+                    System.out.println("Intentando abrir el puerto del router mediante UPnP...");
+                    boolean abierto = red.abrirPuertoAutomaticamente(RedLAN.PUERTO_PREDETERMINADO);
+                    System.out.println(abierto ? "Puerto abierto automáticamente." :
+                            "UPnP no disponible. Actívalo en el router o utiliza una VPN.");
+                    String ip = obtenerIpPublica();
+                    if (ip != null) System.out.println("IP pública para tu amigo: " + ip);
+                    else System.out.println("No se pudo detectar la IP pública.");
                 } else {
-                    System.out.println("No se pudo abrir automáticamente el puerto.");
-                    System.out.println("Activa UPnP en el router o configura manualmente TCP " + RedLAN.PUERTO_PREDETERMINADO + ".");
+                    System.out.println("IP local: " + java.net.InetAddress.getLocalHost().getHostAddress());
+                    System.out.println("Comparte esta IP con jugadores de tu misma red.");
                 }
-                String ipPublica = obtenerIpPublica();
-                if (ipPublica != null) {
-                    System.out.println("Comparte esta IP con tu amigo: " + ipPublica);
-                } else {
-                    System.out.println("No se pudo detectar tu IP pública. Puedes consultarla en un navegador.");
-                }
-                System.out.println("Puerto: " + RedLAN.PUERTO_PREDETERMINADO + " (automático).");
-                if (!puertoAbierto) System.out.println("Si tu conexión usa CGNAT, necesitaréis una VPN de red virtual.");
+                System.out.println("Puerto: " + RedLAN.PUERTO_PREDETERMINADO);
             } else if (modo == 2) {
-                System.out.print("Introduce la IP que te ha enviado tu amigo: ");
+                System.out.print(online ? "IP pública del anfitrión: " : "IP local del anfitrión: ");
                 String ip = sc.nextLine().trim();
                 RedLAN.conectar(nombre, ip, RedLAN.PUERTO_PREDETERMINADO);
                 System.out.println("\n¡Conectado a la partida!");
             } else {
-                System.out.println("Opción no válida. Se continuará sin multijugador.");
+                System.out.println("Opción no válida.");
             }
         } catch (Exception ex) {
             RedLAN.cerrar();
-            System.out.println("No se pudo conectar: " + ex.getMessage());
+            System.out.println("No se pudo crear o conectar la partida: " + ex.getMessage());
         }
     }
 
