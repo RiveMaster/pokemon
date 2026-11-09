@@ -489,7 +489,7 @@ public final class SpriteCollabUI {
                 int direccion = jugador ? Math.min(4, filas - 1) : 0;
                 int f = Math.min(frame, columnas - 1);
                 int sx = f * info.ancho, sy = direccion * info.alto;
-                double escala = Math.min((getWidth() - 16.0) / info.ancho, (getHeight() - 12.0) / info.alto) * escalaEspecie(pokemon);
+                double escala = Math.min((getWidth() - 16.0) / info.ancho, (getHeight() - 12.0) / info.alto) * 0.68 * escalaEspecie(pokemon);
                 int w = Math.max(1, (int) (info.ancho * escala));
                 int h = Math.max(1, (int) (info.alto * escala));
                 int x = (getWidth() - w) / 2;
@@ -497,7 +497,7 @@ public final class SpriteCollabUI {
                 g.drawImage(hoja, x, y, x + w, y + h, sx, sy, sx + info.ancho, sy + info.alto, null);
             } else if (recursos != null && recursos.retrato != null) {
                 double factor = escalaEspecie(pokemon);
-                int w = Math.min(getWidth() - 20, (int)(180 * factor)), h = Math.min(getHeight() - 20, (int)(180 * factor));
+                int w = Math.min(getWidth() - 20, (int)(130 * factor)), h = Math.min(getHeight() - 20, (int)(130 * factor));
                 int x = (getWidth() - w) / 2, y = (getHeight() - h) / 2;
                 if (animacion.equals("Attack")) x += jugador ? 28 : -28;
                 if (animacion.equals("Hurt")) x += (tickFallback % 2 == 0 ? -9 : 9);
