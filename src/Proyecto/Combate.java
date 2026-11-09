@@ -374,6 +374,7 @@ public class Combate {
     public static void turnoJugador(PokemonLuchador jugador, PokemonLuchador rival, Scanner sc) {
         List<Movimiento> movs = jugador.getMovimientos();
         boolean puedeMega = MegaEvoluciones.puedeOfrecerse(jugador);
+        boolean puedeGigamax = Dinamax.puedeActivarse(jugador);
 
         if (movs.isEmpty() && !puedeMega) {
             System.out.println("¡Tu Pokémon no tiene movimientos!");
@@ -390,10 +391,12 @@ public class Combate {
         if (jugador.sinPp()) {
             System.out.println("\n¡A " + jugador.getNombre() + " no le quedan PP!");
             System.out.println("0. Mega-evolucionar (consume el turno)");
+            if (puedeGigamax) System.out.println("-1. Activar Gigamax (3 turnos)");
             System.out.println("99. Usar Forcejeo");
             System.out.print("Elige acción: ");
             int accion = Entrada.leerEntero(sc);
             if (accion == 0) MegaEvoluciones.intentarDuranteCombate(jugador, sc);
+            else if (accion == -1 && puedeGigamax) { activarGigamax(jugador); }
             else if (accion == 99) {
                 System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
                 jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
@@ -412,10 +415,13 @@ public class Combate {
             }
         }
         if (puedeMega) System.out.println("0. Mega-evolucionar (consume el turno)");
+        if (puedeGigamax) System.out.println("-1. Gigamax (3 turnos, consume el turno)");
+        if (jugador.estaEnGigamax()) System.out.println("Gigamax activo: " + jugador.getTurnosGigamax() + " turnos restantes.");
         System.out.print("Elige acción: ");
 
         while (true) {
             int eleccion = Entrada.leerEntero(sc);
+            if (eleccion == -1 && puedeGigamax) { activarGigamax(jugador); return; }
             if (eleccion == 0 && puedeMega) {
                 MegaEvoluciones.intentarDuranteCombate(jugador, sc);
                 return;
@@ -439,6 +445,15 @@ public class Combate {
                 else SpriteCollabUI.animarDerrota(rival);
             }
             return;
+        }
+    }
+
+    private static void activarGigamax(PokemonLuchador pokemon) {
+        if (Dinamax.activar(pokemon)) {
+            System.out.println("¡" + pokemon.getNombre() + " se ha vuelto Gigamax! (3 turnos)");
+            SpriteCollabUI.mostrarCombate(pokemon, null);
+        } else {
+            System.out.println("No se puede activar Gigamax. Comprueba la Banda Dinamax y la especie.");
         }
     }
 
