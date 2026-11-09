@@ -286,6 +286,7 @@ public class Jugador implements Serializable {
     // ya está completo.
 
     private static void mostrarListaEquipo() {
+        SpriteCollabUI.mostrarColeccion("Mi equipo Pokémon", equipo);
         if (equipo.isEmpty()) {
             System.out.println("  (no tienes Pokémon en el equipo)");
             return;
@@ -298,6 +299,7 @@ public class Jugador implements Serializable {
     }
 
     private static void mostrarListaPc() {
+        SpriteCollabUI.mostrarColeccion("PC Pokémon", pc);
         if (pc.isEmpty()) {
             System.out.println("  (el PC está vacío)");
             return;
