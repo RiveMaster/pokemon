@@ -148,19 +148,60 @@ public final class SpriteCollabUI {
     }
 
     private static JPanel tarjeta(PokemonLuchador p) {
-        JPanel card = new JPanel(new BorderLayout(4, 4));
+        JPanel card = new JPanel(new BorderLayout(6, 6));
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(190, 202, 214)), new EmptyBorder(7, 7, 7, 7)));
-        JLabel img = new JLabel("Cargando…", SwingConstants.CENTER);
-        img.setPreferredSize(new Dimension(130, 100));
-        JLabel info = new JLabel("<html><center><b>" + escapar(p.getNombre()) + "</b><br>Nv. " + p.getNivel()
-                + "<br>PS " + p.getVidaActual() + "/" + p.getVidaMax()
-                + "<br>" + (p.estaVivo() ? "Disponible" : "Debilitado") + "</center></html>", SwingConstants.CENTER);
+                BorderFactory.createLineBorder(new Color(190, 202, 214)),
+                new EmptyBorder(9, 9, 9, 9)));
+
+        JLabel encabezado = new JLabel(escapar(p.getNombre()) + "   ·   Nv. " + p.getNivel(), SwingConstants.CENTER);
+        encabezado.setFont(encabezado.getFont().deriveFont(Font.BOLD, 15f));
+        card.add(encabezado, BorderLayout.NORTH);
+
+        JLabel img = new JLabel("Cargando sprite…", SwingConstants.CENTER);
+        img.setPreferredSize(new Dimension(170, 112));
         card.add(img, BorderLayout.CENTER);
-        card.add(info, BorderLayout.SOUTH);
-        cargarRetrato(p, 100, 100, img);
+
+        JPanel detalle = new JPanel();
+        detalle.setOpaque(false);
+        detalle.setLayout(new BoxLayout(detalle, BoxLayout.Y_AXIS));
+
+        JLabel ps = new JLabel("PS  " + p.getVidaActual() + " / " + p.getVidaMax());
+        ps.setFont(ps.getFont().deriveFont(Font.BOLD, 12f));
+        JProgressBar barra = new JProgressBar(0, Math.max(1, p.getVidaMax()));
+        barra.setValue(Math.max(0, Math.min(p.getVidaMax(), p.getVidaActual())));
+        barra.setStringPainted(true);
+        barra.setString(p.getVidaMax() <= 0 ? "0%" : (100 * p.getVidaActual() / p.getVidaMax()) + "%");
+        barra.setPreferredSize(new Dimension(180, 14));
+        detalle.add(ps);
+        detalle.add(barra);
+        detalle.add(filaStat("Ataque", p.getAtaque(), "Defensa", p.getDefensa()));
+        detalle.add(filaStat("At. especial", p.getAtaqueEspecial(), "Def. especial", p.getDefensaEspecial()));
+        detalle.add(filaStat("Velocidad", p.getVelocidad(), "Sexo", String.valueOf(p.getSexo())));
+        ObjetoEquipable objeto = p.getObjeto();
+        detalle.add(filaStat("Estado", p.estaVivo() ? "Disponible" : "Debilitado",
+                "Objeto", objeto == null ? "Ninguno" : objeto.getNombre()));
+        JLabel estado = new JLabel(p.estaVivo() ? "● En forma" : "● Debilitado");
+        estado.setForeground(p.estaVivo() ? new Color(35, 130, 75) : new Color(180, 55, 55));
+        estado.setFont(estado.getFont().deriveFont(Font.BOLD, 11f));
+        detalle.add(estado);
+        card.add(detalle, BorderLayout.SOUTH);
+
+        cargarRetrato(p, 112, 112, img);
         return card;
+    }
+
+    private static JPanel filaStat(String etiquetaA, Object valorA, String etiquetaB, Object valorB) {
+        JPanel fila = new JPanel(new GridLayout(1, 2, 5, 0));
+        fila.setOpaque(false);
+        JLabel a = new JLabel(etiquetaA + ": " + valorA);
+        JLabel b = new JLabel(etiquetaB + ": " + valorB);
+        a.setFont(a.getFont().deriveFont(11f));
+        b.setFont(b.getFont().deriveFont(11f));
+        fila.add(a);
+        fila.add(b);
+        fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
+        return fila;
     }
 
     private static void cargarRetrato(PokemonLuchador p, int ancho, int alto, JLabel destino) {
