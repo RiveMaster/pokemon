@@ -27,6 +27,8 @@ public class Ruta {
             System.out.println("\nExplorando " + zona.getNombre() + " [" + gen.etiqueta() + "]...");
             ExploradorMapa.Resultado exploracion = ExploradorMapa.explorar(jugador, zona);
 
+            if (exploracion.getDestino() != null) return exploracion.getDestino();
+
             if (exploracion.huboEncuentro()) {
                 System.out.println("\n¡La hierba se mueve!");
                 // Los entrenadores mantienen su sistema original, pero solo pueden
