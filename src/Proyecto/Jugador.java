@@ -299,7 +299,7 @@ public class Jugador implements Serializable {
     }
 
     private static void mostrarListaPc() {
-        SpriteCollabUI.mostrarColeccion("PC Pokémon", pc);
+        SpriteCollabUI.mostrarPC(pc);
         if (pc.isEmpty()) {
             System.out.println("  (el PC está vacío)");
             return;
