@@ -343,6 +343,8 @@ public class Combate {
 
     // Mostrar estado de los Pokémon
     static void mostrarEstado(PokemonLuchador jugador, PokemonLuchador rival) {
+        // Ventana gráfica opcional; el flujo de combate de consola permanece intacto.
+        SpriteCollabUI.mostrarCombate(jugador, rival);
         System.out.println("\n===============================");
         System.out.println("Tu Pokémon: " + jugador.getNombre() + "  Nv." + jugador.getNivel());
         System.out.println("Vida: " + jugador.getVidaActual() + "/" + jugador.getVidaMax());
