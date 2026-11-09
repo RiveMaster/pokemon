@@ -31,3 +31,20 @@ Esta entrega establece el transporte y el flujo de conexión. La sincronización
 ## Seguridad
 
 Conectar solo con personas de confianza: esta versión no incorpora autenticación, cifrado TLS, protección contra mensajes maliciosos ni recuperación de sesión. No abrir el puerto a Internet en redes sensibles.
+
+
+## Jugar online detrás de CGNAT sin alojar un servidor de Pokémon externo
+
+UPnP no puede atravesar CGNAT. Para mantener el ordenador del anfitrión como servidor del juego, se puede usar una red privada virtual punto a punto como **Tailscale**:
+
+1. Instalad Tailscale en el ordenador anfitrión y en cada ordenador invitado.
+2. Iniciad sesión y añadid todos los equipos a la misma red privada (tailnet).
+3. El anfitrión crea la partida desde **6. Multijugador online**. El juego intenta detectar y mostrar su IPv4 de Tailscale.
+4. El invitado elige **Unirse a una partida** e introduce esa IP Tailscale (normalmente del rango 100.64.0.0/10). Se usa el puerto TCP 47821.
+5. Mantened Tailscale y el juego abiertos mientras dure la partida.
+
+Tailscale intenta una conexión directa entre los equipos y puede usar su infraestructura DERP como transporte cifrado de respaldo cuando la conexión directa no es posible. DERP no aloja la partida ni ejecuta lógica del juego: el servidor de Pokémon sigue siendo el ordenador anfitrión. No obstante, Tailscale sí requiere su servicio de coordinación y no equivale a una conexión P2P autónoma sin infraestructura alguna.
+
+La detección de IP Tailscale en el juego es automática, pero la instalación, el inicio de sesión y la pertenencia a la misma red privada deben configurarse en ambos equipos. Si no aparece una IP Tailscale, comprueba que la aplicación esté conectada y que la interfaz esté activa.
+
+**Limitación:** esta alternativa proporciona conectividad de red a través de CGNAT; no completa por sí sola la sincronización del mundo ni los combates PvP, que siguen requiriendo integración en los bucles del juego.
