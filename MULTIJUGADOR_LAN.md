@@ -16,9 +16,11 @@ Se añade una capa de transporte TCP (Proyecto.RedLAN) y una entrada en el menú
 3. En el otro equipo selecciona **5. Multijugador LAN**, después **2. Unirse** e introduce esa IP.
 4. Permite Java en el cortafuegos para conexiones TCP entrantes al puerto 47821.
 
-## Conexión por Internet mediante IP pública
+## Conexión online mediante IP pública
 
-El anfitrión debe configurar en su router una regla de reenvío de **TCP 47821** hacia la IP local de su ordenador y permitir ese puerto en el cortafuegos. El cliente introduce la IP pública del anfitrión. Algunos proveedores usan CGNAT; en ese caso el reenvío de puertos convencional no funcionará y será necesario usar una VPN de red privada que sitúe ambos equipos en la misma LAN virtual.
+En el menú **5. Multijugador**, elige **3. Crear partida online** en el equipo anfitrión. El juego intenta mostrar la IP pública mediante un servicio externo; si no puede consultarlo, puedes comprobarla desde el navegador. En el equipo invitado elige **4. Unirse por IP pública** e introduce esa dirección.
+
+El anfitrión debe configurar en su router una regla de reenvío de **TCP 47821** hacia la IP local de su ordenador y permitir ese puerto en el cortafuegos. El cliente introduce la IP pública del anfitrión y el mismo puerto TCP elegido al crear la sala. Algunos proveedores usan CGNAT; en ese caso el reenvío de puertos convencional no funcionará y será necesario usar una VPN de red privada que sitúe ambos equipos en la misma LAN virtual.
 
 No compartas la IP pública en repositorios o capturas públicas.
 
