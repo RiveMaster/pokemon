@@ -44,6 +44,7 @@ public final class RedLAN {
     private volatile int xLocal, yLocal;
     private volatile boolean activa = true;
     private ServerSocket servidor;
+    private UPnPPortMapper.Mapping mapeoPuerto;
     private Socket socket;
     private BufferedWriter salidaCliente;
     private Thread hiloAceptacion, hiloLectura;
@@ -77,6 +78,23 @@ public final class RedLAN {
         return red;
     }
 
+    /**
+     * Solicita al router la apertura del puerto TCP mediante UPnP.
+     * Debe llamarse después de alojar(); devuelve false si el router no lo admite.
+     */
+    public synchronized boolean abrirPuertoAutomaticamente(int puerto) {
+        if (!anfitrion || servidor == null || servidor.isClosed()) return false;
+        try {
+            if (mapeoPuerto != null) mapeoPuerto.cerrar();
+            mapeoPuerto = UPnPPortMapper.abrirPuertoTCP(puerto);
+            eventos.add("UPNP_OK|" + puerto);
+            return true;
+        } catch (Exception ex) {
+            eventos.add("UPNP_ERROR|" + ex.getMessage());
+            return false;
+        }
+    }
+
     public static RedLAN actual() { return instancia; }
     public boolean esAnfitrion() { return anfitrion; }
     public String getNombreLocal() { return nombreLocal; }
@@ -91,6 +109,7 @@ public final class RedLAN {
 
     private void cerrarInterno() {
         activa = false;
+        if (mapeoPuerto != null) { mapeoPuerto.cerrar(); mapeoPuerto = null; }
         try { if (socket != null) socket.close(); } catch (IOException ignored) { }
         try { if (servidor != null) servidor.close(); } catch (IOException ignored) { }
         for (Socket s : clientes.keySet()) try { s.close(); } catch (IOException ignored) { }
