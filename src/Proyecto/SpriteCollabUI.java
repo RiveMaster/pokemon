@@ -198,7 +198,7 @@ public final class SpriteCollabUI {
                 BorderFactory.createLineBorder(new Color(190, 202, 214)),
                 new EmptyBorder(9, 9, 9, 9)));
 
-        JLabel encabezado = new JLabel(escapar(p.getNombre()) + "   ·   Nv. " + p.getNivel(), SwingConstants.CENTER);
+        JLabel encabezado = new JLabel(escapar(p.getNombre()) + (p.esShiny() ? " ✨ SHINY" : "") + "   ·   Nv. " + p.getNivel(), SwingConstants.CENTER);
         encabezado.setFont(encabezado.getFont().deriveFont(Font.BOLD, 15f));
         card.add(encabezado, BorderLayout.NORTH);
 
