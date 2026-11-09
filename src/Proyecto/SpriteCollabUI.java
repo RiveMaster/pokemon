@@ -299,7 +299,7 @@ public final class SpriteCollabUI {
         private String animacion = "Idle";
         private int frame;
         private int tickFallback;
-        private Timer timer;
+        private javax.swing.Timer timer;
         private boolean finalizado;
 
         SpriteActor(boolean jugador) {
@@ -343,7 +343,7 @@ public final class SpriteCollabUI {
         private void avanzar() {
             if (timer != null) timer.stop();
             if (recursos == null) {
-                timer = new Timer(85, e -> {
+                timer = new javax.swing.Timer(85, e -> {
                     tickFallback++;
                     if (!animacion.equals("Idle") && tickFallback >= 8) {
                         if (animacion.equals("Faint")) finalizado = true;
@@ -378,7 +378,7 @@ public final class SpriteCollabUI {
             }
             repaint();
             int duracion = Math.max(1, info.duraciones.get(Math.min(frame, info.duraciones.size() - 1)));
-            timer = new Timer(Math.max(35, duracion * 1000 / 60), e -> {
+            timer = new javax.swing.Timer(Math.max(35, duracion * 1000 / 60), e -> {
                 frame++;
                 avanzar();
             });
