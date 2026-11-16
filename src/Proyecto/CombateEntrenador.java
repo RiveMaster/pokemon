@@ -140,6 +140,11 @@ public class CombateEntrenador {
     /** Cambio voluntario. Devuelve null si el jugador cancela o la elección no vale. */
     private static PokemonLuchador elegirCambio(Scanner sc, Jugador jugador, PokemonLuchador activo) {
         List<PokemonLuchador> equipo = jugador.getEquipo();
+        if (SpriteCollabUI.interfazDisponible()) {
+            int indice = SpriteCollabUI.elegirPokemon(equipo, activo, true);
+            if (indice < 0 || indice >= equipo.size()) return null;
+            return equipo.get(indice);
+        }
         System.out.println("Elige un Pokémon para enviar al combate (0 para cancelar):");
         for (int k = 0; k < equipo.size(); k++) {
             PokemonLuchador p = equipo.get(k);
