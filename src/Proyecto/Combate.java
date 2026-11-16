@@ -19,6 +19,35 @@ public class Combate {
         System.out.println("\n=== ¡COMIENZA EL COMBATE! ===\n");
 
         while (jugador.getPokemon().estaVivo() && rival.getPokemon().estaVivo()) {
+            if (SpriteCollabUI.interfazDisponible()) {
+                PokemonLuchador activo = jugador.getPokemon();
+                PokemonLuchador enemigo = rival.getPokemon();
+                mostrarEstado(activo, enemigo);
+                efecto(enemigo);
+                efecto(activo);
+                if (!enemigo.estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje("¡" + enemigo.getNombre() + " ha sido debilitado!", activo, enemigo);
+                    activo.ganarExp(enemigo.getNivel() * 10);
+                    break;
+                }
+                if (!activo.estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje("¡" + activo.getNombre() + " ha sido debilitado!", activo, enemigo);
+                    break;
+                }
+                SpriteCollabUI.elegirAccion(activo, enemigo, "Luchar");
+                turnoJugador(activo, enemigo, sc);
+                if (!enemigo.estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje("¡" + enemigo.getNombre() + " ha sido debilitado!", activo, enemigo);
+                    activo.ganarExp(enemigo.getNivel() * 10);
+                    break;
+                }
+                turnoRival(activo, enemigo);
+                if (!activo.estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje("¡" + activo.getNombre() + " ha sido debilitado!", activo, enemigo);
+                    break;
+                }
+                continue;
+            }
             SpriteCollabUI.mostrarCombate(jugador.getPokemon(), rival.getPokemon());
 
             // Mostrar barras de vida
