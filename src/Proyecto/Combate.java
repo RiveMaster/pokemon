@@ -261,12 +261,18 @@ public class Combate {
             efecto(salvaje);
             efecto(pokemonJugador);
 
-            System.out.println("1. Atacar");
-            System.out.println("2. Huir");
-            System.out.println("3. Mochila");
-            System.out.print("Elige acción: ");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            int opcion;
+            if (SpriteCollabUI.interfazDisponible()) {
+                opcion = SpriteCollabUI.elegirAccion(pokemonJugador, salvaje,
+                        "Luchar", "Huir", "Mochila") + 1;
+            } else {
+                System.out.println("1. Atacar");
+                System.out.println("2. Huir");
+                System.out.println("3. Mochila");
+                System.out.print("Elige acción: ");
+                opcion = sc.nextInt();
+                sc.nextLine();
+            }
 
             if (opcion == 1) {
                 turnoJugador(pokemonJugador, salvaje, sc);
