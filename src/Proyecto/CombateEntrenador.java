@@ -106,6 +106,7 @@ public class CombateEntrenador {
             }
 
             if (!activo.estaVivo()) {
+                SpriteCollabUI.mostrarMensaje("¡" + activo.getNombre() + " ha sido debilitado!", activo, rival);
                 activo = cambioForzado(sc, jugador, activo);
                 if (activo == null) return false;
             }
