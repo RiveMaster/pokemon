@@ -144,6 +144,10 @@ public final class SpriteCollabUI {
     }
 
 
+    public static boolean interfazDisponible() {
+        return !GraphicsEnvironment.isHeadless();
+    }
+
     /** Actualiza los dos paneles de estado tras cada acción o cambio de Pokémon. */
     public static void refrescarCombate(PokemonLuchador jugador, PokemonLuchador rival) {
         if (GraphicsEnvironment.isHeadless() || jugador == null || rival == null) return;
