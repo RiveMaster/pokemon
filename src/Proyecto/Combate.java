@@ -188,7 +188,7 @@ public class Combate {
 
             int opcion;
             if (SpriteCollabUI.interfazDisponible()) {
-                opcion = SpriteCollabUI.elegirAccion(pokemonJugador, salvaje,
+                opcion = SpriteCollabUI.elegirAccion(pokemonJugador, pokemonpodemita,
                         "Luchar", "Huir", "Mochila") + 1;
             } else {
                 System.out.println("1. Atacar");
