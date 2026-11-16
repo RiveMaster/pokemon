@@ -18,6 +18,14 @@ public class Combate {
 
         System.out.println("\n=== ¡COMIENZA EL COMBATE! ===\n");
 
+        if (!jugador.equipoVM()) {
+            System.out.println("No tienes ningún Pokémon disponible para combatir.");
+            return;
+        }
+        if (!jugador.getPokemon().estaVivo()) {
+            PokemonLuchador inicial = pokemuerto(jugador.getPokemon(), jugador, sc);
+            if (inicial == null) return;
+        }
         while (jugador.getPokemon().estaVivo() && rival.getPokemon().estaVivo()) {
             if (SpriteCollabUI.interfazDisponible()) {
                 PokemonLuchador activo = jugador.getPokemon();
@@ -31,8 +39,9 @@ public class Combate {
                     break;
                 }
                 if (!activo.estaVivo()) {
-                    SpriteCollabUI.mostrarMensaje("¡" + activo.getNombre() + " ha sido debilitado!", activo, enemigo);
-                    break;
+                    PokemonLuchador siguiente = pokemuerto(activo, jugador, sc);
+                    if (siguiente == null) break;
+                    continue;
                 }
                 SpriteCollabUI.elegirAccion(activo, enemigo, "Luchar");
                 turnoJugador(activo, enemigo, sc);
@@ -43,8 +52,8 @@ public class Combate {
                 }
                 turnoRival(activo, enemigo);
                 if (!activo.estaVivo()) {
-                    SpriteCollabUI.mostrarMensaje("¡" + activo.getNombre() + " ha sido debilitado!", activo, enemigo);
-                    break;
+                    PokemonLuchador siguiente = pokemuerto(activo, jugador, sc);
+                    if (siguiente == null) break;
                 }
                 continue;
             }
@@ -615,10 +624,13 @@ public class Combate {
 
         // Ojo: equipoM devuelve true cuando TODO el equipo está debilitado
         if (equipoM(jugadorCompleto)) {
+            SpriteCollabUI.mostrarMensaje("¡Todos tus Pokémon han sido debilitados!", pokemonJugador, pokemonJugador);
             System.out.println("\n¡Todos tus Pokémons han sido debilitados!");
             return null;
         }
 
+        SpriteCollabUI.mostrarMensaje("¡" + pokemonJugador.getNombre() + " ha sido debilitado! Elige otro Pokémon.",
+                pokemonJugador, primerPokemonVivo(jugadorCompleto));
         System.out.println("\n" + pokemonJugador.getNombre() + " ha sido debilitado.");
         System.out.println("¡Debes sacar a otro Pokémon!");
 
@@ -639,6 +651,7 @@ public class Combate {
             if (idx >= 0 && idx < equipo.size()) {
                 PokemonLuchador candidato = equipo.get(idx);
                 if (candidato.estaVivo()) {
+                    if (idx > 0) Collections.swap(equipo, 0, idx);
                     System.out.println("¡Adelante " + candidato.getNombre() + "!");
                     return candidato;
                 }
@@ -647,6 +660,11 @@ public class Combate {
                 System.out.println("Opción no válida.");
             }
         }
+    }
+
+    private static PokemonLuchador primerPokemonVivo(Jugador jugador) {
+        for (PokemonLuchador p : jugador.getEquipo()) if (p.estaVivo()) return p;
+        return jugador.getPokemon();
     }
 
     // Funcion para que cuando a un rival se le muera un pokemon que saque a otro
