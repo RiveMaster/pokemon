@@ -52,16 +52,23 @@ public class CombateEntrenador {
                 continue;
             }
             if (!activo.estaVivo()) {
+                SpriteCollabUI.mostrarMensaje("¡" + activo.getNombre() + " ha sido debilitado!", activo, rival);
                 activo = cambioForzado(sc, jugador, activo);
                 if (activo == null) return false;
                 continue;
             }
 
-            System.out.println("1. Atacar");
-            System.out.println("2. Cambiar Pokémon");
-            System.out.println("3. Rendirse");
-            System.out.print("Elige acción: ");
-            int opcion = Entrada.leerEntero(sc);
+            int opcion;
+            if (SpriteCollabUI.interfazDisponible()) {
+                opcion = SpriteCollabUI.elegirAccion(activo, rival,
+                        "Luchar", "Cambiar Pokémon", "Rendirse") + 1;
+            } else {
+                System.out.println("1. Atacar");
+                System.out.println("2. Cambiar Pokémon");
+                System.out.println("3. Rendirse");
+                System.out.print("Elige acción: ");
+                opcion = Entrada.leerEntero(sc);
+            }
 
             boolean rivalAtaca;
 
@@ -70,6 +77,7 @@ public class CombateEntrenador {
                 rivalAtaca = true;
 
                 if (!rival.estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje("¡" + rival.getNombre() + " ha sido debilitado!", activo, rival);
                     System.out.println("\n¡" + rival.getNombre() + " de " + entrenador + " ha sido debilitado!");
                     activo.ganarExp(rival.getNivel() * 10);
                     indiceRival++;
