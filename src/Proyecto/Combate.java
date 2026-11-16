@@ -586,6 +586,7 @@ public class Combate {
             if (jugador.estaVivo()) SpriteCollabUI.animarDaño(jugador);
             else SpriteCollabUI.animarDerrota(jugador);
         }
+        SpriteCollabUI.refrescarCombate(jugador, salvaje);
     }
 
 
