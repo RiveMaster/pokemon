@@ -351,7 +351,7 @@ public class Combate {
     // Mostrar estado de los Pokémon
     static void mostrarEstado(PokemonLuchador jugador, PokemonLuchador rival) {
         // Ventana gráfica opcional; el flujo de combate de consola permanece intacto.
-        SpriteCollabUI.mostrarCombate(jugador, rival);
+        SpriteCollabUI.refrescarCombate(jugador, rival);
         System.out.println("\n===============================");
         System.out.println("Tu Pokémon: " + jugador.getNombre() + "  Nv." + jugador.getNivel());
         System.out.println("Vida: " + jugador.getVidaActual() + "/" + jugador.getVidaMax());
@@ -403,6 +403,33 @@ public class Combate {
             } else {
                 System.out.println("Acción no válida; pierdes el turno.");
             }
+            return;
+        }
+
+        if (SpriteCollabUI.interfazDisponible()) {
+            int seleccion = SpriteCollabUI.elegirMovimiento(jugador, rival, movs, puedeMega, puedeGigamax);
+            if (seleccion < 0) return;
+            if (seleccion == movs.size() && puedeMega) {
+                MegaEvoluciones.intentarDuranteCombate(jugador, sc);
+                return;
+            }
+            if (seleccion == movs.size() + (puedeMega ? 1 : 0) && puedeGigamax) {
+                activarGigamax(jugador);
+                SpriteCollabUI.refrescarCombate(jugador, rival);
+                return;
+            }
+            if (seleccion >= movs.size()) return;
+            Movimiento elegido = movs.get(seleccion);
+            if (!jugador.tienePp(elegido)) return;
+            SpriteCollabUI.mostrarMensaje(jugador.getNombre() + " usa " + elegido.getNombre() + "!", jugador, rival);
+            SpriteCollabUI.animarAtaque(jugador);
+            int vidaAntes = rival.getVidaActual();
+            jugador.usarMovimiento(elegido, elegido.getPotencia() + jugador.getNivel() / 2, rival);
+            if (rival.getVidaActual() < vidaAntes) {
+                if (rival.estaVivo()) SpriteCollabUI.animarDaño(rival);
+                else SpriteCollabUI.animarDerrota(rival);
+            }
+            SpriteCollabUI.refrescarCombate(jugador, rival);
             return;
         }
 
