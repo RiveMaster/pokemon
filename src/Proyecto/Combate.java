@@ -82,6 +82,7 @@ public class Combate {
                 else SpriteCollabUI.animarDerrota(jugador.getPokemon());
 
                 if (!jugador.getPokemon().estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje(jugador.getNombre() + " ha sido debilitado...", jugador.getPokemon(), rival.getPokemon());
                     System.out.println("\n" + jugador.getNombre() + " ha sido debilitado...");
                     break;
                 }
@@ -105,14 +106,21 @@ public class Combate {
             efecto(rival);
             efecto(jugador);
 
-            System.out.println("1. Atacar");
-            System.out.print("Elige acción: ");
-            int opcion = sc.nextInt();
+            int opcion;
+            if (SpriteCollabUI.interfazDisponible()) {
+                opcion = SpriteCollabUI.elegirAccion(jugador, rival,
+                        "Luchar", "Cambiar Pokémon", "Rendirse") + 1;
+            } else {
+                System.out.println("1. Atacar");
+                System.out.print("Elige acción: ");
+                opcion = sc.nextInt();
+            }
 
             if (opcion == 1) {
                 turnoJugador(jugador, rival, sc);
 
                 if (!rival.estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje("¡" + rival.getNombre() + " ha sido debilitado!", jugador, rival);
                     System.out.println("\n¡Has ganado el combate contra " + rival.getNombre() + "!");
                     jugador.ganarExp(200); // EXP por rival
                     break;
@@ -150,12 +158,18 @@ public class Combate {
             efecto(pokemonpodemita);
             efecto(pokemonJugador);
 
-            System.out.println("1. Atacar");
-            System.out.println("2. Huir");
-            System.out.println("3. Mochila");
-            System.out.print("Elige acción: ");
-            int opcion = sc.nextInt();
-            sc.nextLine();
+            int opcion;
+            if (SpriteCollabUI.interfazDisponible()) {
+                opcion = SpriteCollabUI.elegirAccion(pokemonJugador, salvaje,
+                        "Luchar", "Huir", "Mochila") + 1;
+            } else {
+                System.out.println("1. Atacar");
+                System.out.println("2. Huir");
+                System.out.println("3. Mochila");
+                System.out.print("Elige acción: ");
+                opcion = sc.nextInt();
+                sc.nextLine();
+            }
 
             if (opcion == 1){
                 turnoJugador(pokemonJugador, pokemonpodemita, sc);
@@ -231,6 +245,7 @@ public class Combate {
 
 
                 if (!salvaje.estaVivo()) {
+                    SpriteCollabUI.mostrarMensaje("¡El Pokémon salvaje ha sido debilitado!", pokemonJugador, salvaje);
                     System.out.println("\n¡El Pokémon salvaje ha sido debilitado!");
                     pokemonJugador.ganarExp(300); // EXP por salvaje
                     break;
