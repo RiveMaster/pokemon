@@ -144,6 +144,13 @@ public class Combate {
             efecto(rival);
             efecto(jugador);
 
+            if (!jugador.estaVivo()) {
+                PokemonLuchador siguiente = pokemuerto(jugador, Jugar, sc);
+                if (siguiente == null) break;
+                jugador = siguiente;
+                continue;
+            }
+
             int opcion;
             if (SpriteCollabUI.interfazDisponible()) {
                 opcion = SpriteCollabUI.elegirAccion(jugador, rival, "Luchar") + 1;
@@ -166,8 +173,9 @@ public class Combate {
                 turnoRival(jugador, rival);
 
                 if (!jugador.estaVivo()) {
-                    System.out.println("\n¡Tu Pokémon ha sido debilitado!");
-                    break;
+                    PokemonLuchador siguiente = pokemuerto(jugador, Jugar, sc);
+                    if (siguiente == null) break;
+                    jugador = siguiente;
                 }
 
             } else {
@@ -271,6 +279,16 @@ public class Combate {
 
             efecto(salvaje);
             efecto(pokemonJugador);
+
+            if (!pokemonJugador.estaVivo()) {
+                PokemonLuchador siguiente = pokemuerto(pokemonJugador, jugadorCompleto, sc);
+                if (siguiente == null) {
+                    combateActivo = false;
+                    break;
+                }
+                pokemonJugador = siguiente;
+                continue;
+            }
 
             int opcion;
             if (SpriteCollabUI.interfazDisponible()) {
