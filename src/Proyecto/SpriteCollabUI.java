@@ -569,12 +569,15 @@ public final class SpriteCollabUI {
 
         void mostrarPokemon(PokemonLuchador p) {
             if (pokemon == p) {
+                // Mantiene la pose tumbada tras el KO y vuelve a Idle si lo curan.
+                if (!p.estaVivo() && !animacion.equals("Faint")) reproducir("Faint");
+                else if (p.estaVivo() && animacion.equals("Faint")) reproducir("Idle");
                 repaint();
                 return;
             }
             pokemon = p;
             recursos = null;
-            animacion = "Idle";
+            animacion = p.estaVivo() ? "Idle" : "Faint";
             frame = 0;
             repaint();
             int dex = numeroDex(p);
@@ -582,7 +585,9 @@ public final class SpriteCollabUI {
                 if (pokemon == p) {
                     recursos = set;
                     setToolTipText("<html>" + escapar(set.creditos).replace("\n", "<br>") + "</html>");
-                    reproducir("Idle");
+                    // Tres presentaciones: retrato en mochila/PC, Idle de pie en combate
+                    // y último fotograma de Faint (tumbado) cuando los PS llegan a cero.
+                    reproducir(p.estaVivo() ? "Idle" : "Faint");
                 }
             }));
             else reproducir("Idle");
