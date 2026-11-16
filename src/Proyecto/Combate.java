@@ -302,12 +302,18 @@ public class Combate {
                 System.out.println("Escapas del combate...");
                 combateActivo = false;
             }else if (opcion == 3){
-                System.out.println("1. Capturar");
-                System.out.println("2. Usar pocion");
-                System.out.println("3. Cambiar pokemon");
-                System.out.print("Elige acción: ");
-                int n = sc.nextInt();
-                sc.nextLine();
+                int n;
+                if (SpriteCollabUI.interfazDisponible()) {
+                    n = SpriteCollabUI.elegirAccion(pokemonJugador, salvaje,
+                            "Capturar", "Usar objeto", "Cambiar Pokémon") + 1;
+                } else {
+                    System.out.println("1. Capturar");
+                    System.out.println("2. Usar pocion");
+                    System.out.println("3. Cambiar pokemon");
+                    System.out.print("Elige acción: ");
+                    n = sc.nextInt();
+                    sc.nextLine();
+                }
                 if (n==1) {
                     System.out.println("Elige el tipo de Poké Ball (ej. 'Poke Ball', 'Super Ball'):");
                     String tipoPokeball = sc.nextLine();
@@ -339,16 +345,19 @@ public class Combate {
                     turnoJugador(pokemonJugador, salvaje, sc);
                 }else if (n==3){
                 //aqui viene cuando la mata.......
-                    System.out.println("Elige un Pokémon para enviar al combate:");
                     List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
-
-                    for (int k = 0; k < equipo.size(); k++) {
-                        PokemonLuchador p = equipo.get(k);
-                        String estado = p.estaVivo() ? "Vivo" : "Debilitado";
-                        System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
+                    int idx;
+                    if (SpriteCollabUI.interfazDisponible()) {
+                        idx = SpriteCollabUI.elegirPokemon(equipo, pokemonJugador, true);
+                    } else {
+                        System.out.println("Elige un Pokémon para enviar al combate:");
+                        for (int k = 0; k < equipo.size(); k++) {
+                            PokemonLuchador p = equipo.get(k);
+                            String estado = p.estaVivo() ? "Vivo" : "Debilitado";
+                            System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
+                        }
+                        idx = sc.nextInt() - 1;
                     }
-
-                    int idx = sc.nextInt() - 1;
                     if (idx >= 0 && idx < equipo.size()) {
                         PokemonLuchador nuevo = equipo.get(idx);
 
@@ -611,14 +620,18 @@ public class Combate {
 
         List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
         while (true) {
-            System.out.println("Elige un Pokémon vivo:");
-            for (int k = 0; k < equipo.size(); k++) {
-                PokemonLuchador p = equipo.get(k);
-                String estado = p.estaVivo() ? "Vivo" : "Debilitado";
-                System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
+            int idx;
+            if (SpriteCollabUI.interfazDisponible()) {
+                idx = SpriteCollabUI.elegirPokemon(equipo, pokemonJugador, false);
+            } else {
+                System.out.println("Elige un Pokémon vivo:");
+                for (int k = 0; k < equipo.size(); k++) {
+                    PokemonLuchador p = equipo.get(k);
+                    String estado = p.estaVivo() ? "Vivo" : "Debilitado";
+                    System.out.println((k + 1) + ". " + p.getNombre() + " Nv." + p.getNivel() + " (" + estado + ")");
+                }
+                idx = Entrada.leerEntero(sc) - 1;
             }
-
-            int idx = Entrada.leerEntero(sc) - 1;
             if (idx >= 0 && idx < equipo.size()) {
                 PokemonLuchador candidato = equipo.get(idx);
                 if (candidato.estaVivo()) {
