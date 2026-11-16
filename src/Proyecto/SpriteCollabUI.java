@@ -168,6 +168,25 @@ public final class SpriteCollabUI {
         return mostrarOpciones("¿Qué debería hacer " + jugador.getNombre() + "?", acciones, null);
     }
 
+    /** Selector visual de equipo; impide elegir Pokémon debilitados o el activo. */
+    public static int elegirPokemon(List<PokemonLuchador> equipo, PokemonLuchador activo,
+                                    boolean permitirCancelar) {
+        if (GraphicsEnvironment.isHeadless()) return -1;
+        List<String> opciones = new ArrayList<>();
+        boolean[] habilitadas = new boolean[equipo.size() + (permitirCancelar ? 1 : 0)];
+        for (int i = 0; i < equipo.size(); i++) {
+            PokemonLuchador p = equipo.get(i);
+            opciones.add(p.getNombre() + " · Nv. " + p.getNivel()
+                    + " · PS " + p.getVidaActual() + "/" + p.getVidaMax());
+            habilitadas[i] = p.estaVivo() && p != activo;
+        }
+        if (permitirCancelar) {
+            opciones.add("Volver");
+            habilitadas[habilitadas.length - 1] = true;
+        }
+        return mostrarOpciones("Elige un Pokémon", opciones.toArray(new String[0]), habilitadas);
+    }
+
     /** Menú de movimientos al estilo Pokémon, mostrando PP actuales y máximos. */
     public static int elegirMovimiento(PokemonLuchador jugador, PokemonLuchador rival,
                                        List<Movimiento> movimientos, boolean puedeMega, boolean puedeGigamax) {
