@@ -120,9 +120,8 @@ public class Combate {
                 else SpriteCollabUI.animarDerrota(jugador.getPokemon());
 
                 if (!jugador.getPokemon().estaVivo()) {
-                    SpriteCollabUI.mostrarMensaje(jugador.getNombre() + " ha sido debilitado...", jugador.getPokemon(), rival.getPokemon());
-                    System.out.println("\n" + jugador.getNombre() + " ha sido debilitado...");
-                    break;
+                    PokemonLuchador siguiente = pokemuerto(jugador.getPokemon(), jugador, sc);
+                    if (siguiente == null) break;
                 }
 
             }
