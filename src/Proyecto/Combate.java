@@ -432,19 +432,38 @@ public class Combate {
         }
 
         if (jugador.sinPp()) {
-            System.out.println("\n¡A " + jugador.getNombre() + " no le quedan PP!");
-            System.out.println("0. Mega-evolucionar (consume el turno)");
-            if (puedeGigamax) System.out.println("-1. Activar Gigamax (3 turnos)");
-            System.out.println("99. Usar Forcejeo");
-            System.out.print("Elige acción: ");
-            int accion = Entrada.leerEntero(sc);
-            if (accion == 0) MegaEvoluciones.intentarDuranteCombate(jugador, sc);
-            else if (accion == -1 && puedeGigamax) { activarGigamax(jugador); }
-            else if (accion == 99) {
-                System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
-                jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
+            if (SpriteCollabUI.interfazDisponible()) {
+                List<String> opciones = new ArrayList<>();
+                if (puedeMega) opciones.add("Mega-evolucionar");
+                if (puedeGigamax) opciones.add("Activar Gigamax");
+                opciones.add("Forcejeo");
+                int accion = SpriteCollabUI.elegirAccion(jugador, rival, opciones.toArray(new String[0]));
+                int indiceForcejeo = opciones.indexOf("Forcejeo");
+                if (accion == opciones.indexOf("Mega-evolucionar") && puedeMega) {
+                    MegaEvoluciones.intentarDuranteCombate(jugador, sc);
+                } else if (accion == opciones.indexOf("Activar Gigamax") && puedeGigamax) {
+                    activarGigamax(jugador);
+                } else if (accion == indiceForcejeo) {
+                    SpriteCollabUI.mostrarMensaje(jugador.getNombre() + " usa Forcejeo!", jugador, rival);
+                    jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia()
+                            + jugador.getNivel() / 2, rival);
+                }
+                SpriteCollabUI.refrescarCombate(jugador, rival);
             } else {
-                System.out.println("Acción no válida; pierdes el turno.");
+                System.out.println("\n¡A " + jugador.getNombre() + " no le quedan PP!");
+                System.out.println("0. Mega-evolucionar (consume el turno)");
+                if (puedeGigamax) System.out.println("-1. Activar Gigamax (3 turnos)");
+                System.out.println("99. Usar Forcejeo");
+                System.out.print("Elige acción: ");
+                int accion = Entrada.leerEntero(sc);
+                if (accion == 0) MegaEvoluciones.intentarDuranteCombate(jugador, sc);
+                else if (accion == -1 && puedeGigamax) { activarGigamax(jugador); }
+                else if (accion == 99) {
+                    System.out.println("\n" + jugador.getNombre() + " usa " + Movimiento.FORCEJEO.getNombre() + "!");
+                    jugador.usarMovimiento(Movimiento.FORCEJEO, Movimiento.FORCEJEO.getPotencia() + jugador.getNivel() / 2, rival);
+                } else {
+                    System.out.println("Acción no válida; pierdes el turno.");
+                }
             }
             return;
         }
@@ -547,6 +566,7 @@ public class Combate {
             if (jugador.estaVivo()) SpriteCollabUI.animarDaño(jugador);
             else SpriteCollabUI.animarDerrota(jugador);
         }
+        SpriteCollabUI.refrescarCombate(jugador, rival);
     }
 
     // Turno del rival salvaje (usa siempre un movimiento aleatorio)
