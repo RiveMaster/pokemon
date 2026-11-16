@@ -137,8 +137,10 @@ public final class SpriteCollabUI {
         datos.setText("<html><div style='text-align:left'><b>" + escapar(p.getNombre())
                 + (p.esShiny() ? " ✨ SHINY" : "") + (p.estaEnGigamax() ? " · GIGAMAX" : "")
                 + " · Nv. " + p.getNivel() + "</b><br>PS: " + p.getVidaActual() + "/" + p.getVidaMax()
-                + " (" + porcentaje + "%)<br><span style='color:#9bd38b'>Ataque " + p.getAtaque()
-                + " · Defensa " + p.getDefensa() + "</span><br>Estado: " + escapar(estado)
+                + " (" + porcentaje + "%)<br><span style='color:#9bd38b'>ATQ " + p.getAtaque()
+                + " · DEF " + p.getDefensa() + " · At. Esp. " + p.getAtaqueEspecial()
+                + " · Def. Esp. " + p.getDefensaEspecial() + " · Vel. " + p.getVelocidad()
+                + "</span><br>Estado: " + escapar(estado)
                 + (p.estaVivo() ? "" : "<br><b>DEBILITADO</b>") + "</div></html>");
         actor.mostrarPokemon(p);
     }
