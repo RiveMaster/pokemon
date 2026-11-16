@@ -31,6 +31,8 @@ public final class SpriteCollabUI {
     private static JFrame ventanaCombate;
     private static SpriteActor actorJugador, actorRival;
     private static JLabel datosJugador, datosRival;
+    private static JPanel panelInteraccion;
+    private static JLabel textoCombate;
 
     private SpriteCollabUI() { }
 
@@ -41,6 +43,7 @@ public final class SpriteCollabUI {
             actualizarLado(jugador, actorJugador, datosJugador, true);
             actualizarLado(rival, actorRival, datosRival, false);
             ventanaCombate.setVisible(true);
+            ventanaCombate.toFront();
         });
     }
 
@@ -76,7 +79,7 @@ public final class SpriteCollabUI {
 
     private static void crearVentanaCombate() {
         ventanaCombate = new JFrame("Pokémon — Combate");
-        ventanaCombate.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        ventanaCombate.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         JPanel campo = new JPanel(null) {
             @Override protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -104,10 +107,20 @@ public final class SpriteCollabUI {
         panelDatos.add(datosJugador);
         panelDatos.add(datosRival);
 
+        panelInteraccion = new JPanel(new BorderLayout(8, 8));
+        panelInteraccion.setBorder(new EmptyBorder(10, 14, 10, 14));
+        panelInteraccion.setBackground(new Color(245, 247, 250));
+        textoCombate = new JLabel("¡Un combate Pokémon!", SwingConstants.LEFT);
+        textoCombate.setFont(textoCombate.getFont().deriveFont(Font.BOLD, 15f));
+        panelInteraccion.add(textoCombate, BorderLayout.CENTER);
+
+        JPanel zonaInferior = new JPanel(new BorderLayout());
+        zonaInferior.add(panelDatos, BorderLayout.NORTH);
+        zonaInferior.add(panelInteraccion, BorderLayout.CENTER);
         ventanaCombate.setLayout(new BorderLayout());
         ventanaCombate.add(campo, BorderLayout.CENTER);
-        ventanaCombate.add(panelDatos, BorderLayout.SOUTH);
-        ventanaCombate.setSize(740, 410);
+        ventanaCombate.add(zonaInferior, BorderLayout.SOUTH);
+        ventanaCombate.setSize(820, 570);
         ventanaCombate.setLocationRelativeTo(null);
     }
 
@@ -119,10 +132,112 @@ public final class SpriteCollabUI {
     }
 
     private static void actualizarLado(PokemonLuchador p, SpriteActor actor, JLabel datos, boolean jugador) {
-        datos.setText("<html><div style='text-align:center'><b>" + escapar(p.getNombre())
-                + (p.esShiny() ? " ✨ SHINY" : "") + (p.estaEnGigamax() ? " · GIGAMAX" : "") + " · Nv. " + p.getNivel() + "</b><br>PS: " + p.getVidaActual() + " / "
-                + p.getVidaMax() + (p.estaVivo() ? "" : "<br><b>DEBILITADO</b>") + "</div></html>");
+        int porcentaje = p.getVidaMax() <= 0 ? 0 : Math.max(0, Math.min(100, p.getVidaActual() * 100 / p.getVidaMax()));
+        String estado = p.getEstado() == null ? "NORMAL" : p.getEstado().toString();
+        datos.setText("<html><div style='text-align:left'><b>" + escapar(p.getNombre())
+                + (p.esShiny() ? " ✨ SHINY" : "") + (p.estaEnGigamax() ? " · GIGAMAX" : "")
+                + " · Nv. " + p.getNivel() + "</b><br>PS: " + p.getVidaActual() + "/" + p.getVidaMax()
+                + " (" + porcentaje + "%)<br><span style='color:#9bd38b'>Ataque " + p.getAtaque()
+                + " · Defensa " + p.getDefensa() + "</span><br>Estado: " + escapar(estado)
+                + (p.estaVivo() ? "" : "<br><b>DEBILITADO</b>") + "</div></html>");
         actor.mostrarPokemon(p);
+    }
+
+
+    /** Actualiza los dos paneles de estado tras cada acción o cambio de Pokémon. */
+    public static void refrescarCombate(PokemonLuchador jugador, PokemonLuchador rival) {
+        if (GraphicsEnvironment.isHeadless() || jugador == null || rival == null) return;
+        ejecutarEnEDT(() -> {
+            if (ventanaCombate == null || !ventanaCombate.isDisplayable()) crearVentanaCombate();
+            actualizarLado(jugador, actorJugador, datosJugador, true);
+            actualizarLado(rival, actorRival, datosRival, false);
+            ventanaCombate.setVisible(true);
+        });
+    }
+
+    /** Menú de acciones integrado en la parte inferior de la pantalla de combate. */
+    public static int elegirAccion(PokemonLuchador jugador, PokemonLuchador rival, String... acciones) {
+        if (GraphicsEnvironment.isHeadless()) return 1;
+        refrescarCombate(jugador, rival);
+        return mostrarOpciones("¿Qué debería hacer " + jugador.getNombre() + "?", acciones, null);
+    }
+
+    /** Menú de movimientos al estilo Pokémon, mostrando PP actuales y máximos. */
+    public static int elegirMovimiento(PokemonLuchador jugador, PokemonLuchador rival,
+                                       List<Movimiento> movimientos, boolean puedeMega, boolean puedeGigamax) {
+        if (GraphicsEnvironment.isHeadless()) return -2;
+        refrescarCombate(jugador, rival);
+        List<String> opciones = new ArrayList<>();
+        List<Boolean> habilitadas = new ArrayList<>();
+        for (Movimiento m : movimientos) {
+            int pp = jugador.ppRestantes(m);
+            String texto = m.getNombre() + "   PP " + (m.getPp() <= 0 ? "∞" : pp + "/" + m.getPp());
+            opciones.add(texto);
+            habilitadas.add(jugador.tienePp(m));
+        }
+        if (puedeMega) { opciones.add("Mega-evolución"); habilitadas.add(true); }
+        if (puedeGigamax) { opciones.add("Gigamax"); habilitadas.add(true); }
+        opciones.add("Volver");
+        habilitadas.add(true);
+        boolean[] enabled = new boolean[habilitadas.size()];
+        for (int i = 0; i < enabled.length; i++) enabled[i] = habilitadas.get(i);
+        return mostrarOpciones("Elige un movimiento", opciones.toArray(new String[0]), enabled);
+    }
+
+    /** Mensaje de combate que avanza únicamente cuando el jugador pulsa Continuar. */
+    public static void mostrarMensaje(String mensaje, PokemonLuchador jugador, PokemonLuchador rival) {
+        if (GraphicsEnvironment.isHeadless()) {
+            System.out.println(mensaje);
+            return;
+        }
+        refrescarCombate(jugador, rival);
+        mostrarOpciones(mensaje, new String[]{"Continuar"}, null);
+    }
+
+    private static int mostrarOpciones(String mensaje, String[] opciones, boolean[] habilitadas) {
+        final int[] seleccion = {-1};
+        final CountDownLatch latch = new CountDownLatch(1);
+        ejecutarEnEDT(() -> {
+            if (panelInteraccion == null) crearVentanaCombate();
+            panelInteraccion.removeAll();
+            JLabel texto = new JLabel("<html>" + escapar(mensaje) + "</html>");
+            texto.setFont(texto.getFont().deriveFont(Font.BOLD, 15f));
+            panelInteraccion.add(texto, BorderLayout.NORTH);
+            JPanel botones = new JPanel(new GridLayout(0, Math.min(2, Math.max(1, opciones.length)), 8, 6));
+            botones.setOpaque(false);
+            for (int i = 0; i < opciones.length; i++) {
+                final int indice = i;
+                JButton boton = new JButton(opciones[i]);
+                boton.setFont(boton.getFont().deriveFont(Font.BOLD, 13f));
+                boton.setFocusPainted(false);
+                boton.setEnabled(habilitadas == null || habilitadas[i]);
+                boton.addActionListener(e -> {
+                    seleccion[0] = indice;
+                    latch.countDown();
+                });
+                botones.add(boton);
+            }
+            panelInteraccion.add(botones, BorderLayout.CENTER);
+            panelInteraccion.revalidate();
+            panelInteraccion.repaint();
+            ventanaCombate.setVisible(true);
+            ventanaCombate.toFront();
+        });
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return -1;
+        }
+        return seleccion[0];
+    }
+
+    private static void ejecutarEnEDT(Runnable tarea) {
+        if (SwingUtilities.isEventDispatchThread()) tarea.run();
+        else {
+            try { SwingUtilities.invokeAndWait(tarea); }
+            catch (Exception e) { throw new IllegalStateException("No se pudo actualizar la interfaz de combate", e); }
+        }
     }
 
     /** Equipo y PC conservan sus cuadrículas de retratos. */
