@@ -202,6 +202,7 @@ public class Combate {
             if (opcion == 1){
                 turnoJugador(pokemonJugador, pokemonpodemita, sc);
                 if (!pokemonpodemita.estaVivo()){
+                    SpriteCollabUI.mostrarMensaje("¡" + pokemonpodemita.getNombre() + " ha sido debilitado!", pokemonJugador, pokemonpodemita);
                     System.out.println("\n¡"+pokemonpodemita+" ha sido debilitado!");
                     pokemonJugador.ganarExp(pokemonJugador.getNivel()*10);
                     pokemuertoR(pokemonpodemita, gobierno, combateActivo);
@@ -209,6 +210,7 @@ public class Combate {
                 }
                 turnoRival(pokemonJugador, pokemonpodemita);
                 if (!pokemonJugador.estaVivo()){
+                    SpriteCollabUI.mostrarMensaje("¡" + pokemonJugador.getNombre() + " ha sido debilitado!", pokemonJugador, pokemonpodemita);
                     {
                     PokemonLuchador siguiente = pokemuerto(pokemonJugador, jugadorCompleto, sc);
                     if (siguiente == null) {
@@ -573,6 +575,7 @@ public class Combate {
     // Turno del rival (si es un rival "entrenador")
     public static void turnoRival(PokemonLuchador jugador, PokemonLuchador rival) {
         Movimiento movRival = elegirMovimientoRival(rival);
+        SpriteCollabUI.mostrarMensaje(rival.getNombre() + " usa " + movRival.getNombre() + "!", jugador, rival);
         System.out.println("\n" + rival.getNombre() + " usa " + movRival.getNombre() + "!");
         SpriteCollabUI.animarAtaque(rival);
         int vidaAntes = jugador.getVidaActual();
@@ -587,6 +590,7 @@ public class Combate {
     // Turno del rival salvaje (usa siempre un movimiento aleatorio)
     private static void turnoRivalSalvaje(PokemonLuchador jugador, PokemonLuchador salvaje) {
         Movimiento movRival = elegirMovimientoRival(salvaje);
+        SpriteCollabUI.mostrarMensaje("El salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!", jugador, salvaje);
         System.out.println("\nEl salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!");
         SpriteCollabUI.animarAtaque(salvaje);
         int vidaAntes = jugador.getVidaActual();
