@@ -12,6 +12,32 @@ public class GuardarCargar {
      *-----------------------*/
     public static void guardarPartida(Scanner sc, Jugador jugador) {
         File carpeta = new File("Partidas");
+        if (UIJuego.disponible()) {
+            if (!carpeta.exists()) carpeta.mkdirs();
+            File[] partidas = carpeta.listFiles((dir, nombre) -> nombre.endsWith(".txt"));
+            String[] existentes = partidas == null ? new String[0]
+                    : java.util.Arrays.stream(partidas).map(File::getName).toArray(String[]::new);
+            String[] opciones = new String[existentes.length + 2];
+            opciones[0] = "Guardar como nueva partida";
+            for (int i = 0; i < existentes.length; i++) opciones[i + 1] = "Sobrescribir: " + existentes[i];
+            opciones[opciones.length - 1] = "Cancelar";
+            int seleccion = UIJuego.elegir("Guardar partida", "Elige cómo guardar:", opciones);
+            if (seleccion < 0 || seleccion == opciones.length - 1) return;
+            File destino;
+            if (seleccion == 0) {
+                String nombre = UIJuego.pedirTexto("Guardar partida", "Nombre de la partida:", jugador.getNombre());
+                if (nombre == null || nombre.isBlank()) return;
+                nombre = nombre.replaceAll("[\\\\/:*?\"<>|]", "_");
+                destino = new File(carpeta, nombre + "(" + LocalDate.now() + ").txt");
+            } else destino = new File(carpeta, existentes[seleccion - 1]);
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(destino))) {
+                oos.writeObject(jugador);
+                UIJuego.mensaje("Partida guardada", "Progreso guardado correctamente en " + destino.getName());
+            } catch (IOException ex) {
+                UIJuego.mensaje("Error al guardar", ex.getMessage());
+            }
+            return;
+        }
         if (!carpeta.exists()) {
             carpeta.mkdir();
         }
@@ -61,6 +87,24 @@ public class GuardarCargar {
      *-----------------------*/
     public static Jugador cargarPartida(Scanner sc) {
         File carpeta = new File("Partidas");
+        if (UIJuego.disponible()) {
+            File[] partidas = carpeta.listFiles((dir, nombre) -> nombre.endsWith(".txt"));
+            if (partidas == null || partidas.length == 0) {
+                UIJuego.mensaje("Cargar partida", "No hay partidas guardadas.");
+                return null;
+            }
+            String[] nombres = java.util.Arrays.stream(partidas).map(File::getName).toArray(String[]::new);
+            int seleccion = UIJuego.elegir("Cargar partida", "Selecciona una partida:", nombres);
+            if (seleccion < 0 || seleccion >= partidas.length) return null;
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(partidas[seleccion]))) {
+                Jugador jugador = (Jugador) ois.readObject();
+                UIJuego.mensaje("Partida cargada", "Partida cargada: " + partidas[seleccion].getName());
+                return jugador;
+            } catch (IOException | ClassNotFoundException ex) {
+                UIJuego.mensaje("Error al cargar", ex.getMessage());
+                return null;
+            }
+        }
         if (!carpeta.exists()) {
             System.out.println("No existen partidas guardadas.");;
         }else {
