@@ -14,19 +14,31 @@ public class Villaverde {
         if (exploracionInicial.getDestino() != null) return exploracionInicial.getDestino();
 
         while (true) {
-            System.out.println("\n╔════════════════════════════════════╗");
-            System.out.println("║      PUEBLO VILLAVERDE             ║");
-            System.out.println("╚════════════════════════════════════╝");
-            System.out.println("Generación actual: " + jugadorCompleto.getGeneracion().etiqueta());
-            System.out.println("1. Visitar a mamá");
             Ubicacion primera = Mapa.getRecorrido().size() > 1 ? Mapa.getRecorrido().get(1) : Ubicacion.RUTA1;
-            System.out.println("2. Ir a " + primera.getNombre());
-            System.out.println("3. Menú (mochila, MT, objetos, volar, guardar)");
-            System.out.println("4. Viajar a otra generación");
-            System.out.println("5. Volver a explorar el pueblo (WASD)");
-            System.out.print("\nElige una opción: ");
-            int opcion = leerEntero(sc);
-            sc.nextLine();
+            int opcion;
+            if (UIJuego.disponible()) {
+                int seleccion = UIJuego.elegir("Pueblo Villaverde",
+                        "Generación actual: " + jugadorCompleto.getGeneracion().etiqueta()
+                                + "\\n¿Qué quieres hacer?",
+                        "Visitar a mamá", "Ir a " + primera.getNombre(),
+                        "Mochila y opciones", "Viajar a otra generación",
+                        "Explorar el pueblo", "Introducir cheatcode");
+                if (seleccion < 0) continue;
+                if (seleccion == 5) {
+                    String codigo = UIJuego.pedirTexto("Cheatcode", "Introduce el código secreto:", "");
+                    opcion = "777999222".equals(codigo) ? 777999222 : -1;
+                } else opcion = seleccion + 1;
+            } else {
+                System.out.println("\\nPUEBLO VILLAVERDE");
+                System.out.println("1. Visitar a mamá");
+                System.out.println("2. Ir a " + primera.getNombre());
+                System.out.println("3. Menú (mochila, MT, objetos, volar, guardar)");
+                System.out.println("4. Viajar a otra generación");
+                System.out.println("5. Volver a explorar el pueblo (WASD)");
+                System.out.print("Elige una opción: ");
+                opcion = leerEntero(sc);
+                sc.nextLine();
+            }
 
             switch (opcion) {
                 case 1 -> visitarMama(sc, jugadorCompleto);
@@ -118,31 +130,39 @@ public class Villaverde {
                         default -> System.out.println("Valor no permitido");
                     }
                 }
-                default -> System.out.println("Opción no válida.");
+                case -1 -> UIJuego.mensaje("Cheatcode", "Código incorrecto.");
+                default -> UIJuego.mensaje("Villaverde", "Opción no válida.");
             }
         }
     }
 
     // Elige una de las generaciones desbloqueadas: cambia qué Pokémon salen y el nivel del mundo entero
     private static void viajarEntreGeneraciones(Scanner sc, Jugador jugador) {
-        System.out.println("\n-- Viajar a otra generación --");
+        String[] opciones = new String[10];
         for (int n = 1; n <= 10; n++) {
             Generacion g = Generacion.de(n);
-            String estado = n > jugador.getGeneracionMaxima() ? "bloqueada"
-                    : (jugador.jefeDerrotado(g) ? "✔ jefe derrotado" : "desbloqueada");
-            String actual = n == jugador.getGeneracion().getNumero() ? "  <-- estás aquí" : "";
-            System.out.println(n + ". " + g.etiqueta() + " (nivel +" + g.getBonusNivel() + ") - " + estado + actual);
+            String estado = n > jugador.getGeneracionMaxima() ? "Bloqueada"
+                    : (jugador.jefeDerrotado(g) ? "Jefe derrotado" : "Desbloqueada");
+            String actual = n == jugador.getGeneracion().getNumero() ? " · Actual" : "";
+            opciones[n - 1] = g.etiqueta() + " · Nivel +" + g.getBonusNivel()
+                    + " · " + estado + actual;
         }
-        System.out.println("Para desbloquear la siguiente hay que ganar las 5 medallas y derrotar al jefe del Gobierno.");
-        System.out.print("Elige (0 para cancelar): ");
+        if (UIJuego.disponible()) {
+            int seleccion = UIJuego.elegir("Viajar entre generaciones",
+                    "Para desbloquear la siguiente debes conseguir las 5 medallas y derrotar al jefe del Gobierno.",
+                    opciones);
+            if (seleccion >= 0) {
+                if (jugador.viajarAGeneracion(seleccion + 1))
+                    UIJuego.mensaje("Viaje completado", "Has viajado a " + jugador.getGeneracion().etiqueta()
+                            + ": " + jugador.getGeneracion().getAmbiente());
+                else UIJuego.mensaje("Generación bloqueada", "Aún no has desbloqueado esa generación.");
+            }
+            return;
+        }
+        for (int n = 0; n < opciones.length; n++) System.out.println((n + 1) + ". " + opciones[n]);
         int n = leerEntero(sc);
-        sc.nextLine();
-        if (n == 0) return;
-        if (jugador.viajarAGeneracion(n)) {
-            System.out.println("Has viajado a " + jugador.getGeneracion().etiqueta() + ": " + jugador.getGeneracion().getAmbiente());
-        } else {
-            System.out.println("Esa generación está bloqueada o no existe.");
-        }
+        if (jugador.viajarAGeneracion(n))
+            System.out.println("Has viajado a " + jugador.getGeneracion().etiqueta());
     }
 
     private static int leerEntero(Scanner sc) {
@@ -156,22 +176,13 @@ public class Villaverde {
         }
     }
     public static void visitarMama(Scanner sc, Jugador jugador) {
-        System.out.println("\nCasa de mamá...");
-
         if (!jugador.isMamaVisitada()) {
-            System.out.println("Mamá: ¡Hijo mío! Te doy 1000€ para empezar tu aventura.");
             jugador.agregarDinero(1000);
             jugador.setMamaVisitada(true);
-            System.out.println("✔ Has recibido 1000€");
-            System.out.println("Contunuar..........");
-            sc.nextLine();
-            sc.nextLine();
+            UIJuego.mensaje("Casa de mamá", "¡Hijo mío! Te doy 1000€ para empezar tu aventura.\\nHas recibido 1000€.");
         } else {
-            System.out.println("Mamá: Ya te di dinero, ¡ve y conviértete en un gran entrenador!");
+            UIJuego.mensaje("Casa de mamá", "Ya te di dinero, ¡ve y conviértete en un gran entrenador!");
         }
-
-        System.out.println("Ahora tienes " + jugador.getDinero() + "€");
-        System.out.println("Contunuar..........");
-        sc.nextLine();
+        UIJuego.mensaje("Dinero", "Ahora tienes " + jugador.getDinero() + "€");
     }
 }
