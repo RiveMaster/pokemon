@@ -7,147 +7,91 @@ public class Aventura {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Proyecto.studio.DatosJuego.iniciar(); // usa los datos de data/studio si existen (Pokémon Studio)
+        Proyecto.studio.DatosJuego.iniciar();
+        if (!UIJuego.disponible()) {
+            System.err.println("Este juego necesita un entorno gráfico para iniciar. Usa una sesión de escritorio.");
+            return;
+        }
         Jugador jugador = null;
-        boolean reanudar = false; // true si se cargó una partida: continúa en la posición guardada (Mapa.jugar la lee)
-
-        System.out.println("╔════════════════════════════════════╗");
-        System.out.println("║   BIENVENIDO AL MUNDO POKÉMON      ║");
-        System.out.println("╚════════════════════════════════════╝\n");
-
-        int opcion;
+        boolean reanudar = false;
         while (true) {
-            System.out.println("1. Nueva partida");
-            System.out.println("2. Cargar partida");
-            System.out.println("3. Editor de datos (Pokémon Studio, consola)");
-            System.out.println("4. Editor de datos (Pokémon Studio, ventana gráfica)");
-            System.out.println("5. Multijugador LAN (red local)");
-            System.out.println("6. Multijugador online (Internet)");
-            System.out.print("\nElige una opción: ");
-
-            opcion = sc.nextInt();
-            sc.nextLine(); // Limpiar buffer
-            if (opcion != 3 && opcion != 4) break;
-
-            try {
-                if (opcion == 3) Proyecto.studio.EditorConsola.abrir(Proyecto.studio.DatosJuego.carpeta(), sc);
-                else Proyecto.studio.gui.EditorGrafico.abrir(Proyecto.studio.DatosJuego.carpeta(), true);
-            } catch (java.io.IOException | IllegalStateException e) {
-                System.out.println("No se pudo usar el editor: " + e.getMessage());
-            }
-            Proyecto.studio.DatosJuego.iniciar(); // aplica lo que se haya guardado en el editor
-            System.out.println();
-        }
-
-        if (opcion == 5 || opcion == 6) {
-            configurarMultijugador(opcion == 6);
-            System.out.println("\n1. Nueva partida\n2. Cargar partida");
-            System.out.print("Elige una opción: ");
-            int modo = Entrada.leerEntero(sc);
-            jugador = modo == 2 ? GuardarCargar.cargarPartida(sc) : Encuentros.encuentroInicial(sc);
-        } else if (opcion == 1) {
-            // ===== NUEVA PARTIDA =====
-            System.out.println("\n╔════════════════════════════════════╗");
-            System.out.println("║      EMPEZANDO NUEVA PARTIDA       ║");
-            System.out.println("╚════════════════════════════════════╝\n");
-
-            // Ejecutar el encuentro inicial
-            jugador = Encuentros.encuentroInicial(sc);
-
-        } else if (opcion == 2) {
-            // ===== CARGAR PARTIDA =====
-            jugador = GuardarCargar.cargarPartida(sc);
-
-            if (jugador != null) {
-                jugador.initializeScanner();
-                System.out.println("\n╔════════════════════════════════════╗");
-                System.out.println("║      ¡PARTIDA CARGADA!             ║");
-                System.out.println("╚════════════════════════════════════╝");
-                System.out.println("Bienvenido de vuelta, " + jugador.getNombre() + "!");
-                jugador.mostrarEquipo();
-                System.out.println("Dinero: " + jugador.getDinero() + "€");
-
-                if (jugador.getRival() != null) {
-                    System.out.println("Rival: " + jugador.getRival().getNombre());
-                }
-                System.out.println();
-                jugador.mostrar(jugador);
-                System.out.println("Ubicación guardada: " + jugador.getUbicacion().getNombre());
-                System.out.println("Contunuar..........");
-                reanudar = true;
-            } else {
-                System.out.println("No se pudo cargar la partida. Iniciando nueva partida...\n");
+            String[] opciones = {"Nueva partida", "Cargar partida", "Pokémon Studio (ventana gráfica)",
+                    "Multijugador LAN", "Multijugador online", "Salir"};
+            int opcion = UIJuego.elegir("Pokémon", "¡Bienvenido al mundo Pokémon!\n¿Qué quieres hacer?", opciones);
+            if (opcion == 0) {
                 jugador = Encuentros.encuentroInicial(sc);
+                break;
+            } else if (opcion == 1) {
+                jugador = GuardarCargar.cargarPartida(sc);
+                if (jugador != null) {
+                    jugador.initializeScanner();
+                    reanudar = true;
+                    break;
+                }
+                UIJuego.mensaje("Cargar partida", "No se pudo cargar la partida seleccionada.");
+            } else if (opcion == 2) {
+                try {
+                    Proyecto.studio.gui.EditorGrafico.abrir(Proyecto.studio.DatosJuego.carpeta(), true);
+                    Proyecto.studio.DatosJuego.iniciar();
+                } catch (java.io.IOException | IllegalStateException e) {
+                    UIJuego.mensaje("Pokémon Studio", "No se pudo abrir el editor: " + e.getMessage());
+                }
+            } else if (opcion == 3 || opcion == 4) {
+                configurarMultijugador(opcion == 4);
+                int modo = UIJuego.elegir("Partida", "¿Cómo quieres continuar?",
+                        "Nueva partida", "Cargar partida", "Volver al menú");
+                if (modo == 0) jugador = Encuentros.encuentroInicial(sc);
+                else if (modo == 1) jugador = GuardarCargar.cargarPartida(sc);
+                if (jugador != null) break;
+            } else {
+                return;
             }
-        } else {
-            System.out.println("Opción no válida. Iniciando nueva partida...\n");
-            jugador = Encuentros.encuentroInicial(sc);
         }
-
-        // ===== COMENZAR EL JUEGO =====
         if (jugador != null) {
-            if (reanudar) {
-                System.out.println("\nContinúas en: " + jugador.getUbicacion().getNombre()
-                        + " [" + jugador.getGeneracion().etiqueta() + "]");
-            }
+            if (reanudar) UIJuego.mensaje("Partida cargada",
+                    "Bienvenido de nuevo, " + jugador.getNombre() + ".\nUbicación: " + jugador.getUbicacion().getNombre());
             menuPuebloVillaverde(jugador);
-
-            // Al salir, guardar automáticamente
-            System.out.println("\n💾 Guardando partida...");
-            GuardarCargar.guardarPartida(sc, jugador);
-            System.out.println("¡Hasta pronto, " + jugador.getNombre() + "!");
+            if (UIJuego.confirmar("Guardar partida", "¿Quieres guardar tu progreso antes de salir?")) {
+                GuardarCargar.guardarPartida(sc, jugador);
+            }
+            UIJuego.mensaje("Pokémon", "¡Hasta pronto, " + jugador.getNombre() + "!");
         }
     }
 
     private static void configurarMultijugador(boolean online) {
-        System.out.println(online ? "\n=== JUGAR ONLINE ===" : "\n=== JUGAR POR LAN ===");
-        System.out.println("1. Crear partida");
-        System.out.println("2. Unirse a una partida");
-        System.out.print("Elige: ");
-        int modo = Entrada.leerEntero(sc);
-        sc.nextLine();
-        System.out.print("Nombre de entrenador: ");
-        String nombre = sc.nextLine().trim();
-        if (nombre.isEmpty()) nombre = "Entrenador";
+        String titulo = online ? "Multijugador online" : "Multijugador LAN";
+        int modo = UIJuego.elegir(titulo, "¿Quieres crear una partida o unirte a una existente?",
+                "Crear partida", "Unirse a una partida", "Cancelar");
+        if (modo < 0 || modo == 2) return;
+        String nombre = UIJuego.pedirTexto(titulo, "Nombre de entrenador:", "Entrenador");
+        if (nombre == null) return;
+        if (nombre.isBlank()) nombre = "Entrenador";
         try {
-            if (modo == 1) {
+            if (modo == 0) {
                 RedLAN red = RedLAN.alojar(nombre, RedLAN.PUERTO_PREDETERMINADO);
-                System.out.println("\n¡Partida creada!");
+                StringBuilder info = new StringBuilder("Partida creada.\nPuerto: " + RedLAN.PUERTO_PREDETERMINADO);
                 if (online) {
-                    System.out.println("Intentando abrir el puerto del router mediante UPnP...");
                     boolean abierto = red.abrirPuertoAutomaticamente(RedLAN.PUERTO_PREDETERMINADO);
-                    System.out.println(abierto ? "Puerto abierto automáticamente." :
-                            "No se pudo abrir el puerto mediante UPnP.");
                     String ip = obtenerIpPublica();
-                    if (ip != null) System.out.println("IP pública: " + ip);
-                    else System.out.println("No se pudo detectar la IP pública.");
-
-                    String ipTailscale = obtenerIpTailscale();
-                    if (ipTailscale != null) {
-                        System.out.println("IP privada Tailscale: " + ipTailscale);
-                        System.out.println("Comparte esta IP si ambos equipos están conectados a la misma red Tailscale.");
-                    } else {
-                        System.out.println("Si tienes CGNAT, instala Tailscale en ambos equipos,");
-                        System.out.println("inicia sesión en la misma red privada y comparte la IP Tailscale del anfitrión.");
-                    }
+                    String tailscale = obtenerIpTailscale();
+                    info.append("\nUPnP: ").append(abierto ? "puerto abierto" : "no disponible");
+                    if (ip != null) info.append("\nIP pública: ").append(ip);
+                    if (tailscale != null) info.append("\nIP Tailscale: ").append(tailscale);
+                    else info.append("\nSi tienes CGNAT, ambos jugadores necesitarán una VPN como Tailscale.");
                 } else {
-                    System.out.println("IP local: " + java.net.InetAddress.getLocalHost().getHostAddress());
-                    System.out.println("Comparte esta IP con jugadores de tu misma red.");
+                    info.append("\nIP local: ").append(java.net.InetAddress.getLocalHost().getHostAddress());
                 }
-                System.out.println("Puerto: " + RedLAN.PUERTO_PREDETERMINADO);
-            } else if (modo == 2) {
-                System.out.print(online
-                        ? "IP del anfitrión (pública o Tailscale 100.x.x.x): "
-                        : "IP local del anfitrión: ");
-                String ip = sc.nextLine().trim();
-                RedLAN.conectar(nombre, ip, RedLAN.PUERTO_PREDETERMINADO);
-                System.out.println("\n¡Conectado a la partida!");
+                UIJuego.mensaje(titulo, info.toString());
             } else {
-                System.out.println("Opción no válida.");
+                String ip = UIJuego.pedirTexto(titulo,
+                        online ? "IP pública o Tailscale del anfitrión:" : "IP local del anfitrión:", "");
+                if (ip == null || ip.isBlank()) return;
+                RedLAN.conectar(nombre, ip, RedLAN.PUERTO_PREDETERMINADO);
+                UIJuego.mensaje(titulo, "Conectado a la partida.");
             }
         } catch (Exception ex) {
             RedLAN.cerrar();
-            System.out.println("No se pudo crear o conectar la partida: " + ex.getMessage());
+            UIJuego.mensaje(titulo, "No se pudo crear o conectar la partida: " + ex.getMessage());
         }
     }
 
