@@ -26,6 +26,8 @@ public class Combate {
             PokemonLuchador inicial = pokemuerto(jugador.getPokemon(), jugador, sc);
             if (inicial == null) return;
         }
+        jugador.getEquipo().forEach(PokemonLuchador::iniciarCombate);
+        rival.getPokemon().iniciarCombate();
         while (jugador.getPokemon().estaVivo() && rival.getPokemon().estaVivo()) {
             if (SpriteCollabUI.interfazDisponible()) {
                 PokemonLuchador activo = jugador.getPokemon();
@@ -611,6 +613,7 @@ public class Combate {
             else SpriteCollabUI.animarDerrota(jugador);
         }
         SpriteCollabUI.refrescarCombate(jugador, rival);
+        avanzarDuracionGigamax(jugador, rival);
     }
 
     // Turno del rival salvaje (usa siempre un movimiento aleatorio)
@@ -626,8 +629,14 @@ public class Combate {
             else SpriteCollabUI.animarDerrota(jugador);
         }
         SpriteCollabUI.refrescarCombate(jugador, salvaje);
+        avanzarDuracionGigamax(jugador, salvaje);
     }
 
+    /** Consume un turno Gigamax al completar la respuesta rival de cada ronda. */
+    private static void avanzarDuracionGigamax(PokemonLuchador primero, PokemonLuchador segundo) {
+        if (primero != null) primero.avanzarTurnoGigamax();
+        if (segundo != null && segundo != primero) segundo.avanzarTurnoGigamax();
+    }
 
     // Funcion para cuando uno de tus pokemon se debilita
 
