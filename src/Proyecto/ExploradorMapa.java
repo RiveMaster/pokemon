@@ -129,7 +129,18 @@ public final class ExploradorMapa {
         desplazamiento.getViewport().setBackground(new Color(30, 35, 35));
         ventana.add(estado, BorderLayout.NORTH);
         ventana.add(desplazamiento, BorderLayout.CENTER);
-        ventana.add(ayuda, BorderLayout.SOUTH);
+        JPanel controles = new JPanel(new BorderLayout(8, 4));
+        controles.setBorder(BorderFactory.createEmptyBorder(5, 8, 8, 8));
+        controles.add(ayuda, BorderLayout.NORTH);
+        JPanel cruceta = new JPanel(new GridLayout(2, 3, 5, 5));
+        JButton arriba = new JButton("▲");
+        JButton izquierda = new JButton("◀");
+        JButton abajo = new JButton("▼");
+        JButton derecha = new JButton("▶");
+        cruceta.add(new JLabel()); cruceta.add(arriba); cruceta.add(new JLabel());
+        cruceta.add(izquierda); cruceta.add(abajo); cruceta.add(derecha);
+        controles.add(cruceta, BorderLayout.CENTER);
+        ventana.add(controles, BorderLayout.SOUTH);
 
         Runnable cerrar = () -> {
             MapaCanvas.Posicion p = lienzo.getPosicion();
@@ -141,6 +152,10 @@ public final class ExploradorMapa {
         actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
         instalarMovimiento(ventana, jugador, zona, permitirEncuentros, mapa, lienzo, estado, mapaId,
                 resultado, fin, cerrar);
+        arriba.addActionListener(e -> ejecutarMovimiento(lienzo, "arriba"));
+        izquierda.addActionListener(e -> ejecutarMovimiento(lienzo, "izquierda"));
+        abajo.addActionListener(e -> ejecutarMovimiento(lienzo, "abajo"));
+        derecha.addActionListener(e -> ejecutarMovimiento(lienzo, "derecha"));
 
         ventana.addWindowListener(new WindowAdapter() {
             @Override public void windowClosed(WindowEvent e) {
@@ -156,6 +171,13 @@ public final class ExploradorMapa {
         ventana.setVisible(true);
         SwingUtilities.invokeLater(() -> centrarVista(desplazamiento, lienzo));
         lienzo.requestFocusInWindow();
+    }
+
+    private static void ejecutarMovimiento(JComponent lienzo, String accion) {
+        javax.swing.Action movimiento = lienzo.getActionMap().get(accion);
+        if (movimiento != null) movimiento.actionPerformed(
+                new java.awt.event.ActionEvent(lienzo,
+                        java.awt.event.ActionEvent.ACTION_PERFORMED, accion));
     }
 
     private static void instalarMovimiento(JFrame ventana, Jugador jugador, Zona zona, boolean permitirEncuentros,
