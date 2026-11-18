@@ -22,25 +22,36 @@ public class Encuentros implements Serializable {
             System.out.println("Profesor Garcia: ¡Hola! ¡Bienvenido al mundo de Pokémon!");
             System.out.println("Mi nombre es Martin Garcia. Pero la gente me llama Profesor Garcia.\n");
 
-            System.out.print("Profesor Garcia: Antes de empezar... ¿Cómo te llamas? ");
-            String nombreJugador = sc.nextLine();
+            String nombreJugador = UIJuego.disponible()
+                    ? UIJuego.pedirTexto("Profesor García", "Antes de empezar... ¿Cómo te llamas?", "Entrenador")
+                    : sc.nextLine();
+            if (nombreJugador == null || nombreJugador.isBlank()) nombreJugador = "Entrenador";
 
             System.out.println("Profesor Garcia: " + nombreJugador + " este es tu primo");
             System.out.println("sois muy buenos amigos pero veo que teneis una pequeña rivalidad");
-            System.out.print("Profesor Garcia: ¿Cómo dijiste que se llamaba tu primo? ");
-            String nombreRival = sc.nextLine();
+            String nombreRival = UIJuego.disponible()
+                    ? UIJuego.pedirTexto("Profesor García", "¿Cómo se llama tu primo?", "Rival")
+                    : sc.nextLine();
+            if (nombreRival == null || nombreRival.isBlank()) nombreRival = "Rival";
 
             System.out.println("\nProfesor Garcia: Muy bien " + nombreJugador + ".");
             System.out.println("Profesor Garcia: Ir por la hierba alta sin pokemones es peligroso.");
             System.out.println("Aquí tienes tres Pokémon. Elige uno:");
 
-            System.out.println("1 - Bulbasaur (Planta/Veneno)");
-            System.out.println("2 - Charmander (Fuego)");
-            System.out.println("3 - Squirtle (Agua)");
-            System.out.print("Elige tu Pokémon (1-3): ");
-
-            int eleccion = sc.nextInt();
-            sc.nextLine();
+            int eleccion;
+            if (UIJuego.disponible()) {
+                eleccion = UIJuego.elegir("Elige tu primer Pokémon",
+                        "El Profesor García te ofrece estos Pokémon iniciales:",
+                        "Bulbasaur · Planta/Veneno", "Charmander · Fuego", "Squirtle · Agua") + 1;
+                if (eleccion < 1) eleccion = 1;
+            } else {
+                System.out.println("1 - Bulbasaur (Planta/Veneno)");
+                System.out.println("2 - Charmander (Fuego)");
+                System.out.println("3 - Squirtle (Agua)");
+                System.out.print("Elige tu Pokémon (1-3): ");
+                eleccion = sc.nextInt();
+                sc.nextLine();
+            }
 
             List<PokemonBase> iniciales = Arrays.asList(
                     Pokedex.buscarPorNombre("Bulbasaur"),
