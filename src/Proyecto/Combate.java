@@ -128,6 +128,8 @@ public class Combate {
 
             }
         }
+        jugador.getEquipo().forEach(PokemonLuchador::terminarGigamax);
+        rival.getPokemon().terminarGigamax();
     }
 
 
@@ -185,6 +187,8 @@ public class Combate {
         }
         jugador.desmegaevolucionar();
         rival.desmegaevolucionar();
+        jugador.terminarGigamax();
+        rival.terminarGigamax();
         MegaEvoluciones.terminarCombate();
     }
 
@@ -260,6 +264,8 @@ public class Combate {
         finalizarMegaJugador(jugadorCompleto);
         pokemonJugador.desmegaevolucionar();
         pokemonpodemita.desmegaevolucionar();
+        pokemonJugador.terminarGigamax();
+        pokemonpodemita.terminarGigamax();
         MegaEvoluciones.terminarCombate();
     }
 
@@ -427,6 +433,8 @@ public class Combate {
         finalizarMegaJugador(jugadorCompleto);
         pokemonJugador.desmegaevolucionar();
         salvaje.desmegaevolucionar();
+        pokemonJugador.terminarGigamax();
+        salvaje.terminarGigamax();
         MegaEvoluciones.terminarCombate();
     }
 
