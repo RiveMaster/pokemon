@@ -26,7 +26,8 @@ public final class Dinamax {
 
     public static boolean puedeActivarse(PokemonLuchador pokemon) {
         return tieneBanda() && pokemon != null && pokemon.estaVivo()
-                && !pokemon.estaEnGigamax() && especieCompatible(pokemon.getNombre());
+                && !pokemon.estaEnGigamax() && especieCompatible(pokemon.getNombre())
+                && pokemon.getMegapiedra() == null && !pokemon.getBase().esMega();
     }
 
     public static boolean activar(PokemonLuchador pokemon) {
