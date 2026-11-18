@@ -168,6 +168,12 @@ public class Mapa {
 
     /** Muestra las opciones numeradas y ejecuta la elegida. Null si no cambia de lugar o es inválida. */
     public static Ubicacion elegir(Scanner sc, List<Opcion> opciones) {
+        if (UIJuego.disponible()) {
+            String[] etiquetas = opciones.stream().map(o -> o.texto).toArray(String[]::new);
+            int seleccion = UIJuego.elegir("Exploración", "¿Qué quieres hacer?", etiquetas);
+            if (seleccion < 0 || seleccion >= opciones.size()) return null;
+            return opciones.get(seleccion).accion.ejecutar();
+        }
         for (int i = 0; i < opciones.size(); i++) {
             System.out.println((i + 1) + ". " + opciones.get(i).texto);
         }
