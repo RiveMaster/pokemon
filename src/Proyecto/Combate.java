@@ -522,30 +522,39 @@ public class Combate {
         }
 
         if (SpriteCollabUI.interfazDisponible()) {
-            int seleccion = SpriteCollabUI.elegirMovimiento(jugador, rival, movs, puedeMega, puedeGigamax);
-            if (seleccion < 0) return;
-            if (seleccion == movs.size() && puedeMega) {
-                MegaEvoluciones.intentarDuranteCombate(jugador, sc);
-                return;
-            }
-            if (seleccion == movs.size() + (puedeMega ? 1 : 0) && puedeGigamax) {
-                activarGigamax(jugador);
+            while (true) {
+                int seleccion = SpriteCollabUI.elegirMovimiento(jugador, rival, movs, puedeMega, puedeGigamax);
+                if (seleccion < 0) return;
+                int indiceMega = movs.size();
+                int indiceGigamax = movs.size() + (puedeMega ? 1 : 0);
+                int indiceVolver = movs.size() + (puedeMega ? 1 : 0) + (puedeGigamax ? 1 : 0);
+                if (seleccion == indiceVolver) {
+                    SpriteCollabUI.refrescarCombate(jugador, rival);
+                    continue;
+                }
+                if (seleccion == indiceMega && puedeMega) {
+                    MegaEvoluciones.intentarDuranteCombate(jugador, sc);
+                    return;
+                }
+                if (seleccion == indiceGigamax && puedeGigamax) {
+                    activarGigamax(jugador);
+                    SpriteCollabUI.refrescarCombate(jugador, rival);
+                    return;
+                }
+                if (seleccion < 0 || seleccion >= movs.size()) continue;
+                Movimiento elegido = movs.get(seleccion);
+                if (!jugador.tienePp(elegido)) continue;
+                SpriteCollabUI.mostrarMensaje(jugador.getNombre() + " usa " + elegido.getNombre() + "!", jugador, rival);
+                SpriteCollabUI.animarAtaque(jugador);
+                int vidaAntes = rival.getVidaActual();
+                jugador.usarMovimiento(elegido, elegido.getPotencia() + jugador.getNivel() / 2, rival);
+                if (rival.getVidaActual() < vidaAntes) {
+                    if (rival.estaVivo()) SpriteCollabUI.animarDaño(rival);
+                    else SpriteCollabUI.animarDerrota(rival);
+                }
                 SpriteCollabUI.refrescarCombate(jugador, rival);
                 return;
             }
-            if (seleccion >= movs.size()) return;
-            Movimiento elegido = movs.get(seleccion);
-            if (!jugador.tienePp(elegido)) return;
-            SpriteCollabUI.mostrarMensaje(jugador.getNombre() + " usa " + elegido.getNombre() + "!", jugador, rival);
-            SpriteCollabUI.animarAtaque(jugador);
-            int vidaAntes = rival.getVidaActual();
-            jugador.usarMovimiento(elegido, elegido.getPotencia() + jugador.getNivel() / 2, rival);
-            if (rival.getVidaActual() < vidaAntes) {
-                if (rival.estaVivo()) SpriteCollabUI.animarDaño(rival);
-                else SpriteCollabUI.animarDerrota(rival);
-            }
-            SpriteCollabUI.refrescarCombate(jugador, rival);
-            return;
         }
 
         if (!movs.isEmpty()) {
