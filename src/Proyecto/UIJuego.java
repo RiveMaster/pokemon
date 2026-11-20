@@ -41,6 +41,7 @@ public final class UIJuego {
         contenido.add(botones, BorderLayout.SOUTH);
         dialogo.getRootPane().registerKeyboardAction(e -> dialogo.dispose(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        instalarNavegacion(dialogo);
         dialogo.pack();
         dialogo.setMinimumSize(new Dimension(410, dialogo.getHeight()));
         dialogo.setLocationRelativeTo(null);
@@ -150,6 +151,27 @@ public final class UIJuego {
         dialogo.getContentPane().add(cabecera, BorderLayout.NORTH);
         dialogo.getContentPane().add(contenido, BorderLayout.CENTER);
         return dialogo;
+    }
+
+    /** Permite recorrer las opciones con flechas además de Tab y ratón. */
+    private static void instalarNavegacion(JDialog dialogo) {
+        JRootPane raiz = dialogo.getRootPane();
+        InputMap mapa = raiz.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap acciones = raiz.getActionMap();
+        mapa.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "siguienteOpcion");
+        mapa.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "siguienteOpcion");
+        mapa.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "anteriorOpcion");
+        mapa.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "anteriorOpcion");
+        acciones.put("siguienteOpcion", new AbstractAction() {
+            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent();
+            }
+        });
+        acciones.put("anteriorOpcion", new AbstractAction() {
+            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().focusPreviousComponent();
+            }
+        });
     }
 
     private static JPanel contenido(JDialog dialogo) {
