@@ -513,9 +513,26 @@ public final class ExploradorMapa {
         int adoquin = agregarTile(paleta, categorias, adoquinTile(), TIPO_NORMAL);
         int flores = agregarTile(paleta, categorias, floresTile(), TIPO_NORMAL);
         int farola = agregarTile(paleta, categorias, farolaTile(), TIPO_BLOQUEO);
+        int tierraOscura = agregarTile(paleta, categorias,
+                tile(new Color(98, 151, 77), new Color(65, 122, 57)), TIPO_NORMAL);
+        int tierraClara = agregarTile(paleta, categorias,
+                tile(new Color(116, 175, 85), new Color(156, 195, 102)), TIPO_NORMAL);
+        int sueloFlor = agregarTile(paleta, categorias, floresTile(), TIPO_NORMAL);
+        int sueloPiedra = agregarTile(paleta, categorias, rocaSueloTile(), TIPO_NORMAL);
+        int banco = agregarTile(paleta, categorias, bancoTile(), TIPO_BLOQUEO);
+        int senal = agregarTile(paleta, categorias, cartelRutaTile(), TIPO_BLOQUEO);
         int[][] capas = new int[3][size];
         for (int[] capa : capas) Arrays.fill(capa, -1);
         Arrays.fill(capas[0], 0);
+        // Césped con variación de tonos y vegetación de píxeles, sin ruido aleatorio
+        // que provoque cambios de aspecto entre dos visitas a la misma zona.
+        long semilla = ubicacion.ordinal() * 277L + 41L;
+        for (int y = 1; y < alto - 1; y++) for (int x = 1; x < ancho - 1; x++) {
+            long n = (x * 73856093L ^ y * 19349663L ^ semilla * 83492791L);
+            int variante = (int) Math.floorMod(n, 13);
+            if (variante == 0 || variante == 1) capas[0][y * ancho + x] = tierraOscura;
+            else if (variante == 2 || variante == 3) capas[0][y * ancho + x] = tierraClara;
+        }
         boolean[] colisiones = new boolean[size], manuales = new boolean[size], hierba = new boolean[size];
         List<EntradaEdificio> entradas = new ArrayList<>();
 
@@ -566,6 +583,21 @@ public final class ExploradorMapa {
                     if (capas[2][idx] < 0) capas[1][idx] = adoquin;
                 }
             }
+            // Plazas: bancos frente a la calle y parterres en los jardines.
+            for (int[] pos : new int[][]{{15, 10}, {21, 14}}) {
+                int idx = pos[1] * ancho + pos[0];
+                if (capas[2][idx] < 0) {
+                    capas[2][idx] = banco;
+                    colisiones[idx] = true;
+                    manuales[idx] = true;
+                }
+            }
+            for (int x = 2; x < ancho - 2; x++) {
+                int y = x % 2 == 0 ? 9 : 15;
+                int idx = y * ancho + x;
+                if (capas[1][idx] < 0 && capas[2][idx] < 0)
+                    capas[1][idx] = (x % 6 == 0) ? sueloFlor : tierraClara;
+            }
             // Jardines y mobiliario: separados de los accesos y de las vías transitables.
             for (int x = 7; x <= 9; x++) capas[1][10 * ancho + x] = flores;
             for (int x = 25; x <= 27; x++) capas[1][14 * ancho + x] = flores;
@@ -583,6 +615,27 @@ public final class ExploradorMapa {
                 ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, ancho - 1, y, 4);
             }
         } else {
+            boolean costa = ubicacion == Ubicacion.RUTA4 || ubicacion == Ubicacion.RUTA8;
+            boolean montaña = ubicacion == Ubicacion.RUTA6 || ubicacion == Ubicacion.RUTA10;
+            boolean bosque = ubicacion == Ubicacion.RUTA3 || ubicacion == Ubicacion.RUTA7;
+            // Biomas reconocibles para evitar que todas las rutas tengan la misma
+            // pradera: costa, montaña, bosque y llanuras tienen detalles propios.
+            for (int y = 1; y < alto - 1; y++) for (int x = 1; x < ancho - 1; x++) {
+                int idx = y * ancho + x;
+                int patron = Math.floorMod(x * 11 + y * 17 + ubicacion.ordinal() * 7, 31);
+                if (costa && patron < 10) capas[0][idx] = 1;
+                else if (montaña && patron < 9) capas[0][idx] = sueloPiedra;
+                else if (bosque && patron < 12) capas[0][idx] = tierraOscura;
+                else if (!costa && patron == 0) capas[0][idx] = sueloFlor;
+            }
+            // Sendero serpenteante que permanece conectado con las dos salidas.
+            for (int x = 0; x < ancho; x++) {
+                int cy = centroY + (x > 3 && x < ancho - 3
+                        ? (x % 13 > 7 ? 1 : 0) : 0);
+                capas[1][cy * ancho + x] = 1;
+                if (x > 3 && x < ancho - 3 && x % 13 == 8)
+                    capas[1][centroY * ancho + x] = 1;
+            }
             for (int x = 0; x < ancho; x++) capas[1][centroY * ancho + x] = 1;
             for (int y = 0; y < alto; y++) capas[1][y * ancho + ancho / 2] = 1;
             for (int y = 4; y < 10; y++) for (int x = 4; x < 11; x++) {
@@ -607,6 +660,19 @@ public final class ExploradorMapa {
             for (int y = 3; y < 7; y++) for (int x = 14; x < 19; x++)
                 if (y == 3 || y == 6 || x == 14 || x == 18)
                     ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, y, 5);
+            // Carteles de ruta junto al sendero, nunca encima del camino.
+            if (capas[2][10 * ancho + 3] < 0)
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, 3, 10, senal);
+            for (int i = 0; i < 26; i++) {
+                int fx = 2 + Math.floorMod(i * 19 + ubicacion.ordinal() * 3, ancho - 4);
+                int fy = 2 + Math.floorMod(i * 7 + ubicacion.ordinal() * 11, alto - 4);
+                int pos = fy * ancho + fx;
+                if (capas[1][pos] < 0 && capas[2][pos] < 0) {
+                    if ((i % 5) == 0) capas[1][pos] = sueloPiedra;
+                    else if ((i % 3) == 0) capas[1][pos] = sueloFlor;
+                    else capas[1][pos] = tierraClara;
+                }
+            }
             Random r = new Random(ubicacion.ordinal() * 919L + 47);
             for (int n = 0; n < 24; n++) {
                 int x = 2 + r.nextInt(ancho - 4), y = 2 + r.nextInt(alto - 4);
@@ -645,6 +711,50 @@ public final class ExploradorMapa {
             manuales[idx] = !puerta;
         }
         entradas.add(new EntradaEdificio(centro, y + h - 1, clase));
+    }
+
+    private static BufferedImage rocaSueloTile() {
+        BufferedImage im = tile(new Color(129, 140, 123), new Color(173, 178, 144));
+        Graphics2D g = im.createGraphics();
+        g.setColor(new Color(83, 99, 90));
+        g.fillRect(3, 6, 7, 5);
+        g.fillRect(10, 9, 4, 4);
+        g.setColor(new Color(190, 193, 166));
+        g.fillRect(3, 6, 5, 2);
+        g.fillRect(10, 9, 3, 1);
+        g.dispose();
+        return im;
+    }
+
+    private static BufferedImage bancoTile() {
+        BufferedImage im = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = im.createGraphics();
+        g.setColor(new Color(82, 55, 39));
+        g.fillRect(1, 6, 14, 3);
+        g.fillRect(2, 11, 12, 2);
+        g.setColor(new Color(189, 126, 67));
+        g.fillRect(2, 4, 12, 3);
+        g.fillRect(2, 9, 12, 2);
+        g.setColor(new Color(70, 82, 86));
+        g.fillRect(3, 12, 2, 4);
+        g.fillRect(11, 12, 2, 4);
+        g.dispose();
+        return im;
+    }
+
+    private static BufferedImage cartelRutaTile() {
+        BufferedImage im = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = im.createGraphics();
+        g.setColor(new Color(65, 79, 77));
+        g.fillRect(7, 4, 2, 12);
+        g.setColor(new Color(222, 186, 102));
+        g.fillRect(1, 1, 14, 8);
+        g.setColor(new Color(110, 88, 61));
+        g.drawRect(1, 1, 13, 7);
+        g.setColor(new Color(78, 107, 75));
+        g.fillRect(4, 3, 8, 2);
+        g.dispose();
+        return im;
     }
 
     private static BufferedImage adoquinTile() {
