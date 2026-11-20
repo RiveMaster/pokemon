@@ -195,6 +195,24 @@ public final class MegaEvoluciones {
 
     /** Menú fuera de combate para comprar megapiedras y equiparlas a Pokémon del equipo/PC. */
     public static void gestionarPiedras(Scanner sc, Jugador jugador) {
+        if (UIJuego.disponible()) {
+            while (true) {
+                int opcion = UIJuego.elegir("Centro de Megaevolución",
+                        "Megapiedras en la mochila: " + jugador.getMegapiedras().size()
+                                + "\\nDinero: " + jugador.getDinero() + "€",
+                        "Ver megapiedras", "Comprar megapiedra",
+                        "Equipar piedra", "Quitar piedra", "Volver");
+                switch (opcion) {
+                    case 0 -> UIJuego.mensaje("Megapiedras",
+                            jugador.getMegapiedras().isEmpty() ? "No tienes megapiedras."
+                            : String.join("\\n", jugador.getMegapiedras()));
+                    case 1 -> comprarPiedra(sc, jugador);
+                    case 2 -> equiparPiedra(sc, jugador);
+                    case 3 -> quitarPiedra(sc, jugador);
+                    default -> { return; }
+                }
+            }
+        }
         while (true) {
             System.out.println("\n=== Centro de Megaevolución ===");
             System.out.println("1. Ver megapiedras");
@@ -224,15 +242,20 @@ public final class MegaEvoluciones {
             System.out.println("Ya tienes todas las megapiedras de este catálogo.");
             return;
         }
-        for (int i = 0; i < disponibles.size(); i++)
-            System.out.println((i + 1) + ". " + disponibles.get(i) + " — 2.500 €");
-        System.out.print("Elige una (0 cancela): ");
-        int n = Entrada.leerEntero(sc);
-        if (n == 0) return;
-        if (n < 1 || n > disponibles.size()) {
-            System.out.println("Selección no válida.");
-            return;
+        int n;
+        if (UIJuego.disponible()) {
+            n = UIJuego.elegir("Comprar megapiedra",
+                    "Cada piedra cuesta 2.500€. Elige una:",
+                    disponibles.toArray(new String[0])) + 1;
+        } else {
+            for (int i = 0; i < disponibles.size(); i++)
+                System.out.println((i + 1) + ". " + disponibles.get(i) + " — 2.500 €");
+            System.out.print("Elige una (0 cancela): ");
+            n = Entrada.leerEntero(sc);
         }
+        if (n < 1 || n > disponibles.size()) return;
+        if (UIJuego.disponible() && !UIJuego.confirmar("Confirmar compra",
+                "¿Comprar " + disponibles.get(n - 1) + " por 2.500€?")) return;
         if (jugador.getDinero() < 2500) {
             System.out.println("No tienes dinero suficiente.");
             return;
@@ -256,18 +279,19 @@ public final class MegaEvoluciones {
             System.out.println("No tienes Pokémon.");
             return;
         }
-        System.out.println("Elige Pokémon (equipo y PC):");
-        for (int i = 0; i < pokemons.size(); i++) {
-            PokemonLuchador p = pokemons.get(i);
-            System.out.println((i + 1) + ". " + p.getNombre() + " " + (p.getMegapiedra() == null ? "" : "[lleva " + p.getMegapiedra() + "]"));
+        int pi;
+        if (UIJuego.disponible()) {
+            String[] opciones = pokemons.stream().map(p -> p.getNombre()
+                    + (p.getMegapiedra() == null ? "" : " · " + p.getMegapiedra()))
+                    .toArray(String[]::new);
+            pi = UIJuego.elegir("Equipar megapiedra", "Selecciona un Pokémon:", opciones) + 1;
+        } else {
+            System.out.println("Elige Pokémon (equipo y PC):");
+            for (int i = 0; i < pokemons.size(); i++)
+                System.out.println((i + 1) + ". " + pokemons.get(i).getNombre());
+            pi = Entrada.leerEntero(sc);
         }
-        System.out.print("Pokémon (0 cancela): ");
-        int pi = Entrada.leerEntero(sc);
-        if (pi == 0) return;
-        if (pi < 1 || pi > pokemons.size()) {
-            System.out.println("Selección no válida.");
-            return;
-        }
+        if (pi < 1 || pi > pokemons.size()) return;
         PokemonLuchador pokemon = pokemons.get(pi - 1);
         List<String> compatibles = disponibles.stream()
                 .filter(stone -> pokemons.stream().noneMatch(otro ->
@@ -282,14 +306,17 @@ public final class MegaEvoluciones {
                     + " no tiene una megapiedra compatible libre, o no dispone de megaevolución.");
             return;
         }
-        for (int i = 0; i < compatibles.size(); i++) System.out.println((i + 1) + ". " + compatibles.get(i));
-        System.out.print("Megapiedra (0 cancela): ");
-        int si = Entrada.leerEntero(sc);
-        if (si == 0) return;
-        if (si < 1 || si > compatibles.size()) {
-            System.out.println("Selección no válida.");
-            return;
+        int si;
+        if (UIJuego.disponible()) {
+            si = UIJuego.elegir("Megapiedra compatible",
+                    "Elige la piedra de " + pokemon.getNombre() + ":",
+                    compatibles.toArray(new String[0])) + 1;
+        } else {
+            for (int i = 0; i < compatibles.size(); i++)
+                System.out.println((i + 1) + ". " + compatibles.get(i));
+            si = Entrada.leerEntero(sc);
         }
+        if (si < 1 || si > compatibles.size()) return;
         ObjetoEquipable objetoAnterior = pokemon.getObjeto();
         if (objetoAnterior != null) {
             pokemon.setObjeto(null);
@@ -309,9 +336,18 @@ public final class MegaEvoluciones {
             System.out.println("Ningún Pokémon lleva una megapiedra.");
             return;
         }
-        for (int i = 0; i < equipados.size(); i++) System.out.println((i + 1) + ". " + equipados.get(i).getNombre() + " — " + equipados.get(i).getMegapiedra());
-        System.out.print("Elige Pokémon (0 cancela): ");
-        int n = Entrada.leerEntero(sc);
+        int n;
+        if (UIJuego.disponible()) {
+            String[] opciones = equipados.stream()
+                    .map(p -> p.getNombre() + " · " + p.getMegapiedra())
+                    .toArray(String[]::new);
+            n = UIJuego.elegir("Quitar megapiedra",
+                    "Elige qué Pokémon dejará de llevarla:", opciones) + 1;
+        } else {
+            for (int i = 0; i < equipados.size(); i++)
+                System.out.println((i + 1) + ". " + equipados.get(i).getNombre());
+            n = Entrada.leerEntero(sc);
+        }
         if (n < 1 || n > equipados.size()) return;
         PokemonLuchador p = equipados.get(n - 1);
         p.setMegapiedra(null);
@@ -344,9 +380,16 @@ public final class MegaEvoluciones {
             }
             return false;
         }
-        System.out.println("Elige la megaevolución:");
-        for (int i = 0; i < opciones.size(); i++) System.out.println((i + 1) + ". " + opciones.get(i).nombreForma());
-        int n = Entrada.leerEntero(sc);
+        int n;
+        if (UIJuego.disponible()) {
+            String[] nombres = opciones.stream().map(Forma::nombreForma).toArray(String[]::new);
+            n = UIJuego.elegir("Megaevolución", "Elige la forma Mega:", nombres) + 1;
+        } else {
+            System.out.println("Elige la megaevolución:");
+            for (int i = 0; i < opciones.size(); i++)
+                System.out.println((i + 1) + ". " + opciones.get(i).nombreForma());
+            n = Entrada.leerEntero(sc);
+        }
         if (n < 1 || n > opciones.size()) return false;
         Forma f = opciones.get(n - 1);
         if (pokemon.megaevolucionar(crearBase(pokemon.getBase(), f))) {
