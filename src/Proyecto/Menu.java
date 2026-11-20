@@ -8,6 +8,41 @@ public class Menu {
      * y quien lo llama debe llevarle allí.
      */
     public static Ubicacion mostrarmenu(Scanner sc, Jugador jugador){
+        if (UIJuego.disponible()) {
+            while (true) {
+                int opcion = UIJuego.elegir("Menú del entrenador",
+                        jugador.getNombre() + " · " + jugador.getGeneracion().etiqueta()
+                                + "\\nDinero: " + jugador.getDinero() + "€"
+                                + " · Medallas: " + jugador.medallasEnGeneracion(jugador.getGeneracion()),
+                        "Equipo Pokémon", "Mochila", "Usar MT",
+                        "Equipar objeto", "Volar", "Guardar partida",
+                        "Criadero Pokémon", "Megaevolución", "Volver al mapa", "Salir del juego");
+                switch (opcion) {
+                    case 0 -> jugador.mostrarEstadoEquipo();
+                    case 1 -> jugador.mostrar(jugador);
+                    case 2 -> jugador.usarMT(sc);
+                    case 3 -> jugador.menuEquipar(sc);
+                    case 4 -> {
+                        Ubicacion destino = Vuelo.elegirDestino(sc, jugador);
+                        if (destino != null) return destino;
+                    }
+                    case 5 -> GuardarCargar.guardarPartida(sc, jugador);
+                    case 6 -> SistemaCrianza.visitar(sc, jugador);
+                    case 7 -> MegaEvoluciones.gestionarPiedras(sc, jugador);
+                    case 8, -1 -> { return null; }
+                    case 9 -> {
+                        if (UIJuego.confirmar("Salir de la partida",
+                                "¿Quieres guardar la partida antes de salir?")) {
+                            GuardarCargar.guardarPartida(sc, jugador);
+                        }
+                        if (UIJuego.confirmar("Salir del juego",
+                                "¿Seguro que quieres cerrar la partida?")) System.exit(0);
+                    }
+                    default -> { return null; }
+                }
+            }
+        }
+
         System.out.println("\n1. Ver dinero");
         System.out.println("2. Ver estado del Pokémon");
         System.out.println("3. Ver mochila");
