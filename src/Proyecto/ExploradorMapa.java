@@ -47,15 +47,22 @@ public final class ExploradorMapa {
         private final int y;
         private final Ubicacion destino;
         private final int entradaX, entradaY;
-        private Resultado(boolean encuentro, int x, int y) { this(encuentro, x, y, null, -1, -1); }
+        private final String evento;
+        private Resultado(boolean encuentro, int x, int y) { this(encuentro, x, y, null, -1, -1, null); }
         private Resultado(boolean encuentro, int x, int y, Ubicacion destino, int entradaX, int entradaY) {
+            this(encuentro, x, y, destino, entradaX, entradaY, null);
+        }
+        private Resultado(boolean encuentro, int x, int y, Ubicacion destino, int entradaX, int entradaY, String evento) {
             this.encuentro = encuentro; this.x = x; this.y = y;
             this.destino = destino; this.entradaX = entradaX; this.entradaY = entradaY;
+            this.evento = evento;
         }
         public boolean huboEncuentro() { return encuentro; }
         public int getX() { return x; }
         public int getY() { return y; }
         public Ubicacion getDestino() { return destino; }
+        /** Servicio o casa en cuya puerta ha entrado el jugador; null si solo exploró. */
+        public String getEvento() { return evento; }
     }
 
     /**
@@ -125,7 +132,7 @@ public final class ExploradorMapa {
         estado.setForeground(Color.WHITE);
         estado.setFont(new Font("SansSerif", Font.BOLD, 14));
         estado.setBorder(BorderFactory.createEmptyBorder(11, 16, 11, 16));
-        JLabel ayuda = new JLabel("Explora la zona · Usa los botones o W A S D · Esc para volver");
+        JLabel ayuda = new JLabel("WASD / flechas para caminar · Entra por las puertas de los edificios · Esc: menú");
         ayuda.setFont(new Font("SansSerif", Font.PLAIN, 13));
         ayuda.setForeground(new Color(64, 79, 96));
         ayuda.setBorder(BorderFactory.createEmptyBorder(5, 4, 8, 4));
@@ -277,6 +284,15 @@ public final class ExploradorMapa {
                     return;
                 }
 
+                String evento = mapa.eventoEn(nx, ny);
+                if (evento != null) {
+                    // Se recuerda la casilla anterior: al regresar del evento no se reabre
+                    // inmediatamente la misma puerta y el jugador conserva su ubicación.
+                    resultado.set(new Resultado(false, p.x, p.y, null, -1, -1, evento));
+                    fin.countDown();
+                    ventana.dispose();
+                    return;
+                }
                 lienzo.setPosicion(nx, ny);
                 lienzo.repaint();
                 centrarVista((JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, lienzo), lienzo);
@@ -519,90 +535,178 @@ public final class ExploradorMapa {
         return false;
     }
 
+    /** Ciudad pixel-art provisional: manzanas accesibles y edificios con función reconocible. */
     private static MapaDatos crearMapaProvisional(Ubicacion ubicacion) {
         int ancho = 36, alto = 24, size = ancho * alto;
         boolean ciudad = ubicacion == Ubicacion.VILLAVERDE || Mapa.puebloDe(ubicacion) != null;
-        BufferedImage[] tiles = {
-                tile(new Color(78, 157, 70), new Color(95, 177, 79)),
-                tile(new Color(190, 164, 118), new Color(212, 188, 141)),
-                hierbaTile(),
-                aguaTile(),
-                arbolTile(),
-                paredTile(),
-                edificioTile()
-        };
-        byte[] tipos = {TIPO_NORMAL, TIPO_NORMAL, TIPO_HIERBA, TIPO_AGUA,
-                TIPO_BLOQUEO, TIPO_BLOQUEO, TIPO_BLOQUEO};
+        List<BufferedImage> paleta = new ArrayList<>();
+        List<Byte> categorias = new ArrayList<>();
+        agregarTile(paleta, categorias, tile(new Color(78, 157, 70), new Color(95, 177, 79)), TIPO_NORMAL); // 0 pradera
+        agregarTile(paleta, categorias, tile(new Color(190, 164, 118), new Color(212, 188, 141)), TIPO_NORMAL); // 1 sendero
+        agregarTile(paleta, categorias, hierbaTile(), TIPO_HIERBA); // 2
+        agregarTile(paleta, categorias, aguaTile(), TIPO_AGUA); // 3
+        agregarTile(paleta, categorias, arbolTile(), TIPO_BLOQUEO); // 4
+        agregarTile(paleta, categorias, paredTile(), TIPO_BLOQUEO); // 5
+        agregarTile(paleta, categorias, edificioTile(), TIPO_BLOQUEO); // 6 legado
+        int adoquin = agregarTile(paleta, categorias, adoquinTile(), TIPO_NORMAL);
+        int flores = agregarTile(paleta, categorias, floresTile(), TIPO_NORMAL);
+        int farola = agregarTile(paleta, categorias, farolaTile(), TIPO_BLOQUEO);
         int[][] capas = new int[3][size];
         for (int[] capa : capas) Arrays.fill(capa, -1);
         Arrays.fill(capas[0], 0);
         boolean[] colisiones = new boolean[size], manuales = new boolean[size], hierba = new boolean[size];
+        List<EntradaEdificio> entradas = new ArrayList<>();
 
-        int caminoY = alto / 2;
-        for (int x = 0; x < ancho; x++) capas[1][caminoY * ancho + x] = 1;
-        for (int y = 0; y < alto; y++) capas[1][y * ancho + ancho / 2] = 1;
-        for (int y = 4; y < 10; y++) for (int x = 4; x < 11; x++) {
-            if (capas[1][y * ancho + x] < 0) {
-                capas[1][y * ancho + x] = 2;
-                hierba[y * ancho + x] = true;
-            }
-        }
-        for (int y = 14; y < 20; y++) for (int x = 24; x < 32; x++) {
-            if (capas[1][y * ancho + x] < 0) {
-                capas[1][y * ancho + x] = 2;
-                hierba[y * ancho + x] = true;
-            }
-        }
-        for (int y = 3; y < 9; y++) for (int x = 23; x < 29; x++) {
-            if (capas[1][y * ancho + x] != 1) capas[1][y * ancho + x] = 3;
-        }
-
-        // Árboles y una pequeña pared perimetral: todos son sólidos.
-        for (int x = 0; x < ancho; x++) {
-            ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, 0, 4);
-            ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, alto - 1, 4);
-        }
-        for (int y = 1; y < alto - 1; y++) {
-            ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, 0, y, 4);
-            ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, ancho - 1, y, 4);
-        }
+        int centroY = alto / 2;
         if (ciudad) {
-            // Manzanas urbanas con edificios y puertas orientadas hacia las calles.
-            int[][] casas = {{4,4},{11,4},{22,4},{29,4},{4,16},{11,16},{22,16},{29,16}};
-            for (int[] casa : casas) {
-                int x0 = casa[0], y0 = casa[1];
-                for (int oy = 0; oy < 3; oy++) for (int ox = 0; ox < 4; ox++) {
-                    if (oy == 2 && ox == 1) continue; // hueco de puerta
-                    ponerObstaculo(capas[2], colisiones, manuales, ancho, alto,
-                            x0 + ox, y0 + oy, 6);
+            // Calles de tres casillas y una plaza central que comunica las puertas con la ruta.
+            for (int y = centroY - 1; y <= centroY + 1; y++) {
+                for (int x = 0; x < ancho; x++) capas[1][y * ancho + x] = adoquin;
+            }
+            for (int y = 1; y < alto - 1; y++) {
+                for (int x = 17; x <= 19; x++) capas[1][y * ancho + x] = adoquin;
+            }
+            for (int y = 9; y <= 15; y++) {
+                for (int x = 14; x <= 22; x++) capas[1][y * ancho + x] = adoquin;
+            }
+            // Arquitectura deliberadamente distinta por categoría y con paleta original.
+            String[] servicios = {
+                    "CENTRO_POKEMON", "TIENDA", "GIMNASIO", "CASA",
+                    "CASA", "CASA", "CASA", "CASA"
+            };
+            if (Gimnasio.deCiudad(ubicacion) == null) servicios[2] = "CASA";
+            if (ubicacion == Ubicacion.COMILLAS) servicios[2] = "CASINO";
+            if (ubicacion == Ubicacion.VITORIA) servicios[7] = "GOBIERNO";
+            if (ubicacion == Ubicacion.VILLAVERDE) servicios[4] = "CASA_MAMA";
+            int[] xs = {3, 11, 21, 29, 3, 11, 21, 29};
+            int[] ys = {3, 3, 3, 3, 16, 16, 16, 16};
+            for (int i = 0; i < servicios.length; i++) {
+                int bx = xs[i], by = ys[i];
+                String tipo = servicios[i];
+                dibujarEdificio(paleta, categorias, capas[2], colisiones, manuales,
+                        entradas, ancho, alto, bx, by, 5, 4, tipo, i + ubicacion.ordinal());
+                // Caminos de acceso frontales. Las fachadas no pueden bloquear la calzada.
+                int puertaX = bx + 2;
+                int desde = by + 4, hasta = by == 3 ? centroY - 1 : 20;
+                int y1 = Math.min(desde, hasta), y2 = Math.max(desde, hasta);
+                for (int y = y1; y <= y2; y++) {
+                    int idx = y * ancho + puertaX;
+                    if (capas[2][idx] < 0) capas[1][idx] = adoquin;
                 }
             }
-            // Un pequeño parque entre las manzanas.
-            for (int y = 9; y < 12; y++) for (int x = 3; x < 9; x++) {
-                int idx = y * ancho + x;
-                if (capas[1][idx] != 1) {
-                    capas[1][idx] = 2;
-                    hierba[idx] = true;
-                }
+            // Jardines y mobiliario: separados de los accesos y de las vías transitables.
+            for (int x = 7; x <= 9; x++) capas[1][10 * ancho + x] = flores;
+            for (int x = 25; x <= 27; x++) capas[1][14 * ancho + x] = flores;
+            for (int[] pos : new int[][]{{9, 9}, {26, 9}, {9, 14}, {26, 14}}) {
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, pos[0], pos[1], farola);
+            }
+            // Los laterales son pasos de zona: dejarlos abiertos para viajar.
+            for (int x = 0; x < ancho; x++) {
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, 0, 4);
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, alto - 1, 4);
+            }
+            for (int y = 1; y < alto - 1; y++) {
+                if (Math.abs(y - centroY) <= 1) continue;
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, 0, y, 4);
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, ancho - 1, y, 4);
             }
         } else {
-            for (int y = 3; y < 7; y++) for (int x = 14; x < 19; x++) {
+            for (int x = 0; x < ancho; x++) capas[1][centroY * ancho + x] = 1;
+            for (int y = 0; y < alto; y++) capas[1][y * ancho + ancho / 2] = 1;
+            for (int y = 4; y < 10; y++) for (int x = 4; x < 11; x++) {
+                capas[1][y * ancho + x] = 2;
+                hierba[y * ancho + x] = true;
+            }
+            for (int y = 14; y < 20; y++) for (int x = 24; x < 32; x++) {
+                capas[1][y * ancho + x] = 2;
+                hierba[y * ancho + x] = true;
+            }
+            for (int y = 3; y < 9; y++) for (int x = 23; x < 29; x++)
+                if (capas[1][y * ancho + x] != 1) capas[1][y * ancho + x] = 3;
+            for (int x = 0; x < ancho; x++) {
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, 0, 4);
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, alto - 1, 4);
+            }
+            for (int y = 1; y < alto - 1; y++) {
+                if (Math.abs(y - centroY) <= 1) continue;
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, 0, y, 4);
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, ancho - 1, y, 4);
+            }
+            for (int y = 3; y < 7; y++) for (int x = 14; x < 19; x++)
                 if (y == 3 || y == 6 || x == 14 || x == 18)
                     ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, y, 5);
+            Random r = new Random(ubicacion.ordinal() * 919L + 47);
+            for (int n = 0; n < 24; n++) {
+                int x = 2 + r.nextInt(ancho - 4), y = 2 + r.nextInt(alto - 4);
+                if (capas[1][y * ancho + x] >= 0 || capas[2][y * ancho + x] >= 0) continue;
+                ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, y, 4);
             }
         }
-        Random r = new Random(ubicacion == null ? 1 : ubicacion.ordinal() * 919L + 47);
-        int elementos = ciudad ? 10 : 24;
-        for (int n = 0; n < elementos; n++) {
-            int x = 2 + r.nextInt(ancho - 4), y = 2 + r.nextInt(alto - 4);
-            int idx = y * ancho + x;
-            if (capas[1][idx] == 1 || capas[1][idx] == 3
-                    || (ciudad && ((x >= 4 && x < 15) || (x >= 22 && x < 33))
-                        && (y >= 4 && y < 19))) continue;
-            ponerObstaculo(capas[2], colisiones, manuales, ancho, alto, x, y, 4);
+        byte[] tipos = new byte[categorias.size()];
+        for (int i = 0; i < tipos.length; i++) tipos[i] = categorias.get(i);
+        return new MapaDatos(ancho, alto, paleta.toArray(new BufferedImage[0]), tipos,
+                capas, colisiones, manuales, hierba, List.of(), List.of(), true, entradas);
+    }
+
+    private static int agregarTile(List<BufferedImage> tiles, List<Byte> tipos,
+                                   BufferedImage imagen, int tipo) {
+        tiles.add(imagen);
+        tipos.add((byte) tipo);
+        return tiles.size() - 1;
+    }
+
+    private static void dibujarEdificio(List<BufferedImage> paleta, List<Byte> tipos,
+                                         int[] capa, boolean[] colisiones, boolean[] manuales,
+                                         List<EntradaEdificio> entradas, int ancho, int alto,
+                                         int x, int y, int w, int h, String clase, int variante) {
+        BufferedImage fachada = ArteEdificios.crear(clase, w, h, variante);
+        int centro = x + w / 2;
+        for (int oy = 0; oy < h; oy++) for (int ox = 0; ox < w; ox++) {
+            int px = x + ox, py = y + oy;
+            if (px < 1 || px >= ancho - 1 || py < 1 || py >= alto - 1) continue;
+            BufferedImage trozo = fachada.getSubimage(ox * TILE, oy * TILE, TILE, TILE);
+            boolean puerta = oy == h - 1 && px == centro;
+            int tile = agregarTile(paleta, tipos, trozo, puerta ? TIPO_NORMAL : TIPO_BLOQUEO);
+            int idx = py * ancho + px;
+            capa[idx] = tile;
+            colisiones[idx] = !puerta;
+            manuales[idx] = !puerta;
         }
-        return new MapaDatos(ancho, alto, tiles, tipos, capas, colisiones, manuales, hierba,
-                List.of(), List.of(), true);
+        entradas.add(new EntradaEdificio(centro, y + h - 1, clase));
+    }
+
+    private static BufferedImage adoquinTile() {
+        BufferedImage im = tile(new Color(191, 194, 175), new Color(210, 213, 192));
+        Graphics2D g = im.createGraphics();
+        g.setColor(new Color(143, 154, 138));
+        g.drawLine(0, 7, 15, 7);
+        g.drawLine(8, 0, 8, 7);
+        g.drawLine(3, 8, 3, 15);
+        g.dispose();
+        return im;
+    }
+
+    private static BufferedImage floresTile() {
+        BufferedImage im = tile(new Color(88, 163, 80), new Color(119, 183, 101));
+        Graphics2D g = im.createGraphics();
+        for (int[] p : new int[][]{{3, 4}, {10, 10}, {12, 4}, {5, 12}}) {
+            g.setColor(new Color(36, 99, 48)); g.fillRect(p[0], p[1] + 2, 1, 4);
+            g.setColor(new Color(245, 214, 99)); g.fillRect(p[0] - 1, p[1], 3, 3);
+            g.setColor(new Color(233, 99, 124)); g.fillRect(p[0], p[1] + 1, 1, 1);
+        }
+        g.dispose();
+        return im;
+    }
+
+    private static BufferedImage farolaTile() {
+        BufferedImage im = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = im.createGraphics();
+        g.setColor(new Color(49, 64, 79)); g.fillRect(7, 5, 2, 11);
+        g.fillRect(3, 4, 10, 2);
+        g.setColor(new Color(251, 227, 124)); g.fillRect(4, 1, 8, 4);
+        g.setColor(new Color(245, 247, 218)); g.fillRect(6, 2, 4, 2);
+        g.dispose();
+        return im;
     }
 
     private static void ponerObstaculo(int[] capa, boolean[] colisiones, boolean[] manuales,
@@ -688,6 +792,15 @@ public final class ExploradorMapa {
         return !bloqueada && permiteAgua(esAgua, puedeNadarOVolar);
     }
 
+    /** Puerta transitable asociada a un servicio; no se serializa ni modifica partidas. */
+    private static final class EntradaEdificio {
+        final int x, y;
+        final String tipo;
+        EntradaEdificio(int x, int y, String tipo) {
+            this.x = x; this.y = y; this.tipo = tipo;
+        }
+    }
+
     private static final class MapaDatos {
         final int ancho, alto;
         final BufferedImage[] tiles;
@@ -698,10 +811,19 @@ public final class ExploradorMapa {
         final List<Colocacion> colocaciones;
         final boolean provisional;
         final boolean[] colisionObjetos;
+        final List<EntradaEdificio> entradas;
 
         MapaDatos(int ancho, int alto, BufferedImage[] tiles, byte[] tipos, int[][] capas,
                   boolean[] colisiones, boolean[] manuales, boolean[] hierba,
                   List<ObjetoMapa> objetos, List<Colocacion> colocaciones, boolean provisional) {
+            this(ancho, alto, tiles, tipos, capas, colisiones, manuales, hierba,
+                    objetos, colocaciones, provisional, List.of());
+        }
+
+        MapaDatos(int ancho, int alto, BufferedImage[] tiles, byte[] tipos, int[][] capas,
+                  boolean[] colisiones, boolean[] manuales, boolean[] hierba,
+                  List<ObjetoMapa> objetos, List<Colocacion> colocaciones,
+                  boolean provisional, List<EntradaEdificio> puertas) {
             this.ancho = ancho;
             this.alto = alto;
             this.tiles = tiles;
@@ -713,6 +835,23 @@ public final class ExploradorMapa {
             this.objetos = objetos;
             this.colocaciones = colocaciones;
             this.provisional = provisional;
+            this.entradas = new ArrayList<>(puertas);
+            // En mapas diseñados en Studio, se detectan entradas a partir de los
+            // objetos etiquetados. Se respeta el diseño original del editor.
+            if (!provisional) {
+                for (Colocacion p : colocaciones) {
+                    if (p.objeto < 0 || p.objeto >= objetos.size()) continue;
+                    ObjetoMapa o = objetos.get(p.objeto);
+                    String categoria = o.categoria.toUpperCase(Locale.ROOT);
+                    if (categoria.equals("CENTRO_POKEMON") || categoria.equals("CENTRO_POKÉMON")
+                            || categoria.equals("GIMNASIO") || categoria.equals("TIENDA")
+                            || categoria.equals("CASA") || categoria.equals("CASINO")
+                            || categoria.equals("GOBIERNO")) {
+                        int px = p.x + o.ancho / 2, py = p.y + o.alto;
+                        if (dentro(px, py)) this.entradas.add(new EntradaEdificio(px, py, categoria));
+                    }
+                }
+            }
             this.colisionObjetos = new boolean[ancho * alto];
             for (Colocacion p : colocaciones) {
                 if (p.objeto < 0 || p.objeto >= objetos.size()) continue;
@@ -725,6 +864,12 @@ public final class ExploradorMapa {
                     if (dentro(x, y) && solido) colisionObjetos[y * ancho + x] = true;
                 }
             }
+        }
+
+        String eventoEn(int x, int y) {
+            for (EntradaEdificio entrada : entradas)
+                if (entrada.x == x && entrada.y == y) return entrada.tipo;
+            return null;
         }
 
         boolean dentro(int x, int y) { return x >= 0 && y >= 0 && x < ancho && y < alto; }
