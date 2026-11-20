@@ -35,3 +35,31 @@ Inicia el editor desde la raíz del proyecto para que encuentre esta carpeta:
 ```sh
 java Proyecto.studio.Estudio mapas
 ```
+
+## Pack visual integrado (noviembre de 2026)
+
+El archivo `Tiles/VisualRetro.png` se ha creado a partir de la vista previa
+pixel-art original del proyecto y se utiliza **automáticamente** en los mapas
+generados por `ExploradorMapa` y, si no se ha instalado un sprite de entrenador
+personalizado, en las cuatro direcciones de caminar.
+
+El pack contiene seis fachadas ilustradas, dieciséis muestras de suelo y
+doce poses de entrenador (3 pasos × 4 orientaciones). La versión distribuida
+utiliza un atlas compacto de **192 × 64** píxeles; el renderizador recupera
+las casillas lógicas de 16 × 16 y amplía con nearest-neighbor. El mismo
+renderizador admite una versión de mayor calidad de **384 × 128** píxeles
+si se sustituye el archivo con el mismo nombre.
+
+- Centros Pokémon, tiendas, gimnasios y casas utilizan fachadas distintas.
+- Rutas y ciudades reciben texturas de hierba, caminos, arena, agua y piedra.
+- El fondo de combate ofrece cielo, montañas, árboles y pradera original.
+- Mapas diseñados a mano en Pokémon Studio mantienen su tileset para no
+  invalidar las colisiones ni la colocación de eventos.
+- Para personalizar al entrenador, conserva la opción `Tiles/Jugador.png`
+  descrita en `SPRITECOLLAB.md`: tiene prioridad sobre el pack.
+- El motor no necesita red para usar este atlas.
+- El archivo no contiene sprites extraídos de videojuegos comerciales.
+
+La prueba `ArteVisualRetroSmokeTest` verifica durante CI que el PNG sea válido,
+que las fachadas y los fotogramas existan y que se pueda dibujar el fondo
+de combate en modo sin pantalla.
