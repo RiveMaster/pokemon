@@ -382,7 +382,7 @@ public class Jugador implements Serializable {
         if (UIJuego.disponible()) {
             while (true) {
                 int opcion = UIJuego.elegir("PC Pokémon",
-                        "Pokémon en el equipo: " + equipo.size() + "/6\\n"
+                        "Pokémon en el equipo: " + equipo.size() + "/6\n"
                                 + "Pokémon almacenados: " + pc.size(),
                         "Ver equipo", "Ver PC", "Depositar Pokémon", "Retirar Pokémon", "Salir");
                 if (opcion < 0 || opcion == 4) return;
@@ -832,7 +832,7 @@ public class Jugador implements Serializable {
             eleccion = UIJuego.elegir("Equipar objeto",
                     "Elige un objeto para " + pokemon.getNombre(), opciones) + 1;
         } else {
-            System.out.println("\\n-- Objetos equipables --");
+            System.out.println("\n-- Objetos equipables --");
             for (int i = 0; i < disponibles.size(); i++) {
                 ObjetoEquipable o = disponibles.get(i);
                 System.out.println((i + 1) + ". " + o.getNombre() + " x"
@@ -886,10 +886,10 @@ public class Jugador implements Serializable {
                         detalle = objetosEquipables.isEmpty() ? "No tienes objetos."
                                 : objetosEquipables.entrySet().stream()
                                 .map(e -> e.getKey().getNombre() + " x" + e.getValue())
-                                .collect(java.util.stream.Collectors.joining("\\n"));
+                                .collect(java.util.stream.Collectors.joining("\n"));
                     }
                     case 5 -> detalle = medallas.isEmpty() ? "Todavía no tienes medallas."
-                            : String.join("\\n", medallas);
+                            : String.join("\n", medallas);
                     case 6 -> {
                         SpriteCollabUI.mostrarColeccion("Equipo Pokémon", equipo);
                         continue;
@@ -937,7 +937,7 @@ public class Jugador implements Serializable {
         return objetos.entrySet().stream()
                 .sorted(java.util.Map.Entry.comparingByKey())
                 .map(e -> e.getKey() + " x" + e.getValue())
-                .collect(java.util.stream.Collectors.joining("\\n"));
+                .collect(java.util.stream.Collectors.joining("\n"));
     }
 
     // === Métodos de dinero ===
