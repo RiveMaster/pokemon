@@ -282,9 +282,15 @@ public class Gimnasio {
             UIJuego.mensaje("¡Acceso a la sala del líder!",
                     "Has superado a los tres miembros. " + lider + " te espera en el campo de combate.");
         } else {
-            int entrar = UIJuego.elegir("Sala del líder",
-                    lider + " te propone un combate de revancha. Esta batalla no entrega otra medalla ni premios.",
-                    "Aceptar el combate", "Salir del gimnasio");
+            int entrar;
+            if (UIJuego.disponible()) {
+                entrar = UIJuego.elegir("Sala del líder",
+                        lider + " te propone un combate de revancha. Esta batalla no entrega otra medalla ni premios.",
+                        "Aceptar el combate", "Salir del gimnasio");
+            } else {
+                System.out.println("1. Aceptar revancha  2. Salir del gimnasio");
+                entrar = Entrada.leerEntero(sc) - 1;
+            }
             if (entrar != 0) return;
         }
 
