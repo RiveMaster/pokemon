@@ -120,9 +120,15 @@ public final class ExploradorMapa {
         ventana.setLayout(new BorderLayout());
 
         JLabel estado = new JLabel();
-        estado.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
-        JLabel ayuda = new JLabel("W A S D: moverse    ·    Esc: volver al menú    ·    Los Pokémon aparecen al caminar por la hierba");
-        ayuda.setBorder(BorderFactory.createEmptyBorder(5, 10, 8, 10));
+        estado.setOpaque(true);
+        estado.setBackground(new Color(24, 55, 102));
+        estado.setForeground(Color.WHITE);
+        estado.setFont(new Font("SansSerif", Font.BOLD, 14));
+        estado.setBorder(BorderFactory.createEmptyBorder(11, 16, 11, 16));
+        JLabel ayuda = new JLabel("Explora la zona · Usa los botones o W A S D · Esc para volver");
+        ayuda.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        ayuda.setForeground(new Color(64, 79, 96));
+        ayuda.setBorder(BorderFactory.createEmptyBorder(5, 4, 8, 4));
 
         MapaCanvas lienzo = new MapaCanvas(mapa, jugadorSprite, inicio.x, inicio.y);
         JScrollPane desplazamiento = new JScrollPane(lienzo);
@@ -130,15 +136,27 @@ public final class ExploradorMapa {
         ventana.add(estado, BorderLayout.NORTH);
         ventana.add(desplazamiento, BorderLayout.CENTER);
         JPanel controles = new JPanel(new BorderLayout(8, 4));
-        controles.setBorder(BorderFactory.createEmptyBorder(5, 8, 8, 8));
+        controles.setBackground(new Color(239, 245, 250));
+        controles.setBorder(BorderFactory.createEmptyBorder(9, 14, 12, 14));
         controles.add(ayuda, BorderLayout.NORTH);
-        JPanel cruceta = new JPanel(new GridLayout(2, 3, 5, 5));
+        JPanel cruceta = new JPanel(new GridLayout(2, 3, 7, 7));
+        cruceta.setOpaque(false);
         JButton arriba = new JButton("▲");
         JButton izquierda = new JButton("◀");
         JButton abajo = new JButton("▼");
         JButton derecha = new JButton("▶");
         cruceta.add(new JLabel()); cruceta.add(arriba); cruceta.add(new JLabel());
         cruceta.add(izquierda); cruceta.add(abajo); cruceta.add(derecha);
+        for (JButton b : new JButton[]{arriba, izquierda, abajo, derecha}) {
+            b.setFont(new Font("SansSerif", Font.BOLD, 20));
+            b.setForeground(new Color(35, 73, 119));
+            b.setBackground(Color.WHITE);
+            b.setFocusPainted(false);
+            b.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(177, 198, 219), 1, true),
+                    BorderFactory.createEmptyBorder(4, 16, 4, 16)));
+            b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
         controles.add(cruceta, BorderLayout.CENTER);
         ventana.add(controles, BorderLayout.SOUTH);
 
@@ -165,7 +183,7 @@ public final class ExploradorMapa {
             }
         });
 
-        ventana.setSize(1000, 760);
+        ventana.setSize(1100, 800);
         ventana.setMinimumSize(new Dimension(640, 480));
         ventana.setLocationRelativeTo(null);
         ventana.setVisible(true);
