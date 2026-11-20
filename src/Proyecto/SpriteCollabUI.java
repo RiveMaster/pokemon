@@ -90,7 +90,7 @@ public final class SpriteCollabUI {
                 g2.dispose();
             }
         };
-        campo.setPreferredSize(new Dimension(720, 340));
+        campo.setPreferredSize(new Dimension(820, 390));
 
         actorRival = new SpriteActor(false);
         actorJugador = new SpriteActor(true);
@@ -100,16 +100,20 @@ public final class SpriteCollabUI {
         campo.add(actorJugador);
 
         JPanel panelDatos = new JPanel(new GridLayout(1, 2, 14, 0));
-        panelDatos.setBorder(new EmptyBorder(8, 14, 12, 14));
-        panelDatos.setBackground(new Color(35, 48, 62));
+        panelDatos.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(3, 0, 0, 0, new Color(255, 205, 66)),
+                new EmptyBorder(12, 18, 14, 18)));
+        panelDatos.setBackground(new Color(24, 55, 102));
         datosJugador = crearEtiquetaDatos();
         datosRival = crearEtiquetaDatos();
         panelDatos.add(datosJugador);
         panelDatos.add(datosRival);
 
         panelInteraccion = new JPanel(new BorderLayout(8, 8));
-        panelInteraccion.setBorder(new EmptyBorder(10, 14, 10, 14));
-        panelInteraccion.setBackground(new Color(245, 247, 250));
+        panelInteraccion.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(210, 220, 231)),
+                new EmptyBorder(14, 18, 16, 18)));
+        panelInteraccion.setBackground(new Color(239, 245, 250));
         textoCombate = new JLabel("¡Un combate Pokémon!", SwingConstants.LEFT);
         textoCombate.setFont(textoCombate.getFont().deriveFont(Font.BOLD, 15f));
         panelInteraccion.add(textoCombate, BorderLayout.CENTER);
@@ -120,14 +124,16 @@ public final class SpriteCollabUI {
         ventanaCombate.setLayout(new BorderLayout());
         ventanaCombate.add(campo, BorderLayout.CENTER);
         ventanaCombate.add(zonaInferior, BorderLayout.SOUTH);
-        ventanaCombate.setSize(820, 570);
+        ventanaCombate.setSize(940, 690);
+        ventanaCombate.setMinimumSize(new Dimension(780, 600));
         ventanaCombate.setLocationRelativeTo(null);
     }
 
     private static JLabel crearEtiquetaDatos() {
         JLabel label = new JLabel("Cargando Pokémon…", SwingConstants.CENTER);
         label.setForeground(Color.WHITE);
-        label.setFont(label.getFont().deriveFont(Font.BOLD, 14f));
+        label.setFont(new Font("SansSerif", Font.BOLD, 14f));
+        label.setBorder(new EmptyBorder(4, 8, 4, 8));
         return label;
     }
 
@@ -226,15 +232,23 @@ public final class SpriteCollabUI {
             if (panelInteraccion == null) crearVentanaCombate();
             panelInteraccion.removeAll();
             JLabel texto = new JLabel("<html>" + escapar(mensaje) + "</html>");
-            texto.setFont(texto.getFont().deriveFont(Font.BOLD, 15f));
+            texto.setFont(new Font("SansSerif", Font.BOLD, 16f));
+            texto.setForeground(new Color(32, 49, 70));
+            texto.setBorder(new EmptyBorder(0, 2, 8, 2));
             panelInteraccion.add(texto, BorderLayout.NORTH);
-            JPanel botones = new JPanel(new GridLayout(0, Math.min(2, Math.max(1, opciones.length)), 8, 6));
+            JPanel botones = new JPanel(new GridLayout(0, Math.min(2, Math.max(1, opciones.length)), 10, 8));
             botones.setOpaque(false);
             for (int i = 0; i < opciones.length; i++) {
                 final int indice = i;
                 JButton boton = new JButton(opciones[i]);
-                boton.setFont(boton.getFont().deriveFont(Font.BOLD, 13f));
+                boton.setFont(new Font("SansSerif", Font.BOLD, 14f));
+                boton.setForeground(new Color(35, 58, 83));
+                boton.setBackground(Color.WHITE);
+                boton.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(183, 203, 222), 1, true),
+                        new EmptyBorder(10, 12, 10, 12)));
                 boton.setFocusPainted(false);
+                boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 boton.setEnabled(habilitadas == null || habilitadas[i]);
                 boton.addActionListener(e -> {
                     seleccion[0] = indice;
