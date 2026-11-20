@@ -132,9 +132,9 @@ public class Gobierno {
 
         if (UIJuego.disponible()) {
             UIJuego.mensaje("Sede del Gobierno",
-                    "Generación: " + gen.etiqueta() + "\\n"
+                    "Generación: " + gen.etiqueta() + "\n"
                             + "Jefe: " + jefe.nombre + " · " + jefe.cargo
-                            + "\\nMedallas: " + medallas + "/" + total);
+                            + "\nMedallas: " + medallas + "/" + total);
         }
         System.out.println("\n=== SEDE DEL GOBIERNO DE " + gen.getRegion().toUpperCase() + " ===");
         System.out.println("Jefe: " + jefe.nombre + ", " + jefe.cargo + ".");
