@@ -33,6 +33,7 @@ public final class SpriteCollabUI {
     private static JLabel datosJugador, datosRival;
     private static JPanel panelInteraccion;
     private static JLabel textoCombate;
+    private static JPanel campoBatalla;
 
     private SpriteCollabUI() { }
 
@@ -49,8 +50,14 @@ public final class SpriteCollabUI {
 
     public static void cerrarCombate() {
         SwingUtilities.invokeLater(() -> {
+            if (actorJugador != null) actorJugador.detener();
+            if (actorRival != null) actorRival.detener();
             if (ventanaCombate != null) ventanaCombate.dispose();
             ventanaCombate = null;
+            campoBatalla = null;
+            actorJugador = null;
+            actorRival = null;
+            panelInteraccion = null;
         });
     }
 
@@ -70,32 +77,73 @@ public final class SpriteCollabUI {
     }
 
     private static void animar(PokemonLuchador pokemon, String nombre, boolean ignorado) {
-        if (pokemon == null) return;
-        SwingUtilities.invokeLater(() -> {
-            if (actorJugador != null && actorJugador.representa(pokemon)) actorJugador.reproducir(nombre);
-            else if (actorRival != null && actorRival.representa(pokemon)) actorRival.reproducir(nombre);
+        if (pokemon == null || GraphicsEnvironment.isHeadless()) return;
+        // Se espera en el hilo del combate, nunca en el EDT: cada ataque, impacto
+        // y desmayo puede verse antes de que empiece la siguiente acción.
+        boolean enEDT = SwingUtilities.isEventDispatchThread();
+        CountDownLatch terminado = new CountDownLatch(1);
+        ejecutarEnEDT(() -> {
+            SpriteActor actor = actorJugador != null && actorJugador.representa(pokemon)
+                    ? actorJugador
+                    : actorRival != null && actorRival.representa(pokemon) ? actorRival : null;
+            if (actor == null) { terminado.countDown(); return; }
+            actor.reproducir(nombre);
+            javax.swing.Timer espera = new javax.swing.Timer(
+                    "Attack".equals(nombre) ? 580 : "Hurt".equals(nombre) ? 380 : 740,
+                    e -> terminado.countDown());
+            espera.setRepeats(false);
+            espera.start();
         });
+        if (!enEDT) {
+            try { terminado.await(1050, TimeUnit.MILLISECONDS); }
+            catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+        }
     }
 
     private static void crearVentanaCombate() {
         ventanaCombate = new JFrame("Pokémon — Combate");
         ventanaCombate.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         JPanel campo = new JPanel(null) {
-            @Override protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setPaint(new GradientPaint(0, 0, new Color(202, 230, 245),
-                        0, getHeight(), new Color(226, 237, 205)));
-                g2.fillRect(0, 0, getWidth(), getHeight());
-                g2.dispose();
+            @Override protected void paintComponent(Graphics graficos) {
+                super.paintComponent(graficos);
+                Graphics2D g = (Graphics2D) graficos.create();
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+                // Terreno de combate dibujado con capas y siluetas retro, sin filtros borrosos.
+                int w = getWidth(), h = getHeight();
+                g.setColor(new Color(191, 223, 241)); g.fillRect(0, 0, w, h);
+                g.setColor(new Color(225, 242, 248)); g.fillRect(0, h / 3, w, h / 3);
+                g.setColor(new Color(168, 195, 137)); g.fillRect(0, (h * 2) / 3, w, h / 3);
+                g.setColor(new Color(125, 165, 113)); g.fillRect(0, h - 45, w, 45);
+                g.setColor(new Color(94, 139, 100)); g.fillRect(0, h - 12, w, 12);
+                // Plataformas elípticas clásicas; la superior parece más lejana.
+                int rivalX = w * 58 / 100, rivalY = h * 47 / 100;
+                g.setColor(new Color(107, 148, 112));
+                g.fillOval(rivalX, rivalY, w * 30 / 100, Math.max(22, h / 10));
+                g.setColor(new Color(147, 190, 128));
+                g.fillOval(rivalX + 7, rivalY + 2, w * 28 / 100, Math.max(17, h / 13));
+                int jugadorX = w * 6 / 100, jugadorY = h * 74 / 100;
+                g.setColor(new Color(79, 117, 91));
+                g.fillOval(jugadorX, jugadorY, w * 42 / 100, Math.max(28, h / 8));
+                g.setColor(new Color(144, 184, 122));
+                g.fillOval(jugadorX + 8, jugadorY + 2, w * 40 / 100, Math.max(24, h / 10));
+                g.dispose();
             }
         };
+        campoBatalla = campo;
         campo.setPreferredSize(new Dimension(820, 390));
 
         actorRival = new SpriteActor(false);
         actorJugador = new SpriteActor(true);
-        actorRival.setBounds(430, 12, 230, 205);
-        actorJugador.setBounds(55, 110, 250, 215);
+        // La colocación proporcional mantiene la composición en cualquier tamaño.
+        campo.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override public void componentResized(java.awt.event.ComponentEvent e) {
+                int w = campo.getWidth(), h = campo.getHeight();
+                actorRival.setBounds(w * 56 / 100, h * 6 / 100,
+                        Math.max(150, w * 32 / 100), Math.max(130, h * 47 / 100));
+                actorJugador.setBounds(w * 9 / 100, h * 27 / 100,
+                        Math.max(160, w * 36 / 100), Math.max(150, h * 56 / 100));
+            }
+        });
         campo.add(actorRival);
         campo.add(actorJugador);
 
@@ -140,10 +188,14 @@ public final class SpriteCollabUI {
     private static void actualizarLado(PokemonLuchador p, SpriteActor actor, JLabel datos, boolean jugador) {
         int porcentaje = p.getVidaMax() <= 0 ? 0 : Math.max(0, Math.min(100, p.getVidaActual() * 100 / p.getVidaMax()));
         String estado = p.getEstado() == null ? "NORMAL" : p.getEstado().toString();
+        String colorPS = porcentaje > 50 ? "#77dc91" : porcentaje > 20 ? "#f2d169" : "#f0786d";
+        String barraPS = "<div style='background:#324563;width:180px;padding:2px;'>"
+                + "<span style='color:" + colorPS + "'>●</span> "
+                + "PS " + p.getVidaActual() + "/" + p.getVidaMax() + " (" + porcentaje + "%)</div>";
         datos.setText("<html><div style='text-align:left'><b>" + escapar(p.getNombre())
                 + (p.esShiny() ? " ✨ SHINY" : "") + (p.estaEnGigamax() ? " · GIGAMAX" : "")
-                + " · Nv. " + p.getNivel() + "</b><br>PS: " + p.getVidaActual() + "/" + p.getVidaMax()
-                + " (" + porcentaje + "%)<br><span style='color:#9bd38b'>ATQ " + p.getAtaque()
+                + " · Nv. " + p.getNivel() + "</b><br>" + barraPS
+                + "<br><span style='color:#9bd38b'>ATQ " + p.getAtaque()
                 + " · DEF " + p.getDefensa() + " · At. Esp. " + p.getAtaqueEspecial()
                 + " · Def. Esp. " + p.getDefensaEspecial() + " · Vel. " + p.getVelocidad()
                 + "</span><br>Estado: " + escapar(estado)
