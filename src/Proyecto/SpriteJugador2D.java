@@ -64,6 +64,17 @@ public final class SpriteJugador2D {
                 System.err.println("Sprite del entrenador ilegible: " + ruta + ": " + e.getMessage());
             }
         }
+        // Usa los fotogramas del pack ilustrado cuando no existe un diseño del usuario.
+        if (ArteVisualRetro.disponible()) {
+            SpriteJugador2D pack = new SpriteJugador2D(true);
+            boolean valido = true;
+            for (int dir = 0; dir < 4; dir++) for (int paso = 0; paso < 3; paso++) {
+                BufferedImage imagen = ArteVisualRetro.entrenador(dir, paso);
+                if (imagen == null) valido = false;
+                else pack.fotogramas[dir][paso] = imagen;
+            }
+            if (valido) return pack;
+        }
         return provisional();
     }
 
