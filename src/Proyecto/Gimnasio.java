@@ -256,50 +256,63 @@ public class Gimnasio {
     public void desafiar(Scanner sc, Jugador jugador) {
         Generacion gen = jugador.getGeneracion();
         String clave = claveMedalla(gen);
-
-        System.out.println("\n=== " + nombre.toUpperCase() + " DE " + gen.getRegion().toUpperCase() + " (tipo " + tipo + ") ===");
+        boolean primeraVez = !jugador.tieneMedalla(clave);
+        int vencidos = 0;
+        for (int i = 0; i < NUM_MIEMBROS; i++) {
+            if (jugador.miembroGimnasioDerrotado(claveMiembro(gen, i))) vencidos++;
+        }
 
         if (!jugador.equipoVM()) {
-            System.out.println("Todos tus Pokémon están debilitados. Ve al Centro Pokémon antes de entrar.");
+            UIJuego.mensaje(nombre, "Tu equipo está debilitado. Visita el Centro Pokémon antes de desafiar este gimnasio.");
             return;
         }
 
-        boolean primeraVez = !jugador.tieneMedalla(clave);
+        String estado = primeraVez
+                ? "Progreso: " + vencidos + "/" + NUM_MIEMBROS + " miembros derrotados."
+                : "Ya tienes esta medalla. Puedes disputar una revancha contra el líder sin recibir otra recompensa.";
+        String introduccion = nombre + " · " + gen.getRegion() + "\\nTipo: " + tipo
+                + "\\nLíder: " + lider + " (" + tituloLider + ")"
+                + "\\nNivel recomendado: " + getNivelRecomendado(gen)
+                + "\\n" + estado
+                + (primeraVez ? "\\nPrimero tendrás que superar a los miembros del gimnasio." : "");
+        UIJuego.mensaje("Recepción del gimnasio", introduccion);
 
         if (primeraVez) {
-            System.out.println("Recepción: Bienvenido a " + gen.getRegion() + ". Para llegar a " + lider
-                    + " (" + tituloLider + ") tendrás que vencer antes a sus " + NUM_MIEMBROS + " miembros.");
-
-            if (!superarMiembros(sc, jugador, gen)) {
-                return; // perdió, se rindió o salió del gimnasio
-            }
-            System.out.println("\n" + lider + ": ¡Has llegado hasta aquí! Aquí se viene a demostrar lo que uno vale. "
-                    + "¡No te olvides de suscribirte... a la victoria!");
+            if (!superarMiembros(sc, jugador, gen)) return;
+            UIJuego.mensaje("¡Acceso a la sala del líder!",
+                    "Has superado a los tres miembros. " + lider + " te espera en el campo de combate.");
         } else {
-            System.out.println(lider + " (" + tituloLider + "): Ya tienes la " + medalla
-                    + " de aquí, pero un combate de revancha siempre da visitas.");
-            System.out.println("(La revancha es solo contra el líder y no da recompensas.)");
+            int entrar = UIJuego.elegir("Sala del líder",
+                    lider + " te propone un combate de revancha. Esta batalla no entrega otra medalla ni premios.",
+                    "Aceptar el combate", "Salir del gimnasio");
+            if (entrar != 0) return;
         }
 
+        UIJuego.mensaje("Desafío de gimnasio",
+                lider + ": ¡Bienvenido a mi estadio! Demuestra lo que vale tu equipo. ¡Que empiece el combate!");
         boolean victoria = CombateEntrenador.combatir(sc, jugador, lider, crearEquipo(gen));
 
         if (!victoria) {
-            System.out.println("\n" + lider + ": ¡Vuelve cuando estés más preparado!");
-            System.out.println("Puedes curar a tus Pokémon en el Centro Pokémon.");
+            UIJuego.mensaje("Fin del desafío",
+                    "No has podido superar a " + lider + ". Tus avances contra los miembros se conservan. "
+                            + "Puedes curar al equipo y volver cuando estés preparado.");
             return;
         }
 
-        System.out.println("\n¡Has derrotado a " + lider + "!");
         if (primeraVez) {
             int dinero = recompensaDinero + recompensaDinero * (gen.getNumero() - 1) / 4;
             jugador.añadirMedalla(clave);
             jugador.agregarDinero(dinero);
             if (mtRecompensa != null && !mtRecompensa.isEmpty()) jugador.añadirMT(mtRecompensa);
-            System.out.println(lider + ": Has ganado. Toma la " + medalla + ".");
-            System.out.println("🏅 Has obtenido la " + clave + " (" + jugador.medallasEnGeneracion(gen) + "/" + GIMNASIOS.size() + " en " + gen.getRegion() + ").");
-            System.out.println("💰 Has ganado " + dinero + "€.");
-            if (mtRecompensa != null && !mtRecompensa.isEmpty())
-                System.out.println("📀 Has recibido la MT " + mtRecompensa + " (úsala desde el menú).");
+            String premio = "¡Has conseguido " + clave + "!\\n"
+                    + "Medallas de " + gen.getRegion() + ": "
+                    + jugador.medallasEnGeneracion(gen) + "/" + GIMNASIOS.size()
+                    + "\\nDinero recibido: " + dinero + "€."
+                    + (mtRecompensa != null && !mtRecompensa.isEmpty()
+                    ? "\\nTambién has recibido la MT " + mtRecompensa + "." : "");
+            UIJuego.mensaje("¡Victoria en " + nombre + "!", premio);
+        } else {
+            UIJuego.mensaje("¡Victoria!", "Has vuelto a derrotar a " + lider + ". ¡Buen combate!");
         }
     }
 
@@ -310,43 +323,42 @@ public class Gimnasio {
     private boolean superarMiembros(Scanner sc, Jugador jugador, Generacion gen) {
         for (int i = 0; i < NUM_MIEMBROS; i++) {
             String claveMiembro = claveMiembro(gen, i);
+            if (jugador.miembroGimnasioDerrotado(claveMiembro)) continue;
 
-            if (jugador.miembroGimnasioDerrotado(claveMiembro)) {
-                System.out.println("(" + miembros[i] + " ya está vencido.)");
-                continue;
-            }
             if (!jugador.equipoVM()) {
-                System.out.println("No te quedan Pokémon en pie. Cúralos en el Centro Pokémon y vuelve.");
+                UIJuego.mensaje("Desafío detenido",
+                        "No te quedan Pokémon en pie. Cura a tu equipo en el Centro Pokémon. "
+                                + "Los miembros que ya has derrotado seguirán superados.");
                 return false;
             }
 
-            System.out.println("\n[Miembro " + (i + 1) + "/" + NUM_MIEMBROS + "] " + miembros[i]
-                    + ": ¡Para llegar al líder tendrás que pasar por mí!");
+            String nombreMiembro = miembros[i];
+            int decision = UIJuego.elegir("Reto del gimnasio · " + (i + 1) + "/" + NUM_MIEMBROS,
+                    nombreMiembro + " bloquea el camino al líder.\\n"
+                            + "Tu progreso quedará guardado si decides salir.",
+                    "Enfrentar a " + nombreMiembro, "Abandonar el gimnasio");
+            if (decision != 0) {
+                UIJuego.mensaje("Gimnasio", "Has salido del gimnasio. Tu progreso queda guardado.");
+                return false;
+            }
 
-            boolean victoria = CombateEntrenador.combatir(sc, jugador, miembros[i], crearEquipoMiembro(gen, i));
+            UIJuego.mensaje("Entrenador del gimnasio",
+                    nombreMiembro + ": ¡Si quieres llegar al líder, primero tendrás que vencerme!");
+            boolean victoria = CombateEntrenador.combatir(sc, jugador, nombreMiembro,
+                    crearEquipoMiembro(gen, i));
             if (!victoria) {
-                System.out.println("\n" + miembros[i] + ": ¡Vuelve cuando estés más preparado!");
-                System.out.println("Los miembros que ya has vencido siguen vencidos. Cura a tus Pokémon y vuelve.");
+                UIJuego.mensaje("Desafío perdido",
+                        "No has vencido a " + nombreMiembro + ". Los miembros ya derrotados siguen superados. "
+                                + "Puedes curarte y regresar.");
                 return false;
             }
 
             jugador.marcarMiembroGimnasioDerrotado(claveMiembro);
-            System.out.println("\n¡Has derrotado a " + miembros[i] + "! (" + (i + 1) + "/" + NUM_MIEMBROS + ")");
-
-            String siguiente = (i + 1 < NUM_MIEMBROS) ? miembros[i + 1] : lider + " (líder)";
-            if (!seguir(sc, siguiente)) {
-                System.out.println("Sales del gimnasio. Tu progreso queda guardado.");
-                return false;
-            }
+            UIJuego.mensaje("¡Rival superado!",
+                    "Has derrotado a " + nombreMiembro + ".\\nProgreso del gimnasio: "
+                            + (i + 1) + "/" + NUM_MIEMBROS + " miembros.");
         }
         return true;
     }
 
-    private boolean seguir(Scanner sc, String siguiente) {
-        System.out.println("Siguiente rival: " + siguiente);
-        System.out.println("1. Continuar");
-        System.out.println("2. Salir del gimnasio (el progreso se guarda)");
-        System.out.print("Elige: ");
-        return Entrada.leerEntero(sc) == 1;
-    }
 }
