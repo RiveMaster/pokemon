@@ -238,6 +238,8 @@ public final class SpriteCollabUI {
             panelInteraccion.add(texto, BorderLayout.NORTH);
             JPanel botones = new JPanel(new GridLayout(0, Math.min(2, Math.max(1, opciones.length)), 10, 8));
             botones.setOpaque(false);
+            JButton primerBoton = null;
+            int indiceVolver = -1;
             for (int i = 0; i < opciones.length; i++) {
                 final int indice = i;
                 JButton boton = new JButton(opciones[i]);
@@ -249,7 +251,10 @@ public final class SpriteCollabUI {
                         new EmptyBorder(10, 12, 10, 12)));
                 boton.setFocusPainted(false);
                 boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                boton.setEnabled(habilitadas == null || habilitadas[i]);
+                boton.setEnabled(habilitadas == null || (i < habilitadas.length && habilitadas[i]));
+                if (boton.isEnabled() && primerBoton == null) primerBoton = boton;
+                if ("Volver".equalsIgnoreCase(opciones[i]) || "Cancelar".equalsIgnoreCase(opciones[i]))
+                    indiceVolver = i;
                 boton.addActionListener(e -> {
                     seleccion[0] = indice;
                     latch.countDown();
@@ -259,6 +264,17 @@ public final class SpriteCollabUI {
             panelInteraccion.add(botones, BorderLayout.CENTER);
             panelInteraccion.revalidate();
             panelInteraccion.repaint();
+            final int cancelar = indiceVolver;
+            ventanaCombate.getRootPane().registerKeyboardAction(e -> {
+                seleccion[0] = cancelar;
+                latch.countDown();
+            }, KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0),
+                    JComponent.WHEN_IN_FOCUSED_WINDOW);
+            if (primerBoton != null) {
+                ventanaCombate.getRootPane().setDefaultButton(primerBoton);
+                JButton foco = primerBoton;
+                SwingUtilities.invokeLater(foco::requestFocusInWindow);
+            }
             ventanaCombate.setVisible(true);
             ventanaCombate.toFront();
         });
