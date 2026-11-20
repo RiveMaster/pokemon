@@ -170,10 +170,10 @@ public final class ExploradorMapa {
         actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
         instalarMovimiento(ventana, jugador, zona, permitirEncuentros, mapa, lienzo, estado, mapaId,
                 resultado, fin, cerrar);
-        arriba.addActionListener(e -> ejecutarMovimiento(lienzo, "arriba"));
-        izquierda.addActionListener(e -> ejecutarMovimiento(lienzo, "izquierda"));
-        abajo.addActionListener(e -> ejecutarMovimiento(lienzo, "abajo"));
-        derecha.addActionListener(e -> ejecutarMovimiento(lienzo, "derecha"));
+        configurarBotonMovimiento(arriba, lienzo, "arriba");
+        configurarBotonMovimiento(izquierda, lienzo, "izquierda");
+        configurarBotonMovimiento(abajo, lienzo, "abajo");
+        configurarBotonMovimiento(derecha, lienzo, "derecha");
 
         ventana.addWindowListener(new WindowAdapter() {
             @Override public void windowClosed(WindowEvent e) {
@@ -189,6 +189,25 @@ public final class ExploradorMapa {
         ventana.setVisible(true);
         SwingUtilities.invokeLater(() -> centrarVista(desplazamiento, lienzo));
         lienzo.requestFocusInWindow();
+    }
+
+    /** Mantener pulsado un control repite el movimiento sin exigir clics sucesivos. */
+    private static void configurarBotonMovimiento(JButton boton, JComponent lienzo, String accion) {
+        Timer repeticion = new Timer(145, e -> ejecutarMovimiento(lienzo, accion));
+        repeticion.setInitialDelay(0);
+        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mousePressed(java.awt.event.MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) repeticion.start();
+            }
+            @Override public void mouseReleased(java.awt.event.MouseEvent e) { repeticion.stop(); }
+            @Override public void mouseExited(java.awt.event.MouseEvent e) {
+                if ((e.getModifiersEx() & java.awt.event.InputEvent.BUTTON1_DOWN_MASK) == 0)
+                    repeticion.stop();
+            }
+        });
+        boton.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override public void focusLost(java.awt.event.FocusEvent e) { repeticion.stop(); }
+        });
     }
 
     private static void ejecutarMovimiento(JComponent lienzo, String accion) {
@@ -209,6 +228,10 @@ public final class ExploradorMapa {
         entradas.put(KeyStroke.getKeyStroke("A"), "izquierda");
         entradas.put(KeyStroke.getKeyStroke("S"), "abajo");
         entradas.put(KeyStroke.getKeyStroke("D"), "derecha");
+        entradas.put(KeyStroke.getKeyStroke("UP"), "arriba");
+        entradas.put(KeyStroke.getKeyStroke("LEFT"), "izquierda");
+        entradas.put(KeyStroke.getKeyStroke("DOWN"), "abajo");
+        entradas.put(KeyStroke.getKeyStroke("RIGHT"), "derecha");
         entradas.put(KeyStroke.getKeyStroke("ESCAPE"), "salir");
         acciones.put("salir", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) { cerrar.run(); }
