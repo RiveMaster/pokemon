@@ -69,7 +69,7 @@ public final class SistemaCrianza {
                     "Elige el primer Pokémon:", nombres);
             primero = elegido < 0 ? -1 : disponibles.get(elegido);
         } else {
-            System.out.println("\\nElige el primer progenitor (0 cancela):");
+            System.out.println("\nElige el primer progenitor (0 cancela):");
             listarCandidatos(candidatos, origen, disponibles);
             primero = leerIndice(sc, candidatos.size(), disponibles);
         }
@@ -93,7 +93,7 @@ public final class SistemaCrianza {
                     "Elige el segundo Pokémon:", nombres);
             segundo = elegido < 0 ? -1 : opciones.get(elegido);
         } else {
-            System.out.println("\\nElige el segundo progenitor (0 cancela):");
+            System.out.println("\nElige el segundo progenitor (0 cancela):");
             listarCandidatos(candidatos, origen, disponibles);
             segundo = leerIndice(sc, candidatos.size(), disponibles);
         }
@@ -165,9 +165,9 @@ public final class SistemaCrianza {
 
         UIJuego.mensaje("¡Nuevo Pokémon!", "Ha nacido " + cria.getNombre()
                 + " · Nv.1 · " + cria.getSexo()
-                + "\\nIV heredados: " + cria.resumenIVs()
-                + (equipoLlenoAntes ? "\\nEnviado al PC." : "\\nAñadido al equipo."));
-        System.out.println("\\n¡Ha nacido un huevo Pokémon!");
+                + "\nIV heredados: " + cria.resumenIVs()
+                + (equipoLlenoAntes ? "\nEnviado al PC." : "\nAñadido al equipo."));
+        System.out.println("\n¡Ha nacido un huevo Pokémon!");
         System.out.println("Especie: " + cria.getNombre() + " · Nivel 1 · Sexo: " + cria.getSexo());
         System.out.println("IVs heredados como media de ambos progenitores:");
         System.out.println("  " + cria.resumenIVs());
@@ -252,7 +252,7 @@ public final class SistemaCrianza {
             if (seleccionado >= 0 && seleccionado < todos.size()) {
                 PokemonLuchador p = todos.get(seleccionado);
                 UIJuego.mensaje("Crianza de " + p.getNombre(),
-                        p.resumenIVs() + "\\n"
+                        p.resumenIVs() + "\n"
                                 + (p.puedeCriarAhora() ? "Listo para criar."
                                 : "Descanso restante: " + tiempo(p.milisegundosParaCriar())));
             }
