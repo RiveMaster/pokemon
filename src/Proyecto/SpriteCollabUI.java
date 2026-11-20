@@ -504,6 +504,12 @@ public final class SpriteCollabUI {
 
     private static SpriteSet cargarRecursos(int dex) {
         SpriteSet set = new SpriteSet();
+        cargarSpritesCombateLocales(set, dex);
+        // Un juego con sus propios sprites delanteros/traseros no necesita red.
+        if (set.locales.containsKey("front") && set.locales.containsKey("back")) {
+            set.creditos = "Sprites personalizados cargados desde Tiles/Pokemon";
+            return set;
+        }
         String carpeta = String.format(Locale.ROOT, "sprite/%04d/", dex);
         try {
             Files.createDirectories(CACHE.resolve(String.format(Locale.ROOT, "%04d", dex)));
@@ -535,6 +541,28 @@ public final class SpriteCollabUI {
             set.creditos = "SpriteCollab no disponible para esta especie.";
         }
         return set;
+    }
+
+    /**
+     * Sprites de batalla aportados por el proyecto: frontal y espalda independientes.
+     * No se distribuyen sprites comerciales; estos archivos son opcionales.
+     *
+     * Ejemplos: Tiles/Pokemon/0001_front.png, 0001_back.png,
+     * 0001_shiny_front.png y 0001_shiny_back.png.
+     */
+    private static void cargarSpritesCombateLocales(SpriteSet set, int dex) {
+        String prefijo = String.format(Locale.ROOT, "%04d", dex);
+        for (String nombre : List.of("front", "back", "shiny_front", "shiny_back")) {
+            Path ruta = Path.of("Tiles", "Pokemon", prefijo + "_" + nombre + ".png");
+            if (!Files.isRegularFile(ruta)) continue;
+            try {
+                BufferedImage imagen = ImageIO.read(ruta.toFile());
+                if (imagen != null && imagen.getWidth() > 0 && imagen.getHeight() > 0)
+                    set.locales.put(nombre, imagen);
+            } catch (IOException ex) {
+                System.err.println("Sprite local no disponible: " + ruta + ": " + ex.getMessage());
+            }
+        }
     }
 
     private static Path asegurar(String remoto, Path local) throws IOException {
@@ -630,6 +658,7 @@ public final class SpriteCollabUI {
 
     private static final class SpriteSet {
         final Map<String, BufferedImage> hojas = new HashMap<>();
+        final Map<String, BufferedImage> locales = new HashMap<>();
         Map<String, AnimInfo> animaciones = Collections.emptyMap();
         BufferedImage retrato;
         String creditos = "";
@@ -815,7 +844,26 @@ public final class SpriteCollabUI {
             g.translate(dx, dy);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
                     Math.max(0.05f, Math.min(1f, opacidad))));
-            if (hoja != null && info != null && info.ancho > 0 && info.alto > 0) {
+            BufferedImage spriteBatalla = null;
+            if (recursos != null) {
+                String cara = jugador ? "back" : "front";
+                if (pokemon.esShiny()) spriteBatalla = recursos.locales.get("shiny_" + cara);
+                if (spriteBatalla == null) spriteBatalla = recursos.locales.get(cara);
+            }
+
+            if (spriteBatalla != null) {
+                // Sprite oficial-style aportado por el proyecto, sin deformar píxeles.
+                double factor = escalaEspecie(pokemon);
+                double escala = Math.min((getWidth() - 24.0) / spriteBatalla.getWidth(),
+                        (getHeight() - 24.0) / spriteBatalla.getHeight()) * 0.73 * factor;
+                int w = Math.max(1, Math.min(getWidth() - 12,
+                        (int) Math.round(spriteBatalla.getWidth() * escala)));
+                int h = Math.max(1, Math.min(getHeight() - 12,
+                        (int) Math.round(spriteBatalla.getHeight() * escala)));
+                int x = (getWidth() - w) / 2;
+                int y = getHeight() - h - 8;
+                g.drawImage(spriteBatalla, x, y, w, h, null);
+            } else if (hoja != null && info != null && info.ancho > 0 && info.alto > 0) {
                 int columnas = Math.max(1, hoja.getWidth() / info.ancho);
                 int filas = Math.max(1, hoja.getHeight() / info.alto);
                 int direccion = jugador ? Math.min(4, filas - 1) : 0;
