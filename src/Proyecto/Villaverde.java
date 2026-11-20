@@ -9,11 +9,18 @@ public class Villaverde {
     // Menú de Villaverde. Devuelve a dónde va el jugador (Ruta 1); el resto de opciones se quedan aquí.
     public static Ubicacion mostrarMenu(Scanner sc, Jugador jugadorCompleto) {
 
-        System.out.println("Explora Villaverde con W, A, S y D. Pulsa Esc para abrir el menú.");
-        ExploradorMapa.Resultado exploracionInicial = ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
-        if (exploracionInicial.getDestino() != null) return exploracionInicial.getDestino();
-
+        System.out.println("Explora Villaverde y entra por las puertas de los edificios.");
+        boolean explorar = true;
         while (true) {
+            if (explorar) {
+                ExploradorMapa.Resultado resultado = ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
+                if (resultado.getDestino() != null) return resultado.getDestino();
+                if (resultado.getEvento() != null) {
+                    atenderEdificio(sc, jugadorCompleto, resultado.getEvento());
+                    continue;
+                }
+                explorar = false;
+            }
             Ubicacion primera = Mapa.getRecorrido().size() > 1 ? Mapa.getRecorrido().get(1) : Ubicacion.RUTA1;
             int opcion;
             if (UIJuego.disponible()) {
@@ -52,10 +59,7 @@ public class Villaverde {
                     }
                 }
                 case 4 -> viajarEntreGeneraciones(sc, jugadorCompleto);
-                case 5 -> {
-                    ExploradorMapa.Resultado exploracion = ExploradorMapa.explorarCiudad(jugadorCompleto, Ubicacion.VILLAVERDE);
-                    if (exploracion.getDestino() != null) return exploracion.getDestino();
-                }
+                case 5 -> explorar = true;
                 case 777999222 ->{
                     System.out.println("Entrando en modo debug para estats modificadas.");
                     System.out.println("Introduce la opcion:");
@@ -133,6 +137,20 @@ public class Villaverde {
                 case -1 -> UIJuego.mensaje("Cheatcode", "Código incorrecto.");
                 default -> UIJuego.mensaje("Villaverde", "Opción no válida.");
             }
+        }
+    }
+
+    private static void atenderEdificio(Scanner sc, Jugador jugador, String evento) {
+        switch (evento) {
+            case "CENTRO_POKEMON", "CENTRO_POKÉMON" ->
+                    CentroPokemon.visitar(sc, jugador.getPokemon(), jugador);
+            case "TIENDA" -> Tienda.entrar(sc, jugador);
+            case "CASA_MAMA" -> visitarMama(sc, jugador);
+            case "CASA" -> UIJuego.mensaje("Casa de Villaverde",
+                    "Un vecino te desea suerte en tu aventura. ¡Visita a tu madre antes de partir!");
+            case "GIMNASIO" -> UIJuego.mensaje("Pueblo Villaverde",
+                    "En Villaverde no hay gimnasio. Puedes encontrar el primero en Ciudad Oviedo.");
+            default -> UIJuego.mensaje("Edificio", "La puerta está cerrada por ahora.");
         }
     }
 
