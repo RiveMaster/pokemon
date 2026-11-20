@@ -125,11 +125,7 @@ public final class SpriteCollabUI {
                 g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
                 // Terreno de combate dibujado con capas y siluetas retro, sin filtros borrosos.
                 int w = getWidth(), h = getHeight();
-                g.setColor(new Color(191, 223, 241)); g.fillRect(0, 0, w, h);
-                g.setColor(new Color(225, 242, 248)); g.fillRect(0, h / 3, w, h / 3);
-                g.setColor(new Color(168, 195, 137)); g.fillRect(0, (h * 2) / 3, w, h / 3);
-                g.setColor(new Color(125, 165, 113)); g.fillRect(0, h - 45, w, 45);
-                g.setColor(new Color(94, 139, 100)); g.fillRect(0, h - 12, w, 12);
+                ArteVisualRetro.pintarFondoCombate(g, w, h);
                 // Plataformas elípticas clásicas; la superior parece más lejana.
                 int rivalX = w * 58 / 100, rivalY = h * 47 / 100;
                 g.setColor(new Color(107, 148, 112));
