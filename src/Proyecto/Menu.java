@@ -12,7 +12,7 @@ public class Menu {
             while (true) {
                 int opcion = UIJuego.elegir("Menú del entrenador",
                         jugador.getNombre() + " · " + jugador.getGeneracion().etiqueta()
-                                + "\\nDinero: " + jugador.getDinero() + "€"
+                                + "\nDinero: " + jugador.getDinero() + "€"
                                 + " · Medallas: " + jugador.medallasEnGeneracion(jugador.getGeneracion()),
                         "Equipo Pokémon", "Mochila", "Usar MT",
                         "Equipar objeto", "Volar", "Guardar partida",
