@@ -34,6 +34,7 @@ public final class SpriteCollabUI {
     private static JPanel panelInteraccion;
     private static JLabel textoCombate;
     private static JPanel campoBatalla;
+    private static EfectosCombate efectosCombate;
 
     private SpriteCollabUI() { }
 
@@ -52,18 +53,26 @@ public final class SpriteCollabUI {
         SwingUtilities.invokeLater(() -> {
             if (actorJugador != null) actorJugador.detener();
             if (actorRival != null) actorRival.detener();
+            if (efectosCombate != null) efectosCombate.detener();
             if (ventanaCombate != null) ventanaCombate.dispose();
             ventanaCombate = null;
             campoBatalla = null;
             actorJugador = null;
             actorRival = null;
             panelInteraccion = null;
+            efectosCombate = null;
         });
     }
 
     /** Reproduce el ataque del Pokémon que acaba de elegir un movimiento. */
     public static void animarAtaque(PokemonLuchador atacante) {
         animar(atacante, "Attack", false);
+    }
+
+    /** Proyecta un efecto de tipo original encima del ataque del Pokémon. */
+    public static void animarAtaque(PokemonLuchador atacante, Movimiento movimiento) {
+        animar(atacante, "Attack", false,
+                movimiento == null ? null : movimiento.getTipo());
     }
 
     /** Reproduce el impacto recibido. */
@@ -77,6 +86,10 @@ public final class SpriteCollabUI {
     }
 
     private static void animar(PokemonLuchador pokemon, String nombre, boolean ignorado) {
+        animar(pokemon, nombre, ignorado, null);
+    }
+
+    private static void animar(PokemonLuchador pokemon, String nombre, boolean ignorado, String tipo) {
         if (pokemon == null || GraphicsEnvironment.isHeadless()) return;
         // Se espera en el hilo del combate, nunca en el EDT: cada ataque, impacto
         // y desmayo puede verse antes de que empiece la siguiente acción.
@@ -88,6 +101,8 @@ public final class SpriteCollabUI {
                     : actorRival != null && actorRival.representa(pokemon) ? actorRival : null;
             if (actor == null) { terminado.countDown(); return; }
             actor.reproducir(nombre);
+            if ("Attack".equals(nombre) && efectosCombate != null)
+                efectosCombate.reproducir(tipo, actor.jugador);
             javax.swing.Timer espera = new javax.swing.Timer(
                     "Attack".equals(nombre) ? 580 : "Hurt".equals(nombre) ? 380 : 740,
                     e -> terminado.countDown());
@@ -142,10 +157,13 @@ public final class SpriteCollabUI {
                         Math.max(150, w * 32 / 100), Math.max(130, h * 47 / 100));
                 actorJugador.setBounds(w * 9 / 100, h * 27 / 100,
                         Math.max(160, w * 36 / 100), Math.max(150, h * 56 / 100));
+                efectosCombate.setBounds(0, 0, w, h);
             }
         });
         campo.add(actorRival);
         campo.add(actorJugador);
+        efectosCombate = new EfectosCombate();
+        campo.add(efectosCombate, 0); // capa delante de los Pokémon
 
         JPanel panelDatos = new JPanel(new GridLayout(1, 2, 14, 0));
         panelDatos.setBorder(BorderFactory.createCompoundBorder(
@@ -663,6 +681,83 @@ public final class SpriteCollabUI {
         BufferedImage retrato;
         String creditos = "";
         int tamanoSombra = 1;
+    }
+
+    /** Partículas 2D a 30 FPS para marcar visualmente el tipo de movimiento. */
+    private static final class EfectosCombate extends JComponent {
+        private javax.swing.Timer timer;
+        private String tipo = "normal";
+        private boolean jugador;
+        private long inicio;
+        private double avance;
+
+        EfectosCombate() { setOpaque(false); setFocusable(false); }
+
+        void detener() { if (timer != null) timer.stop(); }
+
+        void reproducir(String tipo, boolean jugador) {
+            detener();
+            this.tipo = tipo == null ? "normal" : tipo.toLowerCase(Locale.ROOT);
+            this.jugador = jugador;
+            inicio = System.nanoTime();
+            avance = 0;
+            timer = new javax.swing.Timer(33, e -> {
+                avance = Math.min(1.0, (System.nanoTime() - inicio) / 480_000_000.0);
+                repaint();
+                if (avance >= 1.0) detener();
+            });
+            timer.start();
+        }
+
+        private Color color() {
+            String t = tipo;
+            if (t.contains("fire") || t.contains("fuego")) return new Color(247, 108, 57);
+            if (t.contains("water") || t.contains("agua")) return new Color(65, 164, 233);
+            if (t.contains("electric") || t.contains("eléctr") || t.contains("electr")) return new Color(251, 216, 69);
+            if (t.contains("grass") || t.contains("planta")) return new Color(109, 190, 87);
+            if (t.contains("psychic") || t.contains("psíqu") || t.contains("psiqu")) return new Color(226, 97, 168);
+            if (t.contains("ghost") || t.contains("fantasma")) return new Color(157, 110, 206);
+            if (t.contains("ice") || t.contains("hielo")) return new Color(135, 217, 237);
+            if (t.contains("poison") || t.contains("veneno")) return new Color(170, 98, 184);
+            if (t.contains("rock") || t.contains("roca") || t.contains("ground") || t.contains("tierra"))
+                return new Color(185, 144, 91);
+            if (t.contains("dark") || t.contains("siniestro")) return new Color(80, 80, 123);
+            if (t.contains("dragon") || t.contains("dragón")) return new Color(98, 130, 217);
+            if (t.contains("steel") || t.contains("acero")) return new Color(175, 187, 201);
+            return new Color(243, 236, 197);
+        }
+
+        @Override protected void paintComponent(Graphics graphics) {
+            super.paintComponent(graphics);
+            if (timer == null || !timer.isRunning()) return;
+            Graphics2D g = (Graphics2D) graphics.create();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_OFF);
+            Color base = color();
+            int ancho = getWidth(), alto = getHeight();
+            double t = avance;
+            int origenX = jugador ? ancho * 28 / 100 : ancho * 72 / 100;
+            int destinoX = jugador ? ancho * 72 / 100 : ancho * 28 / 100;
+            int origenY = jugador ? alto * 58 / 100 : alto * 28 / 100;
+            int destinoY = jugador ? alto * 28 / 100 : alto * 58 / 100;
+            int x = (int) Math.round(origenX + (destinoX - origenX) * t);
+            int y = (int) Math.round(origenY + (destinoY - origenY) * t);
+            for (int i = 0; i < 13; i++) {
+                double fase = i * 2.399 + t * 7;
+                int radio = 10 + (i % 4) * 8;
+                int px = x + (int) (Math.cos(fase) * radio);
+                int py = y + (int) (Math.sin(fase) * radio * .7);
+                int tamaño = 4 + ((i * 3) % 7);
+                int alfa = (int) (210 * (1.0 - t));
+                g.setColor(new Color(base.getRed(), base.getGreen(), base.getBlue(), Math.max(0, alfa)));
+                g.fillRect(px - tamaño / 2, py - tamaño / 2, tamaño, tamaño);
+                if (i % 3 == 0) {
+                    g.setColor(new Color(255, 255, 255, Math.max(0, alfa - 35)));
+                    g.fillRect(px, py, 3, 3);
+                }
+            }
+            g.dispose();
+        }
     }
 
     /** SpriteCollab con acciones, movimiento y efectos pixel-art superpuestos. */
