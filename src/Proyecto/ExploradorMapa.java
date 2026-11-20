@@ -95,7 +95,7 @@ public final class ExploradorMapa {
         MapaDatos mapa = cargarMapa(ubicacion);
         int[] guardada = jugador.getPosicionMapa(mapaId);
         Point inicio = buscarInicio(mapa, guardada, jugador.puedeNavegarAgua());
-        BufferedImage jugadorSprite = cargarSpriteJugador();
+        SpriteJugador2D jugadorSprite = SpriteJugador2D.cargar();
 
         CountDownLatch fin = new CountDownLatch(1);
         AtomicReference<Resultado> resultado = new AtomicReference<>();
@@ -120,7 +120,7 @@ public final class ExploradorMapa {
     }
 
     private static void abrirVentana(Jugador jugador, String titulo, Zona zona, boolean permitirEncuentros,
-                                     String mapaId, MapaDatos mapa, BufferedImage jugadorSprite, Point inicio,
+                                     String mapaId, MapaDatos mapa, SpriteJugador2D jugadorSprite, Point inicio,
                                      AtomicReference<Resultado> resultado, CountDownLatch fin) {
         JFrame ventana = new JFrame("Pokémon — " + titulo);
         ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -168,6 +168,7 @@ public final class ExploradorMapa {
         ventana.add(controles, BorderLayout.SOUTH);
 
         Runnable cerrar = () -> {
+            lienzo.detenerAnimacion();
             MapaCanvas.Posicion p = lienzo.getPosicion();
             resultado.compareAndSet(null, new Resultado(false, p.x, p.y));
             fin.countDown();
@@ -184,6 +185,7 @@ public final class ExploradorMapa {
 
         ventana.addWindowListener(new WindowAdapter() {
             @Override public void windowClosed(WindowEvent e) {
+                lienzo.detenerAnimacion();
                 MapaCanvas.Posicion p = lienzo.getPosicion();
                 resultado.compareAndSet(null, new Resultado(false, p.x, p.y));
                 fin.countDown();
@@ -247,6 +249,8 @@ public final class ExploradorMapa {
         // Se mantiene un manejador local para que el cierre por encuentro sea inmediato.
         class Movimiento {
             void avanzar(int dx, int dy) {
+                if (lienzo.estaMoviendo()) return;
+                lienzo.mirar(dx, dy);
                 MapaCanvas.Posicion p = lienzo.getPosicion();
                 int nx = p.x + dx, ny = p.y + dy;
                 int centroY = mapa.alto / 2;
@@ -285,27 +289,24 @@ public final class ExploradorMapa {
                 }
 
                 String evento = mapa.eventoEn(nx, ny);
-                if (evento != null) {
-                    // Se recuerda la casilla anterior: al regresar del evento no se reabre
-                    // inmediatamente la misma puerta y el jugador conserva su ubicación.
-                    resultado.set(new Resultado(false, p.x, p.y, null, -1, -1, evento));
-                    fin.countDown();
-                    ventana.dispose();
-                    return;
-                }
-                lienzo.setPosicion(nx, ny);
-                lienzo.repaint();
-                centrarVista((JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, lienzo), lienzo);
+                boolean hayEncuentro = permitirEncuentros && zona != null && mapa.esHierba(nx, ny)
+                        && AZAR.nextInt(100) < 16;
+                // La puerta y el encuentro se activan al terminar el paso: así la animación
+                // de caminar sigue siendo visible antes de cambiar de pantalla.
+                lienzo.caminar(nx, ny, dx, dy, () -> {
+                    if (evento != null) {
+                        // Al volver al exterior se conserva la casilla anterior a la puerta.
+                        resultado.set(new Resultado(false, p.x, p.y, null, -1, -1, evento));
+                    } else if (hayEncuentro) {
+                        resultado.set(new Resultado(true, nx, ny));
+                        estado.setText("¡Algo se mueve entre la hierba!");
+                    }
+                    if (evento != null || hayEncuentro) {
+                        fin.countDown();
+                        ventana.dispose();
+                    }
+                });
                 actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
-
-                if (permitirEncuentros && zona != null && mapa.esHierba(nx, ny)
-                        && AZAR.nextInt(100) < 16) {
-                    MapaCanvas.Posicion actual = lienzo.getPosicion();
-                    resultado.set(new Resultado(true, actual.x, actual.y));
-                    fin.countDown();
-                    ventana.dispose();
-                    estado.setText("¡Algo se mueve entre la hierba!");
-                }
             }
         }
         Movimiento movimiento = new Movimiento();
@@ -343,10 +344,10 @@ public final class ExploradorMapa {
 
     private static void centrarVista(JScrollPane scroll, MapaCanvas lienzo) {
         if (scroll == null) return;
-        MapaCanvas.Posicion p = lienzo.getPosicion();
+        double[] posicion = lienzo.posicionInterpolada();
         JViewport vista = scroll.getViewport();
-        int px = p.x * TILE * ZOOM + TILE * ZOOM / 2 - vista.getWidth() / 2;
-        int py = p.y * TILE * ZOOM + TILE * ZOOM / 2 - vista.getHeight() / 2;
+        int px = (int) Math.round((posicion[0] + 0.5) * TILE * ZOOM - vista.getWidth() / 2.0);
+        int py = (int) Math.round((posicion[1] + 0.5) * TILE * ZOOM - vista.getHeight() / 2.0);
         int maxX = Math.max(0, lienzo.getWidth() - vista.getWidth());
         int maxY = Math.max(0, lienzo.getHeight() - vista.getHeight());
         vista.setViewPosition(new Point(Math.max(0, Math.min(maxX, px)), Math.max(0, Math.min(maxY, py))));
@@ -494,45 +495,6 @@ public final class ExploradorMapa {
     private static String normalizar(String valor) {
         return Normalizer.normalize(valor == null ? "" : valor, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}+", "").toLowerCase(Locale.ROOT);
-    }
-
-    private static BufferedImage cargarSpriteJugador() {
-        for (String nombre : List.of("Jugador.png", "Player.png", "jugador.png")) {
-            Path ruta = Path.of("Tiles", nombre);
-            if (!Files.isRegularFile(ruta)) continue;
-            try {
-                BufferedImage hoja = ImageIO.read(ruta.toFile());
-                if (hoja != null && hoja.getWidth() >= TILE && hoja.getHeight() >= TILE) {
-                    BufferedImage tile = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
-                    Graphics2D g = tile.createGraphics();
-                    g.drawImage(hoja, 0, 0, TILE, TILE, 0, 0, TILE, TILE, null);
-                    g.dispose();
-                    if (tienePixelVisible(tile)) return tile;
-                }
-            } catch (IOException ex) {
-                System.err.println("No se pudo cargar el sprite del jugador: " + ex.getMessage());
-            }
-        }
-        return crearSpriteJugador();
-    }
-
-    private static BufferedImage crearSpriteJugador() {
-        BufferedImage im = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = im.createGraphics();
-        g.setColor(new Color(30, 45, 70)); g.fillRect(5, 2, 6, 4);
-        g.setColor(new Color(235, 190, 145)); g.fillRect(5, 5, 6, 5);
-        g.setColor(new Color(45, 90, 175)); g.fillRect(4, 10, 8, 4);
-        g.setColor(new Color(35, 55, 95)); g.fillRect(4, 14, 3, 2); g.fillRect(9, 14, 3, 2);
-        g.setColor(Color.BLACK); g.fillRect(6, 7, 1, 1); g.fillRect(9, 7, 1, 1);
-        g.dispose();
-        return im;
-    }
-
-    private static boolean tienePixelVisible(BufferedImage im) {
-        for (int y = 0; y < im.getHeight(); y++)
-            for (int x = 0; x < im.getWidth(); x++)
-                if ((im.getRGB(x, y) >>> 24) != 0) return true;
-        return false;
     }
 
     /** Ciudad pixel-art provisional: manzanas accesibles y edificios con función reconocible. */
@@ -947,16 +909,25 @@ public final class ExploradorMapa {
         }
     }
 
+    /** Mantiene las coordenadas lógicas en tiles y las visuales entre casillas. */
     private static final class MapaCanvas extends JPanel {
         private final MapaDatos mapa;
-        private final BufferedImage sprite;
+        private final SpriteJugador2D sprite;
         private int jugadorX, jugadorY;
+        private double pantallaX, pantallaY;
+        private int direccion = SpriteJugador2D.FRENTE;
+        private int pasoSecuencia;
+        private int fotogramaPaso;
+        private boolean moviendo;
+        private Timer pasoTimer;
 
-        MapaCanvas(MapaDatos mapa, BufferedImage sprite, int x, int y) {
+        MapaCanvas(MapaDatos mapa, SpriteJugador2D sprite, int x, int y) {
             this.mapa = mapa;
             this.sprite = sprite;
             jugadorX = x;
             jugadorY = y;
+            pantallaX = x;
+            pantallaY = y;
             setOpaque(true);
             setBackground(new Color(30, 35, 35));
             setPreferredSize(new Dimension(mapa.ancho * TILE * ZOOM, mapa.alto * TILE * ZOOM));
@@ -964,12 +935,57 @@ public final class ExploradorMapa {
         }
 
         Posicion getPosicion() { return new Posicion(jugadorX, jugadorY); }
-        void setPosicion(int x, int y) { jugadorX = x; jugadorY = y; }
+        double[] posicionInterpolada() { return new double[]{pantallaX, pantallaY}; }
+        boolean estaMoviendo() { return moviendo; }
+
+        void mirar(int dx, int dy) {
+            if (dy > 0) direccion = SpriteJugador2D.FRENTE;
+            else if (dy < 0) direccion = SpriteJugador2D.ESPALDA;
+            else if (dx < 0) direccion = SpriteJugador2D.IZQUIERDA;
+            else if (dx > 0) direccion = SpriteJugador2D.DERECHA;
+            repaint();
+        }
+
+        void caminar(int x, int y, int dx, int dy, Runnable fin) {
+            if (moviendo) return;
+            mirar(dx, dy);
+            final double anteriorX = pantallaX, anteriorY = pantallaY;
+            final long inicio = System.nanoTime();
+            final long duracion = 138_000_000L; // un paso ~= 138 ms; ~7 tiles/seg
+            jugadorX = x;
+            jugadorY = y;
+            moviendo = true;
+            fotogramaPaso = 1 + (pasoSecuencia++ % 2);
+            pasoTimer = new Timer(16, e -> {
+                double avance = Math.min(1.0, (System.nanoTime() - inicio) / (double) duracion);
+                pantallaX = anteriorX + (x - anteriorX) * avance;
+                pantallaY = anteriorY + (y - anteriorY) * avance;
+                repaint();
+                JScrollPane sc = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
+                centrarVista(sc, this);
+                if (avance >= 1.0) {
+                    detenerAnimacion();
+                    if (fin != null) fin.run();
+                }
+            });
+            pasoTimer.setCoalesce(true);
+            pasoTimer.start();
+        }
+
+        void detenerAnimacion() {
+            if (pasoTimer != null) pasoTimer.stop();
+            pasoTimer = null;
+            moviendo = false;
+            pantallaX = jugadorX;
+            pantallaY = jugadorY;
+            repaint();
+        }
 
         @Override protected void paintComponent(Graphics gOriginal) {
             super.paintComponent(gOriginal);
             Graphics2D g = (Graphics2D) gOriginal.create();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             int tam = TILE * ZOOM;
             for (int capa = 0; capa < mapa.capas.length; capa++) {
                 for (int i = 0; i < mapa.ancho * mapa.alto; i++) {
@@ -989,7 +1005,13 @@ public final class ExploradorMapa {
                     }
                 }
             }
-            g.drawImage(sprite, jugadorX * tam, jugadorY * tam, tam, tam, null);
+            int x = (int) Math.round(pantallaX * tam);
+            int y = (int) Math.round(pantallaY * tam);
+            // Sombra corta y discreta bajo los pies, hecha con píxeles escalados.
+            g.setColor(new Color(30, 55, 49, 80));
+            g.fillRect(x + 3 * ZOOM, y + 14 * ZOOM, 10 * ZOOM, 2 * ZOOM);
+            BufferedImage fotograma = sprite.fotograma(direccion, moviendo ? fotogramaPaso : 0);
+            g.drawImage(fotograma, x, y, tam, tam, null);
             g.dispose();
         }
 
