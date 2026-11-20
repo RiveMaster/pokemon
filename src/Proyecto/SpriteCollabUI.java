@@ -265,11 +265,16 @@ public final class SpriteCollabUI {
             panelInteraccion.revalidate();
             panelInteraccion.repaint();
             final int cancelar = indiceVolver;
-            ventanaCombate.getRootPane().registerKeyboardAction(e -> {
-                seleccion[0] = cancelar;
-                latch.countDown();
-            }, KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0),
-                    JComponent.WHEN_IN_FOCUSED_WINDOW);
+            JRootPane raiz = ventanaCombate.getRootPane();
+            KeyStroke escape = KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0);
+            if (cancelar >= 0) {
+                raiz.registerKeyboardAction(e -> {
+                    seleccion[0] = cancelar;
+                    latch.countDown();
+                }, escape, JComponent.WHEN_IN_FOCUSED_WINDOW);
+            } else {
+                raiz.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).remove(escape);
+            }
             if (primerBoton != null) {
                 ventanaCombate.getRootPane().setDefaultButton(primerBoton);
                 JButton foco = primerBoton;
