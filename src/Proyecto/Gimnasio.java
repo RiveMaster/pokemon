@@ -339,10 +339,16 @@ public class Gimnasio {
             }
 
             String nombreMiembro = miembros[i];
-            int decision = UIJuego.elegir("Reto del gimnasio · " + (i + 1) + "/" + NUM_MIEMBROS,
-                    nombreMiembro + " bloquea el camino al líder.\\n"
-                            + "Tu progreso quedará guardado si decides salir.",
-                    "Enfrentar a " + nombreMiembro, "Abandonar el gimnasio");
+            int decision;
+            if (UIJuego.disponible()) {
+                decision = UIJuego.elegir("Reto del gimnasio · " + (i + 1) + "/" + NUM_MIEMBROS,
+                        nombreMiembro + " bloquea el camino al líder.\\n"
+                                + "Tu progreso quedará guardado si decides salir.",
+                        "Enfrentar a " + nombreMiembro, "Abandonar el gimnasio");
+            } else {
+                System.out.println(nombreMiembro + " te desafía. 1. Combatir  2. Salir");
+                decision = Entrada.leerEntero(sc) - 1;
+            }
             if (decision != 0) {
                 UIJuego.mensaje("Gimnasio", "Has salido del gimnasio. Tu progreso queda guardado.");
                 return false;
