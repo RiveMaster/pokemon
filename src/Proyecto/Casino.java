@@ -63,6 +63,10 @@ public class Casino {
     // ------------------------------------------------------------------
 
     public static void entrar(Scanner sc, Jugador jugador) {
+        if (UIJuego.disponible()) {
+            ruletaGrafica(jugador);
+            return;
+        }
         System.out.println("\n === CASINO DE COMILLAS === ");
         System.out.println("Crupier: Bienvenido. Recuerde: la casa siempre gana... a la larga.");
 
@@ -81,6 +85,58 @@ public class Casino {
             } else {
                 System.out.println("Opción no válida.");
             }
+        }
+    }
+
+    /** Ruleta con opciones por botones; ningún número se escribe en consola. */
+    private static void ruletaGrafica(Jugador jugador) {
+        String[] apuestas = {"Un número (0–36)", "Rojo", "Negro", "Par",
+                "Impar", "Falta (1–18)", "Pasa (19–36)",
+                "Primera docena", "Segunda docena", "Tercera docena", "Salir"};
+        Tipo[] tipos = {Tipo.NUMERO, Tipo.ROJO, Tipo.NEGRO, Tipo.PAR, Tipo.IMPAR,
+                Tipo.FALTA, Tipo.PASA, Tipo.DOCENA1, Tipo.DOCENA2, Tipo.DOCENA3};
+        while (true) {
+            if (jugador.getDinero() < APUESTA_MINIMA) {
+                UIJuego.mensaje("Casino", "No tienes suficiente dinero para apostar.");
+                return;
+            }
+            int opcion = UIJuego.elegir("Casino de Comillas",
+                    "Dinero: " + jugador.getDinero() + "€\\nElige tu apuesta:", apuestas);
+            if (opcion < 0 || opcion >= tipos.length) return;
+            int numero = -1;
+            if (opcion == 0) {
+                String[] numeros = new String[37];
+                for (int n = 0; n <= 36; n++) numeros[n] = n + " · " + color(n);
+                numero = UIJuego.elegir("Número de la ruleta",
+                        "Elige uno de los 37 números:", numeros);
+                if (numero < 0) continue;
+            }
+            int dinero = jugador.getDinero();
+            int[] sugeridos = {10, 25, 50, 100, 250, 500, 1000, dinero};
+            java.util.List<Integer> montos = new java.util.ArrayList<>();
+            for (int monto : sugeridos)
+                if (monto >= APUESTA_MINIMA && monto <= dinero && !montos.contains(monto))
+                    montos.add(monto);
+            String[] opcionesMonto = montos.stream()
+                    .map(monto -> monto + "€")
+                    .toArray(String[]::new);
+            int elegido = UIJuego.elegir("Cantidad de apuesta",
+                    "Saldo: " + dinero + "€\\n¿Cuánto quieres apostar?", opcionesMonto);
+            if (elegido < 0 || elegido >= montos.size()) continue;
+            int apuesta = montos.get(elegido);
+            if (!UIJuego.confirmar("Confirmar apuesta", "¿Apostar " + apuesta + "€?")) continue;
+            if (!jugador.gastarDinero(apuesta)) {
+                UIJuego.mensaje("Casino", "No tienes dinero suficiente.");
+                continue;
+            }
+            int resultado = girar();
+            int cobro = pago(tipos[opcion], numero, apuesta, resultado);
+            if (cobro > 0) jugador.agregarDinero(cobro);
+            UIJuego.mensaje("Resultado de la ruleta",
+                    "La bola cae en " + resultado + " (" + color(resultado) + ").\\n"
+                            + (cobro > 0 ? "¡Has ganado " + cobro + "€!" :
+                            "Has perdido " + apuesta + "€.")
+                            + "\\nSaldo: " + jugador.getDinero() + "€");
         }
     }
 
