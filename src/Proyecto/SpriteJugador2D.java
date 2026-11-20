@@ -60,7 +60,7 @@ public final class SpriteJugador2D {
                 BufferedImage hoja = ImageIO.read(ruta.toFile());
                 if (hoja != null && hoja.getWidth() >= PIXELES && hoja.getHeight() >= PIXELES)
                     return desdeHoja(hoja);
-            } catch (IOException e) {
+            } catch (IOException | IllegalArgumentException e) {
                 System.err.println("Sprite del entrenador ilegible: " + ruta + ": " + e.getMessage());
             }
         }
