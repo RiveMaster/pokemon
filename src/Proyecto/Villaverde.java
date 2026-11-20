@@ -29,12 +29,9 @@ public class Villaverde {
                                 + "\\n¿Qué quieres hacer?",
                         "Visitar a mamá", "Ir a " + primera.getNombre(),
                         "Mochila y opciones", "Viajar a otra generación",
-                        "Explorar el pueblo", "Introducir cheatcode");
+                        "Explorar el pueblo");
                 if (seleccion < 0) continue;
-                if (seleccion == 5) {
-                    String codigo = UIJuego.pedirTexto("Cheatcode", "Introduce el código secreto:", "");
-                    opcion = "777999222".equals(codigo) ? 777999222 : -1;
-                } else opcion = seleccion + 1;
+                opcion = seleccion + 1;
             } else {
                 System.out.println("\\nPUEBLO VILLAVERDE");
                 System.out.println("1. Visitar a mamá");
@@ -134,7 +131,6 @@ public class Villaverde {
                         default -> System.out.println("Valor no permitido");
                     }
                 }
-                case -1 -> UIJuego.mensaje("Cheatcode", "Código incorrecto.");
                 default -> UIJuego.mensaje("Villaverde", "Opción no válida.");
             }
         }
