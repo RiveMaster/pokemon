@@ -37,7 +37,7 @@ public final class UIJuego {
             boton.addActionListener(e -> { seleccion[0] = indice; dialogo.dispose(); });
             botones.add(boton);
         }
-        JPanel contenido = (JPanel) dialogo.getContentPane().getComponent(1);
+        JPanel contenido = contenido(dialogo);
         contenido.add(botones, BorderLayout.SOUTH);
         dialogo.getRootPane().registerKeyboardAction(e -> dialogo.dispose(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -57,7 +57,7 @@ public final class UIJuego {
         campo.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(190, 207, 224), 1, true),
                 new EmptyBorder(11, 12, 11, 12)));
-        JPanel contenido = (JPanel) dialogo.getContentPane().getComponent(1);
+        JPanel contenido = contenido(dialogo);
         contenido.add(campo, BorderLayout.CENTER);
         final String[] valor = {null};
         JButton aceptar = boton("Aceptar", true);
@@ -84,7 +84,7 @@ public final class UIJuego {
     public static void mensaje(String titulo, String mensaje) {
         if (!disponible()) { System.out.println(mensaje); return; }
         JDialog dialogo = crearDialogo(titulo, mensaje);
-        JPanel contenido = (JPanel) dialogo.getContentPane().getComponent(1);
+        JPanel contenido = contenido(dialogo);
         JButton aceptar = boton("Continuar", true);
         aceptar.addActionListener(e -> dialogo.dispose());
         JPanel botones = new JPanel(new BorderLayout());
@@ -133,6 +133,7 @@ public final class UIJuego {
         cabecera.add(titulos, BorderLayout.CENTER);
 
         JPanel contenido = new JPanel(new BorderLayout(0, 18));
+        contenido.setName("contenido");
         contenido.setBackground(FONDO);
         contenido.setBorder(new EmptyBorder(20, 22, 20, 22));
         JTextArea texto = new JTextArea(mensaje == null ? "" : mensaje);
@@ -149,6 +150,14 @@ public final class UIJuego {
         dialogo.getContentPane().add(cabecera, BorderLayout.NORTH);
         dialogo.getContentPane().add(contenido, BorderLayout.CENTER);
         return dialogo;
+    }
+
+    private static JPanel contenido(JDialog dialogo) {
+        for (Component componente : dialogo.getContentPane().getComponents()) {
+            if (componente instanceof JPanel && "contenido".equals(componente.getName()))
+                return (JPanel) componente;
+        }
+        throw new IllegalStateException("No se encontró el panel de contenido");
     }
 
     private static JButton boton(String texto, boolean principal) {
