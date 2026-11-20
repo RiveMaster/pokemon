@@ -185,7 +185,7 @@ public final class ExploradorMapa {
 
         ventana.addWindowListener(new WindowAdapter() {
             @Override public void windowClosed(WindowEvent e) {
-                lienzo.detenerAnimacion();
+                lienzo.detenerTodo();
                 MapaCanvas.Posicion p = lienzo.getPosicion();
                 resultado.compareAndSet(null, new Resultado(false, p.x, p.y));
                 fin.countDown();
