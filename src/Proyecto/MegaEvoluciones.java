@@ -199,13 +199,13 @@ public final class MegaEvoluciones {
             while (true) {
                 int opcion = UIJuego.elegir("Centro de Megaevolución",
                         "Megapiedras en la mochila: " + jugador.getMegapiedras().size()
-                                + "\\nDinero: " + jugador.getDinero() + "€",
+                                + "\nDinero: " + jugador.getDinero() + "€",
                         "Ver megapiedras", "Comprar megapiedra",
                         "Equipar piedra", "Quitar piedra", "Volver");
                 switch (opcion) {
                     case 0 -> UIJuego.mensaje("Megapiedras",
                             jugador.getMegapiedras().isEmpty() ? "No tienes megapiedras."
-                            : String.join("\\n", jugador.getMegapiedras()));
+                            : String.join("\n", jugador.getMegapiedras()));
                     case 1 -> comprarPiedra(sc, jugador);
                     case 2 -> equiparPiedra(sc, jugador);
                     case 3 -> quitarPiedra(sc, jugador);
