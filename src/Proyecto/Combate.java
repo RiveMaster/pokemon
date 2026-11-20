@@ -102,7 +102,7 @@ public class Combate {
 
                     System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
 
-                    SpriteCollabUI.animarAtaque(jugador.getPokemon());
+                    SpriteCollabUI.animarAtaque(jugador.getPokemon(), movJugador);
                     rival.getPokemon().recibirDaño(movJugador.getPotencia());
                     if (rival.getPokemon().estaVivo()) SpriteCollabUI.animarDaño(rival.getPokemon());
                     else SpriteCollabUI.animarDerrota(rival.getPokemon());
@@ -117,7 +117,7 @@ public class Combate {
                 // Turno rival
                 Movimiento movRival = rival.getPokemon().getMovimientos().get(0);
                 System.out.println("\nEl rival usa " + movRival.getNombre() + "!");
-                SpriteCollabUI.animarAtaque(rival.getPokemon());
+                SpriteCollabUI.animarAtaque(rival.getPokemon(), movRival);
                 jugador.getPokemon().recibirDaño(movRival.getPotencia());
                 if (jugador.getPokemon().estaVivo()) SpriteCollabUI.animarDaño(jugador.getPokemon());
                 else SpriteCollabUI.animarDerrota(jugador.getPokemon());
@@ -546,7 +546,7 @@ public class Combate {
                 Movimiento elegido = movs.get(seleccion);
                 if (!jugador.tienePp(elegido)) continue;
                 SpriteCollabUI.mostrarMensaje(jugador.getNombre() + " usa " + elegido.getNombre() + "!", jugador, rival);
-                SpriteCollabUI.animarAtaque(jugador);
+                SpriteCollabUI.animarAtaque(jugador, elegido);
                 int vidaAntes = rival.getVidaActual();
                 jugador.usarMovimiento(elegido, elegido.getPotencia() + jugador.getNivel() / 2, rival);
                 if (rival.getVidaActual() < vidaAntes) {
@@ -589,7 +589,7 @@ public class Combate {
                 continue;
             }
             System.out.println("\n" + jugador.getNombre() + " usa " + movJugador.getNombre() + "!");
-            SpriteCollabUI.animarAtaque(jugador);
+            SpriteCollabUI.animarAtaque(jugador, movJugador);
             int vidaAntes = rival.getVidaActual();
             jugador.usarMovimiento(movJugador, movJugador.getPotencia() + jugador.getNivel() / 2, rival);
             if (rival.getVidaActual() < vidaAntes) {
@@ -623,7 +623,7 @@ public class Combate {
         Movimiento movRival = elegirMovimientoRival(rival);
         SpriteCollabUI.mostrarMensaje(rival.getNombre() + " usa " + movRival.getNombre() + "!", jugador, rival);
         System.out.println("\n" + rival.getNombre() + " usa " + movRival.getNombre() + "!");
-        SpriteCollabUI.animarAtaque(rival);
+        SpriteCollabUI.animarAtaque(rival, movRival);
         int vidaAntes = jugador.getVidaActual();
         rival.usarMovimiento(movRival, movRival.getPotencia(), jugador);
         if (jugador.getVidaActual() < vidaAntes) {
@@ -639,7 +639,7 @@ public class Combate {
         Movimiento movRival = elegirMovimientoRival(salvaje);
         SpriteCollabUI.mostrarMensaje("El salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!", jugador, salvaje);
         System.out.println("\nEl salvaje " + salvaje.getNombre() + " usa " + movRival.getNombre() + "!");
-        SpriteCollabUI.animarAtaque(salvaje);
+        SpriteCollabUI.animarAtaque(salvaje, movRival);
         int vidaAntes = jugador.getVidaActual();
         salvaje.usarMovimiento(movRival, movRival.getPotencia(), jugador);
         if (jugador.getVidaActual() < vidaAntes) {
