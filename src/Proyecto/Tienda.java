@@ -21,7 +21,7 @@ public class Tienda {
         if (UIJuego.disponible()) {
             while (true) {
                 int opcion = UIJuego.elegir("Tienda Pokémon",
-                        "¡Bienvenido al Poké Mart!\\nDinero disponible: " + jugadorCompleto.getDinero() + "€",
+                        "¡Bienvenido al Poké Mart!\nDinero disponible: " + jugadorCompleto.getDinero() + "€",
                         "Poké Ball · " + precioPokeball + "€",
                         "Poción · " + precioPocion + "€",
                         "MT sorpresa · " + precioMt + "€",
@@ -89,7 +89,7 @@ public class Tienda {
 
         jugadorCompleto.añadirMT(mt.getNombre());
         UIJuego.mensaje("MT sorpresa", "¡Has recibido la MT " + mt.getNombre()
-                + "!\\nTipo: " + mt.getTipo() + " · Potencia: " + mt.getPotencia());
+                + "!\nTipo: " + mt.getTipo() + " · Potencia: " + mt.getPotencia());
 
         // Enseñársela ahora a un Pokémon del equipo (si cancela, se queda en la mochila)
         if (jugadorCompleto.getEquipo().isEmpty()) {
@@ -111,10 +111,10 @@ public class Tienda {
                     .map(o -> o.getNombre() + " · " + o.getPrecio() + "€")
                     .toArray(String[]::new);
             eleccion = UIJuego.elegir("Objetos equipables",
-                    "Elige qué objeto quieres comprar.\\nDinero: " + jugadorCompleto.getDinero() + "€",
+                    "Elige qué objeto quieres comprar.\nDinero: " + jugadorCompleto.getDinero() + "€",
                     opciones) + 1;
         } else {
-            System.out.println("\\n-- Objetos equipables -- (dinero: " + jugadorCompleto.getDinero() + "€)");
+            System.out.println("\n-- Objetos equipables -- (dinero: " + jugadorCompleto.getDinero() + "€)");
             for (int i = 0; i < objetos.length; i++) {
                 System.out.println((i + 1) + ". " + objetos[i].getNombre()
                         + " (" + objetos[i].getPrecio() + "€) - " + objetos[i].getDescripcion());
@@ -132,7 +132,7 @@ public class Tienda {
 
         jugadorCompleto.añadirObjetoEquipable(objeto, 1);
         UIJuego.mensaje("Compra completada", "Has comprado " + objeto.getNombre()
-                + ".\\n" + objeto.getDescripcion());
+                + ".\n" + objeto.getDescripcion());
         System.out.println("Dinero restante: " + jugadorCompleto.getDinero() + "€");
     }
 
