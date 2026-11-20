@@ -563,15 +563,7 @@ public class Jugador implements Serializable {
     }
 
     public void curarPokemon(PokemonLuchador pokemon, String tipocura) {
-        if (!usarMedicina(tipocura, pokemon)) {
-            System.out.println("No tienes esa cura."); // No se pudo usar la cura (no hay disponibles)
-        }if (tipocura.equals("pocion")) {
-            pokemon.curar(50);
-        }if (tipocura.equals("superpocion")) {
-            pokemon.curar(120);
-        }if (tipocura.equals("hiperpocion")) {
-            pokemon.curar(200);
-        }
+        usarMedicina(tipocura, pokemon);
     }
 
     public String getNivel() {
@@ -608,25 +600,40 @@ public class Jugador implements Serializable {
     }
 
     // === Usar objetos ===
+    /** Solo muestra recursos que el jugador posee; evita pedir nombres por consola. */
+    public List<String> medicinasDisponibles() {
+        return medicinas.entrySet().stream().filter(e -> e.getValue() != null && e.getValue() > 0)
+                .map(java.util.Map.Entry::getKey).sorted().toList();
+    }
+
+    public List<String> pokeballsDisponibles() {
+        return pokeballs.entrySet().stream().filter(e -> e.getValue() != null && e.getValue() > 0)
+                .map(java.util.Map.Entry::getKey).sorted().toList();
+    }
+
     public boolean usarMedicina(String nombre, PokemonLuchador pokemon) {
-        if (!medicinas.containsKey(nombre) || medicinas.get(nombre) <= 0) {
-            System.out.println("No tienes " + nombre + ".");
+        if (nombre == null || pokemon == null || medicinas.getOrDefault(nombre, 0) <= 0) {
+            UIJuego.mensaje("Mochila", "No tienes esa medicina.");
             return false;
         }
-
-        medicinas.put(nombre, medicinas.get(nombre) - 1);
-
-        switch (nombre.toLowerCase()) {
-            case "poción" -> pokemon.curar(20);
-            case "superpoción" -> pokemon.curar(50);
-            case "hiperpoción" -> pokemon.curar(120);
-            default -> {
-                System.out.println("No reconozco esta medicina.");
-                return false;
-            }
+        String normalizado = java.text.Normalizer.normalize(nombre.toLowerCase(java.util.Locale.ROOT),
+                java.text.Normalizer.Form.NFD).replaceAll("\\p{M}+", "");
+        int curacion = switch (normalizado) {
+            case "pocion" -> 20;
+            case "superpocion" -> 50;
+            case "hiperpocion" -> 120;
+            default -> 0;
+        };
+        if (curacion == 0) {
+            UIJuego.mensaje("Mochila", "No se reconoce esta medicina.");
+            return false;
         }
-
-        System.out.println("Usaste " + nombre + ".");
+        int quedan = medicinas.get(nombre) - 1;
+        if (quedan <= 0) medicinas.remove(nombre);
+        else medicinas.put(nombre, quedan);
+        pokemon.curar(curacion);
+        UIJuego.mensaje("Medicina utilizada", pokemon.getNombre() + " recupera hasta "
+                + curacion + " PS.");
         return true;
     }
 
