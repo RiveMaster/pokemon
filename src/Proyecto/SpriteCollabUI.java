@@ -636,7 +636,7 @@ public final class SpriteCollabUI {
         int tamanoSombra = 1;
     }
 
-    /** Panel animado: cada PNG contiene los fotogramas en horizontal y las direcciones en vertical. */
+    /** SpriteCollab con acciones, movimiento y efectos pixel-art superpuestos. */
     private static final class SpriteActor extends JPanel {
         private final boolean jugador;
         private PokemonLuchador pokemon;
@@ -645,35 +645,47 @@ public final class SpriteCollabUI {
         private int frame;
         private int tickFallback;
         private javax.swing.Timer timer;
+        private javax.swing.Timer refresco;
         private boolean finalizado;
+        private long inicioAccion;
+        private long inicioEntrada;
 
         SpriteActor(boolean jugador) {
             this.jugador = jugador;
             setOpaque(false);
+            // El reloj de presentación no cambia estadísticas ni los tiempos de combate.
+            refresco = new javax.swing.Timer(33, e -> {
+                if (pokemon != null && isDisplayable()) repaint();
+            });
+            refresco.start();
         }
 
         boolean representa(PokemonLuchador p) { return pokemon == p; }
 
+        void detener() {
+            if (timer != null) timer.stop();
+            if (refresco != null) refresco.stop();
+        }
+
         void mostrarPokemon(PokemonLuchador p) {
             if (pokemon == p) {
-                // Mantiene la pose tumbada tras el KO y vuelve a Idle si lo curan.
                 if (!p.estaVivo() && !animacion.equals("Faint")) reproducir("Faint");
                 else if (p.estaVivo() && animacion.equals("Faint")) reproducir("Idle");
                 repaint();
                 return;
             }
+            if (timer != null) timer.stop();
             pokemon = p;
             recursos = null;
             animacion = p.estaVivo() ? "Idle" : "Faint";
             frame = 0;
+            inicioEntrada = System.nanoTime();
             repaint();
             int dex = numeroDex(p);
             if (dex > 0) obtenerRecursos(dex).thenAccept(set -> SwingUtilities.invokeLater(() -> {
-                if (pokemon == p) {
+                if (pokemon == p && isDisplayable()) {
                     recursos = set;
-                    setToolTipText("<html>" + escapar(set.creditos).replace("\n", "<br>") + "</html>");
-                    // Tres presentaciones: retrato en mochila/PC, Idle de pie en combate
-                    // y último fotograma de Faint (tumbado) cuando los PS llegan a cero.
+                    setToolTipText("<html>" + escapar(set.creditos).replace("\\n", "<br>") + "</html>");
                     reproducir(p.estaVivo() ? "Idle" : "Faint");
                 }
             }));
@@ -684,6 +696,7 @@ public final class SpriteCollabUI {
             if (pokemon == null) return;
             if (timer != null) timer.stop();
             animacion = nombre;
+            inicioAccion = System.nanoTime();
             frame = 0;
             tickFallback = 0;
             finalizado = false;
@@ -695,27 +708,36 @@ public final class SpriteCollabUI {
             AnimInfo info = recursos == null ? null : recursos.animaciones.get(animacion);
             BufferedImage hoja = recursos == null ? null : recursos.hojas.get(animacion);
             if (info == null || hoja == null || info.duraciones.isEmpty()) {
-                // Respaldo visual animado para especies que no tengan esa hoja de animación.
-                timer = new javax.swing.Timer(animacion.equals("Idle") ? 140 : 85, e -> {
+                // Sin hoja específica: animar la pose Idle o el retrato con los mismos efectos.
+                timer = new javax.swing.Timer("Idle".equals(animacion) ? 145 : 75, e -> {
                     tickFallback++;
-                    if (!animacion.equals("Idle") && tickFallback >= 8) {
-                        if (animacion.equals("Faint")) finalizado = true;
-                        else { animacion = "Idle"; tickFallback = 0; avanzar(); }
+                    if (!animacion.equals("Idle") && tickFallback >=
+                            ("Faint".equals(animacion) ? 10 : 7)) {
+                        if ("Faint".equals(animacion)) {
+                            finalizado = true;
+                            timer.stop();
+                        } else {
+                            reproducir("Idle");
+                        }
                     }
                     repaint();
                 });
                 timer.start();
+                repaint();
                 return;
             }
-            int total = Math.max(1, Math.min(info.duraciones.size(), hoja.getWidth() / Math.max(1, info.ancho)));
+            int total = Math.max(1, Math.min(info.duraciones.size(),
+                    hoja.getWidth() / Math.max(1, info.ancho)));
             if (frame >= total) {
-                if (animacion.equals("Idle")) frame = 0;
-                else {
+                if ("Idle".equals(animacion)) {
+                    frame = 0;
+                } else if ("Faint".equals(animacion)) {
+                    frame = total - 1;
                     finalizado = true;
-                    if (animacion.equals("Faint")) frame = total - 1;
-                    else { animacion = "Idle"; frame = 0; }
                     repaint();
-                    if (!animacion.equals("Faint")) avanzar();
+                    return;
+                } else {
+                    reproducir("Idle");
                     return;
                 }
             }
@@ -729,49 +751,113 @@ public final class SpriteCollabUI {
             timer.start();
         }
 
+        private static double progreso(long inicio, long duracionMs) {
+            if (inicio == 0) return 1;
+            return Math.max(0.0, Math.min(1.0,
+                    (System.nanoTime() - inicio) / (duracionMs * 1_000_000.0)));
+        }
+
         @Override protected void paintComponent(Graphics graphics) {
             super.paintComponent(graphics);
+            if (pokemon == null) return;
             Graphics2D g = (Graphics2D) graphics.create();
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_OFF);
+
             BufferedImage hoja = recursos == null ? null : recursos.hojas.get(animacion);
             AnimInfo info = recursos == null ? null : recursos.animaciones.get(animacion);
+            if ((hoja == null || info == null) && recursos != null) {
+                hoja = recursos.hojas.get("Idle");
+                info = recursos.animaciones.get("Idle");
+            }
+
+            // Las plataformas no se desplazan: se anima solo al Pokémon encima de ellas.
+            int shadowW = Math.max(24, getWidth() / 3);
+            g.setColor(new Color(45, 60, 55, 78));
+            g.fillOval((getWidth() - shadowW) / 2, getHeight() - 20, shadowW, 12);
+
+            double entrada = progreso(inicioEntrada, 420);
+            int dx = 0, dy = 0;
+            float opacidad = 1f;
+            if (entrada < 1) {
+                dx += (int) Math.round((jugador ? -50 : 50) * (1.0 - entrada));
+                opacidad = (float) (0.15 + entrada * 0.85);
+            }
+            double fase;
+            switch (animacion) {
+                case "Attack" -> {
+                    fase = progreso(inicioAccion, 560);
+                    double empuje = Math.sin(fase * Math.PI);
+                    dx += (int) Math.round((jugador ? 30 : -30) * empuje);
+                    dy -= (int) Math.round(9 * empuje);
+                }
+                case "Hurt" -> {
+                    fase = progreso(inicioAccion, 380);
+                    if (fase < 1) {
+                        dx += (int) (Math.sin(fase * Math.PI * 9) * 7);
+                        opacidad *= (fase < .80 && ((int) (fase * 9)) % 2 == 0) ? 0.50f : 1f;
+                    }
+                }
+                case "Faint" -> {
+                    fase = progreso(inicioAccion, 710);
+                    dy += (int) Math.round(32 * fase);
+                    opacidad *= (float) (1.0 - 0.72 * fase);
+                }
+                default -> {
+                    // Respiración muy ligera en reposo, incluso sin spritesheet.
+                    if (!finalizado) dy -= (int) Math.round(
+                            Math.sin(System.nanoTime() / 310_000_000.0) * 1.3);
+                }
+            }
+
+            g.translate(dx, dy);
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    Math.max(0.05f, Math.min(1f, opacidad))));
             if (hoja != null && info != null && info.ancho > 0 && info.alto > 0) {
                 int columnas = Math.max(1, hoja.getWidth() / info.ancho);
                 int filas = Math.max(1, hoja.getHeight() / info.alto);
                 int direccion = jugador ? Math.min(4, filas - 1) : 0;
-                int f = Math.min(frame, columnas - 1);
-                int sx = f * info.ancho, sy = direccion * info.alto;
+                int fotograma = Math.min(frame, columnas - 1);
+                if (!animacion.equals("Idle")
+                        && recursos.hojas.get(animacion) == null) fotograma = tickFallback % columnas;
+                int sx = fotograma * info.ancho, sy = direccion * info.alto;
                 double factor = escalaEspecie(pokemon);
                 double escalaBase = Math.min((getWidth() - 24.0) / info.ancho,
                         (getHeight() - 24.0) / info.alto) * 0.68;
-                double escala = escalaBase * factor;
-                escala = Math.min(escala, Math.min((getWidth() - 12.0) / info.ancho,
-                        (getHeight() - 12.0) / info.alto));
+                double escala = Math.min(escalaBase * factor,
+                        Math.min((getWidth() - 12.0) / info.ancho,
+                                (getHeight() - 12.0) / info.alto));
                 int w = Math.max(1, (int) Math.round(info.ancho * escala));
                 int h = Math.max(1, (int) Math.round(info.alto * escala));
                 int x = (getWidth() - w) / 2;
                 int y = getHeight() - h - 8;
-                // La sombra se pinta en el mismo sistema de coordenadas que el sprite:
-                // queda centrada bajo sus pies aunque cambien tamaño y animación.
-                int sombraW = Math.max(18, (int) (info.ancho * escala * 0.72 * Math.max(1, recursos.tamanoSombra)));
-                int sombraH = Math.max(5, sombraW / 5);
-                g.setColor(new Color(55, 70, 62, 78));
-                g.fillOval((getWidth() - sombraW) / 2, getHeight() - sombraH - 5, sombraW, sombraH);
-                g.drawImage(hoja, x, y, x + w, y + h, sx, sy, sx + info.ancho, sy + info.alto, null);
+                g.drawImage(hoja, x, y, x + w, y + h,
+                        sx, sy, sx + info.ancho, sy + info.alto, null);
             } else if (recursos != null && recursos.retrato != null) {
                 double factor = escalaEspecie(pokemon);
-                int w = Math.min(getWidth() - 20, (int)(130 * factor)), h = Math.min(getHeight() - 20, (int)(130 * factor));
-                int x = (getWidth() - w) / 2, y = (getHeight() - h) / 2;
-                if (animacion.equals("Attack")) x += jugador ? 28 : -28;
-                if (animacion.equals("Hurt")) x += (tickFallback % 2 == 0 ? -9 : 9);
-                if (animacion.equals("Faint") || finalizado) {
-                    y += 24;
-                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.45f));
-                } else if (animacion.equals("Idle")) y += (tickFallback % 2 == 0 ? 0 : -3);
+                int w = Math.max(24, Math.min(getWidth() - 20, (int) (130 * factor)));
+                int h = Math.max(24, Math.min(getHeight() - 20, (int) (130 * factor)));
+                int x = (getWidth() - w) / 2, y = getHeight() - h - 10;
                 g.drawImage(recursos.retrato, x, y, w, h, null);
             } else {
-                g.setColor(Color.DARK_GRAY);
-                g.drawString(pokemon == null ? "" : pokemon.getNombre(), 15, getHeight() / 2);
+                // Aparece mientras se descarga el arte de SpriteCollab; no deja el campo vacío.
+                g.setColor(new Color(65, 95, 124));
+                int cx = getWidth() / 2, cy = getHeight() / 2;
+                g.fillOval(cx - 28, cy - 30, 56, 56);
+                g.setColor(new Color(255, 255, 255, 230));
+                g.fillArc(cx - 28, cy - 30, 56, 56, 180, 180);
+                g.setColor(new Color(29, 48, 70));
+                g.fillRect(cx - 28, cy - 3, 56, 5);
+                g.setColor(Color.WHITE);
+                g.fillOval(cx - 6, cy - 8, 12, 12);
+                g.setColor(new Color(32, 54, 81));
+                g.setFont(new Font("SansSerif", Font.BOLD, 12));
+                FontMetrics metrics = g.getFontMetrics();
+                String nombre = pokemon.getNombre();
+                g.drawString(nombre, (getWidth() - metrics.stringWidth(nombre)) / 2,
+                        Math.min(getHeight() - 4, cy + 46));
             }
             g.dispose();
         }
