@@ -76,7 +76,13 @@ public class Npc {
         System.out.println("2. Rechazar y seguir tu camino");
         System.out.print("Elige: ");
 
-        if (Entrada.leerEntero(sc) != 1) {
+        int aceptar = UIJuego.disponible()
+                ? UIJuego.elegir("Desafío de entrenador",
+                        nombre + " te reta con " + cantidad + " Pokémon de nivel aproximado "
+                                + (sumaNiveles / cantidad) + ".",
+                        "Aceptar combate", "Seguir caminando") + 1
+                : Entrada.leerEntero(sc);
+        if (aceptar != 1) {
             System.out.println("Rechazas el reto y sigues tu camino.");
             return true;
         }
@@ -87,6 +93,8 @@ public class Npc {
             jugador.agregarDinero(premio);
             System.out.println("\n" + nombre + ": " + FRASES_DERROTA[RAND.nextInt(FRASES_DERROTA.length)]);
             System.out.println(" Has ganado " + premio + "€.");
+            UIJuego.mensaje("¡Entrenador derrotado!", "Has vencido a " + nombre
+                    + " y ganado " + premio + "€.");
         } else {
             System.out.println("\n" + nombre + ": ¡He ganado! ¡Cuida mejor de tu equipo!");
         }
