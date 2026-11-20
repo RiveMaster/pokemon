@@ -11,7 +11,7 @@ public class CentroPokemon {
         if (UIJuego.disponible()) {
             while (true) {
                 int opcion = UIJuego.elegir("Centro Pokémon",
-                        "¡Bienvenido! Aquí cuidamos de tus Pokémon.\\n"
+                        "¡Bienvenido! Aquí cuidamos de tus Pokémon.\n"
                                 + "Pokémon en el equipo: " + jugadorCompleto.getEquipo().size(),
                         "Curar a todo el equipo", "Consultar estadísticas", "PC Pokémon", "Salir");
                 List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
@@ -32,11 +32,11 @@ public class CentroPokemon {
                         if (elegido >= 0 && elegido < equipo.size()) {
                             PokemonLuchador p = equipo.get(elegido);
                             UIJuego.mensaje("Datos de " + p.getNombre(),
-                                    "Nivel: " + p.getNivel() + "\\nPS: " + p.getVidaActual() + "/" + p.getVidaMax()
-                                            + "\\nAtaque: " + p.getAtaque() + " · Defensa: " + p.getDefensa()
-                                            + "\\nAtaque especial: " + p.getAtaqueEspecial()
+                                    "Nivel: " + p.getNivel() + "\nPS: " + p.getVidaActual() + "/" + p.getVidaMax()
+                                            + "\nAtaque: " + p.getAtaque() + " · Defensa: " + p.getDefensa()
+                                            + "\nAtaque especial: " + p.getAtaqueEspecial()
                                             + " · Defensa especial: " + p.getDefensaEspecial()
-                                            + "\\nVelocidad: " + p.getVelocidad() + "\\nIV: " + p.resumenIVs());
+                                            + "\nVelocidad: " + p.getVelocidad() + "\nIV: " + p.resumenIVs());
                         }
                     }
                     case 2 -> Jugador.menuPC(sc);
