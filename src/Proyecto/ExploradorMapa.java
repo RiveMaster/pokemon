@@ -503,22 +503,22 @@ public final class ExploradorMapa {
         boolean ciudad = ubicacion == Ubicacion.VILLAVERDE || Mapa.puebloDe(ubicacion) != null;
         List<BufferedImage> paleta = new ArrayList<>();
         List<Byte> categorias = new ArrayList<>();
-        agregarTile(paleta, categorias, tile(new Color(78, 157, 70), new Color(95, 177, 79)), TIPO_NORMAL); // 0 pradera
-        agregarTile(paleta, categorias, tile(new Color(190, 164, 118), new Color(212, 188, 141)), TIPO_NORMAL); // 1 sendero
-        agregarTile(paleta, categorias, hierbaTile(), TIPO_HIERBA); // 2
-        agregarTile(paleta, categorias, aguaTile(), TIPO_AGUA); // 3
-        agregarTile(paleta, categorias, arbolTile(), TIPO_BLOQUEO); // 4
-        agregarTile(paleta, categorias, paredTile(), TIPO_BLOQUEO); // 5
+        agregarTile(paleta, categorias, ArteVisualRetro.suelo(0, tile(new Color(78, 157, 70), new Color(95, 177, 79))), TIPO_NORMAL); // 0 pradera
+        agregarTile(paleta, categorias, ArteVisualRetro.suelo(1, tile(new Color(190, 164, 118), new Color(212, 188, 141))), TIPO_NORMAL); // 1 sendero
+        agregarTile(paleta, categorias, ArteVisualRetro.suelo(5, hierbaTile()), TIPO_HIERBA); // 2
+        agregarTile(paleta, categorias, ArteVisualRetro.suelo(3, aguaTile()), TIPO_AGUA); // 3
+        agregarTile(paleta, categorias, ArteVisualRetro.suelo(11, arbolTile()), TIPO_BLOQUEO); // 4
+        agregarTile(paleta, categorias, ArteVisualRetro.suelo(13, paredTile()), TIPO_BLOQUEO); // 5
         agregarTile(paleta, categorias, edificioTile(), TIPO_BLOQUEO); // 6 legado
-        int adoquin = agregarTile(paleta, categorias, adoquinTile(), TIPO_NORMAL);
-        int flores = agregarTile(paleta, categorias, floresTile(), TIPO_NORMAL);
+        int adoquin = agregarTile(paleta, categorias, ArteVisualRetro.suelo(7, adoquinTile()), TIPO_NORMAL);
+        int flores = agregarTile(paleta, categorias, ArteVisualRetro.suelo(6, floresTile()), TIPO_NORMAL);
         int farola = agregarTile(paleta, categorias, farolaTile(), TIPO_BLOQUEO);
         int tierraOscura = agregarTile(paleta, categorias,
-                tile(new Color(98, 151, 77), new Color(65, 122, 57)), TIPO_NORMAL);
+                ArteVisualRetro.suelo(8, tile(new Color(98, 151, 77), new Color(65, 122, 57))), TIPO_NORMAL);
         int tierraClara = agregarTile(paleta, categorias,
-                tile(new Color(116, 175, 85), new Color(156, 195, 102)), TIPO_NORMAL);
-        int sueloFlor = agregarTile(paleta, categorias, floresTile(), TIPO_NORMAL);
-        int sueloPiedra = agregarTile(paleta, categorias, rocaSueloTile(), TIPO_NORMAL);
+                ArteVisualRetro.suelo(15, tile(new Color(116, 175, 85), new Color(156, 195, 102))), TIPO_NORMAL);
+        int sueloFlor = agregarTile(paleta, categorias, ArteVisualRetro.suelo(12, floresTile()), TIPO_NORMAL);
+        int sueloPiedra = agregarTile(paleta, categorias, ArteVisualRetro.suelo(14, rocaSueloTile()), TIPO_NORMAL);
         int banco = agregarTile(paleta, categorias, bancoTile(), TIPO_BLOQUEO);
         int senal = agregarTile(paleta, categorias, cartelRutaTile(), TIPO_BLOQUEO);
         int[][] capas = new int[3][size];
