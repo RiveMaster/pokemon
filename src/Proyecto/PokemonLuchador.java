@@ -735,7 +735,9 @@ public class PokemonLuchador implements Serializable {
         }
     }
 
-    public void curar(int i) {
+    /** Recupera PS sin superar el máximo; las pociones llaman a este método. */
+    public void curar(int cantidad) {
+        if (cantidad > 0) restaurarVida(cantidad);
     }
 
     public boolean aprenderMovimiento(Movimiento nuevo) {
