@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 /**
  * Lector del paquete pixel-art original de la previsualización.
- * Atlas opcional: Tiles/VisualRetro.png (384x128).
+ * Atlas opcional: Tiles/VisualRetro.png (192x64 o 384x128).
  *
  * Diseño del atlas:
  * - y=0, seis fachadas de 64x48 (centro, gimnasio, tienda, casas)
@@ -32,7 +32,7 @@ public final class ArteVisualRetro {
         if (!Files.isRegularFile(ARCHIVO)) return null;
         try {
             BufferedImage imagen = ImageIO.read(ARCHIVO.toFile());
-            if (imagen != null && imagen.getWidth() >= 384 && imagen.getHeight() >= 128)
+            if (imagen != null && imagen.getWidth() >= 192 && imagen.getHeight() >= 64)
                 atlas = imagen;
         } catch (IOException ex) {
             System.err.println("El atlas visual no se pudo abrir: " + ex.getMessage());
@@ -44,11 +44,20 @@ public final class ArteVisualRetro {
 
     private static BufferedImage cortar(int x, int y, int w, int h) {
         BufferedImage recurso = atlas();
-        if (recurso == null || x < 0 || y < 0
-                || x + w > recurso.getWidth() || y + h > recurso.getHeight()) return null;
+        if (recurso == null || x < 0 || y < 0 || x + w > 384 || y + h > 128) return null;
+        // Las coordenadas se expresan sobre el atlas lógico 384x128.
+        // El recurso distribuido ocupa la mitad y se amplía sin difuminar píxeles.
+        double escalaX = recurso.getWidth() / 384.0;
+        double escalaY = recurso.getHeight() / 128.0;
+        int sx = (int) Math.round(x * escalaX);
+        int sy = (int) Math.round(y * escalaY);
+        int ex = (int) Math.round((x+w) * escalaX);
+        int ey = (int) Math.round((y+h) * escalaY);
         BufferedImage copia = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = copia.createGraphics();
-        g.drawImage(recurso, 0, 0, w, h, x, y, x+w, y+h, null);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g.drawImage(recurso, 0, 0, w, h, sx, sy, ex, ey, null);
         g.dispose();
         return copia;
     }
