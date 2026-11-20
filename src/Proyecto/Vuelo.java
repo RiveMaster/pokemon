@@ -27,6 +27,30 @@ public class Vuelo {
             }
             return null;
         }
+        if (UIJuego.disponible()) {
+            String[] candidatos = voladores.stream()
+                    .map(p -> p.getNombre() + " · Nv. " + p.getNivel())
+                    .toArray(String[]::new);
+            int elegido = UIJuego.elegir("Vuelo", "¿Qué Pokémon te llevará volando?", candidatos);
+            if (elegido < 0) return null;
+            PokemonLuchador volador = voladores.get(elegido);
+            List<Ubicacion> destinosDisponibles = Mapa.getRecorrido();
+            String[] destinosTexto = destinosDisponibles.stream()
+                    .map(u -> Mapa.descripcionCorta(u)
+                            + (u == jugador.getUbicacion() ? " · Ubicación actual" : ""))
+                    .toArray(String[]::new);
+            int seleccion = UIJuego.elegir("Mapa de vuelo",
+                    "Elige a dónde viajar con " + volador.getNombre() + ":", destinosTexto);
+            if (seleccion < 0 || seleccion >= destinosDisponibles.size()) return null;
+            Ubicacion destino = destinosDisponibles.get(seleccion);
+            if (destino == jugador.getUbicacion()) {
+                UIJuego.mensaje("Vuelo", "Ya estás en " + destino.getNombre() + ".");
+                return null;
+            }
+            UIJuego.mensaje("Vuelo", "¡" + volador.getNombre()
+                    + " te lleva volando a " + destino.getNombre() + "!");
+            return destino;
+        }
         System.out.println("\n-- Volar --");
         System.out.println("¿Qué Pokémon te llevará volando? (0 para cancelar)");
         for (int i = 0; i < voladores.size(); i++) {
