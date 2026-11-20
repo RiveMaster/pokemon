@@ -132,7 +132,7 @@ public final class SpriteCollabUI {
     private static JLabel crearEtiquetaDatos() {
         JLabel label = new JLabel("Cargando Pokémon…", SwingConstants.CENTER);
         label.setForeground(Color.WHITE);
-        label.setFont(new Font("SansSerif", Font.BOLD, 14f));
+        label.setFont(new Font("SansSerif", Font.BOLD, 14));
         label.setBorder(new EmptyBorder(4, 8, 4, 8));
         return label;
     }
@@ -232,7 +232,7 @@ public final class SpriteCollabUI {
             if (panelInteraccion == null) crearVentanaCombate();
             panelInteraccion.removeAll();
             JLabel texto = new JLabel("<html>" + escapar(mensaje) + "</html>");
-            texto.setFont(new Font("SansSerif", Font.BOLD, 16f));
+            texto.setFont(new Font("SansSerif", Font.BOLD, 16));
             texto.setForeground(new Color(32, 49, 70));
             texto.setBorder(new EmptyBorder(0, 2, 8, 2));
             panelInteraccion.add(texto, BorderLayout.NORTH);
@@ -243,7 +243,7 @@ public final class SpriteCollabUI {
             for (int i = 0; i < opciones.length; i++) {
                 final int indice = i;
                 JButton boton = new JButton(opciones[i]);
-                boton.setFont(new Font("SansSerif", Font.BOLD, 14f));
+                boton.setFont(new Font("SansSerif", Font.BOLD, 14));
                 boton.setForeground(new Color(35, 58, 83));
                 boton.setBackground(Color.WHITE);
                 boton.setBorder(BorderFactory.createCompoundBorder(
