@@ -578,16 +578,20 @@ public final class ExploradorMapa {
             if (ubicacion == Ubicacion.COMILLAS) servicios[2] = "CASINO";
             if (ubicacion == Ubicacion.VITORIA) servicios[7] = "GOBIERNO";
             if (ubicacion == Ubicacion.VILLAVERDE) servicios[4] = "CASA_MAMA";
+            // Cada familia tiene un volumen reconocible: el gimnasio es más ancho,
+            // los centros y sedes son grandes, y las casas tienen fachadas más estrechas.
             int[] xs = {3, 11, 21, 29, 3, 11, 21, 29};
-            int[] ys = {3, 3, 3, 3, 16, 16, 16, 16};
+            int[] anchos = {6, 5, 7, 4, 4, 5, 5, 6};
+            int[] altos = {4, 4, 5, 4, 4, 4, 4, 5};
+            int[] ys = {3, 3, 3, 3, 16, 16, 16, 15};
             for (int i = 0; i < servicios.length; i++) {
-                int bx = xs[i], by = ys[i];
+                int bx = xs[i], by = ys[i], bw = anchos[i], bh = altos[i];
                 String tipo = servicios[i];
                 dibujarEdificio(paleta, categorias, capas[2], colisiones, manuales,
-                        entradas, ancho, alto, bx, by, 5, 4, tipo, i + ubicacion.ordinal());
+                        entradas, ancho, alto, bx, by, bw, bh, tipo, i + ubicacion.ordinal());
                 // Caminos de acceso frontales. Las fachadas no pueden bloquear la calzada.
-                int puertaX = bx + 2;
-                int desde = by + 4, hasta = by == 3 ? centroY - 1 : 20;
+                int puertaX = bx + bw / 2;
+                int desde = by + bh, hasta = by == 3 ? centroY - 1 : 20;
                 int y1 = Math.min(desde, hasta), y2 = Math.max(desde, hasta);
                 for (int y = y1; y <= y2; y++) {
                     int idx = y * ancho + puertaX;
