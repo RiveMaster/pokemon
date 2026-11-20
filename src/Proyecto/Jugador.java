@@ -379,6 +379,57 @@ public class Jugador implements Serializable {
 
     // Menú interactivo del PC, pensado para invocarse desde el Centro Pokémon
     public static void menuPC(Scanner sc) {
+        if (UIJuego.disponible()) {
+            while (true) {
+                int opcion = UIJuego.elegir("PC Pokémon",
+                        "Pokémon en el equipo: " + equipo.size() + "/6\\n"
+                                + "Pokémon almacenados: " + pc.size(),
+                        "Ver equipo", "Ver PC", "Depositar Pokémon", "Retirar Pokémon", "Salir");
+                if (opcion < 0 || opcion == 4) return;
+                if (opcion == 0) {
+                    SpriteCollabUI.mostrarColeccion("Mi equipo Pokémon", equipo);
+                } else if (opcion == 1) {
+                    SpriteCollabUI.mostrarPC(pc);
+                } else if (opcion == 2) {
+                    if (equipo.size() <= 1) {
+                        UIJuego.mensaje("PC Pokémon", "Debes conservar al menos un Pokémon en tu equipo.");
+                        continue;
+                    }
+                    String[] nombres = equipo.stream()
+                            .map(p -> p.getNombre() + " · Nv. " + p.getNivel())
+                            .toArray(String[]::new);
+                    int elegido = UIJuego.elegir("Depositar Pokémon",
+                            "Selecciona el Pokémon que quieres enviar al PC.", nombres);
+                    if (elegido >= 0 && elegido < equipo.size()) {
+                        PokemonLuchador p = equipo.get(elegido);
+                        if (UIJuego.confirmar("Confirmar depósito", "¿Enviar a " + p.getNombre() + " al PC?")) {
+                            equipo.remove(elegido);
+                            pc.add(p);
+                            UIJuego.mensaje("Pokémon depositado", p.getNombre() + " ya está en el PC.");
+                        }
+                    }
+                } else if (opcion == 3) {
+                    if (equipo.size() >= 6) {
+                        UIJuego.mensaje("Equipo completo", "Tienes 6 Pokémon. Deposita alguno antes de retirar otro.");
+                        continue;
+                    }
+                    if (pc.isEmpty()) {
+                        UIJuego.mensaje("PC vacío", "No hay Pokémon almacenados.");
+                        continue;
+                    }
+                    String[] nombres = pc.stream()
+                            .map(p -> p.getNombre() + " · Nv. " + p.getNivel())
+                            .toArray(String[]::new);
+                    int elegido = UIJuego.elegir("Retirar Pokémon",
+                            "Selecciona un Pokémon para incorporarlo al equipo.", nombres);
+                    if (elegido >= 0 && elegido < pc.size()) {
+                        PokemonLuchador p = pc.remove(elegido);
+                        equipo.add(p);
+                        UIJuego.mensaje("Pokémon retirado", p.getNombre() + " se ha unido a tu equipo.");
+                    }
+                }
+            }
+        }
         while (true) {
             System.out.println("\n╔════════════════════════════════════╗");
             System.out.println("║              PC POKÉMON             ║");
