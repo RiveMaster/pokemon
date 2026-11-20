@@ -38,7 +38,17 @@ public final class UIJuego {
             botones.add(boton);
         }
         JPanel contenido = contenido(dialogo);
-        contenido.add(botones, BorderLayout.SOUTH);
+        if (opciones.length > 8) {
+            JScrollPane desplazamiento = new JScrollPane(botones,
+                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            desplazamiento.setPreferredSize(new Dimension(465, 325));
+            desplazamiento.setBorder(BorderFactory.createEmptyBorder());
+            desplazamiento.getVerticalScrollBar().setUnitIncrement(22);
+            contenido.add(desplazamiento, BorderLayout.CENTER);
+        } else {
+            contenido.add(botones, BorderLayout.SOUTH);
+        }
         dialogo.getRootPane().registerKeyboardAction(e -> dialogo.dispose(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
         instalarNavegacion(dialogo);
