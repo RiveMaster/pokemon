@@ -20,6 +20,8 @@ public final class ArteEdificios {
     private ArteEdificios() { }
 
     public static BufferedImage crear(String tipo, int anchoCasillas, int altoCasillas, int variante) {
+        BufferedImage mejorado = ArteVisualRetro.edificio(tipo, anchoCasillas, altoCasillas, variante);
+        if (mejorado != null) return mejorado;
         int w = anchoCasillas * 16, h = altoCasillas * 16;
         if (w < 48 || h < 48) throw new IllegalArgumentException("Edificio demasiado pequeño");
         BufferedImage im = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
