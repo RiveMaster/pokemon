@@ -275,8 +275,24 @@ public class Combate {
                     jugadorCompleto.curarPokemon(pokemonJugador, tipomedicina);
                     turnoJugador(pokemonJugador, pokemonpodemita, sc);
                 } else if (n == 2) {
-                    PokemonLuchador nuevo = pokemuerto(pokemonJugador, jugadorCompleto, sc);
-                    if (nuevo != null) pokemonJugador = nuevo;
+                    List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
+                    int idx;
+                    if (SpriteCollabUI.interfazDisponible()) {
+                        idx = SpriteCollabUI.elegirPokemon(equipo, pokemonJugador, true);
+                    } else {
+                        System.out.println("Elige un Pokémon para el combate:");
+                        for (int k = 0; k < equipo.size(); k++)
+                            System.out.println((k + 1) + ". " + equipo.get(k).getNombre());
+                        idx = Entrada.leerEntero(sc) - 1;
+                    }
+                    if (idx >= 0 && idx < equipo.size()) {
+                        PokemonLuchador nuevo = equipo.get(idx);
+                        if (nuevo != pokemonJugador && nuevo.estaVivo()) {
+                            pokemonJugador = nuevo;
+                            UIJuego.mensaje("Cambio de Pokémon",
+                                    "¡Adelante " + nuevo.getNombre() + "!");
+                        }
+                    }
                 }
             }
 
