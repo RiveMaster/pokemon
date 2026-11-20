@@ -60,12 +60,17 @@ public class Pueblo {
             System.out.println("Aquí no hay gimnasio.");
         }
 
-        System.out.println("Explora las calles con W, A, S y D. En las ciudades no aparecen Pokémon salvajes.");
-        ExploradorMapa.Resultado exploracion = ExploradorMapa.explorarCiudad(jugador, p.ubicacion);
-        if (exploracion.getDestino() != null) return exploracion.getDestino();
+        System.out.println("Explora las calles con W, A, S y D. Acércate a las puertas para interactuar.");
 
         while (true) {
+            ExploradorMapa.Resultado exploracion = ExploradorMapa.explorarCiudad(jugador, p.ubicacion);
+            if (exploracion.getDestino() != null) return exploracion.getDestino();
+            if (exploracion.getEvento() != null) {
+                atenderEdificio(sc, jugador, p, exploracion.getEvento());
+                continue; // vuelve a la misma calle frente a la puerta
+            }
             List<Mapa.Opcion> opciones = new ArrayList<>();
+            opciones.add(new Mapa.Opcion("Seguir explorando las calles", () -> null));
             opciones.add(new Mapa.Opcion("Centro Pokémon", () -> {
                 CentroPokemon.visitar(sc, jugador.getPokemon(), jugador);
                 return null;
@@ -110,6 +115,31 @@ public class Pueblo {
             if (destino != null) {
                 return destino;
             }
+        }
+    }
+
+    /** Las puertas del mapa y los menús llevan a los mismos servicios y progreso. */
+    private static void atenderEdificio(Scanner sc, Jugador jugador, Pueblo p, String tipo) {
+        switch (tipo) {
+            case "CENTRO_POKEMON", "CENTRO_POKÉMON" ->
+                    CentroPokemon.visitar(sc, jugador.getPokemon(), jugador);
+            case "TIENDA" -> Tienda.entrar(sc, jugador);
+            case "GIMNASIO" -> {
+                Gimnasio gimnasio = Gimnasio.deCiudad(p.ubicacion);
+                if (gimnasio != null) gimnasio.desafiar(sc, jugador);
+                else UIJuego.mensaje("Edificio cerrado", "Esta localidad no tiene gimnasio.");
+            }
+            case "CASINO" -> {
+                if (p.casino) Casino.entrar(sc, jugador);
+                else UIJuego.mensaje("Edificio", "El casino está cerrado.");
+            }
+            case "GOBIERNO" -> {
+                if (p.sedeGobierno) Gobierno.visitarSede(sc, jugador);
+                else UIJuego.mensaje("Edificio", "La sede del Gobierno no está aquí.");
+            }
+            case "CASA", "CASA_MAMA" -> UIJuego.mensaje("Casa del pueblo",
+                    "¡Bienvenido! Un vecino te saluda desde la puerta. Los gimnasios están en las ciudades principales.");
+            default -> UIJuego.mensaje("Edificio", "No hay ninguna interacción disponible aquí.");
         }
     }
 
