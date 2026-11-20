@@ -483,6 +483,11 @@ public class Jugador implements Serializable {
     }
 
     public void mostrarEstadoEquipo() {
+        if (UIJuego.disponible()) {
+            if (equipo.isEmpty()) UIJuego.mensaje("Equipo Pokémon", "No tienes Pokémon.");
+            else SpriteCollabUI.mostrarColeccion("Estado de tu equipo", equipo);
+            return;
+        }
         System.out.println("\n╔════════════════════════════════════╗");
         System.out.println("║      ESTADO DEL EQUIPO             ║");
         System.out.println("╚════════════════════════════════════╝");
@@ -655,6 +660,19 @@ public class Jugador implements Serializable {
         }
         java.util.Collections.sort(disponibles);
 
+        if (UIJuego.disponible()) {
+            String[] opciones = disponibles.stream().map(nombre -> {
+                Movimiento mov = Ataques.buscarPorNombre(nombre);
+                String detalle = mov == null ? "" : " · " + mov.getTipo()
+                        + " · Potencia " + (int) mov.getPotencia();
+                return nombre + detalle + " · x" + mts.get(nombre);
+            }).toArray(String[]::new);
+            int elegida = UIJuego.elegir("Máquinas técnicas",
+                    "Selecciona una MT para enseñársela a un Pokémon.", opciones);
+            if (elegida >= 0 && elegida < disponibles.size())
+                enseñarMT(sc, disponibles.get(elegida));
+            return;
+        }
         System.out.println("\n-- Tus MT --");
         for (int i = 0; i < disponibles.size(); i++) {
             String nombre = disponibles.get(i);
@@ -712,6 +730,15 @@ public class Jugador implements Serializable {
             System.out.println("No tienes Pokémon en el equipo.");
             return null;
         }
+        if (UIJuego.disponible()) {
+            String[] opciones = equipo.stream().map(p -> {
+                ObjetoEquipable llevado = p.getObjeto();
+                return p.getNombre() + " · Nv. " + p.getNivel()
+                        + (llevado == null ? "" : " · " + llevado.getNombre());
+            }).toArray(String[]::new);
+            int elegido = UIJuego.elegir("Equipo Pokémon", pregunta, opciones);
+            return elegido < 0 || elegido >= equipo.size() ? null : equipo.get(elegido);
+        }
         System.out.println("\n" + pregunta);
         for (int i = 0; i < equipo.size(); i++) {
             PokemonLuchador p = equipo.get(i);
@@ -740,6 +767,22 @@ public class Jugador implements Serializable {
         }
 
         ObjetoEquipable actual = pokemon.getObjeto();
+        if (UIJuego.disponible()) {
+            String objeto = actual == null ? "Ninguno" : actual.getNombre();
+            int opcion = UIJuego.elegir("Objetos de " + pokemon.getNombre(),
+                    "Objeto equipado: " + objeto,
+                    "Equipar desde la mochila", "Quitar objeto", "Volver");
+            if (opcion == 0) equiparDesdeMochila(sc, pokemon);
+            else if (opcion == 1) {
+                if (actual == null) UIJuego.mensaje("Equipo", "Este Pokémon no lleva ningún objeto.");
+                else {
+                    pokemon.setObjeto(null);
+                    añadirObjetoEquipable(actual, 1);
+                    UIJuego.mensaje("Objeto guardado", actual.getNombre() + " vuelve a tu mochila.");
+                }
+            }
+            return;
+        }
         System.out.println("\n" + pokemon.getNombre() + " lleva: "
                 + (actual == null ? "nada" : actual.getNombre() + " - " + actual.getDescripcion()));
         System.out.println("1. Equipar un objeto de la mochila");
@@ -774,18 +817,24 @@ public class Jugador implements Serializable {
             return;
         }
 
-        System.out.println("\n-- Objetos equipables --");
-        for (int i = 0; i < disponibles.size(); i++) {
-            ObjetoEquipable o = disponibles.get(i);
-            System.out.println((i + 1) + ". " + o.getNombre() + " x" + objetosEquipables.get(o) + " - " + o.getDescripcion());
+        int eleccion;
+        if (UIJuego.disponible()) {
+            String[] opciones = disponibles.stream()
+                    .map(o -> o.getNombre() + " · x" + objetosEquipables.get(o))
+                    .toArray(String[]::new);
+            eleccion = UIJuego.elegir("Equipar objeto",
+                    "Elige un objeto para " + pokemon.getNombre(), opciones) + 1;
+        } else {
+            System.out.println("\\n-- Objetos equipables --");
+            for (int i = 0; i < disponibles.size(); i++) {
+                ObjetoEquipable o = disponibles.get(i);
+                System.out.println((i + 1) + ". " + o.getNombre() + " x"
+                        + objetosEquipables.get(o) + " - " + o.getDescripcion());
+            }
+            System.out.print("Elige un objeto (0 para cancelar): ");
+            eleccion = Entrada.leerEntero(sc);
         }
-        System.out.print("Elige un objeto (0 para cancelar): ");
-
-        int eleccion = Entrada.leerEntero(sc);
-        if (eleccion < 1 || eleccion > disponibles.size()) {
-            System.out.println("Cancelado.");
-            return;
-        }
+        if (eleccion < 1 || eleccion > disponibles.size()) return;
 
         ObjetoEquipable nuevo = disponibles.get(eleccion - 1);
         ObjetoEquipable viejo = pokemon.getObjeto();
@@ -813,6 +862,36 @@ public class Jugador implements Serializable {
 
     // === Mostrar mochila ===
     public void mostrar(Jugador jugadorCompleto) {
+        if (UIJuego.disponible()) {
+            while (true) {
+                int opcion = UIJuego.elegir("Mochila de " + nombre,
+                        "Dinero: " + getDinero() + "€ · Medallas: "
+                                + medallasEnGeneracion(getGeneracion()),
+                        "Medicinas", "Poké Balls", "Objetos clave",
+                        "MT y MO", "Objetos equipables", "Medallas", "Equipo", "Cerrar mochila");
+                String detalle;
+                switch (opcion) {
+                    case 0 -> detalle = resumenBolsa(medicinas);
+                    case 1 -> detalle = resumenBolsa(pokeballs);
+                    case 2 -> detalle = resumenBolsa(objetosClave);
+                    case 3 -> detalle = resumenBolsa(mts);
+                    case 4 -> {
+                        detalle = objetosEquipables.isEmpty() ? "No tienes objetos."
+                                : objetosEquipables.entrySet().stream()
+                                .map(e -> e.getKey().getNombre() + " x" + e.getValue())
+                                .collect(java.util.stream.Collectors.joining("\\n"));
+                    }
+                    case 5 -> detalle = medallas.isEmpty() ? "Todavía no tienes medallas."
+                            : String.join("\\n", medallas);
+                    case 6 -> {
+                        SpriteCollabUI.mostrarColeccion("Equipo Pokémon", equipo);
+                        continue;
+                    }
+                    default -> { return; }
+                }
+                UIJuego.mensaje("Contenido de la mochila", detalle);
+            }
+        }
         // Al abrir la mochila también se muestra la vista gráfica del equipo.
         SpriteCollabUI.mostrarColeccion("Equipo Pokémon · Mochila", equipo);
         System.out.println("\n========= MOCHILA =========");
@@ -845,6 +924,14 @@ public class Jugador implements Serializable {
         System.out.println("===========================\n");
     }
 
+
+    private static String resumenBolsa(HashMap<String, Integer> objetos) {
+        if (objetos == null || objetos.isEmpty()) return "Esta sección está vacía.";
+        return objetos.entrySet().stream()
+                .sorted(java.util.Map.Entry.comparingByKey())
+                .map(e -> e.getKey() + " x" + e.getValue())
+                .collect(java.util.stream.Collectors.joining("\\n"));
+    }
 
     // === Métodos de dinero ===
     public static boolean gastarDinero(int cantidad, Jugador jugadorCompleto) {
