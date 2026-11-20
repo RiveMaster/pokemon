@@ -26,14 +26,14 @@ public class Villaverde {
             if (UIJuego.disponible()) {
                 int seleccion = UIJuego.elegir("Pueblo Villaverde",
                         "Generación actual: " + jugadorCompleto.getGeneracion().etiqueta()
-                                + "\\n¿Qué quieres hacer?",
+                                + "\n¿Qué quieres hacer?",
                         "Visitar a mamá", "Ir a " + primera.getNombre(),
                         "Mochila y opciones", "Viajar a otra generación",
                         "Explorar el pueblo");
                 if (seleccion < 0) continue;
                 opcion = seleccion + 1;
             } else {
-                System.out.println("\\nPUEBLO VILLAVERDE");
+                System.out.println("\nPUEBLO VILLAVERDE");
                 System.out.println("1. Visitar a mamá");
                 System.out.println("2. Ir a " + primera.getNombre());
                 System.out.println("3. Menú (mochila, MT, objetos, volar, guardar)");
@@ -193,7 +193,7 @@ public class Villaverde {
         if (!jugador.isMamaVisitada()) {
             jugador.agregarDinero(1000);
             jugador.setMamaVisitada(true);
-            UIJuego.mensaje("Casa de mamá", "¡Hijo mío! Te doy 1000€ para empezar tu aventura.\\nHas recibido 1000€.");
+            UIJuego.mensaje("Casa de mamá", "¡Hijo mío! Te doy 1000€ para empezar tu aventura.\nHas recibido 1000€.");
         } else {
             UIJuego.mensaje("Casa de mamá", "Ya te di dinero, ¡ve y conviértete en un gran entrenador!");
         }
