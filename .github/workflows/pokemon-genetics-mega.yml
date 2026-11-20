@@ -7,6 +7,7 @@ on:
       - "tests/SistemaCrianzaMegaSmokeTest.java"
       - "tests/ExploradorMapaSmokeTest.java"
       - "tests/ArteEdificiosSmokeTest.java"
+      - "tests/Animaciones2DSmokeTest.java"
       - ".github/workflows/pokemon-genetics-mega.yml"
   pull_request:
     paths:
@@ -14,6 +15,7 @@ on:
       - "tests/SistemaCrianzaMegaSmokeTest.java"
       - "tests/ExploradorMapaSmokeTest.java"
       - "tests/ArteEdificiosSmokeTest.java"
+      - "tests/Animaciones2DSmokeTest.java"
       - ".github/workflows/pokemon-genetics-mega.yml"
 
 jobs:
@@ -31,10 +33,12 @@ jobs:
         run: |
           mkdir -p build
           find src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d build
-          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java
+          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java
       - name: Test breeding, IVs, cooldown and mega evolution
         run: java -ea -cp build Proyecto.SistemaCrianzaMegaSmokeTest
       - name: Test WASD exploration movement rules
         run: java -ea -cp build Proyecto.ExploradorMapaSmokeTest
       - name: Test pixel-art buildings and reachable entrances
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ArteEdificiosSmokeTest
+      - name: Test player sprites and walk animation frames
+        run: java -ea -Djava.awt.headless=true -cp build Proyecto.Animaciones2DSmokeTest
