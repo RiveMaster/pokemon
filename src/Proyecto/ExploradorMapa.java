@@ -566,6 +566,12 @@ public final class ExploradorMapa {
             for (int y = 1; y < alto - 1; y++) {
                 for (int x = 17; x <= 19; x++) capas[1][y * ancho + x] = adoquin;
             }
+            // Aceras longitudinales en ambos lados: todas las puertas quedan
+            // conectadas con la plaza sin atravesar edificios ni jardines.
+            for (int x = 1; x < ancho - 1; x++) {
+                capas[1][8 * ancho + x] = adoquin;
+                capas[1][21 * ancho + x] = adoquin;
+            }
             for (int y = 9; y <= 15; y++) {
                 for (int x = 14; x <= 22; x++) capas[1][y * ancho + x] = adoquin;
             }
