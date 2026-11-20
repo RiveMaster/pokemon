@@ -8,6 +8,43 @@ public class CentroPokemon {
     // Método principal del Centro Pokémon
     public static void visitar(Scanner sc, PokemonLuchador miPokemon, Jugador jugadorCompleto) {
 
+        if (UIJuego.disponible()) {
+            while (true) {
+                int opcion = UIJuego.elegir("Centro Pokémon",
+                        "¡Bienvenido! Aquí cuidamos de tus Pokémon.\\n"
+                                + "Pokémon en el equipo: " + jugadorCompleto.getEquipo().size(),
+                        "Curar a todo el equipo", "Consultar estadísticas", "PC Pokémon", "Salir");
+                List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
+                switch (opcion) {
+                    case 0 -> {
+                        for (PokemonLuchador p : equipo) p.curarTotal();
+                        UIJuego.mensaje("Equipo recuperado", "¡Tus Pokémon han recuperado todos sus PS y están listos para la aventura!");
+                    }
+                    case 1 -> {
+                        if (equipo.isEmpty()) {
+                            UIJuego.mensaje("Equipo Pokémon", "No tienes Pokémon en el equipo.");
+                            break;
+                        }
+                        String[] opciones = equipo.stream()
+                                .map(p -> p.getNombre() + " · Nv. " + p.getNivel())
+                                .toArray(String[]::new);
+                        int elegido = UIJuego.elegir("Estadísticas", "Selecciona un Pokémon:", opciones);
+                        if (elegido >= 0 && elegido < equipo.size()) {
+                            PokemonLuchador p = equipo.get(elegido);
+                            UIJuego.mensaje("Datos de " + p.getNombre(),
+                                    "Nivel: " + p.getNivel() + "\\nPS: " + p.getVidaActual() + "/" + p.getVidaMax()
+                                            + "\\nAtaque: " + p.getAtaque() + " · Defensa: " + p.getDefensa()
+                                            + "\\nAtaque especial: " + p.getAtaqueEspecial()
+                                            + " · Defensa especial: " + p.getDefensaEspecial()
+                                            + "\\nVelocidad: " + p.getVelocidad() + "\\nIV: " + p.resumenIVs());
+                        }
+                    }
+                    case 2 -> Jugador.menuPC(sc);
+                    default -> { return; }
+                }
+            }
+        }
+
         while (true) {
             System.out.println("\n=== Centro Pokémon ===");
             System.out.println("1. Curar a tu Pokémon");
