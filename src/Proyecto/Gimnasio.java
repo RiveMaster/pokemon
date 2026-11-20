@@ -270,11 +270,11 @@ public class Gimnasio {
         String estado = primeraVez
                 ? "Progreso: " + vencidos + "/" + NUM_MIEMBROS + " miembros derrotados."
                 : "Ya tienes esta medalla. Puedes disputar una revancha contra el líder sin recibir otra recompensa.";
-        String introduccion = nombre + " · " + gen.getRegion() + "\\nTipo: " + tipo
-                + "\\nLíder: " + lider + " (" + tituloLider + ")"
-                + "\\nNivel recomendado: " + getNivelRecomendado(gen)
-                + "\\n" + estado
-                + (primeraVez ? "\\nPrimero tendrás que superar a los miembros del gimnasio." : "");
+        String introduccion = nombre + " · " + gen.getRegion() + "\nTipo: " + tipo
+                + "\nLíder: " + lider + " (" + tituloLider + ")"
+                + "\nNivel recomendado: " + getNivelRecomendado(gen)
+                + "\n" + estado
+                + (primeraVez ? "\nPrimero tendrás que superar a los miembros del gimnasio." : "");
         UIJuego.mensaje("Recepción del gimnasio", introduccion);
 
         if (primeraVez) {
@@ -310,12 +310,12 @@ public class Gimnasio {
             jugador.añadirMedalla(clave);
             jugador.agregarDinero(dinero);
             if (mtRecompensa != null && !mtRecompensa.isEmpty()) jugador.añadirMT(mtRecompensa);
-            String premio = "¡Has conseguido " + clave + "!\\n"
+            String premio = "¡Has conseguido " + clave + "!\n"
                     + "Medallas de " + gen.getRegion() + ": "
                     + jugador.medallasEnGeneracion(gen) + "/" + GIMNASIOS.size()
-                    + "\\nDinero recibido: " + dinero + "€."
+                    + "\nDinero recibido: " + dinero + "€."
                     + (mtRecompensa != null && !mtRecompensa.isEmpty()
-                    ? "\\nTambién has recibido la MT " + mtRecompensa + "." : "");
+                    ? "\nTambién has recibido la MT " + mtRecompensa + "." : "");
             UIJuego.mensaje("¡Victoria en " + nombre + "!", premio);
         } else {
             UIJuego.mensaje("¡Victoria!", "Has vuelto a derrotar a " + lider + ". ¡Buen combate!");
@@ -342,7 +342,7 @@ public class Gimnasio {
             int decision;
             if (UIJuego.disponible()) {
                 decision = UIJuego.elegir("Reto del gimnasio · " + (i + 1) + "/" + NUM_MIEMBROS,
-                        nombreMiembro + " bloquea el camino al líder.\\n"
+                        nombreMiembro + " bloquea el camino al líder.\n"
                                 + "Tu progreso quedará guardado si decides salir.",
                         "Enfrentar a " + nombreMiembro, "Abandonar el gimnasio");
             } else {
@@ -367,7 +367,7 @@ public class Gimnasio {
 
             jugador.marcarMiembroGimnasioDerrotado(claveMiembro);
             UIJuego.mensaje("¡Rival superado!",
-                    "Has derrotado a " + nombreMiembro + ".\\nProgreso del gimnasio: "
+                    "Has derrotado a " + nombreMiembro + ".\nProgreso del gimnasio: "
                             + (i + 1) + "/" + NUM_MIEMBROS + " miembros.");
         }
         return true;
