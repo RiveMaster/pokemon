@@ -130,6 +130,12 @@ public class Gobierno {
         int total = Gimnasio.getGimnasios().size();
         int medallas = jugador.medallasEnGeneracion(gen);
 
+        if (UIJuego.disponible()) {
+            UIJuego.mensaje("Sede del Gobierno",
+                    "Generación: " + gen.etiqueta() + "\\n"
+                            + "Jefe: " + jefe.nombre + " · " + jefe.cargo
+                            + "\\nMedallas: " + medallas + "/" + total);
+        }
         System.out.println("\n=== SEDE DEL GOBIERNO DE " + gen.getRegion().toUpperCase() + " ===");
         System.out.println("Jefe: " + jefe.nombre + ", " + jefe.cargo + ".");
 
@@ -139,6 +145,9 @@ public class Gobierno {
             return;
         }
         if (medallas < total) {
+            UIJuego.mensaje("Acceso restringido",
+                    "Necesitas las " + total + " medallas de " + gen.getRegion()
+                            + ". Actualmente tienes " + medallas + ".");
             System.out.println("El portero: Sin las " + total + " medallas de " + gen.getRegion() + " no pasas. Tienes " + medallas + ".");
             System.out.println("Portero: Y vuelva usted mañana.");
             return;
@@ -153,6 +162,9 @@ public class Gobierno {
             System.out.println("  \"" + meme + "\"");
         }
 
+        if (UIJuego.disponible() && !UIJuego.confirmar("Desafío del Gobierno",
+                "¿Quieres enfrentarte a " + jefe.nombre + "?")) return;
+
         int nivelMax = jefe.nivelBase + gen.getBonusNivel() + (TAMANO_EQUIPO_JEFE - 1);
         List<PokemonBase> bases = gen.equipoPara(jefe.tipos, nivelMax, TAMANO_EQUIPO_JEFE);
         List<PokemonLuchador> equipo = new ArrayList<>();
@@ -166,6 +178,8 @@ public class Gobierno {
             return;
         }
 
+        UIJuego.mensaje("¡Victoria!",
+                "Has derrotado a " + jefe.nombre + " y ganado la recompensa de la sede.");
         System.out.println("\n¡Has derrotado a " + jefe.nombre + "!");
         System.out.println(jefe.nombre + ": " + jefe.derrota);
         jugador.marcarJefeDerrotado(gen);
