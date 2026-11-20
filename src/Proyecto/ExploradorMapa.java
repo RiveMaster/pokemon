@@ -168,7 +168,7 @@ public final class ExploradorMapa {
         ventana.add(controles, BorderLayout.SOUTH);
 
         Runnable cerrar = () -> {
-            lienzo.detenerAnimacion();
+            lienzo.detenerTodo();
             MapaCanvas.Posicion p = lienzo.getPosicion();
             resultado.compareAndSet(null, new Resultado(false, p.x, p.y));
             fin.countDown();
@@ -1030,6 +1030,8 @@ public final class ExploradorMapa {
         private int fotogramaPaso;
         private boolean moviendo;
         private Timer pasoTimer;
+        private Timer ambienteTimer;
+        private int faseAgua;
 
         MapaCanvas(MapaDatos mapa, SpriteJugador2D sprite, int x, int y) {
             this.mapa = mapa;
@@ -1042,6 +1044,17 @@ public final class ExploradorMapa {
             setBackground(new Color(30, 35, 35));
             setPreferredSize(new Dimension(mapa.ancho * TILE * ZOOM, mapa.alto * TILE * ZOOM));
             setFocusable(true);
+            boolean agua = false;
+            for (int iy = 0; iy < mapa.alto && !agua; iy++)
+                for (int ix = 0; ix < mapa.ancho; ix++)
+                    if (mapa.esAgua(ix, iy)) { agua = true; break; }
+            if (agua) {
+                ambienteTimer = new Timer(255, e -> {
+                    faseAgua = (faseAgua + 1) % 4;
+                    repaint();
+                });
+                ambienteTimer.start();
+            }
         }
 
         Posicion getPosicion() { return new Posicion(jugadorX, jugadorY); }
@@ -1082,6 +1095,12 @@ public final class ExploradorMapa {
             pasoTimer.start();
         }
 
+        void detenerTodo() {
+            detenerAnimacion();
+            if (ambienteTimer != null) ambienteTimer.stop();
+            ambienteTimer = null;
+        }
+
         void detenerAnimacion() {
             if (pasoTimer != null) pasoTimer.stop();
             pasoTimer = null;
@@ -1113,6 +1132,18 @@ public final class ExploradorMapa {
                         if (tile < 0 || tile >= mapa.tiles.length || mapa.tiles[tile] == null) continue;
                         g.drawImage(mapa.tiles[tile], (p.x + ox) * tam, (p.y + oy) * tam, tam, tam, null);
                     }
+                }
+            }
+            // Brillos de agua en cuatro fases, a la misma cuadrícula que los tiles.
+            if (ambienteTimer != null) {
+                g.setColor(new Color(230, 249, 255, 105));
+                for (int iy = 0; iy < mapa.alto; iy++) for (int ix = 0; ix < mapa.ancho; ix++) {
+                    if (!mapa.esAgua(ix, iy)) continue;
+                    int desplazamiento = Math.floorMod(ix * 3 + iy + faseAgua * 4, TILE - 7);
+                    int px = ix * tam + desplazamiento * ZOOM;
+                    int py = iy * tam + (3 + Math.floorMod(iy + faseAgua, 7)) * ZOOM;
+                    g.fillRect(px, py, 6 * ZOOM, ZOOM);
+                    g.fillRect(px + 2 * ZOOM, py + 4 * ZOOM, 4 * ZOOM, ZOOM);
                 }
             }
             int x = (int) Math.round(pantallaX * tam);
