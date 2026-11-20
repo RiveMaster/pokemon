@@ -247,17 +247,36 @@ public class Combate {
                 System.out.println("Escapas del combate para no aguantar a un rojo tocacojones.");
                 combateActivo = false;
             }else if (opcion == 3){
-                System.out.println("1. Usar pocion");
-                System.out.println("2. Cambiar pokemon");
-                System.out.println("Elegir opcion:");
-                int n = sc.nextInt();
-                if (n==1){
-                    System.out.println("Elige el tipo de cura (ej. 'pocion', 'superpocion', 'hiperpocion'):");
-                    String tipomedicina= sc.nextLine();
-
-                    // Llamar al void de Jugador
+                int n;
+                if (SpriteCollabUI.interfazDisponible()) {
+                    n = UIJuego.elegir("Mochila del combate",
+                            "¿Qué quieres hacer?", "Usar medicina", "Cambiar Pokémon", "Volver") + 1;
+                } else {
+                    System.out.println("1. Usar poción  2. Cambiar Pokémon");
+                    n = Entrada.leerEntero(sc);
+                }
+                if (n == 1) {
+                    String tipomedicina;
+                    if (SpriteCollabUI.interfazDisponible()) {
+                        java.util.List<String> disponibles = jugadorCompleto.medicinasDisponibles();
+                        if (disponibles.isEmpty()) {
+                            UIJuego.mensaje("Mochila", "No tienes medicinas.");
+                            continue;
+                        }
+                        int elegido = UIJuego.elegir("Usar medicina",
+                                "Selecciona un objeto para " + pokemonJugador.getNombre(),
+                                disponibles.toArray(new String[0]));
+                        if (elegido < 0) continue;
+                        tipomedicina = disponibles.get(elegido);
+                    } else {
+                        System.out.println("Nombre de la medicina:");
+                        tipomedicina = sc.nextLine();
+                    }
                     jugadorCompleto.curarPokemon(pokemonJugador, tipomedicina);
                     turnoJugador(pokemonJugador, pokemonpodemita, sc);
+                } else if (n == 2) {
+                    PokemonLuchador nuevo = pokemuerto(pokemonJugador, jugadorCompleto, sc);
+                    if (nuevo != null) pokemonJugador = nuevo;
                 }
             }
 
@@ -352,8 +371,21 @@ public class Combate {
                     sc.nextLine();
                 }
                 if (n==1) {
-                    System.out.println("Elige el tipo de Poké Ball (ej. 'Poke Ball', 'Super Ball'):");
-                    String tipoPokeball = sc.nextLine();
+                    String tipoPokeball;
+                    if (SpriteCollabUI.interfazDisponible()) {
+                        java.util.List<String> disponibles = jugadorCompleto.pokeballsDisponibles();
+                        if (disponibles.isEmpty()) {
+                            UIJuego.mensaje("Mochila", "No tienes Poké Balls.");
+                            continue;
+                        }
+                        int elegido = UIJuego.elegir("Capturar Pokémon",
+                                "¿Qué Poké Ball quieres lanzar?", disponibles.toArray(new String[0]));
+                        if (elegido < 0) continue;
+                        tipoPokeball = disponibles.get(elegido);
+                    } else {
+                        System.out.println("Nombre de la Poké Ball:");
+                        tipoPokeball = sc.nextLine();
+                    }
                     // Llamar a la función booleana de Jugador
                     if (jugadorCompleto.capturarPokemon(salvaje, tipoPokeball)) {
                         System.out.println("¡Combate terminado! Pokémon capturado.");
@@ -374,12 +406,24 @@ public class Combate {
                         }
                     }
                 }else if (n==2){
-                    System.out.println("Elige el tipo de cura (ej. 'pocion', 'superpocion', 'hiperpocion'):");
-                    String tipomedicina= sc.nextLine();
-
-                    // Llamar al void de Jugador
+                    String tipomedicina;
+                    if (SpriteCollabUI.interfazDisponible()) {
+                        java.util.List<String> disponibles = jugadorCompleto.medicinasDisponibles();
+                        if (disponibles.isEmpty()) {
+                            UIJuego.mensaje("Mochila", "No tienes medicinas.");
+                            continue;
+                        }
+                        int elegido = UIJuego.elegir("Usar medicina",
+                                "Selecciona un objeto para " + pokemonJugador.getNombre(),
+                                disponibles.toArray(new String[0]));
+                        if (elegido < 0) continue;
+                        tipomedicina = disponibles.get(elegido);
+                    } else {
+                        System.out.println("Nombre de la medicina:");
+                        tipomedicina = sc.nextLine();
+                    }
                     jugadorCompleto.curarPokemon(pokemonJugador, tipomedicina);
-                    turnoJugador(pokemonJugador, salvaje, sc);
+                    turnoRivalSalvaje(pokemonJugador, salvaje);
                 }else if (n==3){
                 //aqui viene cuando la mata.......
                     List<PokemonLuchador> equipo = jugadorCompleto.getEquipo();
