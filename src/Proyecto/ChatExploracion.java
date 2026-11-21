@@ -73,6 +73,11 @@ public final class ChatExploracion extends JPanel {
         actualizacion.stop();
         super.removeNotify();
     }
+    /** Inhibe los comandos de movimiento mientras el jugador escribe. */
+    public boolean estaEscribiendo() { return entrada.isVisible(); }
+
+    public void cancelarEntrada() { cerrarEntrada(); }
+
     public void abrirEntrada(){
         if(!SwingUtilities.isEventDispatchThread()){
             SwingUtilities.invokeLater(this::abrirEntrada);
