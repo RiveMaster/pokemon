@@ -16,7 +16,7 @@ public class Aventura {
         boolean reanudar = false;
         while (true) {
             String[] opciones = {"Nueva partida", "Cargar partida", "Pokémon Studio (ventana gráfica)",
-                    "Multijugador LAN", "Multijugador online", "Salir"};
+                    "Multijugador LAN", "Multijugador online", "Multijugador VPN (Tailscale)", "Salir"};
             int opcion = UIJuego.elegir("Pokémon", "¡Bienvenido al mundo Pokémon!\n¿Qué quieres hacer?", opciones);
             if (opcion == 0) {
                 jugador = Encuentros.encuentroInicial(sc);
@@ -36,8 +36,9 @@ public class Aventura {
                 } catch (java.io.IOException | IllegalStateException e) {
                     UIJuego.mensaje("Pokémon Studio", "No se pudo abrir el editor: " + e.getMessage());
                 }
-            } else if (opcion == 3 || opcion == 4) {
-                configurarMultijugador(opcion == 4);
+            } else if (opcion == 3 || opcion == 4 || opcion == 5) {
+                if (opcion == 5) configurarMultijugadorVPN();
+                else configurarMultijugador(opcion == 4);
                 int modo = UIJuego.elegir("Partida", "¿Cómo quieres continuar?",
                         "Nueva partida", "Cargar partida", "Volver al menú");
                 if (modo == 0) jugador = Encuentros.encuentroInicial(sc);
@@ -93,6 +94,69 @@ public class Aventura {
             RedLAN.cerrar();
             UIJuego.mensaje(titulo, "No se pudo crear o conectar la partida: " + ex.getMessage());
         }
+    }
+
+    /**
+     * Tailscale crea el túnel WireGuard fuera del proceso del juego.
+     * Aquí solo se enlaza el servidor TCP a su interfaz privada.
+     * No abrimos UPnP ni publicamos la IP en Internet.
+     */
+    private static void configurarMultijugadorVPN() {
+        String titulo = "Multijugador por VPN privada";
+        String local = obtenerIpTailscale();
+        if (local == null) {
+            UIJuego.mensaje(titulo,
+                    "Para jugar por VPN, instala Tailscale en ambos ordenadores "
+                    + "e inicia sesión.\nAsegúrate de que los jugadores comparten "
+                    + "una red Tailscale o que el anfitrión comparte su dispositivo.\n"
+                    + "Guía: https://tailscale.com/docs/how-to/quickstart\n"
+                    + "El juego no genera claves privadas ni crea VPN sin tu consentimiento.");
+            return;
+        }
+        int modo=UIJuego.elegir(titulo,
+                "VPN disponible: "+local+"\nPuerto privado: "+RedLAN.PUERTO_PREDETERMINADO
+                + "\nAmbos jugadores deben tener permiso de acceso en Tailscale.",
+                "Crear partida privada", "Unirse con IP Tailscale", "Cancelar");
+        if (modo<0 || modo==2)return;
+        String nombre=UIJuego.pedirTexto(titulo,"Nombre del entrenador:","Entrenador");
+        if (nombre==null)return;
+        if (nombre.isBlank())nombre="Entrenador";
+        try {
+            if(modo==0) {
+                RedLAN.alojar(nombre,RedLAN.PUERTO_PREDETERMINADO,local);
+                UIJuego.mensaje(titulo,"Partida privada creada.\nIP del anfitrión: "+local
+                        + "\nPuerto: "+RedLAN.PUERTO_PREDETERMINADO
+                        + "\nComparte la IP solamente con tus invitados de Tailscale."
+                        + "\nNo se ha abierto ningún puerto público.");
+            }else{
+                String ip=UIJuego.pedirTexto(titulo,
+                        "IP Tailscale 100.x.y.z del anfitrión:","");
+                if(ip==null)return;
+                if(!esIpTailscale(ip.strip())) {
+                    UIJuego.mensaje(titulo,"Introduce una dirección IPv4 del rango privado"
+                            +" de Tailscale (100.64.0.0 a 100.127.255.255).");
+                    return;
+                }
+                RedLAN.conectar(nombre,ip.strip(),RedLAN.PUERTO_PREDETERMINADO);
+                UIJuego.mensaje(titulo,"Conectado a través de la red VPN.");
+            }
+        }catch(Exception ex){
+            RedLAN.cerrar();
+            UIJuego.mensaje(titulo,"Error de VPN: "+ex.getMessage());
+        }
+    }
+
+    static boolean esIpTailscale(String texto) {
+        if(texto==null)return false;
+        String[] p=texto.split("\\.",-1);
+        if(p.length!=4)return false;
+        int[] b=new int[4];
+        for(int i=0;i<4;i++){
+            if(!p[i].matches("[0-9]{1,3}"))return false;
+            b[i]=Integer.parseInt(p[i]);
+            if(b[i]>255)return false;
+        }
+        return b[0]==100 && b[1]>=64 && b[1]<=127;
     }
 
     /**
