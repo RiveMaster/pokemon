@@ -61,9 +61,23 @@ public final class RedLAN {
     }
 
     public static synchronized RedLAN alojar(String nombre, int puerto) throws IOException {
+        return alojar(nombre, puerto, "0.0.0.0");
+    }
+
+    /** Para VPN, escuchar solo la IP local de Tailscale, no todas las interfaces. */
+    public static synchronized RedLAN alojar(String nombre, int puerto, String interfaz) throws IOException {
+        InetAddress direccion = InetAddress.getByName(interfaz);
+        if (!direccion.isAnyLocalAddress() && !java.util.Collections.list(
+                java.net.NetworkInterface.getNetworkInterfaces()).stream()
+                .anyMatch(ni -> {
+                    try {
+                        return java.util.Collections.list(ni.getInetAddresses()).contains(direccion);
+                    } catch (Exception ex) { return false; }
+                }))
+            throw new IOException("La IP no pertenece a una interfaz de este equipo.");
         cerrar();
         RedLAN red = new RedLAN(true, nombre);
-        red.servidor = new ServerSocket(puerto, 16, InetAddress.getByName("0.0.0.0"));
+        red.servidor = new ServerSocket(puerto, 16, direccion);
         instancia = red;
         red.iniciarAceptacion();
         return red;
