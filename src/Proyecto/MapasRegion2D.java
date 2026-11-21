@@ -65,12 +65,15 @@ public final class MapasRegion2D {
             for(int[] c:capas)Arrays.fill(c,-1);
         }
         int tile(String tipo,int variante,byte categoria){
-            paleta.add(ArteRegion2D.terreno(tipo,tema,variante));
+            BufferedImage sprite=RecursosCC0.terreno(mapa.bioma(),tipo,variante);
+            // Hierba alta y agua conservan sus identificadores de encuentro/navegación.
+            paleta.add(sprite!=null?sprite:ArteRegion2D.terreno(tipo,tema,variante));
             tipos.add(categoria);
             return paleta.size()-1;
         }
         int camino(int mascara,int variante){
-            paleta.add(ArteRegion2D.camino(tema,mascara,variante));
+            BufferedImage sprite=RecursosCC0.camino(mapa.bioma(),variante);
+            paleta.add(sprite!=null?sprite:ArteRegion2D.camino(tema,mascara,variante));
             tipos.add(NORMAL);
             return paleta.size()-1;
         }
@@ -240,8 +243,11 @@ public final class MapasRegion2D {
     }
 
     private static void edificio(Estado e,int x,int y,int w,int h,String clase,int variante) {
-        BufferedImage fachada=ArteRegion2D.edificio(clase,w,h,e.tema,
+        BufferedImage fachada=RecursosCC0.edificio(clase,w,h,
                 variante+e.mapa.generacion().getNumero());
+        if(fachada==null)
+            fachada=ArteRegion2D.edificio(clase,w,h,e.tema,
+                    variante+e.mapa.generacion().getNumero());
         int cx=x+w/2;
         for(int dy=0;dy<h;dy++)for(int dx=0;dx<w;dx++){
             int tx=x+dx,ty=y+dy;
