@@ -152,7 +152,8 @@ public final class ExploradorMapa {
         ayuda.setForeground(new Color(64, 79, 96));
         ayuda.setBorder(BorderFactory.createEmptyBorder(5, 4, 8, 4));
 
-        MapaCanvas lienzo = new MapaCanvas(mapa, jugadorSprite, inicio.x, inicio.y, mapaId);
+        MapaCanvas lienzo = new MapaCanvas(mapa, jugadorSprite, inicio.x, inicio.y,
+                identificadorRed(mapaId, jugador));
         JScrollPane desplazamiento = new JScrollPane(lienzo);
         desplazamiento.getViewport().setBackground(new Color(30, 35, 35));
         ventana.add(estado, BorderLayout.NORTH);
@@ -198,7 +199,7 @@ public final class ExploradorMapa {
         actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
         RedLAN redInicial = RedLAN.actual();
         if (redInicial != null && redInicial.estaConectada())
-            redInicial.publicarPosicion(mapaId, inicio.x, inicio.y);
+            redInicial.publicarPosicion(identificadorRed(mapaId, jugador), inicio.x, inicio.y);
         instalarMovimiento(ventana, jugador, zona, permitirEncuentros, mapa, lienzo, estado, mapaId,
                 resultado, fin, cerrar);
         configurarBotonMovimiento(arriba, lienzo, "arriba");
@@ -318,7 +319,7 @@ public final class ExploradorMapa {
                 // de caminar sigue siendo visible antes de cambiar de pantalla.
                 RedLAN red = RedLAN.actual();
                 if (red != null && red.estaConectada())
-                    red.publicarPosicion(mapaId, nx, ny);
+                    red.publicarPosicion(identificadorRed(mapaId, jugador), nx, ny);
                 lienzo.caminar(nx, ny, dx, dy, () -> {
                     if (evento != null) {
                         // Al volver al exterior se conserva la casilla anterior a la puerta.
@@ -349,6 +350,12 @@ public final class ExploradorMapa {
         acciones.put("derecha", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) { movimiento.avanzar(1, 0); }
         });
+    }
+
+    /** No mezcla jugadores de generaciones distintas aunque compartan ciudad. */
+    private static String identificadorRed(String mapaId, Jugador jugador) {
+        if (mapaId.startsWith("REGION_")) return mapaId;
+        return mapaId + ":GEN" + jugador.getGeneracion().getNumero();
     }
 
     private static Ubicacion vecinoHorizontal(String mapaId, int dx) {
