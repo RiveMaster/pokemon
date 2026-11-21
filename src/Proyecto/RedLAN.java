@@ -51,6 +51,9 @@ public final class RedLAN {
     private final Map<Socket, BufferedWriter> clientes = new ConcurrentHashMap<>();
     private final Map<String, JugadorRemoto> jugadores = new ConcurrentHashMap<>();
     private final List<String> eventos = new CopyOnWriteArrayList<>();
+    private final ConcurrentLinkedQueue<String> chat = new ConcurrentLinkedQueue<>();
+    private static final int MAX_CHAT_CARACTERES = 240;
+    private static final int MAX_CHAT_LINEA = 2048;
 
     private RedLAN(boolean anfitrion, String nombreLocal) {
         this.anfitrion = anfitrion;
@@ -143,6 +146,7 @@ public final class RedLAN {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream(), StandardCharsets.UTF_8))) {
             String linea;
             while (activa && (linea = in.readLine()) != null) {
+                if (linea.length() > MAX_CHAT_LINEA) continue;
                 String[] p = linea.split("\\|", -1);
                 if (p.length == 2 && "JOIN".equals(p[0])) {
                     nombre = decodificar(p[1]);
@@ -153,6 +157,14 @@ public final class RedLAN {
                     int x = Integer.parseInt(p[3]), y = Integer.parseInt(p[4]);
                     jugadores.put(nombre, new JugadorRemoto(nombre, loc, x, y));
                     difundir("STATE|" + codificar(nombre) + "|" + codificar(loc) + "|" + x + "|" + y, cliente);
+                } else if (p.length == 2 && "CHAT".equals(p[0])) {
+                    String texto = validarChat(decodificar(p[1]));
+                    if (texto != null) {
+                        // El nombre procede de JOIN, no de lo que afirme el cliente.
+                        String mensaje = "CHAT|" + codificar(nombre) + "|" + codificar(texto);
+                        chat.add(nombre + ": " + texto);
+                        difundir(mensaje, cliente);
+                    }
                 } else if (p.length >= 2 && ("DUEL_REQUEST".equals(p[0]) || "DUEL_ACCEPT".equals(p[0])
                         || "DUEL_REJECT".equals(p[0]) || "DUEL_DATA".equals(p[0]))) {
                     eventos.add(linea);
@@ -173,7 +185,9 @@ public final class RedLAN {
         hiloLectura = new Thread(() -> {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
                 String linea;
-                while (activa && (linea = in.readLine()) != null) procesarCliente(linea);
+                while (activa && (linea = in.readLine()) != null) {
+                    if (linea.length() <= MAX_CHAT_LINEA) procesarCliente(linea);
+                }
             } catch (IOException ex) {
                 if (activa) eventos.add("DISCONNECT|Anfitrión");
             } finally { activa = false; }
@@ -189,6 +203,11 @@ public final class RedLAN {
                 String nombre = decodificar(p[1]);
                 jugadores.put(nombre, new JugadorRemoto(nombre, decodificar(p[2]),
                         Integer.parseInt(p[3]), Integer.parseInt(p[4])));
+            } else if (p.length == 3 && "CHAT".equals(p[0])) {
+                String remitente = decodificar(p[1]);
+                String texto = validarChat(decodificar(p[2]));
+                if (texto != null && remitente.length() <= 48)
+                    chat.add(remitente + ": " + texto);
             } else if (p.length == 2 && "LEAVE".equals(p[0])) {
                 String nombre = decodificar(p[1]); jugadores.remove(nombre); eventos.add("LEAVE|" + nombre);
             } else if (p.length >= 2) eventos.add(linea);
@@ -216,6 +235,38 @@ public final class RedLAN {
         List<String> copia = new ArrayList<>(eventos);
         eventos.removeAll(copia);
         return copia;
+    }
+
+    /**
+     * Envía chat de texto a todos los jugadores conectados. No codifica
+     * objetos Java ni interpreta órdenes escritas por los usuarios.
+     */
+    public void enviarChat(String texto) {
+        String limpio = validarChat(texto);
+        if (!estaConectada() || limpio == null) return;
+        chat.add(nombreLocal + ": " + limpio);
+        if (anfitrion) {
+            difundir("CHAT|" + codificar(nombreLocal) + "|" + codificar(limpio), null);
+        } else {
+            enviarCliente("CHAT|" + codificar(limpio));
+        }
+    }
+
+    public List<String> consumirChat() {
+        List<String> mensajes = new ArrayList<>();
+        String linea;
+        while (mensajes.size() < 30 && (linea = chat.poll()) != null)
+            mensajes.add(linea);
+        return mensajes;
+    }
+
+    static String validarChat(String texto) {
+        if (texto == null) return null;
+        String limpio = texto.replace('\\r', ' ').replace('\\n', ' ')
+                .replaceAll("[\\\\p{Cntrl}]", "").strip();
+        if (limpio.isEmpty()) return null;
+        return limpio.length() > MAX_CHAT_CARACTERES
+                ? limpio.substring(0, MAX_CHAT_CARACTERES) : limpio;
     }
 
     public void solicitarCombate(String nombreRemoto) {
