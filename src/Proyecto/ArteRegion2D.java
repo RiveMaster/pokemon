@@ -62,7 +62,7 @@ public final class ArteRegion2D {
         switch (tipo) {
             case "CESPED" -> hierba(g,p,seed,false);
             case "CESPED_OSCURO" -> hierba(g,p,seed,true);
-            case "SENDA" -> camino(g,p,seed,15);
+            case "SENDA" -> { BufferedImage senda = camino(p,15,seed); g.drawImage(senda,0,0,null); }
             case "ARENA" -> suelo(g,p.arena,p.tierraOscura,seed);
             case "PIEDRA" -> suelo(g,aclarar(p.roca,29),p.roca,seed);
             case "NIEVE" -> suelo(g,rgb(226,238,241),rgb(175,202,215),seed);
