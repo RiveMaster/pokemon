@@ -11,6 +11,8 @@ on:
       - "tests/InteraccionesGraficasSmokeTest.java"
       - "tests/ArteVisualRetroSmokeTest.java"
       - "tests/GeneracionesMapasSmokeTest.java"
+      - "tests/ChatVpnSmokeTest.java"
+      - "Tiles/RPGPixelPack/**"
       - "Tiles/VisualRetro.png"
       - ".github/workflows/pokemon-genetics-mega.yml"
   pull_request:
@@ -23,6 +25,8 @@ on:
       - "tests/InteraccionesGraficasSmokeTest.java"
       - "tests/ArteVisualRetroSmokeTest.java"
       - "tests/GeneracionesMapasSmokeTest.java"
+      - "tests/ChatVpnSmokeTest.java"
+      - "Tiles/RPGPixelPack/**"
       - "Tiles/VisualRetro.png"
       - ".github/workflows/pokemon-genetics-mega.yml"
 
@@ -41,7 +45,7 @@ jobs:
         run: |
           mkdir -p build
           find src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d build
-          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java
+          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java tests/ChatVpnSmokeTest.java
       - name: Test breeding, IVs, cooldown and mega evolution
         run: java -ea -cp build Proyecto.SistemaCrianzaMegaSmokeTest
       - name: Test WASD exploration movement rules
@@ -56,6 +60,8 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ArteVisualRetroSmokeTest
       - name: Verify 100 distinct regional maps and walking routes
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.GeneracionesMapasSmokeTest
+      - name: Probar chat TCP y VPN con conexión de loopback
+        run: java -ea -Djava.awt.headless=true -cp build Proyecto.ChatVpnSmokeTest
       - name: Exportar 100 mapas originales en PNG (10 por generación)
         run: java -Djava.awt.headless=true -cp build Proyecto.ExportadorMapasGeneracionales
       - name: Publicar los 100 mapas y 10 galerías
