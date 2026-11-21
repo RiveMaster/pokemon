@@ -37,8 +37,9 @@ public class Aventura {
                     UIJuego.mensaje("Pokémon Studio", "No se pudo abrir el editor: " + e.getMessage());
                 }
             } else if (opcion == 3 || opcion == 4 || opcion == 5) {
-                if (opcion == 5) configurarMultijugadorVPN();
-                else configurarMultijugador(opcion == 4);
+                if (opcion == 5) {
+                    if (!configurarMultijugadorVPN()) continue;
+                } else configurarMultijugador(opcion == 4);
                 int modo = UIJuego.elegir("Partida", "¿Cómo quieres continuar?",
                         "Nueva partida", "Cargar partida", "Volver al menú");
                 if (modo == 0) jugador = Encuentros.encuentroInicial(sc);
@@ -101,7 +102,7 @@ public class Aventura {
      * Aquí solo se enlaza el servidor TCP a su interfaz privada.
      * No abrimos UPnP ni publicamos la IP en Internet.
      */
-    private static void configurarMultijugadorVPN() {
+    private static boolean configurarMultijugadorVPN() {
         String titulo = "Multijugador por VPN privada";
         String local = obtenerIpTailscale();
         if (local == null) {
@@ -112,7 +113,7 @@ public class Aventura {
                     "Abrir instalación oficial", "Abrir instrucciones de VPN", "Volver");
             if (ayuda == 0) abrirPagina("https://tailscale.com/download");
             else if (ayuda == 1) abrirPagina("https://tailscale.com/docs/how-to/quickstart");
-            return;
+            return false;
         }
         int modo=UIJuego.elegir(titulo,
                 "VPN disponible: "+local+"\nPuerto privado: "+RedLAN.PUERTO_PREDETERMINADO
@@ -127,15 +128,15 @@ public class Aventura {
             } catch (Exception ex) {
                 UIJuego.mensaje(titulo, "Tu IP VPN es: " + local);
             }
-            return;
+            return false;
         }
         if (modo == 3) {
             abrirPagina("https://tailscale.com/docs/features/sharing");
-            return;
+            return false;
         }
-        if (modo<0 || modo>=4)return;
+        if (modo<0 || modo>=4)return false;
         String nombre=UIJuego.pedirTexto(titulo,"Nombre del entrenador:","Entrenador");
-        if (nombre==null)return;
+        if (nombre==null)return false;
         if (nombre.isBlank())nombre="Entrenador";
         try {
             if(modo==0) {
@@ -147,11 +148,11 @@ public class Aventura {
             }else{
                 String ip=UIJuego.pedirTexto(titulo,
                         "IP Tailscale 100.x.y.z del anfitrión:","");
-                if(ip==null)return;
+                if(ip==null)return false;
                 if(!esIpTailscale(ip.strip())) {
                     UIJuego.mensaje(titulo,"Introduce una dirección IPv4 del rango privado"
                             +" de Tailscale (100.64.0.0 a 100.127.255.255).");
-                    return;
+                    return false;
                 }
                 RedLAN.conectar(nombre,ip.strip(),RedLAN.PUERTO_PREDETERMINADO);
                 UIJuego.mensaje(titulo,"Conectado a través de la red VPN.");
@@ -159,7 +160,9 @@ public class Aventura {
         }catch(Exception ex){
             RedLAN.cerrar();
             UIJuego.mensaje(titulo,"Error de VPN: "+ex.getMessage());
+            return false;
         }
+        return true;
     }
 
     private static void abrirPagina(String enlace) {
