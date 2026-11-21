@@ -16,7 +16,8 @@ public class Menu {
                                 + " · Medallas: " + jugador.medallasEnGeneracion(jugador.getGeneracion()),
                         "Equipo Pokémon", "Mochila", "Usar MT",
                         "Equipar objeto", "Volar", "Guardar partida",
-                        "Criadero Pokémon", "Megaevolución", "Volver al mapa", "Salir del juego");
+                        "Criadero Pokémon", "Megaevolución", "Atlas regional (10 mapas)",
+                        "Volver al mapa", "Salir del juego");
                 switch (opcion) {
                     case 0 -> jugador.mostrarEstadoEquipo();
                     case 1 -> jugador.mostrar(jugador);
@@ -29,8 +30,9 @@ public class Menu {
                     case 5 -> GuardarCargar.guardarPartida(sc, jugador);
                     case 6 -> SistemaCrianza.visitar(sc, jugador);
                     case 7 -> MegaEvoluciones.gestionarPiedras(sc, jugador);
-                    case 8, -1 -> { return null; }
-                    case 9 -> {
+                    case 8 -> AtlasRegional.abrir(sc, jugador);
+                    case 9, -1 -> { return null; }
+                    case 10 -> {
                         if (UIJuego.confirmar("Salir de la partida",
                                 "¿Quieres guardar la partida antes de salir?")) {
                             GuardarCargar.guardarPartida(sc, jugador);
