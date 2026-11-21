@@ -79,8 +79,20 @@ public final class ExploradorMapa {
         return explorarArea(jugador, ubicacion, null, false);
     }
 
+    /** Abre uno de los cien mapas del atlas sin alterar la ubicación principal. */
+    public static Resultado explorarMapaRegional(Jugador jugador, CatalogoMapasGeneracionales.Mapa regional) {
+        if (jugador == null || regional == null) return new Resultado(false, 0, 0);
+        return explorarArea(jugador, jugador.getUbicacion(), null, false, regional);
+    }
+
     private static Resultado explorarArea(Jugador jugador, Ubicacion ubicacion,
                                            Zona zona, boolean permitirEncuentros) {
+        return explorarArea(jugador, ubicacion, zona, permitirEncuentros, null);
+    }
+
+    private static Resultado explorarArea(Jugador jugador, Ubicacion ubicacion,
+                                           Zona zona, boolean permitirEncuentros,
+                                           CatalogoMapasGeneracionales.Mapa regional) {
         if (jugador == null || ubicacion == null) return new Resultado(false, 0, 0);
         if (GraphicsEnvironment.isHeadless()) {
             System.out.println("La exploración WASD necesita un entorno gráfico.");
@@ -90,9 +102,12 @@ public final class ExploradorMapa {
             throw new IllegalStateException("La exploración debe iniciarse desde el hilo del juego.");
         }
 
-        String mapaId = ubicacion.name();
-        String titulo = zona == null ? ubicacion.getNombre() : zona.getNombre();
-        MapaDatos mapa = cargarMapa(ubicacion);
+        String mapaId = regional == null ? ubicacion.name() : regional.id();
+        String titulo = regional != null
+                ? regional.generacion().getRegion() + " · " + regional.nombre()
+                : zona == null ? ubicacion.getNombre() : zona.getNombre();
+        MapaDatos mapa = regional == null ? cargarMapa(ubicacion, jugador.getGeneracion())
+                : convertir(MapasRegion2D.generar(regional));
         int[] guardada = jugador.getPosicionMapa(mapaId);
         Point inicio = buscarInicio(mapa, guardada, jugador.puedeNavegarAgua());
         SpriteJugador2D jugadorSprite = SpriteJugador2D.cargar();
@@ -258,7 +273,7 @@ public final class ExploradorMapa {
                 if ((nx < 0 || nx >= mapa.ancho) && Math.abs(ny - centroY) <= 1) {
                     Ubicacion destino = vecinoHorizontal(mapaId, dx);
                     if (destino != null) {
-                        MapaDatos mapaDestino = cargarMapa(destino);
+                        MapaDatos mapaDestino = cargarMapa(destino, jugador.getGeneracion());
                         int entradaX = dx < 0 ? Math.max(1, mapaDestino.ancho - 2) : 1;
                         int entradaY = mapaDestino.alto / 2;
                         resultado.set(new Resultado(false, p.x, p.y, destino, entradaX, entradaY));
@@ -272,7 +287,7 @@ public final class ExploradorMapa {
                 if ((nx == 0 || nx == mapa.ancho - 1) && Math.abs(ny - centroY) <= 1) {
                     Ubicacion destino = vecinoHorizontal(mapaId, dx);
                     if (destino != null) {
-                        MapaDatos mapaDestino = cargarMapa(destino);
+                        MapaDatos mapaDestino = cargarMapa(destino, jugador.getGeneracion());
                         int entradaX = dx < 0 ? Math.max(1, mapaDestino.ancho - 2) : 1;
                         resultado.set(new Resultado(false, p.x, p.y, destino, entradaX, mapaDestino.alto / 2));
                         fin.countDown(); ventana.dispose(); return;
@@ -346,8 +361,9 @@ public final class ExploradorMapa {
         if (scroll == null) return;
         double[] posicion = lienzo.posicionInterpolada();
         JViewport vista = scroll.getViewport();
-        int px = (int) Math.round((posicion[0] + 0.5) * TILE * ZOOM - vista.getWidth() / 2.0);
-        int py = (int) Math.round((posicion[1] + 0.5) * TILE * ZOOM - vista.getHeight() / 2.0);
+        int tam = lienzo.escalaCasilla();
+        int px = (int) Math.round((posicion[0] + 0.5) * tam - vista.getWidth() / 2.0);
+        int py = (int) Math.round((posicion[1] + 0.5) * tam - vista.getHeight() / 2.0);
         int maxX = Math.max(0, lienzo.getWidth() - vista.getWidth());
         int maxY = Math.max(0, lienzo.getHeight() - vista.getHeight());
         vista.setViewPosition(new Point(Math.max(0, Math.min(maxX, px)), Math.max(0, Math.min(maxY, py))));
@@ -373,6 +389,10 @@ public final class ExploradorMapa {
     }
 
     private static MapaDatos cargarMapa(Ubicacion ubicacion) {
+        return cargarMapa(ubicacion, Generacion.GEN1);
+    }
+
+    private static MapaDatos cargarMapa(Ubicacion ubicacion, Generacion generacion) {
         for (Path candidato : rutasMapa(ubicacion)) {
             if (!Files.isRegularFile(candidato)) continue;
             try {
@@ -381,7 +401,21 @@ public final class ExploradorMapa {
                 System.err.println("No se pudo cargar el mapa " + candidato + ": " + ex.getMessage());
             }
         }
-        return crearMapaProvisional(ubicacion);
+        int indice = ubicacion == Ubicacion.VILLAVERDE ? 0
+                : Mapa.puebloDe(ubicacion) != null ? 6
+                : 1 + Math.floorMod(ubicacion.ordinal(), 9);
+        CatalogoMapasGeneracionales.Mapa tema =
+                CatalogoMapasGeneracionales.obtener(generacion, indice);
+        return convertir(MapasRegion2D.generar(tema, ubicacion));
+    }
+
+    private static MapaDatos convertir(MapasRegion2D.Resultado generado) {
+        List<EntradaEdificio> puertas = new ArrayList<>();
+        for (MapasRegion2D.Puerta p : generado.puertas)
+            puertas.add(new EntradaEdificio(p.x(), p.y(), p.servicio()));
+        return new MapaDatos(generado.ancho, generado.alto, generado.tiles, generado.tipos,
+                generado.capas, generado.colisiones, generado.manuales,
+                generado.hierba, List.of(), List.of(), true, puertas, ArteRegion2D.PIXELES);
     }
 
     private static List<Path> rutasMapa(Ubicacion ubicacion) {
@@ -886,6 +920,8 @@ public final class ExploradorMapa {
     private static final class MapaDatos {
         final int ancho, alto;
         final BufferedImage[] tiles;
+        /** Píxeles originales por casilla, 16 clásicos o 32 regionales. */
+        final int resolucion;
         final byte[] tipos;
         final int[][] capas;
         final boolean[] colisiones, manuales, hierba;
@@ -906,6 +942,15 @@ public final class ExploradorMapa {
                   boolean[] colisiones, boolean[] manuales, boolean[] hierba,
                   List<ObjetoMapa> objetos, List<Colocacion> colocaciones,
                   boolean provisional, List<EntradaEdificio> puertas) {
+            this(ancho, alto, tiles, tipos, capas, colisiones, manuales,
+                    hierba, objetos, colocaciones, provisional, puertas, TILE);
+        }
+
+        MapaDatos(int ancho, int alto, BufferedImage[] tiles, byte[] tipos, int[][] capas,
+                  boolean[] colisiones, boolean[] manuales, boolean[] hierba,
+                  List<ObjetoMapa> objetos, List<Colocacion> colocaciones,
+                  boolean provisional, List<EntradaEdificio> puertas, int resolucion) {
+            this.resolucion = resolucion;
             this.ancho = ancho;
             this.alto = alto;
             this.tiles = tiles;
@@ -1042,7 +1087,8 @@ public final class ExploradorMapa {
             pantallaY = y;
             setOpaque(true);
             setBackground(new Color(30, 35, 35));
-            setPreferredSize(new Dimension(mapa.ancho * TILE * ZOOM, mapa.alto * TILE * ZOOM));
+            setPreferredSize(new Dimension(mapa.ancho * escalaCasilla(),
+                    mapa.alto * escalaCasilla()));
             setFocusable(true);
             boolean agua = false;
             for (int iy = 0; iy < mapa.alto && !agua; iy++)
@@ -1056,6 +1102,8 @@ public final class ExploradorMapa {
                 ambienteTimer.start();
             }
         }
+
+        int escalaCasilla() { return mapa.resolucion == 32 ? 32 * 2 : TILE * ZOOM; }
 
         Posicion getPosicion() { return new Posicion(jugadorX, jugadorY); }
         double[] posicionInterpolada() { return new double[]{pantallaX, pantallaY}; }
@@ -1115,7 +1163,7 @@ public final class ExploradorMapa {
             Graphics2D g = (Graphics2D) gOriginal.create();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-            int tam = TILE * ZOOM;
+            int tam = escalaCasilla();
             for (int capa = 0; capa < mapa.capas.length; capa++) {
                 for (int i = 0; i < mapa.ancho * mapa.alto; i++) {
                     int tile = mapa.capas[capa][i];
@@ -1139,19 +1187,23 @@ public final class ExploradorMapa {
                 g.setColor(new Color(230, 249, 255, 105));
                 for (int iy = 0; iy < mapa.alto; iy++) for (int ix = 0; ix < mapa.ancho; ix++) {
                     if (!mapa.esAgua(ix, iy)) continue;
-                    int desplazamiento = Math.floorMod(ix * 3 + iy + faseAgua * 4, TILE - 7);
-                    int px = ix * tam + desplazamiento * ZOOM;
-                    int py = iy * tam + (3 + Math.floorMod(iy + faseAgua, 7)) * ZOOM;
-                    g.fillRect(px, py, 6 * ZOOM, ZOOM);
-                    g.fillRect(px + 2 * ZOOM, py + 4 * ZOOM, 4 * ZOOM, ZOOM);
+                    int escala = tam / mapa.resolucion;
+                    int desplazamiento = Math.floorMod(ix * 3 + iy + faseAgua * 4,
+                            mapa.resolucion - 7);
+                    int px = ix * tam + desplazamiento * escala;
+                    int py = iy * tam + (3 + Math.floorMod(iy + faseAgua, 7)) * escala;
+                    g.fillRect(px, py, 6 * escala, escala);
+                    g.fillRect(px + 2 * escala, py + 4 * escala, 4 * escala, escala);
                 }
             }
             int x = (int) Math.round(pantallaX * tam);
             int y = (int) Math.round(pantallaY * tam);
             // Sombra corta y discreta bajo los pies, hecha con píxeles escalados.
             g.setColor(new Color(30, 55, 49, 80));
-            g.fillRect(x + 3 * ZOOM, y + 14 * ZOOM, 10 * ZOOM, 2 * ZOOM);
+            g.fillRect(x + tam * 3 / 16, y + tam * 14 / 16,
+                    tam * 10 / 16, Math.max(2, tam / 16));
             BufferedImage fotograma = sprite.fotograma(direccion, moviendo ? fotogramaPaso : 0);
+            // Personaje entero, escalado a la resolución de casilla del mapa.
             g.drawImage(fotograma, x, y, tam, tam, null);
             g.dispose();
         }
