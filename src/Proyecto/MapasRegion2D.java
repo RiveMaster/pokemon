@@ -1,0 +1,388 @@
+package Proyecto;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Genera 100 escenarios originales y transitables en pixel-art nativo de 32px.
+ *
+ * Las coordenadas y colisiones siguen midiéndose en CASILLAS, nunca en píxeles.
+ * Las salidas laterales de la ruta están libres y las puertas tienen una casilla
+ * transitable; el renderizador muestra el arte a 2x sin reducir la resolución.
+ */
+public final class MapasRegion2D {
+    public static final int ANCHO = 36;
+    public static final int ALTO = 24;
+    public static final byte NORMAL = 0, BLOQUEO = 1, HIERBA = 2, AGUA = 3;
+
+    public record Puerta(int x, int y, String servicio) { }
+
+    public static final class Resultado {
+        public final int ancho, alto;
+        public final BufferedImage[] tiles;
+        public final byte[] tipos;
+        public final int[][] capas;
+        public final boolean[] colisiones, manuales, hierba;
+        public final List<Puerta> puertas;
+        public final String id, nombre, bioma;
+
+        private Resultado(Estado e) {
+            ancho=e.w; alto=e.h;
+            tiles=e.paleta.toArray(new BufferedImage[0]);
+            tipos=new byte[e.tipos.size()];
+            for (int i=0;i<tipos.length;i++) tipos[i]=e.tipos.get(i);
+            capas=e.capas;
+            colisiones=e.colisiones;
+            manuales=e.manuales;
+            hierba=e.hierba;
+            puertas=List.copyOf(e.puertas);
+            id=e.mapa.id();
+            nombre=e.mapa.nombre();
+            bioma=e.mapa.bioma();
+        }
+    }
+
+    private static final class Estado {
+        final int w=ANCHO,h=ALTO;
+        final int[][] capas=new int[3][w*h];
+        final boolean[] colisiones=new boolean[w*h], manuales=new boolean[w*h], hierba=new boolean[w*h];
+        final ArrayList<BufferedImage> paleta=new ArrayList<>();
+        final ArrayList<Byte> tipos=new ArrayList<>();
+        final ArrayList<Puerta> puertas=new ArrayList<>();
+        final CatalogoMapasGeneracionales.Mapa mapa;
+        final ArteRegion2D.Paleta tema;
+        final Random rnd;
+        int cesped, oscuro, claro, camino, tallo, flores, agua, arena, roca, cueva,
+                arbol, arbol2, arbusto, columna, senal, lampara, puente, valla,
+                nieve, piedra, suelo;
+        Estado(CatalogoMapasGeneracionales.Mapa mapa) {
+            this.mapa=mapa;
+            this.tema=ArteRegion2D.paleta(mapa.generacion().getNumero(), mapa.indice());
+            this.rnd=new Random(mapa.semilla());
+            for(int[] c:capas)Arrays.fill(c,-1);
+        }
+        int tile(String tipo,int variante,byte categoria){
+            paleta.add(ArteRegion2D.terreno(tipo,tema,variante));
+            tipos.add(categoria);
+            return paleta.size()-1;
+        }
+        int camino(int mascara,int variante){
+            paleta.add(ArteRegion2D.camino(tema,mascara,variante));
+            tipos.add(NORMAL);
+            return paleta.size()-1;
+        }
+        int pos(int x,int y){return y*w+x;}
+        boolean dentro(int x,int y){return x>=0&&x<w&&y>=0&&y<h;}
+        void suelo(int x,int y,int t){
+            if(dentro(x,y)&&capas[2][pos(x,y)]<0) capas[1][pos(x,y)]=t;
+        }
+        void sueloFondo(int x,int y,int t){
+            if(dentro(x,y))capas[0][pos(x,y)]=t;
+        }
+        void solido(int x,int y,int t){
+            if(dentro(x,y)){
+                int i=pos(x,y);
+                capas[2][i]=t;
+                colisiones[i]=manuales[i]=true;
+            }
+        }
+        void hierba(int x,int y){
+            if(dentro(x,y)&&capas[2][pos(x,y)]<0){
+                suelo(x,y,tallo);hierba[pos(x,y)]=true;
+            }
+        }
+        void lago(int x,int y){
+            if(dentro(x,y)&&capas[2][pos(x,y)]<0){
+                suelo(x,y,agua);
+                // El agua puede cruzarse solo con un Pokémon capaz de navegar.
+                colisiones[pos(x,y)]=true;
+            }
+        }
+        void dejarPaso(int x,int y) {
+            if(dentro(x,y)){
+                int i=pos(x,y);
+                capas[2][i]=-1;
+                capas[1][i]=camino;
+                colisiones[i]=manuales[i]=hierba[i]=false;
+            }
+        }
+    }
+
+    private MapasRegion2D() { }
+
+    public static Resultado generar(CatalogoMapasGeneracionales.Mapa mapa) {
+        return generar(mapa,null);
+    }
+
+    /**
+     * El parámetro ubicación solo se usa para añadir servicios reales del
+     * recorrido principal; los 100 mapas del atlas no modifican la aventura.
+     */
+    public static Resultado generar(CatalogoMapasGeneracionales.Mapa mapa, Ubicacion ubicacion) {
+        if(mapa==null)throw new IllegalArgumentException("Mapa regional requerido");
+        Estado e=new Estado(mapa);
+        int variacion=mapa.generacion().getNumero()*7+mapa.indice()*13;
+        e.cesped=e.tile("CESPED",variacion,NORMAL);
+        e.oscuro=e.tile("CESPED_OSCURO",variacion+1,NORMAL);
+        e.claro=e.tile("CESPED",variacion+2,NORMAL);
+        e.camino=e.camino(15,variacion);
+        e.tallo=e.tile("HIERBA_ALTA",variacion+3,HIERBA);
+        e.flores=e.tile("FLORES",variacion+4,NORMAL);
+        e.agua=e.tile("AGUA",variacion+5,AGUA);
+        e.arena=e.tile("ARENA",variacion+6,NORMAL);
+        e.roca=e.tile("ROCA",variacion+7,BLOQUEO);
+        e.cueva=e.tile("CUEVA",variacion+8,NORMAL);
+        e.arbol=e.tile("ARBOL",variacion+9,BLOQUEO);
+        e.arbol2=e.tile("ARBOL2",variacion+10,BLOQUEO);
+        e.arbusto=e.tile("ARBUSTO",variacion+11,BLOQUEO);
+        e.columna=e.tile("COLUMNA",variacion+12,BLOQUEO);
+        e.senal=e.tile("CARTEL",variacion+13,BLOQUEO);
+        e.lampara=e.tile("FAROLA",variacion+14,BLOQUEO);
+        e.puente=e.tile("PUENTE",variacion+15,NORMAL);
+        e.valla=e.tile("VALLA",variacion+16,BLOQUEO);
+        e.nieve=e.tile("NIEVE",variacion+17,NORMAL);
+        e.piedra=e.tile("PIEDRA",variacion+18,NORMAL);
+        e.suelo=e.tile("SENDA",variacion+19,NORMAL);
+        Arrays.fill(e.capas[0],e.cesped);
+        for(int y=1;y<e.h-1;y++)for(int x=1;x<e.w-1;x++){
+            long n=(long)x*73856093L ^ (long)y*19349663L ^ mapa.semilla()*83492791L;
+            int v=(int)Math.floorMod(n,17);
+            if(v==0||v==1)e.sueloFondo(x,y,e.oscuro);
+            else if(v==2)e.sueloFondo(x,y,e.claro);
+        }
+
+        switch(mapa.bioma()) {
+            case "PUEBLO","CIUDAD" -> ciudad(e,ubicacion);
+            case "BOSQUE" -> bosque(e);
+            case "COSTA" -> costa(e);
+            case "MONTANA" -> montana(e);
+            case "LAGO" -> lagos(e);
+            case "RUINAS" -> ruinas(e);
+            case "PANTANO" -> pantano(e);
+            case "CUEVA" -> cueva(e);
+            case "JARDIN" -> jardin(e);
+            default -> bosque(e);
+        }
+
+        // Eje central obligatorio para cruzar el mapa; no hace invisibles
+        // los elementos que están por encima o por debajo de él.
+        int cy=e.h/2;
+        for(int x=0;x<e.w;x++)
+            for(int y=cy-1;y<=cy+1;y++) e.dejarPaso(x,y);
+        if(!mapa.urbano() && !mapa.bioma().equals("JARDIN")){
+            // Senderos con textura natural y cruces suaves.
+            for(int x=0;x<e.w;x++)
+                if(x%5==0) e.suelo(x,cy+2,e.piedra);
+        }
+        for(int x=0;x<e.w;x++){
+            e.solido(x,0,e.arbol);
+            e.solido(x,e.h-1,e.arbol2);
+        }
+        for(int y=1;y<e.h-1;y++){
+            if(Math.abs(y-cy)<=1)continue;
+            e.solido(0,y,e.arbol);
+            e.solido(e.w-1,y,e.arbol2);
+        }
+        for(int y=cy-1;y<=cy+1;y++){
+            e.dejarPaso(0,y);e.dejarPaso(e.w-1,y);
+        }
+        return new Resultado(e);
+    }
+
+    private static void ciudad(Estado e,Ubicacion ubicacion){
+        boolean grande=e.mapa.bioma().equals("CIUDAD");
+        int cy=e.h/2;
+        for(int x=0;x<e.w;x++)for(int y=cy-2;y<=cy+2;y++) e.suelo(x,y,e.piedra);
+        for(int y=1;y<e.h-1;y++){
+            for(int x=17;x<=19;x++)e.suelo(x,y,e.piedra);
+        }
+        for(int y:new int[]{8,21})for(int x=1;x<e.w-1;x++)e.suelo(x,y,e.piedra);
+        int[] bx={2,10,21,29,2,11,21,29};
+        int[] by=grande?new int[]{2,2,2,2,17,17,17,17}
+                :new int[]{3,3,3,3,17,17,17,17};
+        int[] ancho={6,5,7,5,5,5,7,5};
+        int[] alto={5,4,5,4,4,4,5,4};
+        String[] edificios={"CENTRO_POKEMON","TIENDA",
+                grande?"GIMNASIO":"CASA","CASA",
+                "CASA","CASA","CASA","CASA"};
+        if(ubicacion!=null){
+            // El gimnasio y los servicios conservan las reglas de la ciudad.
+            if(Gimnasio.deCiudad(ubicacion)==null) edificios[2]="CASA";
+            if(ubicacion==Ubicacion.COMILLAS)edificios[2]="CASINO";
+            if(ubicacion==Ubicacion.VITORIA)edificios[6]="GOBIERNO";
+            if(ubicacion==Ubicacion.VILLAVERDE)edificios[4]="CASA_MAMA";
+        }else{
+            // Atlas libre: un pueblo tiene casas, una ciudad tiene gimnasio.
+            if(!grande)edificios[2]="CASA";
+        }
+        for(int i=0;i<bx.length;i++){
+            edificio(e,bx[i],by[i],ancho[i],alto[i],edificios[i],i);
+            int puertaX=bx[i]+ancho[i]/2,des=by[i]+alto[i],hasta=by[i]<10?cy-2:21;
+            for(int y=Math.min(des,hasta);y<=Math.max(des,hasta);y++)
+                if(e.dentro(puertaX,y)&&e.capas[2][e.pos(puertaX,y)]<0)
+                    e.suelo(puertaX,y,e.piedra);
+        }
+        for(int x=7;x<10;x++){
+            e.suelo(x,10,e.flores);
+            e.suelo(x,14,e.flores);
+        }
+        for(int x=25;x<28;x++){
+            e.suelo(x,10,e.flores);
+            e.suelo(x,14,e.flores);
+        }
+        for(int[] p:new int[][]{{9,9},{25,9},{9,15},{25,15}})
+            e.solido(p[0],p[1],grande?e.lampara:e.arbusto);
+        e.solido(15,9,e.senal);
+        e.solido(21,15,e.lampara);
+    }
+
+    private static void edificio(Estado e,int x,int y,int w,int h,String clase,int variante) {
+        BufferedImage fachada=ArteRegion2D.edificio(clase,w,h,e.tema,
+                variante+e.mapa.generacion().getNumero());
+        int cx=x+w/2;
+        for(int dy=0;dy<h;dy++)for(int dx=0;dx<w;dx++){
+            int tx=x+dx,ty=y+dy;
+            if(!e.dentro(tx,ty))continue;
+            BufferedImage recorte=fachada.getSubimage(dx*ArteRegion2D.PIXELES,
+                    dy*ArteRegion2D.PIXELES,ArteRegion2D.PIXELES,ArteRegion2D.PIXELES);
+            int id=e.paleta.size();
+            e.paleta.add(recorte);
+            boolean puerta=dy==h-1&&tx==cx;
+            e.tipos.add(puerta?NORMAL:BLOQUEO);
+            int indice=e.pos(tx,ty);
+            e.capas[2][indice]=id;
+            e.colisiones[indice]=e.manuales[indice]=!puerta;
+        }
+        e.puertas.add(new Puerta(cx,y+h-1,clase));
+    }
+
+    private static void bosque(Estado e){
+        for(int i=0;i<115;i++){
+            int x=1+e.rnd.nextInt(e.w-2),y=1+e.rnd.nextInt(e.h-2);
+            if(Math.abs(y-e.h/2)<=3)continue;
+            if(i%6==0)e.hierba(x,y);
+            else if(i%4==0)e.solido(x,y,e.arbusto);
+            else e.solido(x,y,i%2==0?e.arbol:e.arbol2);
+        }
+        for(int i=0;i<30;i++){
+            int x=2+e.rnd.nextInt(e.w-4),y=2+e.rnd.nextInt(e.h-4);
+            if(Math.abs(y-e.h/2)>3)e.hierba(x,y);
+        }
+    }
+
+    private static void costa(Estado e){
+        for(int y=1;y<e.h-1;y++)for(int x=1;x<e.w-1;x++){
+            if(y<8||y>17){
+                e.sueloFondo(x,y,e.arena);
+                if(y<5||y>20)e.lago(x,y);
+                else if((x+y)%11==0)e.suelo(x,y,e.piedra);
+            }
+        }
+        for(int x=3;x<e.w-2;x+=5){
+            e.suelo(x,8,e.flores);
+            e.suelo(x,16,e.arena);
+        }
+        for(int x=8;x<e.w-5;x+=9) {
+            e.solido(x,9,e.arbusto);
+            e.solido(x+2,16,e.roca);
+        }
+    }
+
+    private static void montana(Estado e){
+        for(int y=1;y<e.h-1;y++)for(int x=1;x<e.w-1;x++){
+            int d=Math.abs(y-e.h/2);
+            e.sueloFondo(x,y,d>6?e.nieve:e.piedra);
+            if(d>3&&e.rnd.nextInt(5)==0)e.solido(x,y,e.roca);
+            else if(d>4&&e.rnd.nextInt(7)==0)e.solido(x,y,e.columna);
+        }
+        for(int i=0;i<18;i++){
+            int x=2+e.rnd.nextInt(e.w-4),y=2+e.rnd.nextInt(e.h-4);
+            if(Math.abs(y-12)>3)e.suelo(x,y,e.cueva);
+        }
+    }
+
+    private static void lagos(Estado e){
+        for(int[] centro:new int[][]{{9,7},{27,17}}){
+            for(int y=1;y<e.h-1;y++)for(int x=1;x<e.w-1;x++){
+                double dx=(x-centro[0])/6.8,dy=(y-centro[1])/4.2;
+                if(dx*dx+dy*dy<1)e.lago(x,y);
+                else if(dx*dx+dy*dy<1.6)e.suelo(x,y,e.arena);
+            }
+        }
+        for(int i=0;i<28;i++){
+            int x=2+e.rnd.nextInt(e.w-4),y=2+e.rnd.nextInt(e.h-4);
+            if(Math.abs(y-12)>3&&e.capas[1][e.pos(x,y)]!=e.agua){
+                if(i%4==0)e.solido(x,y,e.arbol);
+                else e.hierba(x,y);
+            }
+        }
+    }
+
+    private static void ruinas(Estado e){
+        for(int y=2;y<e.h-2;y++)for(int x=3;x<e.w-3;x++)
+            e.sueloFondo(x,y,e.piedra);
+        for(int x=5;x<e.w-4;x+=6){
+            e.solido(x,5,e.columna);
+            e.solido(x,19,e.columna);
+        }
+        for(int y=3;y<e.h-3;y+=5){
+            e.solido(4,y,e.valla);
+            e.solido(e.w-5,y,e.valla);
+        }
+        for(int x=12;x<25;x++)for(int y=9;y<16;y++)
+            e.suelo(x,y,e.piedra);
+        e.solido(18,8,e.senal);
+    }
+
+    private static void pantano(Estado e){
+        for(int y=1;y<e.h-1;y++)for(int x=1;x<e.w-1;x++){
+            int n=Math.floorMod(x*7+y*13+(int)e.mapa.semilla(),23);
+            if((y<9||y>15)&&n<11)e.lago(x,y);
+            else if(n<15&&Math.abs(y-12)>2)e.hierba(x,y);
+        }
+        for(int i=0;i<24;i++){
+            int x=1+e.rnd.nextInt(e.w-2),y=1+e.rnd.nextInt(e.h-2);
+            if(Math.abs(y-12)>3) e.solido(x,y,e.arbusto);
+        }
+        for(int x=5;x<e.w-5;x+=8){
+            e.suelo(x,9,e.puente);
+            e.suelo(x,16,e.puente);
+        }
+    }
+
+    private static void cueva(Estado e){
+        for(int y=1;y<e.h-1;y++)for(int x=1;x<e.w-1;x++){
+            e.sueloFondo(x,y,e.cueva);
+            if(Math.abs(y-12)>4&&e.rnd.nextInt(7)==0)
+                e.solido(x,y,e.roca);
+            else if(Math.abs(y-12)>4&&e.rnd.nextInt(13)==0)
+                e.solido(x,y,e.columna);
+        }
+        for(int x=4;x<e.w-3;x+=7){
+            e.suelo(x,8,e.piedra);
+            e.suelo(x,17,e.piedra);
+        }
+    }
+
+    private static void jardin(Estado e){
+        for(int y=3;y<e.h-3;y++)for(int x=3;x<e.w-3;x++)
+            e.sueloFondo(x,y,e.claro);
+        for(int x=4;x<e.w-4;x++){
+            e.suelo(x,9,e.piedra);
+            e.suelo(x,16,e.piedra);
+        }
+        for(int x=4;x<e.w-4;x+=4)
+            for(int y:new int[]{6,7,17,18}) e.suelo(x,y,e.flores);
+        for(int x=5;x<e.w-4;x+=7){
+            e.solido(x,5,e.arbusto);
+            e.solido(x,19,e.arbusto);
+        }
+        for(int y=2;y<e.h-2;y++)
+            if(y<9||y>15)e.suelo(17,y,e.agua);
+        e.suelo(17,8,e.puente);
+        e.suelo(17,16,e.puente);
+    }
+}
