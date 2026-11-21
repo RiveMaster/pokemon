@@ -147,7 +147,7 @@ public final class ExploradorMapa {
         estado.setForeground(Color.WHITE);
         estado.setFont(new Font("SansSerif", Font.BOLD, 14));
         estado.setBorder(BorderFactory.createEmptyBorder(11, 16, 11, 16));
-        JLabel ayuda = new JLabel("WASD / flechas para caminar · Entra por las puertas de los edificios · Esc: menú");
+        JLabel ayuda = new JLabel("WASD / flechas: caminar · T: chat · Enter: enviar · Esc: volver");
         ayuda.setFont(new Font("SansSerif", Font.PLAIN, 13));
         ayuda.setForeground(new Color(64, 79, 96));
         ayuda.setBorder(BorderFactory.createEmptyBorder(5, 4, 8, 4));
@@ -180,6 +180,11 @@ public final class ExploradorMapa {
             b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
         controles.add(cruceta, BorderLayout.CENTER);
+        ChatExploracion chat = new ChatExploracion(lienzo);
+        controles.add(chat, BorderLayout.EAST);
+        JButton botonChat = new JButton("Chat (T)");
+        botonChat.addActionListener(e -> chat.abrirEntrada());
+        controles.add(botonChat, BorderLayout.WEST);
         ventana.add(controles, BorderLayout.SOUTH);
 
         Runnable cerrar = () -> {
@@ -308,6 +313,9 @@ public final class ExploradorMapa {
                         && AZAR.nextInt(100) < 16;
                 // La puerta y el encuentro se activan al terminar el paso: así la animación
                 // de caminar sigue siendo visible antes de cambiar de pantalla.
+                RedLAN red = RedLAN.actual();
+                if (red != null && red.estaConectada())
+                    red.publicarPosicion(mapaId, nx, ny);
                 lienzo.caminar(nx, ny, dx, dy, () -> {
                     if (evento != null) {
                         // Al volver al exterior se conserva la casilla anterior a la puerta.
