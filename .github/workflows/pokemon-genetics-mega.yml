@@ -10,6 +10,7 @@ on:
       - "tests/Animaciones2DSmokeTest.java"
       - "tests/InteraccionesGraficasSmokeTest.java"
       - "tests/ArteVisualRetroSmokeTest.java"
+      - "tests/GeneracionesMapasSmokeTest.java"
       - "Tiles/VisualRetro.png"
       - ".github/workflows/pokemon-genetics-mega.yml"
   pull_request:
@@ -21,6 +22,7 @@ on:
       - "tests/Animaciones2DSmokeTest.java"
       - "tests/InteraccionesGraficasSmokeTest.java"
       - "tests/ArteVisualRetroSmokeTest.java"
+      - "tests/GeneracionesMapasSmokeTest.java"
       - "Tiles/VisualRetro.png"
       - ".github/workflows/pokemon-genetics-mega.yml"
 
@@ -39,7 +41,7 @@ jobs:
         run: |
           mkdir -p build
           find src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d build
-          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java
+          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java
       - name: Test breeding, IVs, cooldown and mega evolution
         run: java -ea -cp build Proyecto.SistemaCrianzaMegaSmokeTest
       - name: Test WASD exploration movement rules
@@ -52,3 +54,5 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.InteraccionesGraficasSmokeTest
       - name: Test integrated visual pack and battle scene
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ArteVisualRetroSmokeTest
+      - name: Verify 100 distinct regional maps and walking routes
+        run: java -ea -Djava.awt.headless=true -cp build Proyecto.GeneracionesMapasSmokeTest
