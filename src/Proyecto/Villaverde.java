@@ -29,7 +29,7 @@ public class Villaverde {
                                 + "\n¿Qué quieres hacer?",
                         "Visitar a mamá", "Ir a " + primera.getNombre(),
                         "Mochila y opciones", "Viajar a otra generación",
-                        "Explorar el pueblo");
+                        "Atlas regional (10 mapas)", "Explorar el pueblo");
                 if (seleccion < 0) continue;
                 opcion = seleccion + 1;
             } else {
@@ -38,7 +38,8 @@ public class Villaverde {
                 System.out.println("2. Ir a " + primera.getNombre());
                 System.out.println("3. Menú (mochila, MT, objetos, volar, guardar)");
                 System.out.println("4. Viajar a otra generación");
-                System.out.println("5. Volver a explorar el pueblo (WASD)");
+                System.out.println("5. Atlas regional de esta generación");
+                System.out.println("6. Volver a explorar el pueblo (WASD)");
                 System.out.print("Elige una opción: ");
                 opcion = leerEntero(sc);
                 sc.nextLine();
@@ -56,7 +57,8 @@ public class Villaverde {
                     }
                 }
                 case 4 -> viajarEntreGeneraciones(sc, jugadorCompleto);
-                case 5 -> explorar = true;
+                case 5 -> AtlasRegional.abrir(sc, jugadorCompleto);
+                case 6 -> explorar = true;
                 case 777999222 ->{
                     System.out.println("Entrando en modo debug para estats modificadas.");
                     System.out.println("Introduce la opcion:");
