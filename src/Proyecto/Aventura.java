@@ -105,19 +105,35 @@ public class Aventura {
         String titulo = "Multijugador por VPN privada";
         String local = obtenerIpTailscale();
         if (local == null) {
-            UIJuego.mensaje(titulo,
-                    "Para jugar por VPN, instala Tailscale en ambos ordenadores "
-                    + "e inicia sesión.\nAsegúrate de que los jugadores comparten "
-                    + "una red Tailscale o que el anfitrión comparte su dispositivo.\n"
-                    + "Guía: https://tailscale.com/docs/how-to/quickstart\n"
-                    + "El juego no genera claves privadas ni crea VPN sin tu consentimiento.");
+            int ayuda = UIJuego.elegir(titulo,
+                    "No se ha detectado una interfaz Tailscale activa.\n"
+                    + "Instala Tailscale en ambos ordenadores e inicia sesión.\n"
+                    + "El anfitrión debe invitar al otro jugador o compartir su dispositivo.",
+                    "Abrir instalación oficial", "Abrir instrucciones de VPN", "Volver");
+            if (ayuda == 0) abrirPagina("https://tailscale.com/download");
+            else if (ayuda == 1) abrirPagina("https://tailscale.com/docs/how-to/quickstart");
             return;
         }
         int modo=UIJuego.elegir(titulo,
                 "VPN disponible: "+local+"\nPuerto privado: "+RedLAN.PUERTO_PREDETERMINADO
                 + "\nAmbos jugadores deben tener permiso de acceso en Tailscale.",
-                "Crear partida privada", "Unirse con IP Tailscale", "Cancelar");
-        if (modo<0 || modo==2)return;
+                "Crear partida privada", "Unirse con IP Tailscale",
+                "Copiar mi IP VPN", "Cómo compartir la VPN", "Cancelar");
+        if (modo == 2) {
+            try {
+                java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+                        new java.awt.datatransfer.StringSelection(local), null);
+                UIJuego.mensaje(titulo, "IP VPN copiada al portapapeles.");
+            } catch (Exception ex) {
+                UIJuego.mensaje(titulo, "Tu IP VPN es: " + local);
+            }
+            return;
+        }
+        if (modo == 3) {
+            abrirPagina("https://tailscale.com/docs/features/sharing");
+            return;
+        }
+        if (modo<0 || modo>=4)return;
         String nombre=UIJuego.pedirTexto(titulo,"Nombre del entrenador:","Entrenador");
         if (nombre==null)return;
         if (nombre.isBlank())nombre="Entrenador";
@@ -143,6 +159,16 @@ public class Aventura {
         }catch(Exception ex){
             RedLAN.cerrar();
             UIJuego.mensaje(titulo,"Error de VPN: "+ex.getMessage());
+        }
+    }
+
+    private static void abrirPagina(String enlace) {
+        try {
+            if (java.awt.Desktop.isDesktopSupported())
+                java.awt.Desktop.getDesktop().browse(java.net.URI.create(enlace));
+            else UIJuego.mensaje("Instrucciones", enlace);
+        } catch (Exception ex) {
+            UIJuego.mensaje("Instrucciones", enlace);
         }
     }
 
