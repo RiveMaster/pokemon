@@ -152,7 +152,7 @@ public final class ExploradorMapa {
         ayuda.setForeground(new Color(64, 79, 96));
         ayuda.setBorder(BorderFactory.createEmptyBorder(5, 4, 8, 4));
 
-        MapaCanvas lienzo = new MapaCanvas(mapa, jugadorSprite, inicio.x, inicio.y);
+        MapaCanvas lienzo = new MapaCanvas(mapa, jugadorSprite, inicio.x, inicio.y, mapaId);
         JScrollPane desplazamiento = new JScrollPane(lienzo);
         desplazamiento.getViewport().setBackground(new Color(30, 35, 35));
         ventana.add(estado, BorderLayout.NORTH);
@@ -196,6 +196,9 @@ public final class ExploradorMapa {
         };
 
         actualizarEstado(estado, jugador, lienzo, mapa, mapaId);
+        RedLAN redInicial = RedLAN.actual();
+        if (redInicial != null && redInicial.estaConectada())
+            redInicial.publicarPosicion(mapaId, inicio.x, inicio.y);
         instalarMovimiento(ventana, jugador, zona, permitirEncuentros, mapa, lienzo, estado, mapaId,
                 resultado, fin, cerrar);
         configurarBotonMovimiento(arriba, lienzo, "arriba");
@@ -1084,9 +1087,18 @@ public final class ExploradorMapa {
         private boolean moviendo;
         private Timer pasoTimer;
         private Timer ambienteTimer;
+        private final Timer redTimer;
+        private final String mapaId;
         private int faseAgua;
 
-        MapaCanvas(MapaDatos mapa, SpriteJugador2D sprite, int x, int y) {
+        MapaCanvas(MapaDatos mapa, SpriteJugador2D sprite, int x, int y, String mapaId) {
+            this.mapaId = mapaId;
+            redTimer = new Timer(200, e -> {
+                RedLAN red = RedLAN.actual();
+                if (red != null && red.estaConectada()) repaint();
+            });
+            redTimer.setCoalesce(true);
+            redTimer.start();
             this.mapa = mapa;
             this.sprite = sprite;
             jugadorX = x;
@@ -1155,6 +1167,7 @@ public final class ExploradorMapa {
             detenerAnimacion();
             if (ambienteTimer != null) ambienteTimer.stop();
             ambienteTimer = null;
+            redTimer.stop();
         }
 
         void detenerAnimacion() {
@@ -1210,6 +1223,33 @@ public final class ExploradorMapa {
             g.setColor(new Color(30, 55, 49, 80));
             g.fillRect(x + tam * 3 / 16, y + tam * 14 / 16,
                     tam * 10 / 16, Math.max(2, tam / 16));
+            // Los compañeros conectados se muestran en la misma casilla virtual.
+            // Sus coordenadas y mapas son mensajes limitados del protocolo TCP.
+            RedLAN red = RedLAN.actual();
+            if (red != null && red.estaConectada()) {
+                for (RedLAN.JugadorRemoto remoto : red.jugadoresEn(mapaId)) {
+                    if (!mapa.dentro(remoto.x, remoto.y)) continue;
+                    int rx = remoto.x * tam, ry = remoto.y * tam;
+                    if (mapa.resolucion == ArteRegion2D.PIXELES) {
+                        g.drawImage(EntrenadorRegion2D.fotograma(SpriteJugador2D.FRENTE, 0),
+                                rx, ry - tam / 2, tam, tam * 3 / 2, null);
+                    } else {
+                        g.drawImage(sprite.fotograma(SpriteJugador2D.FRENTE, 0),
+                                rx, ry, tam, tam, null);
+                    }
+                    g.setFont(new Font("SansSerif", Font.BOLD, Math.max(11, tam / 5)));
+                    FontMetrics m = g.getFontMetrics();
+                    String nombre = remoto.nombre.length() > 24
+                            ? remoto.nombre.substring(0, 24) : remoto.nombre;
+                    int anchoNombre = m.stringWidth(nombre) + 9;
+                    int nombreY = Math.max(14, ry - tam / 2 - 8);
+                    g.setColor(new Color(20, 38, 62, 210));
+                    g.fillRoundRect(rx + tam / 2 - anchoNombre / 2, nombreY - 14,
+                            anchoNombre, 17, 5, 5);
+                    g.setColor(Color.WHITE);
+                    g.drawString(nombre, rx + tam / 2 - m.stringWidth(nombre) / 2, nombreY - 2);
+                }
+            }
             if (mapa.resolucion == ArteRegion2D.PIXELES) {
                 // Sprite original de 32x48, con los pies alineados con la casilla.
                 BufferedImage fotograma = EntrenadorRegion2D.fotograma(direccion,
