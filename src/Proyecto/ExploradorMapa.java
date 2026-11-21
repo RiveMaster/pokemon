@@ -201,7 +201,7 @@ public final class ExploradorMapa {
         if (redInicial != null && redInicial.estaConectada())
             redInicial.publicarPosicion(identificadorRed(mapaId, jugador), inicio.x, inicio.y);
         instalarMovimiento(ventana, jugador, zona, permitirEncuentros, mapa, lienzo, estado, mapaId,
-                resultado, fin, cerrar);
+                resultado, fin, cerrar, chat);
         configurarBotonMovimiento(arriba, lienzo, "arriba");
         configurarBotonMovimiento(izquierda, lienzo, "izquierda");
         configurarBotonMovimiento(abajo, lienzo, "abajo");
@@ -253,7 +253,7 @@ public final class ExploradorMapa {
     private static void instalarMovimiento(JFrame ventana, Jugador jugador, Zona zona, boolean permitirEncuentros,
                                            MapaDatos mapa, MapaCanvas lienzo, JLabel estado, String mapaId,
                                            AtomicReference<Resultado> resultado, CountDownLatch fin,
-                                           Runnable cerrar) {
+                                           Runnable cerrar, ChatExploracion chat) {
         InputMap entradas = lienzo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap acciones = lienzo.getActionMap();
 
@@ -267,13 +267,17 @@ public final class ExploradorMapa {
         entradas.put(KeyStroke.getKeyStroke("RIGHT"), "derecha");
         entradas.put(KeyStroke.getKeyStroke("ESCAPE"), "salir");
         acciones.put("salir", new AbstractAction() {
-            @Override public void actionPerformed(java.awt.event.ActionEvent e) { cerrar.run(); }
+            @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (chat.estaEscribiendo()) chat.cancelarEntrada();
+                else cerrar.run();
+            }
         });
 
         // Se mantiene un manejador local para que el cierre por encuentro sea inmediato.
         class Movimiento {
             void avanzar(int dx, int dy) {
-                if (lienzo.estaMoviendo()) return;
+                // WASD, flechas y Esc se reservan al campo de texto al pulsar T.
+                if (chat.estaEscribiendo() || lienzo.estaMoviendo()) return;
                 lienzo.mirar(dx, dy);
                 MapaCanvas.Posicion p = lienzo.getPosicion();
                 int nx = p.x + dx, ny = p.y + dy;
