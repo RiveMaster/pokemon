@@ -1202,9 +1202,15 @@ public final class ExploradorMapa {
             g.setColor(new Color(30, 55, 49, 80));
             g.fillRect(x + tam * 3 / 16, y + tam * 14 / 16,
                     tam * 10 / 16, Math.max(2, tam / 16));
-            BufferedImage fotograma = sprite.fotograma(direccion, moviendo ? fotogramaPaso : 0);
-            // Personaje entero, escalado a la resolución de casilla del mapa.
-            g.drawImage(fotograma, x, y, tam, tam, null);
+            if (mapa.resolucion == ArteRegion2D.PIXELES) {
+                // Sprite original de 32x48, con los pies alineados con la casilla.
+                BufferedImage fotograma = EntrenadorRegion2D.fotograma(direccion,
+                        moviendo ? fotogramaPaso : 0);
+                g.drawImage(fotograma, x, y - tam / 2, tam, tam * 3 / 2, null);
+            } else {
+                BufferedImage fotograma = sprite.fotograma(direccion, moviendo ? fotogramaPaso : 0);
+                g.drawImage(fotograma, x, y, tam, tam, null);
+            }
             g.dispose();
         }
 
