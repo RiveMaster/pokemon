@@ -166,6 +166,11 @@ public final class RedLAN {
                     nombre = decodificar(p[1]);
                     eventos.add("JOIN|" + nombre);
                     enviarA(cliente, "WELCOME|" + codificar(nombreLocal));
+                    // Al unirse, el cliente conoce las posiciones ya publicadas.
+                    for (JugadorRemoto existente : jugadores.values())
+                        enviarA(cliente, "STATE|" + codificar(existente.nombre)
+                                + "|" + codificar(existente.ubicacion)
+                                + "|" + existente.x + "|" + existente.y);
                 } else if (p.length == 5 && "POS".equals(p[0])) {
                     String loc = decodificar(p[2]);
                     int x = Integer.parseInt(p[3]), y = Integer.parseInt(p[4]);
