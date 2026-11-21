@@ -65,7 +65,10 @@ public final class MapasRegion2D {
             for(int[] c:capas)Arrays.fill(c,-1);
         }
         int tile(String tipo,int variante,byte categoria){
-            BufferedImage sprite=RecursosCC0.terreno(mapa.bioma(),tipo,variante);
+            // El césped principal conserva la paleta generacional distintiva:
+            // los tiles CC0 se mezclan para caminos, piedra, arbustos y edificios.
+            BufferedImage sprite="CESPED".equals(tipo) ? null :
+                    RecursosCC0.terreno(mapa.bioma(),tipo,variante);
             // Hierba alta y agua conservan sus identificadores de encuentro/navegación.
             paleta.add(sprite!=null?sprite:ArteRegion2D.terreno(tipo,tema,variante));
             tipos.add(categoria);
