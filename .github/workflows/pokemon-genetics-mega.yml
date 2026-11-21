@@ -56,3 +56,12 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ArteVisualRetroSmokeTest
       - name: Verify 100 distinct regional maps and walking routes
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.GeneracionesMapasSmokeTest
+      - name: Exportar 100 mapas originales en PNG (10 por generación)
+        run: java -Djava.awt.headless=true -cp build Proyecto.ExportadorMapasGeneracionales
+      - name: Publicar los 100 mapas y 10 galerías
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapas-2d-100-generaciones
+          path: MapasGenerados/
+          if-no-files-found: error
+          retention-days: 30
