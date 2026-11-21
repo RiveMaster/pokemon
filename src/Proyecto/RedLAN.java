@@ -262,8 +262,8 @@ public final class RedLAN {
 
     static String validarChat(String texto) {
         if (texto == null) return null;
-        String limpio = texto.replace('\\r', ' ').replace('\\n', ' ')
-                .replaceAll("[\\\\p{Cntrl}]", "").strip();
+        String limpio = texto.replace('\r', ' ').replace('\n', ' ')
+                .replaceAll("\\p{Cntrl}", "").strip();
         if (limpio.isEmpty()) return null;
         return limpio.length() > MAX_CHAT_CARACTERES
                 ? limpio.substring(0, MAX_CHAT_CARACTERES) : limpio;
