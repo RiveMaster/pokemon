@@ -38,6 +38,7 @@ public final class AtlasUsuario16 {
     private static final Map<String, int[]> COMPACTO = crearCoordenadasCompactas();
     private final BufferedImage imagen;
     private final boolean compacto;
+    private BufferedImage pradera;
 
     private AtlasUsuario16(BufferedImage imagen) {
         if (imagen == null) throw new IllegalArgumentException("Atlas nulo");
@@ -97,7 +98,30 @@ public final class AtlasUsuario16 {
         Pieza pieza = PIEZAS.get(nombre);
         if (pieza == null)
             throw new IllegalArgumentException("Pieza desconocida: " + nombre);
+        // La hoja original no incluye una baldosa de hierba continua opaca.
+        // Se ensambla un suelo únicamente con tonos de sus propios árboles,
+        // nunca con texturas o paletas externas.
+        if ("SUELO_VERDE".equals(nombre)) {
+            if (pradera == null) pradera = crearPraderaDelAtlas();
+            return pradera;
+        }
         return recortar(pieza);
+    }
+
+    private BufferedImage crearPraderaDelAtlas() {
+        BufferedImage arbol = recortar(PIEZAS.get("ARBOL_REDONDO"));
+        BufferedImage pino = recortar(PIEZAS.get("PINO"));
+        int base = arbol.getRGB(7, 10);
+        int claro = pino.getRGB(10, 13);
+        if ((base >>> 24) < 220) base = arbol.getRGB(5, 8);
+        if ((claro >>> 24) < 220) claro = base;
+        BufferedImage suelo = new BufferedImage(TILE, TILE, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < TILE; y++) for (int x = 0; x < TILE; x++) {
+            boolean detalle = (x * 17 + y * 29) % 37 == 0
+                    || (x * 23 + y * 11) % 53 == 0;
+            suelo.setRGB(x, y, detalle ? claro : base);
+        }
+        return suelo;
     }
 
     public static Map<String, Pieza> piezas() { return PIEZAS; }
