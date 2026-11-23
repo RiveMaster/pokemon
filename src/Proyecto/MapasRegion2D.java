@@ -107,6 +107,59 @@ public final class MapasRegion2D {
                 colisiones[pos(x,y)]=true;
             }
         }
+        /** Sprite de árbol de 32x64 dividido en dos tiles sin estirar el PNG. */
+        void pinoAlto(int x,int y,boolean nevado) {
+            if(!dentro(x,y)||!dentro(x,y-1))return;
+            int inferior=pos(x,y),superior=pos(x,y-1);
+            if(capas[2][inferior]>=0||capas[2][superior]>=0
+                    || colisiones[inferior]||colisiones[superior])return;
+            BufferedImage img=TerrenosConVecinos32.pino(x+y*3,nevado);
+            for(int dy=0;dy<2;dy++){
+                BufferedImage trozo=img.getSubimage(0,dy*32,32,32);
+                int id=paleta.size();
+                paleta.add(trozo);
+                tipos.add(BLOQUEO);
+                int indice=pos(x,y-1+dy);
+                capas[2][indice]=id;
+                colisiones[indice]=manuales[indice]=true;
+            }
+        }
+
+        /** Claro irregular: cada tile examina sus cuatro vecinos y diagonales. */
+        void claro(int x,int y,int ancho,int alto,int variante) {
+            for(int dy=0;dy<alto;dy++)for(int dx=0;dx<ancho;dx++){
+                int tx=x+dx,ty=y+dy;
+                if(!dentro(tx,ty) || capas[2][pos(tx,ty)]>=0 || colisiones[pos(tx,ty)])
+                    continue;
+                int m=TerrenosConVecinos32.mascara(
+                        dy>0,dx<ancho-1,dy<alto-1,dx>0);
+                int d=(dx>0&&dy>0?1:0)|(dx<ancho-1&&dy>0?2:0)
+                        |(dx>0&&dy<alto-1?4:0)
+                        |(dx<ancho-1&&dy<alto-1?8:0);
+                BufferedImage tile=TerrenosConVecinos32.claro(tema,m,d,variante+dx+dy*17);
+                int id=paleta.size();
+                paleta.add(tile);
+                tipos.add(NORMAL);
+                capas[1][pos(tx,ty)]=id;
+            }
+        }
+
+        /** Plataforma rocosa con borde frontal; bloquea por altura. */
+        void meseta(int x,int y,int ancho,int alto,int variante) {
+            for(int dy=0;dy<alto;dy++)for(int dx=0;dx<ancho;dx++){
+                int tx=x+dx,ty=y+dy;
+                if(!dentro(tx,ty)||capas[2][pos(tx,ty)]>=0)continue;
+                int m=TerrenosConVecinos32.mascara(
+                        dy>0,dx<ancho-1,dy<alto-1,dx>0);
+                BufferedImage tile=TerrenosConVecinos32.plataforma(tema,m,variante+dx+dy*7);
+                int id=paleta.size();
+                paleta.add(tile);
+                tipos.add(BLOQUEO);
+                capas[2][pos(tx,ty)]=id;
+                colisiones[pos(tx,ty)]=manuales[pos(tx,ty)]=true;
+            }
+        }
+
         void dejarPaso(int x,int y) {
             if(dentro(x,y)){
                 int i=pos(x,y);
@@ -269,11 +322,17 @@ public final class MapasRegion2D {
     }
 
     private static void bosque(Estado e){
+        // Primero se colocan claros y una cornisa en espacios seguros.
+        // Después llegan los árboles: sus copas no cortan las salidas.
+        e.claro(3,3,5,4,11+e.mapa.indice());
+        e.claro(23,16,6,4,19+e.mapa.generacion().getNumero());
+        e.meseta(20,3,4,3,e.mapa.indice());
         for(int i=0;i<115;i++){
             int x=1+e.rnd.nextInt(e.w-2),y=1+e.rnd.nextInt(e.h-2);
             if(Math.abs(y-e.h/2)<=3)continue;
             if(i%6==0)e.hierba(x,y);
             else if(i%4==0)e.solido(x,y,e.arbusto);
+            else if(i%3==0 && y>=3)e.pinoAlto(x,y,false);
             else e.solido(x,y,i%2==0?e.arbol:e.arbol2);
         }
         for(int i=0;i<30;i++){
@@ -305,6 +364,7 @@ public final class MapasRegion2D {
             int d=Math.abs(y-e.h/2);
             e.sueloFondo(x,y,d>6?e.nieve:e.piedra);
             if(d>3&&e.rnd.nextInt(5)==0)e.solido(x,y,e.roca);
+            else if(d>4&&e.rnd.nextInt(9)==0 && y>2)e.pinoAlto(x,y,true);
             else if(d>4&&e.rnd.nextInt(7)==0)e.solido(x,y,e.columna);
         }
         for(int i=0;i<18;i++){
