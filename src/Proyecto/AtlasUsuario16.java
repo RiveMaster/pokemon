@@ -17,6 +17,9 @@ import java.util.Map;
  */
 public final class AtlasUsuario16 {
     public static final Path ARCHIVO = Path.of("Tiles", "AtlasUsuario.png");
+    public static final Path PAQUETE_INICIAL = Path.of("Tiles", "AtlasUsuarioFase1.png");
+    public static final int ANCHO_COMPACTO = 256;
+    public static final int ALTO_COMPACTO = 128;
     public static final int ANCHO_ESPERADO = 864;
     public static final int ALTO_ESPERADO = 925;
     public static final int TILE = 16;
@@ -32,31 +35,36 @@ public final class AtlasUsuario16 {
 
     /** Rectángulos inspeccionados en el PNG ORIGINAL (864 × 925). */
     private static final Map<String, Pieza> PIEZAS = crearCatalogo();
+    private static final Map<String, int[]> COMPACTO = crearCoordenadasCompactas();
     private final BufferedImage imagen;
+    private final boolean compacto;
 
     private AtlasUsuario16(BufferedImage imagen) {
-        if (imagen == null || imagen.getWidth() != ANCHO_ESPERADO
-                || imagen.getHeight() != ALTO_ESPERADO) {
+        if (imagen == null) throw new IllegalArgumentException("Atlas nulo");
+        compacto = imagen.getWidth() == ANCHO_COMPACTO
+                && imagen.getHeight() == ALTO_COMPACTO;
+        if (!compacto && (imagen.getWidth() != ANCHO_ESPERADO
+                || imagen.getHeight() != ALTO_ESPERADO))
             throw new IllegalArgumentException(
-                    "Se esperaba el atlas original de 864 x 925 píxeles.");
-        }
+                    "El atlas debe medir 864x925 o ser el paquete inicial de 256x128.");
         this.imagen = imagen;
     }
 
-    public static boolean instalado() { return Files.isRegularFile(ARCHIVO); }
+    public boolean esOriginalCompleto() { return !compacto; }
+    public static boolean instalado() {
+        return Files.isRegularFile(ARCHIVO) || Files.isRegularFile(PAQUETE_INICIAL);
+    }
 
     public static AtlasUsuario16 cargar() throws IOException {
-        if (!instalado())
-            throw new IOException("Falta " + ARCHIVO
-                    + ". Instala únicamente el PNG facilitado por el usuario.");
-        BufferedImage imagen = ImageIO.read(ARCHIVO.toFile());
+        // Al instalar el PNG original, el juego lo utilizará automáticamente.
+        Path ruta = Files.isRegularFile(ARCHIVO) ? ARCHIVO : PAQUETE_INICIAL;
+        if (!Files.isRegularFile(ruta))
+            throw new IOException("Falta el atlas del usuario en Tiles/");
+        BufferedImage imagen = ImageIO.read(ruta.toFile());
         if (imagen == null)
-            throw new IOException("El archivo del atlas no es un PNG válido.");
-        try {
-            return new AtlasUsuario16(imagen);
-        } catch (IllegalArgumentException ex) {
-            throw new IOException(ex.getMessage(), ex);
-        }
+            throw new IOException("El archivo no contiene un PNG válido: " + ruta);
+        try { return new AtlasUsuario16(imagen); }
+        catch (IllegalArgumentException ex) { throw new IOException(ex.getMessage(), ex); }
     }
 
     /** También sirve para pruebas de la cuadrícula y del manifiesto. */
@@ -65,15 +73,22 @@ public final class AtlasUsuario16 {
     }
 
     public BufferedImage recortar(Pieza pieza) {
-        if (pieza.x() + pieza.ancho() > imagen.getWidth()
-                || pieza.y() + pieza.alto() > imagen.getHeight())
+        int x = pieza.x(), y = pieza.y();
+        if (compacto) {
+            int[] local = COMPACTO.get(pieza.nombre());
+            if (local == null)
+                throw new IllegalArgumentException("Sprite ausente en paquete inicial: " + pieza.nombre());
+            x = local[0];
+            y = local[1];
+        }
+        if (x + pieza.ancho() > imagen.getWidth()
+                || y + pieza.alto() > imagen.getHeight())
             throw new IllegalArgumentException("Pieza fuera del atlas: " + pieza.nombre());
         BufferedImage recorte = new BufferedImage(
                 pieza.ancho(), pieza.alto(), BufferedImage.TYPE_INT_ARGB);
         java.awt.Graphics2D g = recorte.createGraphics();
         g.drawImage(imagen, 0, 0, pieza.ancho(), pieza.alto(),
-                pieza.x(), pieza.y(), pieza.x() + pieza.ancho(),
-                pieza.y() + pieza.alto(), null);
+                x, y, x + pieza.ancho(), y + pieza.alto(), null);
         g.dispose();
         return recorte;
     }
@@ -109,6 +124,32 @@ public final class AtlasUsuario16 {
         registrar(m, "INTERIOR_SUELO",  206, 198, 16, 16, false, "INTERIOR");
         registrar(m, "INTERIOR_PARED",  222, 198, 16, 16, true,  "INTERIOR");
         registrar(m, "INTERIOR_OBJETO", 169, 280, 16, 16, true,  "INTERIOR");
+        return Map.copyOf(m);
+    }
+
+    /** Posiciones de los mismos recortes en el PNG compacto incluido con el juego. */
+    private static Map<String, int[]> crearCoordenadasCompactas() {
+        Map<String, int[]> m = new LinkedHashMap<>();
+        m.put("SUELO_CLARO", new int[]{0,0});
+        m.put("SUELO_TIERRA", new int[]{16,0});
+        m.put("SUELO_PIEDRA", new int[]{32,0});
+        m.put("SUELO_AGUA", new int[]{48,0});
+        m.put("SUELO_VERDE", new int[]{64,0});
+        m.put("ARBOL_REDONDO", new int[]{0,17});
+        m.put("ARBOL_REDONDO_2", new int[]{17,17});
+        m.put("PINO", new int[]{36,17});
+        m.put("PINO_2", new int[]{59,17});
+        m.put("ARBUSTO", new int[]{84,17});
+        m.put("ARBUSTO_2", new int[]{102,17});
+        m.put("CASA_ROJA", new int[]{0,49});
+        m.put("CASA_VERDE", new int[]{34,49});
+        m.put("TIENDA_AZUL", new int[]{67,49});
+        m.put("EDIFICIO_AZUL", new int[]{104,49});
+        m.put("CASA_MARRON", new int[]{134,49});
+        m.put("CASA_GRANDE", new int[]{165,49});
+        m.put("INTERIOR_SUELO", new int[]{204,49});
+        m.put("INTERIOR_PARED", new int[]{222,49});
+        m.put("INTERIOR_OBJETO", new int[]{204,67});
         return Map.copyOf(m);
     }
 
