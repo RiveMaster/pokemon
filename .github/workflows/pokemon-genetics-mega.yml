@@ -13,6 +13,7 @@ on:
       - "tests/GeneracionesMapasSmokeTest.java"
       - "tests/ChatVpnSmokeTest.java"
       - "tests/SpritesExternosSmokeTest.java"
+      - "tests/TerrenosConVecinosSmokeTest.java"
       - "Tiles/RPGPixelPack/**"
       - "Tiles/VisualRetro.png"
       - ".github/workflows/pokemon-genetics-mega.yml"
@@ -28,6 +29,7 @@ on:
       - "tests/GeneracionesMapasSmokeTest.java"
       - "tests/ChatVpnSmokeTest.java"
       - "tests/SpritesExternosSmokeTest.java"
+      - "tests/TerrenosConVecinosSmokeTest.java"
       - "Tiles/RPGPixelPack/**"
       - "Tiles/VisualRetro.png"
       - ".github/workflows/pokemon-genetics-mega.yml"
@@ -47,7 +49,7 @@ jobs:
         run: |
           mkdir -p build
           find src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d build
-          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java tests/ChatVpnSmokeTest.java tests/SpritesExternosSmokeTest.java
+          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java tests/ChatVpnSmokeTest.java tests/SpritesExternosSmokeTest.java tests/TerrenosConVecinosSmokeTest.java
       - name: Test breeding, IVs, cooldown and mega evolution
         run: java -ea -cp build Proyecto.SistemaCrianzaMegaSmokeTest
       - name: Test WASD exploration movement rules
@@ -64,6 +66,8 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.GeneracionesMapasSmokeTest
       - name: Comprobar los 11 atlas de sprites CC0
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.SpritesExternosSmokeTest
+      - name: Comprobar claros, cornisas y árboles según vecinos
+        run: java -ea -Djava.awt.headless=true -cp build Proyecto.TerrenosConVecinosSmokeTest
       - name: Probar chat TCP y VPN con conexión de loopback
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ChatVpnSmokeTest
       - name: Exportar 100 mapas originales en PNG (10 por generación)
