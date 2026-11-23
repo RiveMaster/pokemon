@@ -45,8 +45,8 @@ public final class MapaAtlasUsuario {
             BufferedImage imagen = atlas.sprite(sprite);
             int casillasAncho = (imagen.getWidth() + TILE - 1) / TILE;
             int casillasAlto = (imagen.getHeight() + TILE - 1) / TILE;
-            if (x < 0 || y < 0 || x + casillasAncho >= ANCHO
-                    || y + casillasAlto >= ALTO)
+            if (x < 0 || y < 0 || x + casillasAncho > ANCHO
+                    || y + casillasAlto > ALTO)
                 throw new IllegalArgumentException("Objeto fuera del mapa: " + sprite);
             for (int dy = 0; dy < casillasAlto; dy++)
                 for (int dx = 0; dx < casillasAncho; dx++)
@@ -100,7 +100,8 @@ public final class MapaAtlasUsuario {
         // Bosque de borde (objetos con su altura original, 16-27 px).
         for (int x = 0; x < ANCHO; x += 2) {
             m.objeto(x, 0, x % 4 == 0 ? "PINO" : "ARBOL_REDONDO", null);
-            if (x != 14 && x != 16)
+            // No tapar puertas de la fila sur con vegetación.
+            if (x < 4 || x >= 12 && x <= 20)
                 m.objeto(x, ALTO-3, x % 4 == 0 ? "PINO_2" : "ARBOL_REDONDO_2", null);
         }
         for (int y = 3; y < ALTO-3; y += 3) {
