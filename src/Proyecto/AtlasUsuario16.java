@@ -119,7 +119,7 @@ public final class AtlasUsuario16 {
         for (int y = 0; y < TILE; y++) for (int x = 0; x < TILE; x++) {
             boolean detalle = (x * 17 + y * 29) % 37 == 0
                     || (x * 23 + y * 11) % 53 == 0;
-            suelo.setRGB(x, y, detalle ? claro : base);
+            suelo.setRGB(x, y, 0xff000000 | ((detalle ? claro : base) & 0x00ffffff));
         }
         return suelo;
     }
