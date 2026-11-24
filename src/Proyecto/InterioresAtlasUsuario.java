@@ -47,18 +47,22 @@ public final class InterioresAtlasUsuario {
             return x>=0&&y>=0&&x<ANCHO&&y<ALTO&&!bloqueado[y][x];
         }
         public boolean esSalida(int x,int y){return x==puertaX&&y==puertaY;}
-        public String interactuar(int x,int y){
+        /** Mueble vecino al jugador. Devuelve la entidad real, no solo su texto. */
+        public Mueble muebleCercano(int x,int y){
             for(Mueble m:muebles){
                 BufferedImage im=atlas.spriteInterior(m.sprite());
                 int ax=Math.max(1,(im.getWidth()+TILE-1)/TILE);
                 int ay=Math.max(1,(im.getHeight()+TILE-1)/TILE);
-                // El mensaje aparece al situarse junto al frente del mueble.
                 for(int yy=m.y();yy<m.y()+ay;yy++)
                     for(int xx=m.x();xx<m.x()+ax;xx++)
                         if(Math.abs(x-xx)+Math.abs(y-yy)==1)
-                            return m.descripcion();
+                            return m;
             }
             return null;
+        }
+        public String interactuar(int x,int y){
+            Mueble encontrado = muebleCercano(x,y);
+            return encontrado == null ? null : encontrado.descripcion();
         }
         private void mueble(int x,int y,String nombre,String descripcion){
             BufferedImage sprite=atlas.spriteInterior(nombre);
@@ -161,6 +165,15 @@ public final class InterioresAtlasUsuario {
      * se devuelve el foco a la ventana principal, sin perder la posición.
      */
     public static void visitar(JFrame padre,AtlasUsuario16 atlas,Tipo tipo,Runnable volver){
+        visitar(padre,atlas,tipo,volver,null);
+    }
+
+    /**
+     * Un servicio real puede asociarse a los muebles sin sustituir sus sprites.
+     * La acción se ejecuta solo al pulsar E, Espacio o el botón interactuar.
+     */
+    public static void visitar(JFrame padre,AtlasUsuario16 atlas,Tipo tipo,Runnable volver,
+                                java.util.function.Consumer<Mueble> servicio){
         Interior i=generar(tipo,atlas);
         JDialog ventana=new JDialog(padre,"Interior · "+tipo.name().replace('_',' '),
                 Dialog.ModalityType.DOCUMENT_MODAL);
@@ -197,8 +210,12 @@ public final class InterioresAtlasUsuario {
                 teclas.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0),"interactuar");
                 getActionMap().put("interactuar",new AbstractAction(){
                     @Override public void actionPerformed(ActionEvent e){
-                        String descripcion=i.interactuar(px,py);
-                        estado.setText(descripcion==null?" Nada de interés cerca.":" "+descripcion);
+                        Mueble mueble=i.muebleCercano(px,py);
+                        estado.setText(mueble==null?" Nada de interés cerca.":" "+mueble.descripcion());
+                        if(mueble!=null && servicio!=null) {
+                            servicio.accept(mueble);
+                            SwingUtilities.invokeLater(this::requestFocusInWindow);
+                        }
                     }
                 });
                 teclas.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0),"salir");
@@ -231,6 +248,15 @@ public final class InterioresAtlasUsuario {
             }
         };
         ventana.add(lienzo,BorderLayout.CENTER);
+        JPanel acciones=new JPanel(new GridLayout(1,2,8,0));
+        JButton interactuar=new JButton("Interactuar (E)");
+        JButton salir=new JButton("Salir al exterior (Esc)");
+        interactuar.addActionListener(e -> lienzo.getActionMap().get("interactuar")
+                .actionPerformed(new ActionEvent(lienzo,ActionEvent.ACTION_PERFORMED,"interactuar")));
+        salir.addActionListener(e -> ventana.dispose());
+        acciones.add(interactuar);
+        acciones.add(salir);
+        ventana.add(acciones,BorderLayout.SOUTH);
         ventana.pack();
         ventana.setLocationRelativeTo(padre);
         ventana.addWindowListener(new java.awt.event.WindowAdapter(){
