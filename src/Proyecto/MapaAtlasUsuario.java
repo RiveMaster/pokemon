@@ -129,7 +129,7 @@ public final class MapaAtlasUsuario {
             JFrame ventana = new JFrame("Mapa de prueba · Solo tileset del usuario");
             ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             ventana.setLayout(new BorderLayout());
-            JLabel mensaje = new JLabel(" WASD o flechas: caminar · Esc: salir · Entradas: interiores en fase 2");
+            JLabel mensaje = new JLabel(" WASD o flechas: caminar · Esc: salir · Pisa la entrada para visitar el interior");
             mensaje.setBorder(BorderFactory.createEmptyBorder(8,8,8,8));
             ventana.add(mensaje, BorderLayout.NORTH);
             JPanel lienzo = new JPanel() {
@@ -153,9 +153,14 @@ public final class MapaAtlasUsuario {
                                 px=nx; py=ny;
                                 repaint();
                                 String evento=m.eventoFrente(nx,ny);
-                                if(evento!=null)
-                                    mensaje.setText(" " + evento
-                                            + " · Entrada detectada; interior en fase 2.");
+                                if (evento != null) {
+                                    InterioresAtlasUsuario.Tipo tipo =
+                                            InterioresAtlasUsuario.Tipo.valueOf(evento);
+                                    mensaje.setText(" " + tipo.name().replace('_',' ')
+                                            + " · Interior del mismo atlas");
+                                    InterioresAtlasUsuario.visitar(ventana, atlas, tipo,
+                                            () -> requestFocusInWindow());
+                                }
                             }
                         });
                     }
