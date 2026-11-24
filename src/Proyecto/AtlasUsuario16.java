@@ -18,6 +18,11 @@ import java.util.Map;
 public final class AtlasUsuario16 {
     public static final Path ARCHIVO = Path.of("Tiles", "AtlasUsuario.png");
     public static final Path PAQUETE_INICIAL = Path.of("Tiles", "AtlasUsuarioFase1.png");
+    public static final Path PAQUETE_INTERIORES = Path.of("Tiles", "AtlasUsuarioInteriorFase2.png");
+    private static final Map<String, int[]> INTERIORES = crearInteriores();
+    private static final Map<String, int[]> COMPACTO_INTERIORES = crearInterioresCompactos();
+    private BufferedImage imagenInteriores;
+    private final Map<String, BufferedImage> cache = new java.util.HashMap<>();
     public static final int ANCHO_COMPACTO = 256;
     public static final int ALTO_COMPACTO = 128;
     public static final int ANCHO_ESPERADO = 864;
@@ -122,6 +127,101 @@ public final class AtlasUsuario16 {
             suelo.setRGB(x, y, 0xff000000 | ((detalle ? claro : base) & 0x00ffffff));
         }
         return suelo;
+    }
+
+
+    /**
+     * Recorta muebles y suelos solamente de la imagen facilitada.
+     * Si está instalada la hoja completa, utiliza sus coordenadas originales;
+     * si no, utiliza las mismas piezas del paquete compacto de fase 2.
+     */
+    public BufferedImage spriteInterior(String nombre) {
+        int[] original = INTERIORES.get(nombre);
+        if (original == null) throw new IllegalArgumentException("Pieza interior desconocida: " + nombre);
+        BufferedImage guardada = cache.get(nombre);
+        if (guardada != null) return guardada;
+        int[] rect = compacto ? COMPACTO_INTERIORES.get(nombre) : original;
+        if (rect == null) throw new IllegalArgumentException("Pieza interior sin recorte: " + nombre);
+        BufferedImage fuente = imagen;
+        if (compacto) {
+            if (imagenInteriores == null) {
+                try {
+                    imagenInteriores = ImageIO.read(PAQUETE_INTERIORES.toFile());
+                } catch (IOException ex) {
+                    throw new IllegalStateException("Falta el paquete interior: " + PAQUETE_INTERIORES, ex);
+                }
+                if (imagenInteriores == null || imagenInteriores.getWidth() != 256
+                        || imagenInteriores.getHeight() != 118)
+                    throw new IllegalStateException("Dimensiones de atlas interior incorrectas");
+            }
+            fuente = imagenInteriores;
+        }
+        if (rect[0] < 0 || rect[1] < 0 || rect[0]+rect[2] > fuente.getWidth()
+                || rect[1]+rect[3] > fuente.getHeight())
+            throw new IllegalArgumentException("Sprite interior fuera del PNG: " + nombre);
+        BufferedImage sprite = new BufferedImage(rect[2], rect[3], BufferedImage.TYPE_INT_ARGB);
+        java.awt.Graphics2D g = sprite.createGraphics();
+        g.drawImage(fuente, 0, 0, rect[2], rect[3],
+                rect[0], rect[1], rect[0]+rect[2], rect[1]+rect[3], null);
+        g.dispose();
+        cache.put(nombre, sprite);
+        return sprite;
+    }
+
+    public static Map<String, int[]> piezasInterior() { return INTERIORES; }
+
+    private static Map<String, int[]> crearInteriores() {
+        Map<String, int[]> m = new LinkedHashMap<>();
+        m.put("PISO_CASA", new int[]{250,200,16,16});
+        m.put("PISO_TIENDA", new int[]{285,201,16,16});
+        m.put("PISO_CENTRO", new int[]{294,202,16,16});
+        m.put("PARED_CASA", new int[]{208,223,16,16});
+        m.put("PARED_TIENDA", new int[]{188,280,16,16});
+        m.put("PARED_CENTRO", new int[]{173,272,16,16});
+        m.put("ALFOMBRA", new int[]{270,201,16,16});
+        m.put("CAMA", new int[]{144,337,28,30});
+        m.put("MESA", new int[]{203,295,48,35});
+        m.put("ESTANTERIA", new int[]{194,340,32,27});
+        m.put("ESTANTERIA_GRANDE", new int[]{226,340,40,26});
+        m.put("CAJA_MADERA", new int[]{267,337,42,25});
+        m.put("MACETA", new int[]{338,307,31,31});
+        m.put("MOSTRADOR", new int[]{276,338,37,28});
+        m.put("TERMINAL", new int[]{420,340,27,27});
+        m.put("MAQUINA_AZUL", new int[]{253,151,24,40});
+        m.put("MAQUINA_CENTRO", new int[]{307,151,24,40});
+        m.put("VITRINA", new int[]{481,348,20,29});
+        m.put("CORTINA", new int[]{350,153,30,39});
+        m.put("ESTANTERIA_PEQUENA", new int[]{166,340,33,28});
+        m.put("DECORACION", new int[]{383,339,47,28});
+        m.put("TECHO_BLANCO", new int[]{174,273,16,16});
+        return java.util.Collections.unmodifiableMap(m);
+    }
+
+    private static Map<String, int[]> crearInterioresCompactos() {
+        Map<String, int[]> m = new LinkedHashMap<>();
+        m.put("PISO_CASA", new int[]{1,1,16,16});
+        m.put("PISO_TIENDA", new int[]{18,1,16,16});
+        m.put("PISO_CENTRO", new int[]{35,1,16,16});
+        m.put("PARED_CASA", new int[]{52,1,16,16});
+        m.put("PARED_TIENDA", new int[]{69,1,16,16});
+        m.put("PARED_CENTRO", new int[]{86,1,16,16});
+        m.put("ALFOMBRA", new int[]{103,1,16,16});
+        m.put("CAMA", new int[]{120,1,28,30});
+        m.put("MESA", new int[]{149,1,48,35});
+        m.put("ESTANTERIA", new int[]{198,1,32,27});
+        m.put("ESTANTERIA_GRANDE", new int[]{1,37,40,26});
+        m.put("CAJA_MADERA", new int[]{42,37,42,25});
+        m.put("MACETA", new int[]{85,37,31,31});
+        m.put("MOSTRADOR", new int[]{117,37,37,28});
+        m.put("TERMINAL", new int[]{155,37,27,27});
+        m.put("MAQUINA_AZUL", new int[]{183,37,24,40});
+        m.put("MAQUINA_CENTRO", new int[]{208,37,24,40});
+        m.put("VITRINA", new int[]{233,37,20,29});
+        m.put("CORTINA", new int[]{1,78,30,39});
+        m.put("ESTANTERIA_PEQUENA", new int[]{32,78,33,28});
+        m.put("DECORACION", new int[]{66,78,47,28});
+        m.put("TECHO_BLANCO", new int[]{114,78,16,16});
+        return java.util.Collections.unmodifiableMap(m);
     }
 
     public static Map<String, Pieza> piezas() { return PIEZAS; }
