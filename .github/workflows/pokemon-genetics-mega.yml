@@ -16,6 +16,8 @@ on:
       - "tests/TerrenosConVecinosSmokeTest.java"
       - "tests/AtlasUsuarioFase1SmokeTest.java"
       - "tests/AtlasUsuarioFase2SmokeTest.java"
+      - "tests/AtlasCorregidoSmokeTest.java"
+      - "Tiles/AtlasUsuarioCorregido.zip"
       - "Tiles/AtlasUsuarioInteriorFase2.png"
       - "Tiles/AtlasUsuarioFase1.png"
       - "Tiles/AtlasUsuario.png"
@@ -37,6 +39,8 @@ on:
       - "tests/TerrenosConVecinosSmokeTest.java"
       - "tests/AtlasUsuarioFase1SmokeTest.java"
       - "tests/AtlasUsuarioFase2SmokeTest.java"
+      - "tests/AtlasCorregidoSmokeTest.java"
+      - "Tiles/AtlasUsuarioCorregido.zip"
       - "Tiles/AtlasUsuarioInteriorFase2.png"
       - "Tiles/AtlasUsuarioFase1.png"
       - "Tiles/AtlasUsuario.png"
@@ -59,7 +63,7 @@ jobs:
         run: |
           mkdir -p build
           find src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d build
-          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java tests/ChatVpnSmokeTest.java tests/SpritesExternosSmokeTest.java tests/TerrenosConVecinosSmokeTest.java tests/AtlasUsuarioFase1SmokeTest.java tests/AtlasUsuarioFase2SmokeTest.java
+          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java tests/ChatVpnSmokeTest.java tests/SpritesExternosSmokeTest.java tests/TerrenosConVecinosSmokeTest.java tests/AtlasUsuarioFase1SmokeTest.java tests/AtlasUsuarioFase2SmokeTest.java tests/AtlasCorregidoSmokeTest.java
       - name: Test breeding, IVs, cooldown and mega evolution
         run: java -ea -cp build Proyecto.SistemaCrianzaMegaSmokeTest
       - name: Test WASD exploration movement rules
@@ -82,6 +86,8 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.AtlasUsuarioFase1SmokeTest
       - name: Probar los tres interiores usando únicamente los sprites del usuario
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.AtlasUsuarioFase2SmokeTest
+      - name: Probar integración de atlas corregido (ZIP opcional)
+        run: java -ea -Djava.awt.headless=true -cp build Proyecto.AtlasCorregidoSmokeTest
       - name: Probar chat TCP y VPN con conexión de loopback
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ChatVpnSmokeTest
       - name: Exportar 100 mapas originales en PNG (10 por generación)
