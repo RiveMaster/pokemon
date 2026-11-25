@@ -1,12 +1,27 @@
 # Integración del tileset corregido del usuario
 
-La versión de prueba y los **100 mapas regionales** pueden utilizar los sprites del
-paquete `tilesetMapa_CORREGIDO_para_proyecto.zip`. Este paquete contiene
+Los **100 mapas regionales existentes se han rediseñado** con distintas
+disposiciones de edificios, caminos y vegetación. Se han añadido **20 mapas
+nuevos (dos por generación)**, con IDs estables `NUEVO_01_01` hasta
+`NUEVO_10_02`, conservando intactos los 100 IDs antiguos.
+
+El juego **incluye de serie** `Tiles/AtlasUsuarioSeleccion96.png`, con
+**16 sprites auténticos del atlas corregido** en un formato PNG compacto
+de paleta de 96 colores. Por tanto, los 120 mapas tienen casas, tiendas,
+Centro Pokémon, gimnasio y vegetación nuevos sin instalar nada adicional.
+
+Para disponer de más fachadas y objetos, también se admite el paquete
+`tilesetMapa_CORREGIDO_para_proyecto.zip`. Este paquete contiene
 **371 imágenes PNG catalogadas**: **201 sprites completos** y **170 módulos
 pendientes de montaje**. Los módulos pendientes se conservan, pero
 **no se dibujan individualmente** para evitar los cortes detectados.
 
-## Instalar el paquete sin escribir rutas ni comandos
+## Instalar el paquete completo (opcional) sin escribir comandos
+
+No es obligatorio instalar nada para ver los primeros 16 sprites: ya están
+en el repositorio y se usan automáticamente. Para desbloquear hasta
+22 fachadas distintas de casa, 8 de tienda, 3 de gimnasio y 2 de Centro
+Pokémon en el generador regional:
 
 1. Descarga `tilesetMapa_CORREGIDO_para_proyecto.zip` desde la conversación.
 2. Abre el juego y carga una partida.
@@ -16,7 +31,8 @@ pendientes de montaje**. Los módulos pendientes se conservan, pero
    o al Atlas regional para visualizar los edificios y la vegetación actualizados.
 
 El instalador escribe únicamente `Tiles/AtlasUsuarioCorregido.zip`:
-no altera `Tiles/Pokemon/`, los gráficos de combate, las partidas,
+si no está presente, la selección compacta sigue funcionando.
+No altera `Tiles/Pokemon/`, los gráficos de combate, las partidas,
 los datos de Pokémon, los eventos ni la lógica del juego. Comprueba
 **todos los hashes SHA-256 de los 371 recursos y del atlas original**,
 sus identificadores, rutas y dimensiones antes de sustituir el paquete.
@@ -28,8 +44,10 @@ Si el ZIP no está instalado, el renderizador conserva los gráficos antiguos.
 
 - `AtlasCorregido.java` administra las imágenes identificadas en el manifiesto,
   las carga desde el ZIP cuando hacen falta y evita acceder a módulos incompletos.
-- `MapasRegion2D.java` usa las fachadas de Centros Pokémon, tiendas, gimnasios,
-  casas y edificios especiales, además de pinos, vegetación y otros elementos
+- `MapasRegion2D.java` utiliza cuatro diseños de ciudad, rutas arbóreas
+  nuevas con árboles completos de 2×2 casillas y las fachadas de Centros
+  Pokémon, tiendas, gimnasios, casas y edificios especiales; además
+  incorpora pinos, vegetación y otros elementos
   identificados. Los edificios se centran respetando las proporciones y
   sin estiramientos no enteros.
 - Los terrenos transitables utilizan píxeles y colores tomados del mismo
@@ -42,8 +60,11 @@ Si el ZIP no está instalado, el renderizador conserva los gráficos antiguos.
 
 ## Alcance
 
-La integración visual queda habilitada en **los mapas regionales generados**
+La integración visual queda habilitada en **los 120 mapas regionales generados**
 y en las localidades del recorrido principal que usan ese generador.
+Se accede desde el menú **Atlas regional (12 mapas)**, que incluye
+los diez anteriores y dos adicionales de la generación actual.
+Las salidas, puertas y colisiones se prueban automáticamente en los 120 mapas.
 Los mapas personalizados `.pmap` conservan sus propias texturas y
 no se sobrescriben automáticamente. Los interiores de prueba anteriores
 continúan utilizando `AtlasUsuario16`; sus nuevos recortes pendientes
@@ -61,3 +82,11 @@ especiales arbitrariamente.
 El atlas fue proporcionado por el usuario para su uso en el proyecto;
 la licencia de redistribución de terceros no ha sido verificada.
 No publiques el ZIP como arte libre sin confirmar los derechos.
+
+## Exportación y vistas previas
+
+GitHub Actions compila Java 17, valida las 120 rutas y exporta un ZIP con
+**120 PNG** de 36×24 casillas (32 píxeles por casilla) y **10 galerías**
+visualizando todos los escenarios. Los recursos Pokémon y los guardados
+no se modifican. La paleta del PNG de selección es una reducción de colores,
+no un sustituto exacto de los colores originales del ZIP completo.
