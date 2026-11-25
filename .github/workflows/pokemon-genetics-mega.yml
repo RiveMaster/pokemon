@@ -16,7 +16,7 @@ on:
       - "tests/TerrenosConVecinosSmokeTest.java"
       - "tests/AtlasUsuarioFase1SmokeTest.java"
       - "tests/AtlasUsuarioFase2SmokeTest.java"
-      - "tests/AtlasCorregidoSmokeTest.java tests/EscalaMapasSmokeTest.java"
+      - "tests/AtlasCorregidoSmokeTest.java"
       - "tests/EscalaMapasSmokeTest.java"
       - "Tiles/AtlasUsuarioCorregido.zip"
       - "Tiles/AtlasUsuarioSeleccion96.png"
@@ -67,7 +67,7 @@ jobs:
         run: |
           mkdir -p build
           find src -name '*.java' -print0 | xargs -0 javac --release 17 -encoding UTF-8 -d build
-          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java tests/ChatVpnSmokeTest.java tests/SpritesExternosSmokeTest.java tests/TerrenosConVecinosSmokeTest.java tests/AtlasUsuarioFase1SmokeTest.java tests/AtlasUsuarioFase2SmokeTest.java tests/AtlasCorregidoSmokeTest.java
+          javac --release 17 -encoding UTF-8 -cp build -d build tests/SistemaCrianzaMegaSmokeTest.java tests/ExploradorMapaSmokeTest.java tests/ArteEdificiosSmokeTest.java tests/Animaciones2DSmokeTest.java tests/InteraccionesGraficasSmokeTest.java tests/ArteVisualRetroSmokeTest.java tests/GeneracionesMapasSmokeTest.java tests/ChatVpnSmokeTest.java tests/SpritesExternosSmokeTest.java tests/TerrenosConVecinosSmokeTest.java tests/AtlasUsuarioFase1SmokeTest.java tests/AtlasUsuarioFase2SmokeTest.java tests/AtlasCorregidoSmokeTest.java tests/EscalaMapasSmokeTest.java
       - name: Test breeding, IVs, cooldown and mega evolution
         run: java -ea -cp build Proyecto.SistemaCrianzaMegaSmokeTest
       - name: Test WASD exploration movement rules
