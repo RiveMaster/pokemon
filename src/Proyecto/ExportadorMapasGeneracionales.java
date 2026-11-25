@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Exporta los 100 mapas del juego como archivos PNG separados y diez mosaicos
+ * Exporta los 120 mapas del juego como archivos PNG separados y diez mosaicos
  * de referencia. El juego usa el mismo generador; estas imágenes son vistas
  * previas y no son necesarias para que las regiones sean jugables.
  *
@@ -25,28 +25,30 @@ public final class ExportadorMapasGeneracionales {
             Path carpeta=destino.resolve(String.format("GEN%02d",generacion.getNumero()));
             Files.createDirectories(carpeta);
             int thumbW=576,thumbH=384;
-            BufferedImage mosaico=new BufferedImage(thumbW*5,thumbH*2,BufferedImage.TYPE_INT_ARGB);
+            BufferedImage mosaico=new BufferedImage(thumbW*6,thumbH*2,BufferedImage.TYPE_INT_ARGB);
             Graphics2D galeria=mosaico.createGraphics();
             galeria.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                     RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-            for(CatalogoMapasGeneracionales.Mapa descripcion:
-                    CatalogoMapasGeneracionales.listar(generacion)){
+            java.util.List<CatalogoMapasGeneracionales.Mapa> escenas =
+                    new java.util.ArrayList<>(CatalogoMapasGeneracionales.listar(generacion));
+            escenas.addAll(CatalogoMapasGeneracionales.nuevos(generacion));
+            for(CatalogoMapasGeneracionales.Mapa descripcion:escenas){
                 MapasRegion2D.Resultado mapa=MapasRegion2D.generar(descripcion);
                 BufferedImage imagen=pintar(mapa);
                 Path archivo=carpeta.resolve(String.format("MAPA_%02d_%s.png",
                         descripcion.indice()+1,descripcion.bioma().toLowerCase(java.util.Locale.ROOT)));
                 if(!ImageIO.write(imagen,"png",archivo.toFile()))
                     throw new IOException("El sistema no puede escribir PNG: " + archivo);
-                int col=descripcion.indice()%5,fila=descripcion.indice()/5;
+                int col=descripcion.indice()%6,fila=descripcion.indice()/6;
                 galeria.drawImage(imagen,col*thumbW,fila*thumbH,thumbW,thumbH,null);
                 total++;
             }
             galeria.dispose();
             ImageIO.write(mosaico,"png",carpeta.resolve("GALERIA_GENERACION.png").toFile());
-            System.out.println("Exportada: "+generacion.etiqueta()+" (10 mapas)");
+            System.out.println("Exportada: "+generacion.etiqueta()+" (12 mapas)");
         }
-        if(total!=100)throw new IllegalStateException("Se esperaban 100 mapas: "+total);
-        System.out.println("Exportación completada: 100 PNG + 10 galerías en "+destino);
+        if(total!=120)throw new IllegalStateException("Se esperaban 120 mapas: "+total);
+        System.out.println("Exportación completada: 120 PNG + 10 galerías en "+destino);
     }
 
     public static BufferedImage pintar(MapasRegion2D.Resultado mapa) {
