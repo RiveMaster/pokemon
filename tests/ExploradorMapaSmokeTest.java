@@ -23,6 +23,28 @@ public final class ExploradorMapaSmokeTest {
         comprobar(ExploradorMapa.puedeEntrarCasilla(false, false, false),
                 "una casilla libre permite caminar");
 
+        // La vista compacta ocupa 576x384 px para el mapa de 36x24.
+        // El tamaño se cambia solo en pantalla, nunca en la rejilla lógica.
+        comprobar(ExploradorMapa.pixelesPorCasilla(32,0)==16,
+                "mapa regional compacto: 16 px por casilla");
+        comprobar(ExploradorMapa.pixelesPorCasilla(32,1)==32,
+                "zoom regional nativo: 32 px por casilla");
+        comprobar(ExploradorMapa.pixelesPorCasilla(32,2)==64,
+                "zoom regional ampliado x2");
+        comprobar(ExploradorMapa.pixelesPorCasilla(32,3)==96,
+                "zoom regional ampliado x3");
+        comprobar(ExploradorMapa.pixelesPorCasilla(32,4)==128,
+                "zoom regional ampliado x4");
+        comprobar(ExploradorMapa.pixelesPorCasilla(32,-100)==16,
+                "el zoom inferior está limitado");
+        comprobar(ExploradorMapa.pixelesPorCasilla(32,100)==128,
+                "el zoom superior está limitado");
+        comprobar(ExploradorMapa.pixelesPorCasilla(16,0)==48,
+                "el zoom de mapas personalizados no cambia");
+        comprobar(36*ExploradorMapa.pixelesPorCasilla(32,0)==576
+                && 24*ExploradorMapa.pixelesPorCasilla(32,0)==384,
+                "el mapa regional completo entra en la vista de escritorio");
+
         comprobar(ExploradorMapa.generaEncuentro(true),
                 "la hierba está marcada como terreno de encuentros");
         comprobar(!ExploradorMapa.generaEncuentro(false),
