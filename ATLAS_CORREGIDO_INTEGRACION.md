@@ -40,6 +40,28 @@ sus identificadores, rutas y dimensiones antes de sustituir el paquete.
 La instalación se puede repetir para reemplazar el archivo ZIP del usuario.
 Si el ZIP no está instalado, el renderizador conserva los gráficos antiguos.
 
+## Corrección de escala de edificios y terreno
+
+Las fachadas del atlas se recortan por transparencia antes de calcular su
+tamaño. Se dibujan con el mayor factor entero que entra en su parcela,
+utilizando nearest-neighbor, sin deformarlas ni recortarlas.
+
+- Los ocho edificios de cada ciudad ocupan solares de 6–7 × 7 casillas de 32 px,
+  con una franja de calle frente a cada puerta.
+- El mapa regional aparece inicialmente con zoom x4 (128 píxeles en
+  pantalla por casilla de 32 px). Se puede ajustar con los botones
+  Zoom + / Zoom − o con las teclas + / − dentro del rango x2..x5.
+- Los mapas .pmap de 16 px mantienen su zoom anterior para no romper
+  los escenarios personalizados.
+- Ninguna casa puede sobresalir de su parcela: si una imagen no cabe, su
+  ampliación entera se limita antes de dibujarla. Se evita que árboles
+  y farolas sobrescriban las fachadas nuevas.
+- El recorrido y las posiciones guardadas siguen expresados en casillas,
+  de modo que aumentar el zoom no altera colisiones ni ubicaciones.
+
+Las pruebas EscalaMapasSmokeTest y GeneracionesMapasSmokeTest validan
+las dimensiones de los edificios y las rutas transitables de los 120 mapas.
+
 ## Uso en el mapa
 
 - `AtlasCorregido.java` administra las imágenes identificadas en el manifiesto,
