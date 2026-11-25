@@ -143,6 +143,40 @@ public final class MapasRegion2D {
             }
         }
 
+        /**
+         * Árbol completo de 2x2 casillas con un único sprite real del atlas.
+         * Los cuatro cuadrantes comparten el mismo lienzo para evitar cortes
+         * y sus cuatro colisiones se activan juntas.
+         */
+        void arbolGrande(int x,int y,int variante) {
+            AtlasCorregido atlas=AtlasCorregido.actual();
+            if(atlas==null || !dentro(x,y)||!dentro(x+1,y+1))return;
+            for(int dy=0;dy<2;dy++)for(int dx=0;dx<2;dx++) {
+                int p=pos(x+dx,y+dy);
+                if(colisiones[p]||capas[2][p]>=0) return;
+            }
+            BufferedImage origen=atlas.sprite("ArbolAlto0"+(1+Math.floorMod(variante,4)));
+            if(origen==null)origen=atlas.sprite(
+                    Math.floorMod(variante,2)==0?"Pino01":"Pino07");
+            if(origen==null)return;
+            BufferedImage lienzo=new BufferedImage(64,64,BufferedImage.TYPE_INT_ARGB);
+            java.awt.Graphics2D g=lienzo.createGraphics();
+            g.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION,
+                    java.awt.RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            int escala=origen.getWidth()*2<=64 && origen.getHeight()*2<=64 ? 2 : 1;
+            int ww=origen.getWidth()*escala,hh=origen.getHeight()*escala;
+            g.drawImage(origen,(64-ww)/2,64-hh,ww,hh,null);
+            g.dispose();
+            for(int dy=0;dy<2;dy++)for(int dx=0;dx<2;dx++) {
+                BufferedImage trozo=lienzo.getSubimage(dx*32,dy*32,32,32);
+                int id=paleta.size(),p=pos(x+dx,y+dy);
+                paleta.add(trozo);
+                tipos.add(BLOQUEO);
+                capas[2][p]=id;
+                colisiones[p]=manuales[p]=true;
+            }
+        }
+
         /** Claro irregular: cada tile examina sus cuatro vecinos y diagonales. */
         void claro(int x,int y,int ancho,int alto,int variante) {
             for(int dy=0;dy<alto;dy++)for(int dx=0;dx<ancho;dx++){
@@ -332,6 +366,20 @@ public final class MapasRegion2D {
         e.solido(15,9,e.senal);
         e.solido(21,15,e.lampara);
 
+        // Jardines laterales que no pisan los portales ni el corredor central.
+        for(int x=4;x<e.w-4;x+=3) {
+            if(x>=16&&x<=20)continue;
+            for(int y:new int[]{9,15}) {
+                if(e.capas[2][e.pos(x,y)]<0
+                        && (x+e.mapa.indice())%4!=0)
+                    e.suelo(x,y,e.flores);
+            }
+        }
+        if(forma==3) {
+            e.arbolGrande(8,9,e.mapa.indice());
+            e.arbolGrande(26,15,e.mapa.generacion().getNumero());
+        }
+
         if (forma==3) {
             // Plaza española rodeada de una vía de 3 casillas de anchura;
             // mosaicos y arriates quedan fuera del eje obligatorio.
@@ -384,6 +432,22 @@ public final class MapasRegion2D {
         }
         for(int[] p:new int[][]{{6,7},{12,7},{24,18},{30,18}})
             e.suelo(p[0],p[1],e.flores);
+        // Pinares completos de dos por dos. No ocupan la avenida central,
+        // el sendero inferior ni la conexión norte-sur.
+        int[][] bosquetes={
+            {3,3},{9,3},{24,3},{30,3},
+            {3,20},{10,20},{24,20},{30,20}
+        };
+        for(int k=0;k<bosquetes.length;k++)
+            e.arbolGrande(bosquetes[k][0],bosquetes[k][1],variante+k);
+        for(int k=0;k<42;k++) {
+            int x=2+e.rnd.nextInt(e.w-4),y=2+e.rnd.nextInt(e.h-4);
+            if(Math.abs(y-cy)<=3 || y==7 || y==18 || x==17 || x==18)continue;
+            if(e.capas[2][e.pos(x,y)]>=0)continue;
+            if(k%5==0)e.solido(x,y,e.arbol);
+            else if(k%3==0)e.solido(x,y,e.arbusto);
+            else e.suelo(x,y,e.flores);
+        }
         // El eje central se restablece al final de generar(), de modo que
         // ambos extremos siempre son accesibles en todas las generaciones.
     }
