@@ -288,8 +288,13 @@ public final class MapasRegion2D {
         // Eje central obligatorio para cruzar el mapa; no hace invisibles
         // los elementos que están por encima o por debajo de él.
         int cy=e.h/2;
+        // Las nuevas sendas forestales tienen un sendero de UNA casilla,
+        // próximo al ritmo y escala de las rutas clásicas de Game Boy.
+        // Los mapas existentes mantienen sus tres carriles para no alterar
+        // las reglas ni los accesos que utilizan las partidas guardadas.
+        int radioPaso=mapa.id().startsWith("NUEVO_") && !mapa.urbano()?0:1;
         for(int x=0;x<e.w;x++)
-            for(int y=cy-1;y<=cy+1;y++) e.dejarPaso(x,y);
+            for(int y=cy-radioPaso;y<=cy+radioPaso;y++) e.dejarPaso(x,y);
         if(!mapa.urbano() && !mapa.bioma().equals("JARDIN")){
             // Senderos con textura natural y cruces suaves.
             for(int x=0;x<e.w;x++)
@@ -304,7 +309,7 @@ public final class MapasRegion2D {
             e.solido(0,y,e.arbol);
             e.solido(e.w-1,y,e.arbol2);
         }
-        for(int y=cy-1;y<=cy+1;y++){
+        for(int y=cy-radioPaso;y<=cy+radioPaso;y++){
             e.dejarPaso(0,y);e.dejarPaso(e.w-1,y);
         }
         return new Resultado(e);
