@@ -48,13 +48,44 @@ public final class GeneracionesMapasSmokeTest {
             assert biomas.size()==10 : "Cada generación debe tener diez ambientes";
         }
         assert generados==100 && ids.size()==100 && huellas.size()==100;
+        assert CatalogoMapasGeneracionales.todos().size()==100 :
+                "Los 100 identificadores originales no deben desaparecer";
+        assert CatalogoMapasGeneracionales.todosConNuevos().size()==120;
+        for (Generacion gen : Generacion.values()) {
+            var nuevas = CatalogoMapasGeneracionales.nuevos(gen);
+            assert nuevas.size()==2;
+            for (CatalogoMapasGeneracionales.Mapa nueva:nuevas) {
+                assert nueva.id().startsWith("NUEVO_");
+                assert ids.add(nueva.id()) : "Mapa nuevo con ID repetido";
+                MapasRegion2D.Resultado mapa=MapasRegion2D.generar(nueva);
+                generados++;
+                assert mapa.tiles.length==mapa.tipos.length;
+                for(BufferedImage tile:mapa.tiles)
+                    assert tile!=null && tile.getWidth()==32 && tile.getHeight()==32;
+                long huella=huellaVisual(mapa);
+                assert huellas.add(huella) :
+                        "Escenario nuevo idéntico a otro: "+nueva.id();
+                boolean[] accesibles=recorrido(mapa);
+                int cy=mapa.alto/2;
+                assert accesibles[cy*mapa.ancho];
+                assert accesibles[cy*mapa.ancho+mapa.ancho-1];
+                assert mapa.puertas.size()==(nueva.urbano()?8:0);
+                for(MapasRegion2D.Puerta puerta:mapa.puertas) {
+                    int index=puerta.y()*mapa.ancho+puerta.x();
+                    assert accesibles[index] :
+                            "Puerta nueva inaccesible: "+nueva.id()+" / "+puerta.servicio();
+                    assert !mapa.colisiones[index] && !mapa.manuales[index];
+                }
+            }
+        }
+        assert generados==120 && ids.size()==120 && huellas.size()==120;
         BufferedImage f=EntrenadorRegion2D.fotograma(SpriteJugador2D.FRENTE,0);
         BufferedImage b=EntrenadorRegion2D.fotograma(SpriteJugador2D.ESPALDA,0);
         assert f.getWidth()==32 && f.getHeight()==48;
         assert !mismosPixeles(f,b):"El entrenador debe girar de verdad";
         assert !mismosPixeles(f,EntrenadorRegion2D.fotograma(SpriteJugador2D.FRENTE,1)):
             "Los tres pasos deben tener poses distintas";
-        System.out.println("GeneracionesMapasSmokeTest: 100 mapas únicos con puertas y caminos transitables OK");
+        System.out.println("GeneracionesMapasSmokeTest: 120 mapas únicos con puertas y caminos transitables OK");
     }
 
     private static boolean[] recorrido(MapasRegion2D.Resultado m) {
