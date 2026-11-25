@@ -237,21 +237,42 @@ public final class AtlasCorregido {
 
     /** Encaja fachadas completas con escalado entero, nunca las deforma. */
     public BufferedImage edificio(String servicio, int ancho, int alto, int variante) {
+        // La versión incluida de serie muestra 16 sprites auténticos.
+        // Al instalar el ZIP completo se desbloquean todas las variantes de
+        // edificios y colores, sin alterar su evento ni sus colisiones.
+        String[] casas = paqueteCompleto()
+                ? new String[]{
+                    "CasaRoja1","CasaVerde1","CasaAzul1","CasaMarron1",
+                    "CasaNaranja1","CasaRoja2","CasaVerde2","CasaAzul2",
+                    "CasaMarron2","CasaNaranja2","CasaRosa1","CasaRosa2",
+                    "CasaPaja1","CasaPaja2","CasaPiedra1","CasaTerra1",
+                    "CasaAzulAlta1","CasaVerdeAlta1","CasaRojaGrande1",
+                    "CasaTorreta1","CasaTejadoNaranja1","CasaAlmacen1"
+                }
+                : new String[]{
+                    "CasaRoja1","CasaVerde1","CasaAzul1","CasaMarron1",
+                    "CasaNaranja1"
+                };
+        String[] tiendas = paqueteCompleto()
+                ? new String[]{"TiendaAzul1","TiendaVerde1","TiendaAzul2",
+                    "TiendaVerde2","TiendaVioleta1","TiendaTurquesa1",
+                    "TiendaMercado1","TiendaMercado2"}
+                : new String[]{"TiendaAzul1","TiendaVerde1"};
+        String[] gimnasios = paqueteCompleto()
+                ? new String[]{"GimnasioRojo1","GimnasioGrande1","GimnasioDorado1"}
+                : new String[]{"GimnasioRojo1"};
+        String[] centros = paqueteCompleto()
+                ? new String[]{"CentroPokemon1","CentroPokemon2"}
+                : new String[]{"CentroPokemon1"};
         String id = switch (servicio) {
-            case "CENTRO_POKEMON" -> "CentroPokemon1";
-            case "TIENDA" -> variante % 2 == 0 ? "TiendaAzul1" : "TiendaVerde1";
-            case "GIMNASIO" -> variante % 2 == 0 ? "GimnasioRojo1" : "GimnasioGrande1";
-            case "CASA_MAMA" -> "CasaRoja1";
-            case "CASA" -> switch (Math.floorMod(variante,5)) {
-                case 0 -> "CasaRoja1";
-                case 1 -> "CasaVerde1";
-                case 2 -> "CasaAzul1";
-                case 3 -> "CasaMarron1";
-                default -> "CasaNaranja1";
-            };
-            case "CASINO" -> "TiendaAzul1";
-            case "GOBIERNO" -> "GimnasioGrande1";
-            default -> "CasaRoja1";
+            case "CENTRO_POKEMON" -> centros[Math.floorMod(variante,centros.length)];
+            case "TIENDA" -> tiendas[Math.floorMod(variante,tiendas.length)];
+            case "GIMNASIO" -> gimnasios[Math.floorMod(variante,gimnasios.length)];
+            case "CASA_MAMA" -> paqueteCompleto() ? "CasaRojaGrande1" : "CasaRoja1";
+            case "CASA" -> casas[Math.floorMod(variante,casas.length)];
+            case "CASINO" -> paqueteCompleto() ? "TiendaMercado1" : "TiendaAzul1";
+            case "GOBIERNO" -> paqueteCompleto() ? "EdificioAzul1" : "GimnasioRojo1";
+            default -> casas[Math.floorMod(variante,casas.length)];
         };
         BufferedImage src = sprite(id);
         if (src == null) {
