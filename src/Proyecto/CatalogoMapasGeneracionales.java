@@ -40,13 +40,32 @@ public final class CatalogoMapasGeneracionales {
     public record Mapa(Generacion generacion, int indice, String id,
                        String nombre, String bioma, long semilla) {
         public String etiqueta() {
-            return String.format("%02d/10 · %s · %s", indice + 1, nombre,
-                    bioma.toLowerCase(java.util.Locale.ROOT));
+            String prefijo = id.startsWith("NUEVO_") ? "NUEVO · " :
+                    String.format("%02d/10 · ", indice + 1);
+            return prefijo + nombre + " · " + bioma.toLowerCase(java.util.Locale.ROOT);
         }
         public boolean urbano() {
             return bioma.equals("PUEBLO") || bioma.equals("CIUDAD");
         }
     }
+
+    /**
+     * Veinte lugares NUEVOS, dos por generación. No se alteran los cien IDs
+     * originales ni los índices 0..9 que ya pueden existir en partidas guardadas.
+     * La distribución específica de estos escenarios está en MapasRegion2D.
+     */
+    private static final String[][] NOMBRES_NUEVOS = {
+        {"Villa Encina", "Vereda del Olivar"},
+        {"Pueblo Campanario", "Senda del Hayedo"},
+        {"Villa Azahar", "Sendero de la Bruma"},
+        {"Villa del Hielo", "Paso del Abedul"},
+        {"Pueblo Forja", "Ruta del Nogal"},
+        {"Villa de los Vientos", "Camino de las Rosas"},
+        {"Puerto Palma", "Sendero Volcánico"},
+        {"Villa Robledal", "Ruta de Brezos"},
+        {"Pueblo Terracota", "Camino del Almendro"},
+        {"Villa Alba", "Vereda de Cristal"}
+    };
 
     private CatalogoMapasGeneracionales() { }
 
@@ -70,6 +89,29 @@ public final class CatalogoMapasGeneracionales {
     public static List<Mapa> todos() {
         List<Mapa> mapas = new ArrayList<>(100);
         for (Generacion generacion : Generacion.values()) mapas.addAll(listar(generacion));
+        return Collections.unmodifiableList(mapas);
+    }
+
+    /** Dos nuevos escenarios por generación sin reescribir los 100 anteriores. */
+    public static List<Mapa> nuevos(Generacion generacion) {
+        if (generacion == null) throw new IllegalArgumentException("Generación requerida");
+        int g = generacion.getNumero() - 1;
+        List<Mapa> resultado = new ArrayList<>(2);
+        for (int i=0; i<2; i++) {
+            long semilla = 982451653L + generacion.getNumero()*92117L + i*7177L;
+            resultado.add(new Mapa(generacion, 10+i,
+                    String.format("NUEVO_%02d_%02d", generacion.getNumero(),i+1),
+                    NOMBRES_NUEVOS[g][i], i==0 ? "PUEBLO" : "BOSQUE",semilla));
+        }
+        return Collections.unmodifiableList(resultado);
+    }
+
+    public static List<Mapa> todosConNuevos() {
+        List<Mapa> mapas = new ArrayList<>(120);
+        for (Generacion generacion : Generacion.values()) {
+            mapas.addAll(listar(generacion));
+            mapas.addAll(nuevos(generacion));
+        }
         return Collections.unmodifiableList(mapas);
     }
 }
