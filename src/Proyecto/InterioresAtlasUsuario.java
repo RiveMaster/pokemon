@@ -214,7 +214,7 @@ public final class InterioresAtlasUsuario {
                         estado.setText(mueble==null?" Nada de interés cerca.":" "+mueble.descripcion());
                         if(mueble!=null && servicio!=null) {
                             servicio.accept(mueble);
-                            SwingUtilities.invokeLater(this::requestFocusInWindow);
+                            SwingUtilities.invokeLater(() -> lienzo.requestFocusInWindow());
                         }
                     }
                 });
