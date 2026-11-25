@@ -3,7 +3,7 @@ package Proyecto;
 import java.util.List;
 import java.util.Scanner;
 
-/** Menú gráfico de los 100 mapas explorables: 10 por generación. */
+/** Menú gráfico de 120 mapas explorables: 10 clásicos y 2 nuevos por generación. */
 public final class AtlasRegional {
     private AtlasRegional() { }
 
@@ -11,15 +11,16 @@ public final class AtlasRegional {
         if (jugador == null) return;
         while (true) {
             Generacion generacion = jugador.getGeneracion();
-            List<CatalogoMapasGeneracionales.Mapa> regiones =
-                    CatalogoMapasGeneracionales.listar(generacion);
+            List<CatalogoMapasGeneracionales.Mapa> regiones = new java.util.ArrayList<>(
+                    CatalogoMapasGeneracionales.listar(generacion));
+            regiones.addAll(CatalogoMapasGeneracionales.nuevos(generacion));
             String[] opciones = new String[regiones.size() + 1];
             for (int i = 0; i < regiones.size(); i++) opciones[i] = regiones.get(i).etiqueta();
             opciones[regiones.size()] = "Volver";
             int seleccion;
             if (UIJuego.disponible()) {
                 seleccion = UIJuego.elegir("Atlas regional · " + generacion.getRegion(),
-                        "Explora diez lugares originales de " + generacion.getRegion()
+                        "Explora doce lugares de " + generacion.getRegion()
                                 + ".\nPuedes volver cuando quieras con Esc. El mapa principal"
                                 + " y las partidas guardadas permanecen intactos.",
                         opciones);
