@@ -21,6 +21,7 @@ public final class ExportadorMapasGeneracionales {
     public static void main(String[] args) throws IOException {
         Path destino = args.length > 0 ? Path.of(args[0]) : Path.of("MapasGenerados");
         int total=0;
+        java.util.List<java.util.Map<String,Object>> manifiesto=new java.util.ArrayList<>();
         for(Generacion generacion:Generacion.values()){
             Path carpeta=destino.resolve(String.format("GEN%02d",generacion.getNumero()));
             Files.createDirectories(carpeta);
@@ -39,6 +40,14 @@ public final class ExportadorMapasGeneracionales {
                         descripcion.indice()+1,descripcion.bioma().toLowerCase(java.util.Locale.ROOT)));
                 if(!ImageIO.write(imagen,"png",archivo.toFile()))
                     throw new IOException("El sistema no puede escribir PNG: " + archivo);
+                java.util.Map<String,Object> entrada=new java.util.LinkedHashMap<>();
+                entrada.put("id", descripcion.id());
+                entrada.put("nombre", descripcion.nombre());
+                entrada.put("bioma", descripcion.bioma());
+                entrada.put("generacion", generacion.getNumero());
+                entrada.put("nuevo", descripcion.id().startsWith("NUEVO_"));
+                entrada.put("archivo", destino.relativize(archivo).toString().replace('\\','/'));
+                manifiesto.add(entrada);
                 int col=descripcion.indice()%6,fila=descripcion.indice()/6;
                 galeria.drawImage(imagen,col*thumbW,fila*thumbH,thumbW,thumbH,null);
                 total++;
@@ -48,7 +57,15 @@ public final class ExportadorMapasGeneracionales {
             System.out.println("Exportada: "+generacion.etiqueta()+" (12 mapas)");
         }
         if(total!=120)throw new IllegalStateException("Se esperaban 120 mapas: "+total);
-        System.out.println("Exportación completada: 120 PNG + 10 galerías en "+destino);
+        java.util.Map<String,Object> indice=new java.util.LinkedHashMap<>();
+        indice.put("total",total);
+        indice.put("originales",100);
+        indice.put("nuevos",20);
+        indice.put("tamano_tile_pixeles",32);
+        indice.put("mapas",manifiesto);
+        Files.writeString(destino.resolve("mapas_manifest.json"),
+                Proyecto.studio.Json.escribir(indice),java.nio.charset.StandardCharsets.UTF_8);
+        System.out.println("Exportación completada: 120 PNG + 10 galerías + manifiesto en "+destino);
     }
 
     public static BufferedImage pintar(MapasRegion2D.Resultado mapa) {
