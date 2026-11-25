@@ -65,17 +65,21 @@ public final class MapasRegion2D {
             for(int[] c:capas)Arrays.fill(c,-1);
         }
         int tile(String tipo,int variante,byte categoria){
-            // El césped principal conserva la paleta generacional distintiva:
-            // los tiles CC0 se mezclan para caminos, piedra, arbustos y edificios.
-            BufferedImage sprite="CESPED".equals(tipo) ? null :
-                    RecursosCC0.terreno(mapa.bioma(),tipo,variante);
-            // Hierba alta y agua conservan sus identificadores de encuentro/navegación.
+            AtlasCorregido atlas = AtlasCorregido.actual();
+            BufferedImage sprite = atlas != null ? atlas.terreno(tipo,variante) : null;
+            if (sprite == null) {
+                // Compatibilidad con instalaciones que aún no tengan el ZIP.
+                sprite = "CESPED".equals(tipo) ? null
+                        : RecursosCC0.terreno(mapa.bioma(),tipo,variante);
+            }
             paleta.add(sprite!=null?sprite:ArteRegion2D.terreno(tipo,tema,variante));
             tipos.add(categoria);
             return paleta.size()-1;
         }
         int camino(int mascara,int variante){
-            BufferedImage sprite=RecursosCC0.camino(mapa.bioma(),variante);
+            AtlasCorregido atlas = AtlasCorregido.actual();
+            BufferedImage sprite = atlas != null ? atlas.camino(mascara,variante)
+                    : RecursosCC0.camino(mapa.bioma(),variante);
             paleta.add(sprite!=null?sprite:ArteRegion2D.camino(tema,mascara,variante));
             tipos.add(NORMAL);
             return paleta.size()-1;
@@ -113,7 +117,21 @@ public final class MapasRegion2D {
             int inferior=pos(x,y),superior=pos(x,y-1);
             if(capas[2][inferior]>=0||capas[2][superior]>=0
                     || colisiones[inferior]||colisiones[superior])return;
-            BufferedImage img=TerrenosConVecinos32.pino(x+y*3,nevado);
+            AtlasCorregido atlas = AtlasCorregido.actual();
+            BufferedImage img = null;
+            if (atlas != null) {
+                BufferedImage pino = atlas.sprite(nevado ? "Pino02"
+                        : Math.floorMod(x+y,2)==0 ? "Pino01" : "Pino07");
+                if (pino != null) {
+                    img = new BufferedImage(32,64,BufferedImage.TYPE_INT_ARGB);
+                    java.awt.Graphics2D g = img.createGraphics();
+                    // Se conserva el tamaño original dentro de dos casillas,
+                    // sin estirar ni recortar la silueta del usuario.
+                    g.drawImage(pino, (32-pino.getWidth())/2,64-pino.getHeight(),null);
+                    g.dispose();
+                }
+            }
+            if (img == null) img=TerrenosConVecinos32.pino(x+y*3,nevado);
             for(int dy=0;dy<2;dy++){
                 BufferedImage trozo=img.getSubimage(0,dy*32,32,32);
                 int id=paleta.size();
@@ -299,7 +317,11 @@ public final class MapasRegion2D {
     }
 
     private static void edificio(Estado e,int x,int y,int w,int h,String clase,int variante) {
-        BufferedImage fachada=RecursosCC0.edificio(clase,w,h,
+        AtlasCorregido atlas = AtlasCorregido.actual();
+        BufferedImage fachada = atlas != null
+                ? atlas.edificio(clase,w,h,variante+e.mapa.generacion().getNumero())
+                : null;
+        if(fachada==null) fachada=RecursosCC0.edificio(clase,w,h,
                 variante+e.mapa.generacion().getNumero());
         if(fachada==null)
             fachada=ArteRegion2D.edificio(clase,w,h,e.tema,
