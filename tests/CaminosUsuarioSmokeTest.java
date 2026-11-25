@@ -26,7 +26,7 @@ public final class CaminosUsuarioSmokeTest {
                 for(int y=0;y<32;y++)for(int x=0;x<32;x++)
                     assert (tile.getRGB(x,y)>>>24)==255 :
                             "Transparencia inesperada en camino "+m+"/"+d;
-                firmas.add(tile.getRGB(15,15));
+                firmas.add(tile.getRGB(0,0) ^ tile.getRGB(16,16) ^ tile.getRGB(16,0));
             }
         }
         assert firmas.size()>2 : "Las texturas originales deben ser diferentes";
@@ -70,7 +70,7 @@ public final class CaminosUsuarioSmokeTest {
         assert MapasRegion2D.mascaraCamino(ejemplo,1,2,1,false)==1;
 
         CatalogoMapasGeneracionales.Mapa urbano =
-                CatalogoMapasGeneracionales.listar(Generacion.PRIMERA).stream()
+                CatalogoMapasGeneracionales.listar(Generacion.GEN1).stream()
                 .filter(CatalogoMapasGeneracionales.Mapa::urbano)
                 .findFirst().orElseThrow();
         MapasRegion2D.Resultado pueblo=MapasRegion2D.generar(urbano);
