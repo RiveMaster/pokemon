@@ -18,6 +18,7 @@ on:
       - "tests/AtlasUsuarioFase2SmokeTest.java"
       - "tests/AtlasCorregidoSmokeTest.java"
       - "Tiles/AtlasUsuarioCorregido.zip"
+      - "Tiles/AtlasUsuarioSeleccion96.png"
       - "Tiles/AtlasUsuarioInteriorFase2.png"
       - "Tiles/AtlasUsuarioFase1.png"
       - "Tiles/AtlasUsuario.png"
@@ -41,6 +42,7 @@ on:
       - "tests/AtlasUsuarioFase2SmokeTest.java"
       - "tests/AtlasCorregidoSmokeTest.java"
       - "Tiles/AtlasUsuarioCorregido.zip"
+      - "Tiles/AtlasUsuarioSeleccion96.png"
       - "Tiles/AtlasUsuarioInteriorFase2.png"
       - "Tiles/AtlasUsuarioFase1.png"
       - "Tiles/AtlasUsuario.png"
@@ -76,7 +78,7 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.InteraccionesGraficasSmokeTest
       - name: Test integrated visual pack and battle scene
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ArteVisualRetroSmokeTest
-      - name: Verify 100 distinct regional maps and walking routes
+      - name: Verify 120 distinct regional maps and walking routes
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.GeneracionesMapasSmokeTest
       - name: Comprobar los 11 atlas de sprites CC0
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.SpritesExternosSmokeTest
@@ -90,12 +92,12 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.AtlasCorregidoSmokeTest
       - name: Probar chat TCP y VPN con conexión de loopback
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ChatVpnSmokeTest
-      - name: Exportar 100 mapas originales en PNG (10 por generación)
+      - name: Exportar 120 mapas PNG (12 por generación)
         run: java -Djava.awt.headless=true -cp build Proyecto.ExportadorMapasGeneracionales
-      - name: Publicar los 100 mapas y 10 galerías
+      - name: Publicar los 120 mapas y 10 galerías
         uses: actions/upload-artifact@v4
         with:
-          name: mapas-2d-100-generaciones
+          name: mapas-2d-120-generaciones
           path: MapasGenerados/
           if-no-files-found: error
           retention-days: 30
