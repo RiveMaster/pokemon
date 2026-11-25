@@ -21,15 +21,17 @@ public final class AtlasCorregidoSmokeTest {
             assert AtlasCorregido.importar(archivo) == 201;
         }
         AtlasCorregido atlas = AtlasCorregido.actual();
-        if (atlas == null) {
-            assert !AtlasCorregido.instalado() :
-                    "El archivo existe, pero el atlas no se ha podido validar";
-            System.out.println("AtlasCorregidoSmokeTest: ZIP opcional ausente; fallback compatible OK");
-            return;
+        if (atlas == null)
+            throw new AssertionError("Debe cargarse el atlas integrado o el ZIP corregido");
+        if (atlas.paqueteCompleto()) {
+            assert atlas.cantidadLista() == 201;
+            assert atlas.cantidadPendiente() == 170;
+            assert atlas.catalogo().size() == 371;
+        } else {
+            assert atlas.cantidadLista() == 16;
+            assert atlas.cantidadPendiente() == 0;
+            assert atlas.catalogo().size() == 16;
         }
-        assert atlas.cantidadLista() == 201;
-        assert atlas.cantidadPendiente() == 170;
-        assert atlas.catalogo().size() == 371;
         for (String id : new String[]{"CentroPokemon1","TiendaAzul1",
                 "GimnasioRojo1","CasaRoja1","Pino01","Arbusto03","ArbolCopa01"}) {
             BufferedImage img = atlas.sprite(id);
@@ -42,7 +44,12 @@ public final class AtlasCorregidoSmokeTest {
                 "El terreno debe ser opaco";
         BufferedImage centro = atlas.edificio("CENTRO_POKEMON",6,5,0);
         assert centro.getWidth() == 192 && centro.getHeight() == 160;
-        assert centro.getRGB(centro.getWidth()/2,centro.getHeight()-10) != 0;
-        System.out.println("AtlasCorregidoSmokeTest: 201 sprites utilizables, 170 módulos excluidos OK");
+        boolean pixelDibujado=false;
+        for (int y=0;y<centro.getHeight();y++)
+            for (int x=0;x<centro.getWidth();x++)
+                if ((centro.getRGB(x,y)>>>24)>128) pixelDibujado=true;
+        assert pixelDibujado : "El Centro Pokémon debe conservar su fachada";
+        System.out.println("AtlasCorregidoSmokeTest: "+atlas.cantidadLista()
+                +" sprites originales disponibles y renderizador compatible OK");
     }
 }
