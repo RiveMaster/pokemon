@@ -334,10 +334,12 @@ public final class MapasRegion2D {
             {2,10,21,29,2,10,21,29}
         };
         int[] bx=planosX[forma];
-        int[] by=grande?new int[]{2,2,2,2,17,17,17,17}
-                :new int[]{3,3,3,3,17,17,17,17};
-        int[] ancho={6,5,7,5,5,5,7,5};
-        int[] alto={5,4,5,4,4,4,5,4};
+        // Fachadas de 6-7 casillas y siete de altura: tamaño suficiente
+        // para que la mayoría de sprites lleguen a x4 sin deformarse.
+        // Se deja una calle al sur de cada fila de edificios: y=8 y y=21.
+        int[] by={1,1,1,1,14,14,14,14};
+        int[] ancho={7,6,7,6,7,6,7,6};
+        int[] alto={7,7,7,7,7,7,7,7};
         String[] edificios={"CENTRO_POKEMON","TIENDA",
                 grande?"GIMNASIO":"CASA","CASA",
                 "CASA","CASA","CASA","CASA"};
@@ -357,8 +359,10 @@ public final class MapasRegion2D {
             int decoracion = i + e.mapa.indice()*11
                     + e.mapa.generacion().getNumero()*7;
             edificio(e,bx[i],by[i],ancho[i],alto[i],edificios[i],decoracion);
-            int puertaX=bx[i]+ancho[i]/2,des=by[i]+alto[i],hasta=by[i]<10?cy-2:21;
-            for(int y=Math.min(des,hasta);y<=Math.max(des,hasta);y++)
+            int puertaX=bx[i]+ancho[i]/2;
+            int desde=by[i]+alto[i];
+            int hasta=by[i]<10 ? 8 : 21;
+            for(int y=desde;y<=hasta;y++)
                 if(e.dentro(puertaX,y)&&e.capas[2][e.pos(puertaX,y)]<0)
                     e.suelo(puertaX,y,e.piedra);
         }
