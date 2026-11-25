@@ -374,10 +374,13 @@ public final class MapasRegion2D {
             e.suelo(x,10,e.flores);
             e.suelo(x,14,e.flores);
         }
+        // Las decoraciones nunca deben reemplazar un cuadrante de fachada
+        // ni ocultar la puerta de un edificio de siete casillas de alto.
         for(int[] p:new int[][]{{9,9},{25,9},{9,15},{25,15}})
-            e.solido(p[0],p[1],grande?e.lampara:e.arbusto);
-        e.solido(15,9,e.senal);
-        e.solido(21,15,e.lampara);
+            if(e.capas[2][e.pos(p[0],p[1])]<0)
+                e.solido(p[0],p[1],grande?e.lampara:e.arbusto);
+        if(e.capas[2][e.pos(15,9)]<0)e.solido(15,9,e.senal);
+        if(e.capas[2][e.pos(21,15)]<0)e.solido(21,15,e.lampara);
 
         // Jardines laterales que no pisan los portales ni el corredor central.
         for(int x=4;x<e.w-4;x+=3) {
