@@ -16,7 +16,7 @@ public class Menu {
                                 + " · Medallas: " + jugador.medallasEnGeneracion(jugador.getGeneracion()),
                         "Equipo Pokémon", "Mochila", "Usar MT",
                         "Equipar objeto", "Volar", "Guardar partida",
-                        "Criadero Pokémon", "Megaevolución", "Atlas regional (10 mapas)",
+                        "Criadero Pokémon", "Megaevolución", "Atlas regional (12 mapas)",
                         "Probar nuevo mapa (atlas único)", "Instalar tileset corregido (ZIP)",
                         "Volver al mapa", "Salir del juego");
                 switch (opcion) {
