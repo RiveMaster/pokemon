@@ -290,16 +290,44 @@ public final class AtlasCorregido {
             src = sprite(id);
         }
         if (src == null) return null;
-        int w=ancho*32,h=alto*32;
+        // Recortar margen transparente ANTES de calcular el factor entero.
+        // Si se fuerza una escala mayor de la que admite la parcela,
+        // la fachada se cortaría y la puerta dejaría de coincidir.
+        src = recortarTransparencia(src);
+        int w = ancho * ArteRegion2D.PIXELES;
+        int h = alto * ArteRegion2D.PIXELES;
+        int escala = escalaEntera(src,w,h);
+        if (escala == 0) return null;
         BufferedImage canvas = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = canvas.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        int scale=src.getWidth()*2<=w && src.getHeight()*2<=h ? 2 : 1;
-        int sw=src.getWidth()*scale,sh=src.getHeight()*scale;
+        int sw = src.getWidth()*escala, sh = src.getHeight()*escala;
         g.drawImage(src,(w-sw)/2,h-sh,sw,sh,null);
         g.dispose();
         return canvas;
+    }
+
+    /** Conserva todos los píxeles visibles sin añadir suavizado. */
+    static BufferedImage recortarTransparencia(BufferedImage imagen) {
+        int minX=imagen.getWidth(), minY=imagen.getHeight(), maxX=-1,maxY=-1;
+        for (int y=0;y<imagen.getHeight();y++)
+            for (int x=0;x<imagen.getWidth();x++)
+                if ((imagen.getRGB(x,y)>>>24)!=0) {
+                    minX=Math.min(minX,x); minY=Math.min(minY,y);
+                    maxX=Math.max(maxX,x); maxY=Math.max(maxY,y);
+                }
+        if (maxX<minX) return imagen;
+        if (minX==0 && minY==0 && maxX==imagen.getWidth()-1
+                && maxY==imagen.getHeight()-1) return imagen;
+        return imagen.getSubimage(minX,minY,maxX-minX+1,maxY-minY+1);
+    }
+
+    /** Mayor ampliación entera que cabe COMPLETA en la parcela. */
+    static int escalaEntera(BufferedImage imagen,int ancho,int alto) {
+        if (imagen==null || ancho<1 || alto<1) return 0;
+        return Math.min(8,Math.min((ancho-4)/imagen.getWidth(),
+                (alto-2)/imagen.getHeight()));
     }
 
     private static String hash(byte[] b) {
