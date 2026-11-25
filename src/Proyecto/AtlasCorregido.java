@@ -114,17 +114,36 @@ public final class AtlasCorregido {
         Graphics2D g = img.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        // El atlas no declara superficies transitables listas, de modo que
-        // estas muestras solo se usan como fondo hasta validar los módulos.
-        int sx = switch (tipo) {
-            case "AGUA" -> 277;
-            case "ARENA", "SENDA" -> 270;
-            case "PIEDRA", "ROCA", "MURO", "CUEVA", "COLUMNA", "NIEVE" -> 291;
-            default -> 6;
-        };
-        int sy = tipo.equals("AGUA") ? 154 : 95;
+        // Los patrones de 16x16 del manifiesto están expresamente marcados
+        // como "PorMontar": no se repiten como suelo definitivo porque
+        // contienen bordes de otros dibujos. La textura provisional utiliza
+        // EXCLUSIVAMENTE colores muestreados del PNG original.
         BufferedImage source = atlasOriginal();
-        g.drawImage(source,0,0,32,32,sx,sy,sx+16,sy+16,null);
+        int x = 15, y = 9; // verde del primer árbol del atlas
+        if (tipo.equals("ARENA") || tipo.equals("SENDA")) {
+            x=20; y=105; // beige de suelo del propio atlas
+        } else if (tipo.equals("PIEDRA") || tipo.equals("ROCA")
+                || tipo.equals("MURO") || tipo.equals("CUEVA")
+                || tipo.equals("COLUMNA") || tipo.equals("NIEVE")) {
+            x=290; y=105; // gris del mismo atlas
+        } else if (tipo.equals("AGUA")) {
+            x=287; y=164; // azul del mismo atlas
+        } else if (tipo.equals("HIERBA_ALTA") || tipo.equals("CESPED_OSCURO")) {
+            x=20; y=13; // verde más oscuro del mismo árbol
+        }
+        int muestra = source.getRGB(x,y);
+        g.setColor(new Color(0xff000000 | (muestra & 0x00ffffff), true));
+        g.fillRect(0,0,32,32);
+        if (!tipo.equals("AGUA")) {
+            int detalle = source.getRGB(tipo.equals("ARENA") || tipo.equals("SENDA")
+                    ? 18 : 17, tipo.equals("ARENA") || tipo.equals("SENDA") ? 102 : 8);
+            g.setColor(new Color(0xff000000 | (detalle & 0x00ffffff),true));
+            for(int i=0;i<9;i++) {
+                int px=Math.floorMod(i*13+variante*3,30);
+                int py=Math.floorMod(i*17+variante*7,31);
+                g.fillRect(px,py,2,1);
+            }
+        }
 
         String decoracion = switch (tipo) {
             case "ARBOL" -> variante % 2 == 0 ? "ArbolCopa01" : "ArbolCopa20";
