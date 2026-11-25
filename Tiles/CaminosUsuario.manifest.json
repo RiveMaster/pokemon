@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "nombre": "CaminosUsuario",
+  "atlas": "Tiles/CaminosUsuario.png",
+  "fuente": "PNG original de 864x925 píxeles facilitado por el usuario",
+  "tamano_atlas": [256, 512],
+  "tamano_tile": [16, 16],
+  "tamano_en_mapas_regionales": [32, 32],
+  "familias": {
+    "SENDA": {"fila_inicial": 0, "descripcion": "Senderos de tierra beige"},
+    "PIEDRA": {"fila_inicial": 256, "descripcion": "Pavimento gris de piedra"}
+  },
+  "mascara_cardinal": {"N": 1, "E": 2, "S": 4, "O": 8},
+  "mascara_diagonal": {"NO": 1, "NE": 2, "SE": 4, "SO": 8},
+  "localizacion": {
+    "x": "mascara_cardinal * 16",
+    "y": "fila_inicial + mascara_diagonal * 16"
+  },
+  "muestras_originales": {
+    "verde": [15, 9],
+    "verde_sombra": [17, 8],
+    "verde_luz": [18, 9],
+    "tierra": [10, 100],
+    "tierra_luz": [12, 95],
+    "tierra_sombra": [16, 100],
+    "piedra": [234, 100],
+    "piedra_luz": [247, 114],
+    "piedra_sombra": [237, 111]
+  },
+  "variantes": 512,
+  "procedencia": "Colores y textura interior muestreados del atlas del usuario; bordes y máscaras reconstruidos para conectarse correctamente. No son 512 sprites precortados de la imagen original.",
+  "colisiones": "Se mantienen las casillas y colisiones previas; solo cambia la capa gráfica."
+}
