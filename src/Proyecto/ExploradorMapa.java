@@ -181,11 +181,31 @@ public final class ExploradorMapa {
             b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
         controles.add(cruceta, BorderLayout.CENTER);
+        if (mapa.resolucion == 32) {
+            JPanel zoomControles = new JPanel(new GridLayout(2,1,3,3));
+            JButton ampliar = new JButton("Zoom +");
+            JButton reducir = new JButton("Zoom −");
+            ampliar.addActionListener(e -> {
+                lienzo.ajustarZoomRegional(1);
+                centrarVista(desplazamiento,lienzo);
+                lienzo.requestFocusInWindow();
+            });
+            reducir.addActionListener(e -> {
+                lienzo.ajustarZoomRegional(-1);
+                centrarVista(desplazamiento,lienzo);
+                lienzo.requestFocusInWindow();
+            });
+            zoomControles.add(ampliar);
+            zoomControles.add(reducir);
+            controles.add(zoomControles,BorderLayout.WEST);
+        }
         ChatExploracion chat = new ChatExploracion(lienzo);
-        controles.add(chat, BorderLayout.EAST);
+        JPanel lateralChat = new JPanel(new BorderLayout(3,3));
+        lateralChat.add(chat,BorderLayout.CENTER);
         JButton botonChat = new JButton("Chat (T)");
         botonChat.addActionListener(e -> chat.abrirEntrada());
-        controles.add(botonChat, BorderLayout.WEST);
+        lateralChat.add(botonChat,BorderLayout.SOUTH);
+        controles.add(lateralChat,BorderLayout.EAST);
         ventana.add(controles, BorderLayout.SOUTH);
 
         Runnable cerrar = () -> {
@@ -266,6 +286,31 @@ public final class ExploradorMapa {
         entradas.put(KeyStroke.getKeyStroke("DOWN"), "abajo");
         entradas.put(KeyStroke.getKeyStroke("RIGHT"), "derecha");
         entradas.put(KeyStroke.getKeyStroke("ESCAPE"), "salir");
+        if (mapa.resolucion == 32) {
+            entradas.put(KeyStroke.getKeyStroke("PLUS"), "zoom_mas");
+            entradas.put(KeyStroke.getKeyStroke("EQUALS"), "zoom_mas");
+            entradas.put(KeyStroke.getKeyStroke("MINUS"), "zoom_menos");
+            acciones.put("zoom_mas", new AbstractAction() {
+                @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if(!chat.estaEscribiendo()) {
+                        lienzo.ajustarZoomRegional(1);
+                        JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(
+                                JScrollPane.class,lienzo);
+                        centrarVista(sp,lienzo);
+                    }
+                }
+            });
+            acciones.put("zoom_menos", new AbstractAction() {
+                @Override public void actionPerformed(java.awt.event.ActionEvent e) {
+                    if(!chat.estaEscribiendo()) {
+                        lienzo.ajustarZoomRegional(-1);
+                        JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(
+                                JScrollPane.class,lienzo);
+                        centrarVista(sp,lienzo);
+                    }
+                }
+            });
+        }
         acciones.put("salir", new AbstractAction() {
             @Override public void actionPerformed(java.awt.event.ActionEvent e) {
                 if (chat.estaEscribiendo()) chat.cancelarEntrada();
@@ -1101,6 +1146,7 @@ public final class ExploradorMapa {
         private final Timer redTimer;
         private final String mapaId;
         private int faseAgua;
+        private int zoomRegional = 4;
 
         MapaCanvas(MapaDatos mapa, SpriteJugador2D sprite, int x, int y, String mapaId) {
             this.mapaId = mapaId;
@@ -1134,7 +1180,19 @@ public final class ExploradorMapa {
             }
         }
 
-        int escalaCasilla() { return mapa.resolucion == 32 ? 32 * 2 : TILE * ZOOM; }
+        /** Los mapas regionales usan x4 por defecto; se permite ajustar a x2..x5. */
+        int escalaCasilla() { return mapa.resolucion == 32 ? 32 * zoomRegional : TILE * ZOOM; }
+
+        void ajustarZoomRegional(int delta) {
+            if (mapa.resolucion != 32) return;
+            int siguiente = Math.max(2,Math.min(5,zoomRegional+delta));
+            if (zoomRegional == siguiente) return;
+            zoomRegional = siguiente;
+            setPreferredSize(new Dimension(mapa.ancho*escalaCasilla(),
+                    mapa.alto*escalaCasilla()));
+            revalidate();
+            repaint();
+        }
 
         Posicion getPosicion() { return new Posicion(jugadorX, jugadorY); }
         double[] posicionInterpolada() { return new double[]{pantallaX, pantallaY}; }
