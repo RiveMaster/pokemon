@@ -32,6 +32,16 @@ public final class ExploradorMapa {
     private static final int MAGIC_PMAP = 0x504D4150;
     private static final int TILE = 16;
     private static final int ZOOM = 3;
+    // En los mapas regionales los PNG son de 32x32. La vista compacta
+    // muestra 16 px por casilla (reducción exacta 2:1, sin suavizado),
+    // para que un mapa de 36x24 ocupe 576x384 px en pantalla.
+    private static final int[] ZOOM_REGION_PX = {16, 32, 64, 96, 128};
+
+    static int pixelesPorCasilla(int resolucion, int nivelRegional) {
+        if (resolucion != 32) return TILE * ZOOM;
+        int nivel = Math.max(0, Math.min(ZOOM_REGION_PX.length-1, nivelRegional));
+        return ZOOM_REGION_PX[nivel];
+    }
     private static final int TIPO_NORMAL = 0;
     private static final int TIPO_BLOQUEO = 1;
     private static final int TIPO_HIERBA = 2;
@@ -182,9 +192,10 @@ public final class ExploradorMapa {
         }
         controles.add(cruceta, BorderLayout.CENTER);
         if (mapa.resolucion == 32) {
-            JPanel zoomControles = new JPanel(new GridLayout(2,1,3,3));
+            JPanel zoomControles = new JPanel(new GridLayout(3,1,3,3));
             JButton ampliar = new JButton("Zoom +");
             JButton reducir = new JButton("Zoom −");
+            JButton compacto = new JButton("Ver todo");
             ampliar.addActionListener(e -> {
                 lienzo.ajustarZoomRegional(1);
                 centrarVista(desplazamiento,lienzo);
@@ -195,8 +206,14 @@ public final class ExploradorMapa {
                 centrarVista(desplazamiento,lienzo);
                 lienzo.requestFocusInWindow();
             });
+            compacto.addActionListener(e -> {
+                lienzo.vistaCompacta();
+                centrarVista(desplazamiento,lienzo);
+                lienzo.requestFocusInWindow();
+            });
             zoomControles.add(ampliar);
             zoomControles.add(reducir);
+            zoomControles.add(compacto);
             controles.add(zoomControles,BorderLayout.WEST);
         }
         ChatExploracion chat = new ChatExploracion(lienzo);
@@ -236,8 +253,14 @@ public final class ExploradorMapa {
             }
         });
 
-        ventana.setSize(1100, 800);
-        ventana.setMinimumSize(new Dimension(640, 480));
+        // Respetar el área útil del monitor, incluidos portátiles con
+        // barra de tareas: la ventana ya no se abre más alta que la pantalla.
+        Rectangle escritorio = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getMaximumWindowBounds();
+        ventana.setSize(Math.min(1050, Math.max(480, escritorio.width - 24)),
+                Math.min(740, Math.max(400, escritorio.height - 24)));
+        ventana.setMinimumSize(new Dimension(
+                Math.min(640, escritorio.width), Math.min(480, escritorio.height)));
         ventana.setLocationRelativeTo(null);
         ventana.setVisible(true);
         SwingUtilities.invokeLater(() -> centrarVista(desplazamiento, lienzo));
@@ -1146,7 +1169,7 @@ public final class ExploradorMapa {
         private final Timer redTimer;
         private final String mapaId;
         private int faseAgua;
-        private int zoomRegional = 4;
+        private int zoomRegional = 0; // Compacto: mapa completo visible en pantallas habituales.
 
         MapaCanvas(MapaDatos mapa, SpriteJugador2D sprite, int x, int y, String mapaId) {
             this.mapaId = mapaId;
@@ -1181,17 +1204,23 @@ public final class ExploradorMapa {
         }
 
         /** Los mapas regionales usan x4 por defecto; se permite ajustar a x2..x5. */
-        int escalaCasilla() { return mapa.resolucion == 32 ? 32 * zoomRegional : TILE * ZOOM; }
+        int escalaCasilla() {
+            return pixelesPorCasilla(mapa.resolucion, zoomRegional);
+        }
 
         void ajustarZoomRegional(int delta) {
             if (mapa.resolucion != 32) return;
-            int siguiente = Math.max(2,Math.min(5,zoomRegional+delta));
+            int siguiente = Math.max(0, Math.min(ZOOM_REGION_PX.length - 1, zoomRegional + delta));
             if (zoomRegional == siguiente) return;
             zoomRegional = siguiente;
             setPreferredSize(new Dimension(mapa.ancho*escalaCasilla(),
                     mapa.alto*escalaCasilla()));
             revalidate();
             repaint();
+        }
+
+        void vistaCompacta() {
+            ajustarZoomRegional(-zoomRegional);
         }
 
         Posicion getPosicion() { return new Posicion(jugadorX, jugadorY); }
@@ -1277,7 +1306,7 @@ public final class ExploradorMapa {
                 g.setColor(new Color(230, 249, 255, 105));
                 for (int iy = 0; iy < mapa.alto; iy++) for (int ix = 0; ix < mapa.ancho; ix++) {
                     if (!mapa.esAgua(ix, iy)) continue;
-                    int escala = tam / mapa.resolucion;
+                    int escala = Math.max(1, tam / mapa.resolucion);
                     int desplazamiento = Math.floorMod(ix * 3 + iy + faseAgua * 4,
                             mapa.resolucion - 7);
                     int px = ix * tam + desplazamiento * escala;
