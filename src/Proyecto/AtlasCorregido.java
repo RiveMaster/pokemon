@@ -235,7 +235,10 @@ public final class AtlasCorregido {
     }
 
     public BufferedImage camino(int mascara, int variante) {
-        return terreno("SENDA", variante);
+        // La cuadrícula del atlas original se usa también cuando un
+        // llamador solicita una pieza individual fuera del generador.
+        BufferedImage conectado = CaminosUsuario.tile(false, mascara, 0);
+        return conectado != null ? conectado : terreno("SENDA", variante);
     }
 
     /** Encaja fachadas completas con escalado entero, nunca las deforma. */
