@@ -332,9 +332,21 @@ public final class MapasRegion2D {
             if(!e.dentro(tx,ty))continue;
             BufferedImage recorte=fachada.getSubimage(dx*ArteRegion2D.PIXELES,
                     dy*ArteRegion2D.PIXELES,ArteRegion2D.PIXELES,ArteRegion2D.PIXELES);
+            boolean puerta=dy==h-1&&tx==cx;
+            // El sprite corregido es más pequeño que el solar. Los tiles
+            // totalmente transparentes no son muros invisibles.
+            if (atlas != null && !puerta) {
+                boolean visible=false;
+                for(int py=0;py<32 && !visible;py++)
+                    for(int px=0;px<32;px++)
+                        if((recorte.getRGB(px,py)>>>24)>=128) {
+                            visible=true;
+                            break;
+                        }
+                if(!visible)continue;
+            }
             int id=e.paleta.size();
             e.paleta.add(recorte);
-            boolean puerta=dy==h-1&&tx==cx;
             e.tipos.add(puerta?NORMAL:BLOQUEO);
             int indice=e.pos(tx,ty);
             e.capas[2][indice]=id;
