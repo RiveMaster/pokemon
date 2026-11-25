@@ -16,7 +16,8 @@ on:
       - "tests/TerrenosConVecinosSmokeTest.java"
       - "tests/AtlasUsuarioFase1SmokeTest.java"
       - "tests/AtlasUsuarioFase2SmokeTest.java"
-      - "tests/AtlasCorregidoSmokeTest.java"
+      - "tests/AtlasCorregidoSmokeTest.java tests/EscalaMapasSmokeTest.java"
+      - "tests/EscalaMapasSmokeTest.java"
       - "Tiles/AtlasUsuarioCorregido.zip"
       - "Tiles/AtlasUsuarioSeleccion96.png"
       - "Tiles/AtlasUsuarioInteriorFase2.png"
@@ -41,6 +42,7 @@ on:
       - "tests/AtlasUsuarioFase1SmokeTest.java"
       - "tests/AtlasUsuarioFase2SmokeTest.java"
       - "tests/AtlasCorregidoSmokeTest.java"
+      - "tests/EscalaMapasSmokeTest.java"
       - "Tiles/AtlasUsuarioCorregido.zip"
       - "Tiles/AtlasUsuarioSeleccion96.png"
       - "Tiles/AtlasUsuarioInteriorFase2.png"
@@ -90,6 +92,8 @@ jobs:
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.AtlasUsuarioFase2SmokeTest
       - name: Probar integración de atlas corregido (ZIP opcional)
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.AtlasCorregidoSmokeTest
+      - name: Verificar tamaño de edificios y que no salgan de sus parcelas
+        run: java -ea -Djava.awt.headless=true -cp build Proyecto.EscalaMapasSmokeTest
       - name: Probar chat TCP y VPN con conexión de loopback
         run: java -ea -Djava.awt.headless=true -cp build Proyecto.ChatVpnSmokeTest
       - name: Exportar 120 mapas PNG (12 por generación)
