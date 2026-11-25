@@ -25,6 +25,9 @@ import java.util.zip.ZipFile;
  */
 public final class AtlasCorregido {
     public static final Path ARCHIVO = Path.of("Tiles", "AtlasUsuarioCorregido.zip");
+    public static final Path SELECCION = Path.of("Tiles", "AtlasUsuarioSeleccion96.png");
+    private static final String SHA_SELECCION =
+            "11e2be1726ea54890484f4453f20b4d6f3f98776326b2cb1d31183e42e1798df";
     private static final String RAIZ = "Tiles/AtlasUsuarioCorregido/";
     private static final String HASH_ORIGINAL =
             "64dfc4461d31236aee871e558be826d5ceb9542ea311aeb1c004cb5535699657";
@@ -35,28 +38,74 @@ public final class AtlasCorregido {
     private final Map<String, Pieza> piezas;
     private final Map<String, BufferedImage> cache = new ConcurrentHashMap<>();
     private volatile BufferedImage original;
+    private final BufferedImage seleccion;
+    private final Map<String,int[]> recortesSeleccion;
 
     private AtlasCorregido(Map<String, Pieza> piezas) {
-        this.piezas = Collections.unmodifiableMap(piezas);
+        this(piezas,null,Map.of());
     }
+
+    private AtlasCorregido(Map<String, Pieza> piezas, BufferedImage seleccion,
+                          Map<String,int[]> rectangulos) {
+        this.piezas = Collections.unmodifiableMap(piezas);
+        this.seleccion = seleccion;
+        this.recortesSeleccion = rectangulos;
+    }
+
+    public boolean paqueteCompleto() { return seleccion == null; }
 
     public static boolean instalado() { return Files.isRegularFile(ARCHIVO); }
 
     public static AtlasCorregido actual() {
-        if (!instalado()) return null;
         AtlasCorregido local = instancia;
         if (local != null) return local;
         synchronized (AtlasCorregido.class) {
-            if (instancia == null) {
+            if (instancia == null && instalado()) {
                 try { instancia = validar(ARCHIVO, false); }
                 catch (IOException e) {
-                    System.err.println("Atlas corregido inválido; se conserva el mapa anterior: "
-                            + e.getMessage());
-                    return null;
+                    System.err.println("ZIP corregido inválido: " + e.getMessage());
+                }
+            }
+            // Selección de sprites empaquetada con el juego: permite dibujar
+            // centros, tiendas, casas y árboles sin importar 371 archivos.
+            if (instancia == null && Files.isRegularFile(SELECCION)) {
+                try { instancia = leerSeleccion(); }
+                catch (IOException e) {
+                    System.err.println("Selección de sprites inválida: " + e.getMessage());
                 }
             }
             return instancia;
         }
+    }
+
+    private static AtlasCorregido leerSeleccion() throws IOException {
+        byte[] bytes = Files.readAllBytes(SELECCION);
+        if (!SHA_SELECCION.equals(hash(bytes)))
+            throw new IOException("El PNG reducido no coincide con el original publicado");
+        BufferedImage img = ImageIO.read(new ByteArrayInputStream(bytes));
+        if (img == null || img.getWidth() != 256 || img.getHeight() != 93)
+            throw new IOException("Atlas reducido de tamaño inesperado");
+        String[] ids={
+            "CentroPokemon1","TiendaAzul1","TiendaVerde1","GimnasioRojo1",
+            "CasaRoja1","CasaVerde1","CasaAzul1","CasaMarron1","CasaNaranja1",
+            "Pino01","Pino07","ArbolCopa01","Arbusto03","Arbusto27",
+            "RocaCiudad1","SenalCiudad1"
+        };
+        int[][] rect={
+            {0,0,52,53},{53,0,30,34},{84,0,30,35},{115,0,45,49},
+            {161,0,33,37},{195,0,32,37},{0,54,33,38},{34,54,30,39},
+            {65,54,32,38},{98,54,22,27},{121,54,22,25},
+            {144,54,17,19},{162,54,18,16},{181,54,12,12},
+            {194,54,22,30},{217,54,15,23}
+        };
+        Map<String,Pieza> lista=new LinkedHashMap<>();
+        Map<String,int[]> recortes=new LinkedHashMap<>();
+        for(int i=0;i<ids.length;i++) {
+            int[] r=rect[i];
+            lista.put(ids[i], new Pieza(ids[i], "mini", "seleccion",r[2],r[3],"",true));
+            recortes.put(ids[i],r);
+        }
+        return new AtlasCorregido(lista,img,Collections.unmodifiableMap(recortes));
     }
 
     public int cantidadLista() {
@@ -74,7 +123,14 @@ public final class AtlasCorregido {
         BufferedImage cached = cache.get(id);
         if (cached != null) return cached;
         try {
-            BufferedImage img = leerPng(p.archivo());
+            BufferedImage img;
+            if (seleccion != null) {
+                int[] rect=recortesSeleccion.get(id);
+                if (rect == null) return null;
+                img = seleccion.getSubimage(rect[0],rect[1],rect[2],rect[3]);
+            } else {
+                img = leerPng(p.archivo());
+            }
             if (img.getWidth() != p.ancho() || img.getHeight() != p.alto())
                 throw new IOException("Dimensiones incorrectas: " + id);
             cache.put(id, img);
@@ -118,7 +174,7 @@ public final class AtlasCorregido {
         // como "PorMontar": no se repiten como suelo definitivo porque
         // contienen bordes de otros dibujos. La textura provisional utiliza
         // EXCLUSIVAMENTE colores muestreados del PNG original.
-        BufferedImage source = atlasOriginal();
+        BufferedImage source = seleccion == null ? atlasOriginal() : null;
         int x = 15, y = 9; // verde del primer árbol del atlas
         if (tipo.equals("ARENA") || tipo.equals("SENDA")) {
             x=20; y=105; // beige de suelo del propio atlas
@@ -131,12 +187,24 @@ public final class AtlasCorregido {
         } else if (tipo.equals("HIERBA_ALTA") || tipo.equals("CESPED_OSCURO")) {
             x=20; y=13; // verde más oscuro del mismo árbol
         }
-        int muestra = source.getRGB(x,y);
+        int muestra = source != null ? source.getRGB(x,y) :
+                // Valores muestreados del atlas original, sin otros paquetes.
+                switch (tipo) {
+                    case "AGUA" -> 0xff2eaff0;
+                    case "ARENA", "SENDA" -> 0xffe8daab;
+                    case "PIEDRA", "ROCA", "MURO", "CUEVA", "COLUMNA", "NIEVE" -> 0xffbbb6b3;
+                    case "HIERBA_ALTA", "CESPED_OSCURO" -> 0xff506744;
+                    default -> 0xff819f54;
+                };
         g.setColor(new Color(0xff000000 | (muestra & 0x00ffffff), true));
         g.fillRect(0,0,32,32);
         if (!tipo.equals("AGUA")) {
-            int detalle = source.getRGB(tipo.equals("ARENA") || tipo.equals("SENDA")
-                    ? 18 : 17, tipo.equals("ARENA") || tipo.equals("SENDA") ? 102 : 8);
+            int detalle = source != null ?
+                    source.getRGB(tipo.equals("ARENA") || tipo.equals("SENDA")
+                            ? 18 : 17,
+                            tipo.equals("ARENA") || tipo.equals("SENDA") ? 102 : 8)
+                    : (tipo.equals("ARENA") || tipo.equals("SENDA")
+                            ? 0xffe9dbac : 0xff769251);
             g.setColor(new Color(0xff000000 | (detalle & 0x00ffffff),true));
             for(int i=0;i<9;i++) {
                 int px=Math.floorMod(i*13+variante*3,30);
@@ -186,6 +254,17 @@ public final class AtlasCorregido {
             default -> "CasaRoja1";
         };
         BufferedImage src = sprite(id);
+        if (src == null) {
+            // Ediciones compactas: algunas fachadas extraordinarias requieren
+            // el ZIP completo; ofrecer una fachada compatible y no mezclar packs.
+            id = switch (servicio) {
+                case "CENTRO_POKEMON" -> "CentroPokemon1";
+                case "TIENDA", "CASINO" -> "TiendaAzul1";
+                case "GIMNASIO", "GOBIERNO" -> "GimnasioRojo1";
+                default -> "CasaRoja1";
+            };
+            src = sprite(id);
+        }
         if (src == null) return null;
         int w=ancho*32,h=alto*32;
         BufferedImage canvas = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
