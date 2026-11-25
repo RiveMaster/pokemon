@@ -184,6 +184,8 @@ public final class AtlasCorregido {
             x=290; y=105; // gris del mismo atlas
         } else if (tipo.equals("AGUA")) {
             x=287; y=164; // azul del mismo atlas
+        } else if (tipo.equals("CLARO")) {
+            x=14; y=6; // verde claro extraído de las copas del atlas
         } else if (tipo.equals("HIERBA_ALTA") || tipo.equals("CESPED_OSCURO")) {
             x=20; y=13; // verde más oscuro del mismo árbol
         }
@@ -194,6 +196,7 @@ public final class AtlasCorregido {
                     case "ARENA", "SENDA" -> 0xffe8daab;
                     case "PIEDRA", "ROCA", "MURO", "CUEVA", "COLUMNA", "NIEVE" -> 0xffbbb6b3;
                     case "HIERBA_ALTA", "CESPED_OSCURO" -> 0xff506744;
+                    case "CLARO" -> 0xffa7be55;
                     default -> 0xff819f54;
                 };
         g.setColor(new Color(0xff000000 | (muestra & 0x00ffffff), true));
