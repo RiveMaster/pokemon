@@ -188,7 +188,9 @@ public final class MapasRegion2D {
                 int d=(dx>0&&dy>0?1:0)|(dx<ancho-1&&dy>0?2:0)
                         |(dx>0&&dy<alto-1?4:0)
                         |(dx<ancho-1&&dy<alto-1?8:0);
-                BufferedImage tile=TerrenosConVecinos32.claro(tema,m,d,variante+dx+dy*17);
+                AtlasCorregido atlas=AtlasCorregido.actual();
+                BufferedImage tile=atlas!=null ? atlas.terreno("CLARO",variante+dx+dy*17)
+                        : TerrenosConVecinos32.claro(tema,m,d,variante+dx+dy*17);
                 int id=paleta.size();
                 paleta.add(tile);
                 tipos.add(NORMAL);
@@ -203,7 +205,9 @@ public final class MapasRegion2D {
                 if(!dentro(tx,ty)||capas[2][pos(tx,ty)]>=0)continue;
                 int m=TerrenosConVecinos32.mascara(
                         dy>0,dx<ancho-1,dy<alto-1,dx>0);
-                BufferedImage tile=TerrenosConVecinos32.plataforma(tema,m,variante+dx+dy*7);
+                AtlasCorregido atlas=AtlasCorregido.actual();
+                BufferedImage tile=atlas!=null ? atlas.terreno("PIEDRA",variante+dx+dy*7)
+                        : TerrenosConVecinos32.plataforma(tema,m,variante+dx+dy*7);
                 int id=paleta.size();
                 paleta.add(tile);
                 tipos.add(BLOQUEO);
