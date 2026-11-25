@@ -233,7 +233,10 @@ public final class MapasRegion2D {
 
         switch(mapa.bioma()) {
             case "PUEBLO","CIUDAD" -> ciudad(e,ubicacion);
-            case "BOSQUE" -> bosque(e);
+            case "BOSQUE" -> {
+                if (mapa.id().startsWith("NUEVO_")) bosqueNuevo(e);
+                else bosque(e);
+            }
             case "COSTA" -> costa(e);
             case "MONTANA" -> montana(e);
             case "LAGO" -> lagos(e);
@@ -277,7 +280,17 @@ public final class MapasRegion2D {
             for(int x=17;x<=19;x++)e.suelo(x,y,e.piedra);
         }
         for(int y:new int[]{8,21})for(int x=1;x<e.w-1;x++)e.suelo(x,y,e.piedra);
-        int[] bx={2,10,21,29,2,11,21,29};
+        // Tres planos urbanos distintos para las localidades antiguas; la
+        // Villa nueva utiliza un cuarto plano con plazas y fachadas singulares.
+        int forma = e.mapa.id().startsWith("NUEVO_") ? 3
+                : Math.floorMod(e.mapa.generacion().getNumero()+e.mapa.indice()*7,3);
+        int[][] planosX={
+            {2,10,21,29,2,11,21,29},
+            {3,11,20,29,3,11,20,29},
+            {2,11,21,29,3,10,20,29},
+            {2,10,21,29,2,10,21,29}
+        };
+        int[] bx=planosX[forma];
         int[] by=grande?new int[]{2,2,2,2,17,17,17,17}
                 :new int[]{3,3,3,3,17,17,17,17};
         int[] ancho={6,5,7,5,5,5,7,5};
@@ -296,7 +309,11 @@ public final class MapasRegion2D {
             if(!grande)edificios[2]="CASA";
         }
         for(int i=0;i<bx.length;i++){
-            edificio(e,bx[i],by[i],ancho[i],alto[i],edificios[i],i);
+            // Distintas cubiertas y colores según localidad; el servicio
+            // real asociado a la puerta no cambia.
+            int decoracion = i + e.mapa.indice()*11
+                    + e.mapa.generacion().getNumero()*7;
+            edificio(e,bx[i],by[i],ancho[i],alto[i],edificios[i],decoracion);
             int puertaX=bx[i]+ancho[i]/2,des=by[i]+alto[i],hasta=by[i]<10?cy-2:21;
             for(int y=Math.min(des,hasta);y<=Math.max(des,hasta);y++)
                 if(e.dentro(puertaX,y)&&e.capas[2][e.pos(puertaX,y)]<0)
@@ -314,6 +331,61 @@ public final class MapasRegion2D {
             e.solido(p[0],p[1],grande?e.lampara:e.arbusto);
         e.solido(15,9,e.senal);
         e.solido(21,15,e.lampara);
+
+        if (forma==3) {
+            // Plaza española rodeada de una vía de 3 casillas de anchura;
+            // mosaicos y arriates quedan fuera del eje obligatorio.
+            for(int x=13;x<=22;x++)
+                for(int y=10;y<=14;y++)
+                    e.suelo(x,y,e.piedra);
+            for(int[] p:new int[][]{{13,9},{22,9},{13,15},{22,15}}) {
+                if(e.capas[2][e.pos(p[0],p[1])]<0)
+                    e.suelo(p[0],p[1],e.flores);
+            }
+        } else if (forma==1) {
+            // Calle lateral y bordes ajardinados.
+            for(int y=8;y<=21;y++) {
+                if(e.dentro(8,y)&&e.capas[2][e.pos(8,y)]<0)
+                    e.suelo(8,y,e.camino);
+                if(e.dentro(27,y)&&e.capas[2][e.pos(27,y)]<0)
+                    e.suelo(27,y,e.camino);
+            }
+        } else if (forma==2) {
+            // Avenida pavimentada en torno al cruce.
+            for(int x=11;x<=25;x++)
+                for(int y:new int[]{10,14})
+                    if(e.capas[2][e.pos(x,y)]<0) e.suelo(x,y,e.arena);
+        }
+    }
+
+    private static void bosqueNuevo(Estado e) {
+        // Senderos arbolados completamente nuevos, con claros en diagonal,
+        // dos zonas de hierba alta y un camino secundario norte-sur.
+        int cy=e.h/2, variante=e.mapa.generacion().getNumero();
+        e.claro(3,3,8,6,variante*11);
+        e.claro(23,15,9,6,variante*19);
+        for(int x=3;x<e.w-3;x++) {
+            e.suelo(x,7,e.camino);
+            e.suelo(x,18,e.camino);
+        }
+        for(int y=3;y<e.h-3;y++)
+            for(int x=17;x<=18;x++) e.suelo(x,y,e.camino);
+        for(int x=4;x<e.w-4;x+=3)
+            for(int y:new int[]{4,5,19,20}) {
+                if((x+y+variante)%3==0) e.solido(x,y,e.arbusto);
+                else if(y<6 && x%2==0 && x!=17 && x!=18)
+                    e.pinoAlto(x,y,false);
+            }
+        for(int x=4;x<e.w-4;x++) {
+            if(x%3!=0) {
+                e.hierba(x,9);
+                e.hierba(x,16);
+            }
+        }
+        for(int[] p:new int[][]{{6,7},{12,7},{24,18},{30,18}})
+            e.suelo(p[0],p[1],e.flores);
+        // El eje central se restablece al final de generar(), de modo que
+        // ambos extremos siempre son accesibles en todas las generaciones.
     }
 
     private static void edificio(Estado e,int x,int y,int w,int h,String clase,int variante) {
