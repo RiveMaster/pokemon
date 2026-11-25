@@ -312,7 +312,60 @@ public final class MapasRegion2D {
         for(int y=cy-radioPaso;y<=cy+radioPaso;y++){
             e.dejarPaso(0,y);e.dejarPaso(e.w-1,y);
         }
+        // Los caminos ya dibujados conservan sus casillas y colisiones.
+        // Solo la capa gráfica se cambia por los 512 autotiles del usuario.
+        aplicarCaminosConectados(e);
         return new Resultado(e);
+    }
+
+    /**
+     * Convierte la distribución real de caminos de las 120 escenas a autotiles.
+     * Incluye 4 vecinos cardinales y 4 diagonales para enlazar calles anchas
+     * sin cortes entre las esquinas. No reescribe ninguna colisión, hierba,
+     * interacción, puerta ni ID guardado.
+     */
+    private static void aplicarCaminosConectados(Estado e) {
+        if (!CaminosUsuario.disponible()) return;
+        int[][] tipo = new int[e.h][e.w];
+        for(int y=0;y<e.h;y++)for(int x=0;x<e.w;x++) {
+            int tile=e.capas[1][e.pos(x,y)];
+            // 1=tierra/sendero, 2=pavimento de piedra, 0=no camino.
+            tipo[y][x]= tile==e.camino || tile==e.suelo || tile==e.arena ? 1
+                       : tile==e.piedra ? 2 : 0;
+        }
+        int[] indices=new int[512];
+        Arrays.fill(indices,-1);
+        for(int y=0;y<e.h;y++)for(int x=0;x<e.w;x++) {
+            int material=tipo[y][x];
+            if(material==0)continue;
+            int cardinal=mascaraCamino(tipo,x,y,material,false);
+            int diagonal=mascaraCamino(tipo,x,y,material,true);
+            int cache=(material==2?256:0)+(diagonal<<4)+cardinal;
+            int tile=indices[cache];
+            if(tile<0) {
+                BufferedImage imagen=CaminosUsuario.tile(material==2,cardinal,diagonal);
+                if(imagen==null)continue;
+                tile=e.paleta.size();
+                e.paleta.add(imagen);
+                e.tipos.add(NORMAL);
+                indices[cache]=tile;
+            }
+            e.capas[1][e.pos(x,y)]=tile;
+        }
+    }
+
+    /** Máscaras N/E/S/O o NO/NE/SE/SO de vecinos del mismo tipo de suelo. */
+    static int mascaraCamino(int[][] terreno,int x,int y,int tipo,boolean diagonal) {
+        int[][] d=diagonal
+                ? new int[][]{{-1,-1},{1,-1},{1,1},{-1,1}}
+                : new int[][]{{0,-1},{1,0},{0,1},{-1,0}};
+        int mascara=0;
+        for(int i=0;i<d.length;i++) {
+            int nx=x+d[i][0],ny=y+d[i][1];
+            if(ny>=0&&ny<terreno.length&&nx>=0&&nx<terreno[ny].length
+                    &&terreno[ny][nx]==tipo)mascara|=1<<i;
+        }
+        return mascara;
     }
 
     private static void ciudad(Estado e,Ubicacion ubicacion){
